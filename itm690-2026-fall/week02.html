@@ -463,6 +463,19 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 .vid span{font-size:12.5px;font-weight:700;line-height:1.4;}
 .vid span::before{content:"▶ ";color:var(--red);}
 
+/* ---------- 섹션 3 ---------- */
+.tbl.lm{font-size:clamp(15px,1.4vw,19px);}
+.tbl.lm td.s{text-align:left;font-family:"Cambria","Times New Roman",serif;padding:8px 22px;}
+.tbl.lm td.ok{color:var(--green);font-weight:900;} .tbl.lm td.no{color:var(--red);font-weight:900;}
+.tbl.lm td.why{font-size:.85em;font-weight:800;color:var(--brand-dark);background:var(--sky-light);}
+.guess{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;}
+.guess .g{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 26px;border-radius:12px;border:1px solid var(--line);background:var(--bg);min-width:160px;}
+.guess .g b{font-size:clamp(18px,1.8vw,24px);font-family:"Cambria","Times New Roman",serif;}
+.guess .g span{font-size:14px;font-weight:800;}
+.guess .up2{border-color:var(--green);background:var(--green-light);} .guess .up2 span{color:var(--green);}
+.guess .up{border-color:#cfe3d8;} .guess .up span{color:var(--green);}
+.guess .down{border-color:var(--red);background:var(--red-light);} .guess .down span{color:var(--red);}
+
 /* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
 @page{size:320mm 180mm;margin:0;}
 @media print{
@@ -906,6 +919,223 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
+<!-- ===================== 3. 언어모델과 트랜스포머 ===================== -->
+<section class="slide section" data-sec="3" data-title="언어모델과 트랜스포머">
+  <div class="kicker">Section 3</div>
+  <h2>언어모델과 트랜스포머</h2>
+  <p class="section-lead">다음 단어 하나를 맞히는 것. 그것이 언어모델의 전부이고, 트랜스포머는 그 일을 아주 잘하는 구조다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="3"></ol>
+    <p class="muted center">작곡 예제에서 “다음 음”을 이어 붙였듯, 이번에는 “다음 단어”를 이어 붙인다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="언어모델(Language Model)">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>언어모델 (Language Model)</h2>
+  <div class="body">
+    <p style="font-weight:700">사람이 말했을 법한 문장은?</p>
+    <table class="tbl lm" aria-label="여섯 문장과 각 문장을 판단하는 데 필요한 능력">
+      <tbody>
+        <tr><td class="s">Jane went to the store.</td><td class="ok">○</td><td class="why" rowspan="3">문법 이해</td></tr>
+        <tr><td class="s">store to Jane went the.</td><td class="no">✕</td></tr>
+        <tr><td class="s">Jane went store.</td><td class="no">✕</td></tr>
+        <tr><td class="s">Jane goed to the store.</td><td class="no">✕</td><td class="why">어형 변화</td></tr>
+        <tr><td class="s">The store went to Jane.</td><td class="no">✕</td><td class="why">의미 분석</td></tr>
+        <tr><td class="s">The food truck went to Jane.</td><td class="ok">○</td><td class="why">의미 분석의 예외</td></tr>
+      </tbody>
+    </table>
+    <p class="em center">언어 모델 = <span class="math"><i>P</i>(text)</span> — “이 문장이 나올 법한 정도”를 확률로 매기는 함수</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="언어모델의 원리">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>언어모델의 원리</h2>
+  <div class="body">
+    <p style="font-weight:800;font-size:clamp(16px,1.5vw,20px)">질문 – 다음에 올 단어는?</p>
+    <p class="math center" style="font-size:clamp(20px,2.2vw,28px);font-weight:700">Jane had a headache yesterday. She went to the <span style="border-bottom:3px solid var(--red);padding:0 40px">&nbsp;</span>.</p>
+    <div class="guess">
+      <div class="g up2"><b>Hospital</b><span>확률 ↑↑</span></div>
+      <div class="g up"><b>Store</b><span>확률 ↑</span></div>
+      <div class="g down"><b>Banana</b><span>확률 ↓↓</span></div>
+    </div>
+    <p class="muted center">앞 문장(두통)까지 읽고 있어야 “hospital”에 가장 높은 확률을 줄 수 있다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="언어모델의 핵심 = 다음 단어 예측하기">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>언어모델의 핵심 = 다음 단어 예측하기</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>조건부 확률의 연쇄 법칙 (chain rule)</li>
+    </ul>
+    <div class="center"><span class="fbox"><i>P</i>(“I love you”) = <i>P</i>(“I”) × <i>P</i>(“love” | “I”) × <i>P</i>(“you” | “I love”)</span></div>
+    <ul class="bul compact" style="padding-left:2.4em">
+      <li><span class="math"><i>P</i>(“I”)</span> – 첫 단어가 “I”일 확률</li>
+      <li><span class="math"><i>P</i>(“love” | “I”)</span> – “I” 다음에 “love”가 올 확률</li>
+      <li><span class="math"><i>P</i>(“you” | “I love”)</span> – “I love” 다음에 “you”가 올 확률</li>
+    </ul>
+    <div class="callout"><b>언어모델의 구현</b> — 주어진 단어 배열 다음에 등장할 단어를 예측하도록 인공신경망을 학습시키면 된다. 문장의 확률은 “다음 단어 확률”의 곱으로 얻어진다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="언어 모델을 이용한 작문">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>언어 모델을 이용한 작문</h2>
+  <div class="body">
+    <p class="em"><span class="arrow"></span>다음에 올 단어 예측하기 — 예측한 단어를 다시 입력으로 넣어 이어 쓴다</p>
+    <svg class="rnn" data-words="She,went,to,the,hospital,." data-mode="gen" data-ctx="Jane had a headache yesterday." role="img" aria-label="앞선 문장 정보를 받은 뒤 START 신호부터 She went to the hospital을 한 단어씩 생성하는 순환 신경망"></svg>
+    <p class="muted center">작곡 예제의 “다음 음”이 “다음 단어”로 바뀌었을 뿐, 구조는 같다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="RNN 언어모델의 한계 – Long-Term Dependency">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>RNN 언어모델의 한계 – Long-Term Dependency 문제</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <figure class="plain"><img src="assets/week02/s35-short-dep.png" alt="가까운 입력 x0, x1이 출력 h3에 영향을 주는 짧은 순환 신경망 그림" style="max-height:150px"></figure>
+        <div class="callout good"><b>문제 – 다음에 올 단어는?</b><br>I grew up in France. I speak fluent ______.<br><span class="muted">→ 바로 앞에 “France”가 있으니 쉽다</span></div>
+      </div>
+      <div class="stack">
+        <figure class="plain"><img src="assets/week02/s36-long-dep.png" alt="멀리 떨어진 입력 x0, x1과 출력 h(t+1) 사이가 긴 순환 신경망 그림" style="max-height:150px"></figure>
+        <div class="callout bad"><b>문제 – 다음에 올 단어는?</b><br>I grew up in France … <span class="muted">(수십 문장)</span> … I speak fluent ______.<br><span class="muted">→ “France”가 너무 멀리 있다</span></div>
+      </div>
+    </div>
+    <p class="em center"><span class="arrow"></span>문장이 길어지면 상태 <span class="math"><i>h</i><sub><i>t</i></sub></span>가 멀리 떨어진 정보를 반영하지 못하는 한계</p>
+    <p class="src"><a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="noopener">https://colah.github.io/posts/2015-08-Understanding-LSTMs/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="Attention 기법 (2014)">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>Attention 기법 (2014) — 어디를 볼지 정하기</h2>
+  <div class="body">
+    <ul class="bul"><li>Long-Term Dependency 문제의 해결 — 멀리 있어도 “관련 있는 단어”를 직접 찾아본다</li></ul>
+    <div class="two eq" style="align-items:start">
+      <figure class="plain"><img src="assets/week02/s37-it-sentences.png" alt="두 문장: The animal didn't cross the street because it was too tired / too wide. 프랑스어 번역에서 it이 각각 il과 elle로 달라진다" style="max-height:170px"><figcaption>“it”이 animal인지 street인지에 따라 프랑스어 번역(il / elle)이 달라진다</figcaption></figure>
+      <figure class="plain"><img src="assets/week02/s37-attention-lines.png" alt="it 단어에서 animal 또는 street로 굵은 선이 이어진 attention 시각화" style="max-height:170px"><figcaption>번역 모델이 “it”을 처리할 때 주목한 단어 — 왼쪽은 animal, 오른쪽은 street</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html" target="_blank" rel="noopener">https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="Attention Map">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>Attention 기법 (2014) — 입력된 단어 중 어디를 주목할지 학습</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.3fr .7fr;align-items:start">
+      <figure class="plain"><img src="assets/week02/s38-attention.gif" alt="인코더가 das grüne Haus를 읽고 디코더가 the green house를 쓰는 동안 attention이 각 단계에서 어느 입력 단어를 보는지 보여 주는 애니메이션" style="max-height:380px"><figcaption>디코더가 단어를 하나 쓸 때마다 인코더의 어느 단어를 볼지(attention) 정한다 — 문맥 벡터 하나에 다 담지 않아도 된다</figcaption></figure>
+      <figure class="plain"><img src="assets/week02/s38-attention-map.gif" alt="입력 단어와 출력 단어 사이의 attention 가중치를 밝기로 나타낸 행렬" style="max-height:300px"><figcaption>ATTENTION Map — 밝을수록 강하게 주목</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://aws.amazon.com/blogs/machine-learning/train-neural-machine-translation-models-with-sockeye/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/machine-learning/train-neural-machine-translation-models-with-sockeye/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="Google – Transformer 모델 (2017)">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>Google – Transformer 모델 (2017)</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.15fr .85fr">
+      <figure class="plain"><img src="assets/week02/s39-transformer.png" alt="Transformer 구조: 인코더 스택과 디코더 스택, 입력 Je suis étudiant에서 출력 I am a student" style="max-height:400px"></figure>
+      <div class="stack">
+        <ul class="bul compact">
+          <li>순환 신경망(RNN)의 두 가지 한계
+            <ul>
+              <li>단어를 순서대로 하나씩 처리해야 하므로 <b>병렬 처리가 불가능</b></li>
+              <li>멀리 떨어진 단어 사이의 관계(전역 의존성)를 학습하기 어려움</li>
+            </ul>
+          </li>
+          <li>Transformer: 순환 구조를 버리고 <b>attention만으로</b> 인코더·디코더를 만든 모델 — “Attention Is All You Need” (Vaswani et al. 2017)</li>
+        </ul>
+        <p class="em"><span class="arrow"></span>Multi-headed Self Attention 기법을 활용하여 기존 Seq2Seq 모델 개선</p>
+      </div>
+    </div>
+    <p class="src"><a href="http://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener">http://jalammar.github.io/illustrated-transformer/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="Transformer 모델 특허">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>Transformer 모델 특허</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <figure><img src="assets/week02/s40-patent-front.png" alt="대한민국 등록특허 10-2180002 공보 첫 면: 어텐션 기반의 시퀀스 변환 신경망, 출원인 구글" style="max-height:420px"><figcaption>등록특허 10-2180002 “어텐션-기반의 시퀀스 변환 신경망” (Google LLC, 2020년 등록)</figcaption></figure>
+      <figure><img src="assets/week02/s40-patent-drawing.jpg" alt="특허 도면: 인코더 신경망과 디코더 신경망으로 이루어진 시퀀스 변환 시스템" style="max-height:420px"><figcaption>도면 1 — 논문의 그림이 특허 도면이 되었다</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="등록특허 10-2180002 청구항">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>등록특허 10-2180002 청구항 1</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.35fr .65fr;align-items:start">
+      <figure class="plain"><img src="assets/week02/s42-claim.png" alt="청구항 1 전문. 인코더 신경망, 셀프-어텐션, 쿼리·키·값, 디코더 신경망 부분에 밑줄" style="max-height:440px"></figure>
+      <div class="stack">
+        <div class="callout"><b>청구항이 잡아낸 핵심 요소</b>
+          <ul class="bul compact" style="margin-top:6px">
+            <li>입력 시퀀스를 받아 표현을 만드는 <b>인코더 신경망</b></li>
+            <li>각 입력 위치에 대해 <b>셀프-어텐션</b>을 적용하는 서브네트워크</li>
+            <li>입력으로부터 <b>쿼리·키·값</b>을 만들어 출력을 계산</li>
+            <li>인코딩된 표현에서 출력 시퀀스를 생성하는 <b>디코더 신경망</b></li>
+          </ul>
+        </div>
+        <p class="muted" style="font-size:14px">특허는 “아이디어”가 아니라 이렇게 요소들의 조합으로 정의된 “구성”을 보호한다. 다음 섹션의 BERT·GPT 특허는 이 청구항에서 인코더와 디코더를 각각 떼어 낸 것이다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="“셀프-어텐션”에 대한 직관적 이해">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>“셀프-어텐션”에 대한 직관적 이해</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">Q</span><b class="ttl">Query</b><p class="prob">“누구 이런 정보 가진 사람?” — 각 단어가 다른 단어들에게 던지는 질문</p></div>
+      <div class="step"><span class="no">K</span><b class="ttl">Key</b><p class="prob">“나는 이런 정보 가졌어!” — 각 단어가 내거는 이름표</p></div>
+      <div class="step"><span class="no">V</span><b class="ttl">Value</b><p class="prob">만약 (Query, Key) 매칭이 잘 된다면 “다음 계층으로 이 정보를 넘겨줘” — 실제로 전달되는 내용</p></div>
+    </div>
+    <figure class="plain"><img src="assets/week02/s44-self-attention.png" alt="세 입력 각각이 query, key, value로 변환되고, query와 key의 점수로 value를 가중합하는 self-attention 계산 그림" style="max-height:230px"><figcaption>문장 안의 모든 단어가 서로에게 질문하고 답한다 — 그래서 “셀프(self)” 어텐션</figcaption></figure>
+    <p class="src"><a href="https://towardsdatascience.com/illustrated-self-attention-2d627e33b20a" target="_blank" rel="noopener">https://towardsdatascience.com/illustrated-self-attention-2d627e33b20a</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="Transformer의 장점과 성능">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>“셀프-어텐션”의 장점 — 더 빨리 배우고, 더 잘 번역한다</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr;align-items:start">
+      <ul class="bul compact">
+        <li><b>손쉽게 병렬처리 가능</b>
+          <ul><li>순환 신경망의 순차적인 특성이 없음 → 긴 학습·추론 시간, 높은 자원 사용 문제 완화</li></ul>
+        </li>
+        <li><b>전역 의존성 문제 해결</b>
+          <ul><li>먼 위치들 사이의 의존성을 효과적으로 학습</li><li>학습이 더 쉽고 빠른데도 기계번역에서 최고 성능(state-of-the-art) 달성</li></ul>
+        </li>
+      </ul>
+      <div class="figrow" style="gap:12px">
+        <figure class="plain" style="flex:1 1 200px"><img src="assets/week02/s46-en-de.png" alt="영어-독일어 번역 품질(BLEU): GNMT(RNN), ConvS2S, SliceNet, Transformer 순으로 높아짐" style="max-height:200px"><figcaption>English → German</figcaption></figure>
+        <figure class="plain" style="flex:1 1 200px"><img src="assets/week02/s46-en-fr.png" alt="영어-프랑스어 번역 품질(BLEU): GNMT, ConvS2S, Transformer 순으로 높아짐" style="max-height:200px"><figcaption>English → French</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html" target="_blank" rel="noopener">https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="AlphaFold – 셀프-어텐션의 활용">
+  <div class="kicker">언어모델과 트랜스포머</div>
+  <h2>AlphaFold – “셀프-어텐션” 신경망의 활용</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week02/s47-alphafold.png" alt="AlphaFold 2의 구조도: 다중 서열 정렬과 잔기 쌍 표현에 attention을 적용해 단백질 3차원 구조를 예측" style="max-height:420px"><figcaption>Jumper et al. (2021), Nature — 단백질 서열을 “문장”처럼 읽는 attention 구조로 3차원 구조를 예측 (2024년 노벨 화학상)</figcaption></figure>
+    <p class="muted center">언어를 위해 만든 구조가 언어 밖(단백질, 이미지, 소리)으로 번져 나간다 — 뒤의 “기반모델” 이야기의 복선</p>
+    <p class="src"><a href="https://www.nature.com/articles/s41586-021-03819-2/figures/3" target="_blank" rel="noopener">https://www.nature.com/articles/s41586-021-03819-2/figures/3</a></p>
+  </div>
+</section>
+
     </div><!-- /deck -->
 
     <nav class="pager" aria-label="페이지 이동">
@@ -1128,10 +1358,11 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   const sub = k => String(k).split('').map(c => '₀₁₂₃₄₅₆₇₈₉'[+c]).join('');
   function drawRNN(svg, idx){
     const words = svg.dataset.words.split(','), mode = svg.dataset.mode || 'concept', out = svg.dataset.out || '';
-    const n = words.length, colW = 104, W = Math.max(760, (n - 1) * colW + 260), bw = 46, bh = 42;
+    const n = words.length, colW = 104, W = Math.max(760, (n - 1) * colW + 260) + (svg.dataset.ctx ? 180 : 0), bw = 46, bh = 42;
     const H = mode === 'concept' ? 250 : 320;
     const yH = mode === 'concept' ? 96 : 160, yIn = mode === 'concept' ? 186 : 250, yOut = 56, yLab = yIn + bh / 2 + 22;
-    const x0 = (W - (n - 1) * colW) / 2, xs = words.map((_, i) => x0 + i * colW);
+    const ctx = svg.dataset.ctx || '';
+    const x0 = (W - (n - 1) * colW) / 2 + (ctx ? 90 : 0), xs = words.map((_, i) => x0 + i * colW);
     const id = 'rnnArr' + idx, idr = 'rnnArrR' + idx;
     let s = `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker><marker id="${idr}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b0483f"/></marker></defs>`;
     const box = (cls, x, y) => `<rect class="${cls}" x="${x - bw / 2}" y="${y - bh / 2}" width="${bw}" height="${bh}" rx="7"/>`;
@@ -1160,9 +1391,10 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         if (i < n - 1) { const nx = xs[i + 1], mx = x + colW / 2; s += `<path class="fb" d="M${x + bw / 2} ${yOut} H${mx} V${yIn} H${nx - bw / 2 - 2}" marker-end="url(#${idr})"/>`; }
       });
     }
+    if (ctx) { s += `<line class="ar" x1="${xs[0] - bw / 2 - 150}" y1="${yH}" x2="${xs[0] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/><text class="w" x="${xs[0] - bw / 2 - 156}" y="${yH - 12}" text-anchor="end" style="fill:#b0483f">앞선 문장 정보</text><text class="lab" x="${xs[0] - bw / 2 - 156}" y="${yH + 8}" text-anchor="end">${ctx}</text>`; }
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = s;
   }
-  document.querySelectorAll('svg.rnn').forEach(drawRNN);
+  document.querySelectorAll('svg.rnn:not(.s2sd)').forEach(drawRNN);
 
   /* ---------- 인코더–문맥 벡터–디코더 도식 ---------- */
   function drawS2S(svg, idx){
