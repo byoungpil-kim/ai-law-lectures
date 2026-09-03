@@ -536,7 +536,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <div class="cover-body">
     <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 2강</span>
     <h1>대규모 언어모델과 <em>기반모델</em></h1>
-    <p class="lead">컴퓨터는 어떻게 말을 숫자로 바꾸고, 그 숫자로 다음 단어를 맞히게 되었나. 단어 임베딩에서 트랜스포머와 사후학습을 거쳐 ChatGPT, 그리고 범용·멀티모달 기반모델에 이르는 길을 따라간다.</p>
+    <p class="lead">컴퓨터는 어떻게 말을 숫자로 바꾸고, 그 숫자로 다음 단어를 맞히게 되었나. 단어 임베딩, 트랜스포머, 사후학습, ChatGPT, 그리고 범용·멀티모달 기반모델을 차례로 살펴본다.</p>
     <div class="meta">
       <span class="meta-chip">2026. 9. 10.</span>
       <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
@@ -549,7 +549,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 <section class="slide section" data-sec="1" data-title="자연어 처리와 단어 임베딩">
   <div class="kicker">Section 1</div>
   <h2>자연어 처리와 단어 임베딩</h2>
-  <p class="section-lead">말을 숫자로 바꾸는 첫걸음. 단어를 “세는” 방법에서 단어의 “뜻”을 좌표로 찍는 방법으로.</p>
+  <p class="section-lead">단어를 숫자로 바꾸는 방법. 등장 횟수를 세는 방법에서 단어의 뜻을 좌표로 나타내는 방법으로.</p>
   <div class="body">
     <ol class="roadmap" data-current="1"></ol>
     <p class="muted center">1강에서 본 “인공지능 = 함수”를 떠올리자. 입력이 문장이라면, 함수에 넣기 전에 문장을 먼저 숫자로 바꿔야 한다.</p>
@@ -764,7 +764,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <p class="section-lead">문장은 단어의 “순서”다. 앞에서 본 단어의 기억을 옆으로 넘겨 가며 읽는 신경망, 순환 신경망(RNN).</p>
   <div class="body">
     <ol class="roadmap" data-current="2"></ol>
-    <p class="muted center">앞 섹션의 스팸 분류기는 단어를 주머니에 쓸어 담듯 “있다/없다”만 세었다. 그러면 “개가 사람을 물었다”와 “사람이 개를 물었다”가 같은 문장이 된다.</p>
+    <p class="muted center">앞 섹션의 스팸 분류기는 단어의 순서를 무시하고 “있다/없다”만 세었다. 그러면 “개가 사람을 물었다”와 “사람이 개를 물었다”가 같은 문장이 된다.</p>
   </div>
 </section>
 
@@ -866,7 +866,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
     <svg class="rnn" data-words="솔,솔,라,라,솔,솔,미" data-mode="gen" role="img" aria-label="시작 신호를 넣으면 음을 하나 내고, 그 음을 다음 입력으로 넣어 다시 음을 내는 순환 신경망"></svg>
     <div class="two">
       <ul class="bul">
-        <li><b>이전 단계 예측 값을 다음 단계 입력으로 활용</b> — 시작 신호 하나만 주면 음이 꼬리에 꼬리를 물고 이어진다</li>
+        <li><b>이전 단계 예측 값을 다음 단계 입력으로 활용</b> — 시작 신호 하나만 주면 음이 차례로 이어진다</li>
         <li>수많은 악보로 “다음 음”을 맞히도록 학습한 결과</li>
         <li class="arrow">이 구조가 곧 뒤에서 볼 “다음 단어 예측” 언어모델의 원형</li>
       </ul>
@@ -997,11 +997,11 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <div class="body">
     <div class="two eq" style="align-items:start">
       <div class="stack">
-        <figure class="plain"><img src="assets/week02/s35-short-dep.png" alt="가까운 입력 x0, x1이 출력 h3에 영향을 주는 짧은 순환 신경망 그림" style="max-height:150px"></figure>
+        <figure class="plain"><img src="assets/week02/s35-short-dep.png" alt="가까운 입력 x0, x1이 출력 h3에 영향을 주는 짧은 순환 신경망 그림" style="max-height:170px"></figure>
         <div class="callout good"><b>문제 – 다음에 올 단어는?</b><br>I grew up in France. I speak fluent ______.<br><span class="muted">→ 바로 앞에 “France”가 있으니 쉽다</span></div>
       </div>
       <div class="stack">
-        <figure class="plain"><img src="assets/week02/s36-long-dep.png" alt="멀리 떨어진 입력 x0, x1과 출력 h(t+1) 사이가 긴 순환 신경망 그림" style="max-height:150px"></figure>
+        <figure class="plain"><img src="assets/week02/s36-long-dep.png" alt="멀리 떨어진 입력 x0, x1과 출력 h(t+1) 사이가 긴 순환 신경망 그림" style="max-height:170px"></figure>
         <div class="callout bad"><b>문제 – 다음에 올 단어는?</b><br>I grew up in France … <span class="muted">(수십 문장)</span> … I speak fluent ______.<br><span class="muted">→ “France”가 너무 멀리 있다</span></div>
       </div>
     </div>
@@ -1131,7 +1131,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <h2>AlphaFold – “셀프-어텐션” 신경망의 활용</h2>
   <div class="body">
     <figure class="plain"><img src="assets/week02/s47-alphafold.png" alt="AlphaFold 2의 구조도: 다중 서열 정렬과 잔기 쌍 표현에 attention을 적용해 단백질 3차원 구조를 예측" style="max-height:420px"><figcaption>Jumper et al. (2021), Nature — 단백질 서열을 “문장”처럼 읽는 attention 구조로 3차원 구조를 예측 (2024년 노벨 화학상)</figcaption></figure>
-    <p class="muted center">언어를 위해 만든 구조가 언어 밖(단백질, 이미지, 소리)으로 번져 나간다 — 뒤의 “기반모델” 이야기의 복선</p>
+    <p class="muted center">언어를 위해 만든 구조가 언어 밖(단백질, 이미지, 소리)에도 적용된다</p>
     <p class="src"><a href="https://www.nature.com/articles/s41586-021-03819-2/figures/3" target="_blank" rel="noopener">https://www.nature.com/articles/s41586-021-03819-2/figures/3</a></p>
   </div>
 </section>
@@ -1154,7 +1154,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
     {name:'시퀀스 데이터와 순환 신경망', sub:'앞 단어의 기억을 넘기기'},
     {name:'언어모델과 트랜스포머', sub:'다음 단어 예측하기'},
     {name:'BERT·GPT와 스케일링 법칙', sub:'크게 만들수록 잘한다'},
-    {name:'사후학습과 ChatGPT', sub:'사람 피드백으로 길들이기'},
+    {name:'사후학습과 ChatGPT', sub:'사람 피드백으로 조정하기'},
     {name:'기반모델', sub:'하나의 모델, 수많은 용도'},
     {name:'범용·멀티모달 기반모델', sub:'글을 넘어 이미지·소리로'}
   ];

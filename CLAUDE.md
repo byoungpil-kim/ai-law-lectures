@@ -60,6 +60,7 @@ GitHub Pages로 서비스된다: https://byoungpil-kim.github.io/ai-law-lectures
 
 - 페이지 언어는 한국어(`lang="ko"`), 영문 부제는 보조로만.
 - 푸터: `© 2026 김병필 · KAIST 기술경영전문대학원`.
+- 비유적 표현을 쓰지 않는다. 개념은 직접 서술한다 (예: "복선", "길들이기", "꼬리에 꼬리를 물고" 같은 표현 금지).
 
 ## Git 작업 규칙
 
