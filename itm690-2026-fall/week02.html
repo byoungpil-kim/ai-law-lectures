@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2강 대규모 언어모델과 기반모델 — 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 2강: 단어 임베딩, 순환 신경망, 트랜스포머, 사후학습, ChatGPT와 범용·멀티모달 기반모델" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6fa6" />
+<style>
+/* 2026 에이전틱 AI 부트캠프(aibootcamp2026) 디자인 토큰을 따른다 */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --ink-soft:#3a3f3b; --muted:#626a64; --line:#d5ddd3; --line-soft:#e9ede6;
+  --brand:#2e9bdb; --brand-dark:#1b6fa6; --brand-deep:#124d78; --sky-light:#e3f1fb;
+  --green:#2f765b; --green-light:#e6f2ec; --amber:#b8792e; --amber-light:#fbf1de; --red:#b0483f; --red-light:#fbe9e7; --navy:#132436;
+  --shadow:0 16px 45px rgba(54,42,31,.12); --shadow-sm:0 2px 10px rgba(21,29,23,.05);
+  --radius:14px; --sidebar-width:264px; --topbar-h:64px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-dark);}
+img,video,svg{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;} }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 clamp(16px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topbar-left{display:flex;align-items:center;gap:18px;min-width:0;}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:0 0 auto;}
+.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:9px;color:#fff;background:var(--brand);font-size:15px;font-weight:800;}
+.brand-text{display:block;line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;}
+.brand-text small{display:block;margin-top:1px;color:var(--muted);font-size:11.5px;font-weight:600;}
+.week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
+.week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.zoom-ctl{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;}
+.zoom-ctl button{border:0;background:transparent;padding:6px 10px;font-size:13px;font-weight:800;color:var(--brand-dark);cursor:pointer;line-height:1;}
+.zoom-ctl button:hover{background:var(--sky-light);}
+.zoom-ctl .zv{min-width:44px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);border-right:1px solid var(--line);padding:6px 4px;cursor:pointer;}
+.progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
+.progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
+.progress-label b{color:var(--ink);}
+.progress-track{overflow:hidden;height:7px;border-radius:999px;background:#e1e8df;}
+.progress-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-dark),var(--brand));transition:width 220ms ease;}
+
+/* ---------- layout ---------- */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{
+  position:sticky;top:var(--topbar-h);width:var(--sidebar-width);flex:0 0 auto;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:22px 14px 28px;
+  border-right:1px solid var(--line);background:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sidebar-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 8px;}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.toc-link{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:9px;border:0;background:transparent;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.toc-link .no{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;color:var(--muted);font-size:11px;font-weight:900;flex:0 0 auto;}
+.toc-link .nm{flex:1 1 auto;min-width:0;}
+.toc-link .cnt{font-size:11px;font-weight:600;color:var(--muted);opacity:.8;}
+.toc-link:hover{background:var(--sky-light);color:var(--brand-dark);}
+.toc-link.active{background:var(--brand);color:#fff;}
+.toc-link.active .no{background:rgba(255,255,255,.22);color:#fff;}
+.toc-link.active .cnt{color:#fff;opacity:.85;}
+.toc-link.done .no{background:var(--green-light);color:var(--green);}
+.sub{list-style:none;margin:2px 0 6px 22px;padding:0 0 0 12px;display:none;border-left:2px solid var(--line-soft);}
+.toc li.open .sub{display:block;}
+.sub button{
+  display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 10px;border-radius:6px;
+  color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sub button:hover{background:var(--sky-light);color:var(--brand-dark);}
+.sub button.active{color:var(--brand-dark);font-weight:800;}
+.side-hint{margin-top:auto;padding:14px 12px 0;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line-soft);}
+.side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
+
+.stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
+.deck{flex:1 1 auto;display:flex;flex-direction:column;}
+.slide{
+  display:none;position:relative;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
+}
+.slide.active{display:flex;flex:1 1 auto;animation:fadein .22s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
+.slide h2{margin:0 0 20px;font-size:clamp(22px,2.5vw,30px);line-height:1.3;letter-spacing:-.01em;font-weight:800;}
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0;}
+.slide.top .body{justify-content:flex-start;}
+.body p{margin:0;}
+
+/* ---------- pager ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.pbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brand-dark);font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;max-width:44%;
+}
+.pbtn span{overflow:hidden;text-overflow:ellipsis;}
+.pbtn svg{width:16px;height:16px;flex:0 0 auto;}
+.pbtn:hover{border-color:var(--brand);background:var(--sky-light);transform:translateY(-1px);}
+.pbtn.next{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.pbtn.next:hover{background:var(--brand);border-color:var(--brand);}
+.pbtn:disabled{opacity:.35;cursor:default;transform:none;}
+.pinfo{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;text-align:center;}
+.pinfo .sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-dark);}
+.pinfo .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:360px;}
+.pinfo .dots i{width:8px;height:8px;border-radius:999px;background:#d9e1d6;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.pinfo .dots i:hover{background:var(--brand);}
+.pinfo .dots i.on{background:var(--brand-dark);transform:scale(1.25);}
+.pinfo .cnt{font-size:12px;color:var(--muted);}
+
+/* ---------- cover / section slides ---------- */
+.slide.cover{
+  color:#eef3f7;border-color:transparent;
+  background:radial-gradient(1000px 460px at 85% -10%,rgba(46,155,219,.18),transparent 60%),linear-gradient(180deg,#101f30 0%,var(--navy) 55%,#17293b 100%);
+}
+.slide.cover .kicker{color:#7cc4ee;}
+.slide.cover .kicker .n{color:#9fb4c4;}
+.cover-body{display:flex;flex-direction:column;justify-content:center;gap:18px;flex:1;}
+.cover-kicker{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9d7ec;background:rgba(46,155,219,.15);border:1px solid rgba(46,155,219,.35);padding:7px 14px;border-radius:999px;}
+.cover h1{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.22;letter-spacing:-.02em;color:#fff;}
+.cover h1 em{color:#7cc4ee;font-style:normal;}
+.cover .lead{color:#c9d6e0;font-size:clamp(15px,1.4vw,18px);max-width:640px;}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#dbe7ef;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;}
+.cover .outline{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.cover .outline button{
+  display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:13.5px;
+}
+.cover .outline button:hover{background:rgba(255,255,255,.1);}
+.cover .outline .num{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(124,196,238,.16);color:#7cc4ee;font-size:12px;font-weight:900;display:grid;place-items:center;}
+.cover .outline small{display:block;font-weight:600;color:#a9bdcb;font-size:11.5px;}
+
+.slide.section .body{align-items:center;}
+.slide.section h2{text-align:center;}
+.section-lead{text-align:center;color:var(--muted);max-width:640px;margin:-8px auto 0;}
+
+/* 인공지능 ⊃ 머신러닝 ⊃ 인공신경망 ⊃ 딥 러닝 포함 관계 도식 */
+.nest{position:relative;width:min(100%,720px);aspect-ratio:16/10;margin:0 auto;}
+.nest .lv{position:absolute;border-radius:26px;transition:box-shadow .2s ease;}
+.nest .lv>span{position:absolute;top:16px;left:22px;font-weight:800;font-size:clamp(14px,1.7vw,19px);}
+.nest .l1{inset:0;background:#dbeefb;color:var(--brand-deep);}
+.nest .l2{left:26%;top:19%;right:4%;bottom:4%;background:#a9d5f1;color:var(--brand-deep);}
+.nest .l3{left:44%;top:37%;right:7%;bottom:8%;background:#3f9fd8;color:#fff;}
+.nest .l4{left:58%;top:54%;right:11%;bottom:14%;background:var(--brand-deep);color:#fff;display:grid;place-items:center;}
+.nest .l4>span{position:static;}
+.nest .lv.hi{box-shadow:0 0 0 4px var(--red),0 10px 30px rgba(176,72,63,.25);}
+
+/* ---------- content components ---------- */
+.bul{margin:0;padding-left:1.25em;font-size:clamp(15px,1.25vw,17px);line-height:1.72;}
+.bul>li{margin:0 0 9px;}
+.bul>li:last-child{margin-bottom:0;}
+.bul li::marker{color:var(--brand-dark);}
+.bul ul{list-style:none;margin:5px 0 0;padding-left:1.15em;}
+.bul ul li{position:relative;margin:0 0 4px;color:var(--ink-soft);}
+.bul ul li::before{content:"–";position:absolute;left:-1.1em;color:var(--muted);}
+.bul ul ul li::before{content:"·";}
+.bul ul ul li{font-size:.94em;}
+.bul b{font-weight:800;}
+.bul .arrow{color:var(--red);font-weight:800;}
+.bul .arrow::before{content:"➜ ";}
+.compact{font-size:clamp(14px,1.15vw,16px);}
+.compact>li{margin-bottom:5px;}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+.two.eq{grid-template-columns:1fr 1fr;}
+.two.wide-r{grid-template-columns:.85fr 1.15fr;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.figrow{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+figure{margin:0;text-align:center;min-width:0;}
+figure img,figure video{display:block;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);}
+figure.plain img{border:0;border-radius:0;}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
+.src{font-size:11.5px;color:var(--muted);word-break:break-all;margin-top:auto;padding-top:14px;line-height:1.6;}
+.src a{color:var(--brand-dark);text-decoration:none;}
+.src a:hover{text-decoration:underline;}
+.em{color:var(--red);font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.5;}
+.em.center{text-align:center;}
+.em .arrow::before{content:"➜ ";}
+.callout{border-left:4px solid var(--brand);background:var(--sky-light);padding:12px 16px;border-radius:8px;font-size:15px;}
+.callout.warn{border-color:var(--amber);background:var(--amber-light);}
+.callout.bad{border-color:var(--red);background:var(--red-light);}
+.callout.good{border-color:var(--green);background:var(--green-light);}
+.callout b{font-weight:800;}
+.quote{font-size:clamp(16px,1.45vw,19px);line-height:1.75;border-left:4px solid var(--brand);padding:8px 20px;margin:0;color:var(--ink);}
+.quote cite{display:block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;color:var(--ink-soft);}
+.center{text-align:center;}
+.muted{color:var(--muted);}
+
+.math{font-family:"Cambria","Times New Roman",Georgia,serif;font-size:1.06em;}
+.math i{font-style:italic;}
+.math .w{color:var(--red);font-weight:700;font-style:italic;}
+.fbox{display:inline-block;padding:10px 24px;border:2px solid var(--ink);border-radius:6px;background:#fff;font-family:"Cambria","Times New Roman",Georgia,serif;font-size:clamp(18px,1.9vw,25px);line-height:1.4;}
+.fbox.red{border-color:var(--red);}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 6px;}
+.frac>span{padding:0 6px;}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;}
+.sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;margin:0 4px;}
+.sum>span{font-size:.55em;}
+.sum>b{font-size:1.5em;font-weight:400;}
+
+.tbl{border-collapse:collapse;margin:0 auto;font-size:clamp(13px,1.15vw,15.5px);background:#fff;}
+.tbl th,.tbl td{border:1px solid #9aa39b;padding:8px 16px;text-align:center;line-height:1.35;}
+.tbl th{background:var(--sky-light);font-weight:800;}
+.tbl .hl{background:var(--amber-light);}
+.tbl .dim{color:var(--muted);}
+
+/* f( ) = 함수 표기 */
+.fn{
+  display:flex;align-items:center;justify-content:center;gap:clamp(6px,1.4vw,16px);flex-wrap:nowrap;
+  font-family:"Cambria","Times New Roman",Georgia,serif;padding:6px 0 62px;
+}
+.fn.nolbl{padding-bottom:6px;}
+.fn .f{font-style:italic;font-size:clamp(54px,7vw,92px);line-height:1;}
+.fn .par{font-size:clamp(62px,8.2vw,112px);line-height:1;font-weight:300;color:var(--ink);}
+.fn .eq{font-size:clamp(40px,5.2vw,70px);line-height:1;margin:0 4px;}
+.fn .part{position:relative;display:flex;flex-direction:column;align-items:center;}
+.fn .slot{min-width:clamp(80px,11vw,140px);min-height:56px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(16px,1.6vw,22px);font-weight:700;font-family:"Inter","Noto Sans KR",sans-serif;}
+.fn .slot.blank{border-bottom:3px solid var(--red);}
+.fn .slot img{max-height:clamp(90px,14vw,150px);width:auto;border-radius:6px;}
+.fn .slot.col{flex-direction:column;gap:4px;}
+.fn .slot.col img{max-height:56px;}
+.fn .lbl{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;
+  font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(13px,1.15vw,15.5px);font-weight:800;color:var(--red);
+  border-top:3px solid var(--red);padding-top:6px;text-align:center;line-height:1.35;white-space:nowrap;min-width:100%;
+}
+.fn.sm{padding-bottom:50px;}
+.fn.sm .f{font-size:clamp(40px,4.6vw,60px);}
+.fn.sm .par{font-size:clamp(46px,5.4vw,72px);}
+.fn.sm .eq{font-size:clamp(30px,3.4vw,44px);}
+.fn.sm .slot{min-height:44px;font-size:clamp(14px,1.3vw,17px);}
+.fn.sm .slot img{max-height:clamp(64px,9vw,96px);}
+.fn.sm .lbl{font-size:12.5px;}
+.fn.xs{padding-bottom:0;}
+.fn.xs .f{font-size:36px;} .fn.xs .par{font-size:40px;} .fn.xs .eq{font-size:26px;} .fn.xs .slot{min-height:36px;min-width:60px;font-size:14px;}
+.fn-list{display:flex;flex-direction:column;gap:18px;}
+.fn-list .fn{padding:0;justify-content:flex-start;}
+.fn-list .fn .out{font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(20px,2.4vw,30px);font-weight:700;margin-left:10px;}
+.fn .cjk{font-family:"Noto Sans KR",sans-serif;font-size:clamp(30px,3.6vw,46px);font-weight:800;}
+
+/* 트리 도식 */
+.tree{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;}
+.tnode{padding:10px 20px;border:2px solid var(--ink);border-radius:8px;background:#fff;font-weight:800;font-size:clamp(13px,1.2vw,16px);text-align:center;position:relative;}
+.tnode.hi{border-color:var(--red);background:var(--red-light);color:var(--red);}
+.tnode.dots{border:0;background:transparent;font-size:1.6em;padding:4px 0;letter-spacing:.1em;}
+.tnode small{display:block;font-weight:600;color:var(--muted);font-size:.85em;}
+.tree .stem{width:2px;height:26px;background:var(--ink);}
+.tree .row{position:relative;display:grid;gap:12px;width:100%;padding-top:26px;}
+.tree .row::before{content:"";position:absolute;top:0;left:calc(100% / var(--n) / 2);right:calc(100% / var(--n) / 2);height:2px;background:var(--ink);}
+.tree .row>div{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.tree .row>div::before{content:"";position:absolute;top:-26px;width:2px;height:26px;background:var(--ink);}
+.tree .row .desc{font-size:clamp(13px,1.1vw,15px);color:var(--ink-soft);text-align:left;margin:0;padding-left:1.1em;line-height:1.55;}
+.tree .row .desc li{margin-bottom:3px;}
+.hl-note{display:flex;align-items:center;gap:12px;justify-content:center;font-size:13.5px;color:var(--muted);font-weight:600;}
+.hl-note img{height:44px;width:auto;border-radius:6px;}
+.hl-note .ar{color:var(--red);font-size:22px;font-weight:900;}
+
+/* 신경망·뉴런 SVG */
+.nn{width:100%;max-width:680px;height:auto;display:block;margin:0 auto;}
+.nn .in{fill:#fff;stroke:var(--brand-dark);stroke-width:2.2;}
+.nn .hid{fill:#fff;stroke:var(--amber);stroke-width:2.2;}
+.nn .out{fill:#fff;stroke:var(--green);stroke-width:2.2;}
+.nn .e{stroke:#22201d;stroke-width:1.1;opacity:.72;}
+.nn .nl{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:15px;fill:var(--ink);}
+.nn .ol{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:17px;fill:var(--ink);}
+.nn .dots{font-size:22px;font-weight:800;fill:var(--ink);}
+.nn .box{fill:none;stroke:var(--red);stroke-dasharray:7 5;stroke-width:2.2;}
+.nn-wrap{position:relative;}
+.nn-wrap .overlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border:1.5px solid var(--ink);padding:8px 22px;font-weight:800;font-size:clamp(14px,1.4vw,18px);border-radius:6px;white-space:nowrap;}
+.neuron{width:100%;max-width:640px;height:auto;display:block;margin:0 auto;}
+.neuron .nb{fill:#fff;stroke:var(--brand-dark);stroke-width:2.4;}
+.neuron .ln{stroke:var(--brand-dark);stroke-width:2;fill:none;}
+.neuron .lab{font-family:"Cambria","Times New Roman",serif;font-size:17px;font-weight:700;fill:var(--ink);}
+.neuron .w{fill:var(--red);}
+.neuron .z{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:19px;fill:var(--red);font-weight:700;}
+.neuron .act{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--red);}
+.io-flow{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;}
+.io-flow .io{text-align:center;font-weight:800;color:var(--red);font-size:clamp(14px,1.3vw,17px);line-height:1.4;}
+.io-flow .io img{width:clamp(96px,12vw,150px);height:auto;border-radius:8px;border:1px solid var(--line);display:block;margin:0 auto 8px;}
+.io-flow .io .ink{color:var(--ink);font-weight:700;font-size:.9em;}
+.io-flow .outs{list-style:none;margin:0 0 8px;padding:0;font-weight:700;color:var(--ink);font-size:clamp(14px,1.3vw,17px);text-align:left;line-height:1.9;}
+.io-flow .outs li.first{color:var(--green);font-weight:900;}
+
+/* 기타 */
+.media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;}
+.media-grid img,.media-grid video{width:100%;aspect-ratio:16/9;max-height:250px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;background:#000;}
+.media-grid figcaption{font-size:12.5px;}
+.poster-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.poster-grid img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;}
+.cross{position:relative;display:inline-block;}
+.cross::before,.cross::after{content:"";position:absolute;left:50%;top:50%;width:112%;height:8px;background:var(--red);border-radius:4px;transform:translate(-50%,-50%) rotate(45deg);opacity:.92;}
+.cross::after{transform:translate(-50%,-50%) rotate(-45deg);}
+.stackpile{position:relative;height:190px;width:200px;margin:0 auto;}
+.stackpile img{position:absolute;width:120px;height:auto;border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-sm);background:#fff;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
+.step .no{width:30px;height:30px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
+.step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
+.step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
+.step .sol::before{content:"➜ ";}
+.cycle{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;}
+.cycle .node{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;min-height:150px;justify-content:center;}
+.cycle .node img{height:46px;width:auto;}
+.cycle .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.cycle .node p b{display:block;color:var(--red);font-weight:800;}
+.cycle .ar{font-size:30px;color:var(--brand-dark);font-weight:900;}
+.tri{position:relative;width:min(100%,780px);aspect-ratio:780/480;margin:0 auto;}
+.tri-arrows{position:absolute;inset:0;width:100%;height:100%;}
+.tri-arrows path{fill:none;stroke:var(--brand-dark);stroke-width:3;}
+.tri .node{position:absolute;width:32%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:center;}
+.tri .node img{height:44px;width:auto;}
+.tri .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.tri .node p b{display:block;color:var(--red);font-weight:800;}
+.tri .n1{left:1%;top:3%;}
+.tri .n2{right:1%;top:3%;}
+.tri .n3{left:34%;bottom:2%;}
+.cycle-back{text-align:center;color:var(--muted);font-size:13.5px;font-weight:700;margin-top:-6px;}
+.cycle-back::before{content:"↺ ";color:var(--brand-dark);font-size:18px;}
+.pyr{display:grid;grid-template-columns:150px 1fr 150px;gap:14px;align-items:center;max-width:820px;margin:0 auto;width:100%;}
+.pyr svg{width:100%;height:auto;display:block;}
+.pyr .side{text-align:center;font-weight:800;font-size:14px;line-height:1.5;}
+.pyr .side .ar{display:block;font-size:44px;line-height:1;color:var(--brand-dark);}
+.pyr .side.left .ar{color:var(--muted);}
+.chart-box{width:100%;max-width:760px;margin:0 auto;}
+.chart-box svg{width:100%;height:auto;display:block;}
+.chart-box .axis{stroke:#7b857d;stroke-width:1;}
+.chart-box .grid{stroke:#e1e8df;stroke-width:1;}
+.chart-box .tick{font-size:12px;fill:var(--muted);}
+.chart-box .lbl{font-size:12.5px;font-weight:700;fill:var(--ink);}
+.chart-box .pct{font-size:12px;font-weight:800;fill:var(--ink);}
+.chart-box .ln{fill:none;stroke:var(--brand-dark);stroke-width:2.4;}
+.chart-box .pt{fill:var(--brand-dark);}
+.chart-box .target{stroke:var(--red);stroke-width:2;stroke-dasharray:7 5;}
+.chart-box .ttl{font-size:13px;font-weight:800;fill:var(--muted);}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);}
+.logo-title{display:flex;align-items:center;gap:14px;}
+.logo-title img{height:34px;width:auto;}
+.cover-img{position:absolute;inset:0;border-radius:inherit;overflow:hidden;}
+.cover-img img{width:100%;height:100%;object-fit:cover;object-position:left center;filter:grayscale(1) brightness(.55);}
+.cover .over{position:relative;z-index:1;}
+
+@media (max-width:1100px){ .two,.two.eq,.two.wide-r{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;} }
+@media (max-width:900px){
+  .layout{display:block;}
+  .sidebar{position:sticky;top:var(--topbar-h);width:auto;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:10px 12px;background:rgba(243,246,242,.96);backdrop-filter:blur(8px);z-index:20;flex-direction:row;}
+  .sidebar-title,.sub,.side-hint{display:none!important;}
+  .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
+  .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
+  .toc-link .cnt{display:none;}
+  .stage{min-height:auto;}
+}
+@media (max-width:640px){
+  .topbar{gap:10px;}
+  .week-title{display:none;}
+  .zoom-ctl{display:none;}
+  .progress-wrap{width:110px;}
+  .pbtn{padding:10px 12px;font-size:13px;}
+  .pbtn span{display:none;}
+  .pbtn svg{width:18px;height:18px;}
+  .poster-grid{grid-template-columns:repeat(2,1fr);}
+  .tri{aspect-ratio:auto;display:flex;flex-direction:column;gap:10px;}
+  .tri-arrows{display:none;}
+  .tri .node{position:static;width:100%;}
+  .pyr{grid-template-columns:1fr;}
+  .io-flow{grid-template-columns:1fr;}
+  .slide{overflow-x:auto;}
+  .fn{flex-wrap:wrap;gap:4px;padding-bottom:70px;}
+  .fn .f{font-size:44px;} .fn .par{font-size:52px;} .fn .eq{font-size:34px;flex-basis:100%;text-align:center;margin:6px 0;}
+  .fn .slot{min-width:56px;min-height:40px;font-size:14px;}
+  .fn .slot img{max-height:84px;}
+  .fn .slot.col img{max-height:40px;}
+  .fn .lbl{white-space:normal;font-size:12px;min-width:0;width:max-content;max-width:150px;}
+  .fn .part{margin-bottom:8px;}
+  .fn.sm,.fn.xs{padding-bottom:60px;}
+  .fn.nolbl,.fn-list .fn{padding-bottom:0;}
+  .fn.nolbl .eq,.fn-list .fn .eq{flex-basis:auto;}
+  .tbl th,.tbl td{padding:6px 8px;font-size:12.5px;}
+  .nest{aspect-ratio:4/3;}
+  .nest .lv>span{font-size:13px;top:10px;left:12px;}
+}
+/* ---------- 2강 추가 컴포넌트 ---------- */
+.roadmap{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px;}
+.roadmap li{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:700;color:var(--muted);}
+.roadmap li .n{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;font-size:11px;font-weight:900;}
+.roadmap li.cur{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;transform:scale(1.06);box-shadow:0 8px 20px rgba(27,111,166,.25);}
+.roadmap li.cur .n{background:rgba(255,255,255,.22);color:#fff;}
+.roadmap li.done{background:var(--green-light);border-color:#cfe3d8;color:var(--green);}
+.roadmap li.done .n{background:#fff;color:var(--green);}
+.step .ttl{display:block;font-size:16px;font-weight:800;color:var(--ink);}
+.step .bul{padding-left:1.1em;}
+.tbl.mini{font-size:12.5px;margin:0;}
+.tbl.mini td{padding:3px 10px;text-align:left;}
+.tbl.mini td:last-child{text-align:center;font-weight:700;}
+.toc-link:disabled{opacity:.5;cursor:default;}
+.toc-link:disabled:hover{background:transparent;color:var(--muted);}
+.cover .outline button:disabled{opacity:.45;cursor:default;}
+.cover .outline button:disabled:hover{background:rgba(255,255,255,.045);}
+
+/* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
+@page{size:320mm 180mm;margin:0;}
+@media print{
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .topbar,.sidebar,.pager{display:none!important;}
+  .layout{display:block;}
+  .stage{zoom:1!important;min-height:0!important;padding:0!important;display:block;}
+  .deck{display:block;}
+  .slide{display:flex!important;flex-direction:column;zoom:.85;width:calc(320mm / .85);height:calc(180mm / .85);overflow:hidden;box-sizing:border-box;
+    margin:0;border:0;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;animation:none!important;
+    padding:14mm 18mm 12mm;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .two{grid-template-columns:1.1fr .9fr;} .two.eq{grid-template-columns:1fr 1fr;} .two.wide-r{grid-template-columns:.85fr 1.15fr;}
+  .steps{grid-template-columns:repeat(3,1fr);} .io-flow{grid-template-columns:auto 1fr auto;} .pyr{grid-template-columns:150px 1fr 150px;}
+  .poster-grid{grid-template-columns:repeat(4,1fr);} .fn{flex-wrap:nowrap;}
+  .slide.cover{border-radius:0;}
+  .cover-img{border-radius:0;}
+  video{background:#000;}
+  a{text-decoration:none;color:inherit;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="brand" title="강의 일정으로">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
+    </a>
+    <div class="week-tag"><span class="week-num">2강</span><span class="week-title">대규모 언어모델과 기반모델</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="zoom-ctl" role="group" aria-label="슬라이드 크기">
+      <button type="button" id="zoomOut" title="작게 (−)">A−</button>
+      <span class="zv" id="zoomVal" title="자동 크기로 되돌리기 (0)">100%</span>
+      <button type="button" id="zoomIn" title="크게 (+)">A+</button>
+    </div>
+    <div class="progress-wrap" aria-label="진행률">
+      <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">0</span></span>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="목차">
+    <div class="sidebar-title">목차</div>
+    <ol class="toc" id="toc"></ol>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · <kbd>+</kbd> <kbd>−</kbd> 크기 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="deck" id="deck">
+
+<!-- ===================== 0. 들어가며 ===================== -->
+<section class="slide cover" data-sec="0" data-title="표지">
+  <div class="cover-body">
+    <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 2강</span>
+    <h1>대규모 언어모델과 <em>기반모델</em></h1>
+    <p class="lead">컴퓨터는 어떻게 말을 숫자로 바꾸고, 그 숫자로 다음 단어를 맞히게 되었나. 단어 임베딩에서 트랜스포머와 사후학습을 거쳐 ChatGPT, 그리고 범용·멀티모달 기반모델에 이르는 길을 따라간다.</p>
+    <div class="meta">
+      <span class="meta-chip">2026. 9. 10.</span>
+      <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
+    </div>
+    <div class="outline" id="coverOutline"></div>
+  </div>
+</section>
+
+<!-- ===================== 1. 자연어 처리와 단어 임베딩 ===================== -->
+<section class="slide section" data-sec="1" data-title="자연어 처리와 단어 임베딩">
+  <div class="kicker">Section 1</div>
+  <h2>자연어 처리와 단어 임베딩</h2>
+  <p class="section-lead">말을 숫자로 바꾸는 첫걸음. 단어를 “세는” 방법에서 단어의 “뜻”을 좌표로 찍는 방법으로.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="1"></ol>
+    <p class="muted center">1강에서 본 “인공지능 = 함수”를 떠올리자. 입력이 문장이라면, 함수에 넣기 전에 문장을 먼저 숫자로 바꿔야 한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="자연어 처리 기술">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>자연어 처리 기술</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step">
+        <span class="no">1</span><b class="ttl">두 종류의 언어</b>
+        <ul class="bul compact">
+          <li>프로그래밍 언어 (Programming Language) — 컴퓨터를 위해 만든 말</li>
+          <li>자연어 (Natural Language) — 사람이 쓰는 말</li>
+        </ul>
+      </div>
+      <div class="step">
+        <span class="no">2</span><b class="ttl">자연어 처리 (NLP)</b>
+        <ul class="bul compact">
+          <li>컴퓨터를 이용하여 유용한 작업을 수행하기 위해 자연어를 처리·이해하는 방법에 관한 연구</li>
+          <li>컴퓨터 공학의 고전적 주제 — 1954년 조지타운 대학과 IBM이 러시아어 60문장을 영어로 기계번역</li>
+          <li>그러나 2010년까지 기계번역은 인간 수준에 현저히 못 미침</li>
+        </ul>
+      </div>
+      <div class="step">
+        <span class="no">3</span><b class="ttl">딥러닝의 적용 (2010~)</b>
+        <ul class="bul compact">
+          <li>음성인식 과제에서 딥러닝이 놀라운 성능 향상을 보임</li>
+          <li>Amazon Alexa, Google Assistant, Apple Siri 등 상업 시스템이 딥러닝 방식을 채택</li>
+          <li>음성 인식, 기계 번역, 대화(챗봇)로 확산</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="10년 전의 자연어 처리">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>10년 전의 자연어 처리 — 언어를 “이해”하지 못하는 인공지능</h2>
+  <div class="body">
+    <div class="two wide-r" style="grid-template-columns:1.15fr .85fr">
+      <div class="stack">
+        <blockquote class="quote" lang="en">“Machines that truly understand language would be incredibly useful. <b>But we don’t know how to build them.</b>”
+          <cite>– Will Knight, MIT Technology Review (2016)</cite>
+        </blockquote>
+        <div class="grid2">
+          <div class="callout good"><b>문법 분석 — 되는 것</b><br>품사 분류, 구문 분석<br><span class="muted">언어학자 수준까지 분석 가능</span></div>
+          <div class="callout bad"><b>의미 분석 — 안 되는 것</b><br>Meaning: 중의·함의·은유·반의<br>Context: 문맥·맥락·상황<br>Reasoning: 상식(common sense)이 필요</div>
+        </div>
+      </div>
+      <figure><img src="assets/week02/s04-siri.png" alt="Siri에게 ‘맥도날드가 아닌 패스트푸드점을 찾아줘’라고 했더니 맥도날드 세 곳을 찾아준 화면" style="max-height:380px"><figcaption>“맥도날드가 <b>아닌</b> 패스트푸드점을 찾아줘” → 맥도날드 3곳 (Siri, 2010년대 초)</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="인공신경망에 텍스트 입력하기">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>인공신경망에 텍스트 입력하기</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>컴퓨터에 저장된 데이터
+        <ul>
+          <li>컴퓨터에 저장된 텍스트 – “01000111…” → 그 자체로는 특별한 의미가 없음</li>
+          <li>인공신경망 모델의 입력 변수로 활용하려면 유의미한 숫자 형태로 변환할 필요</li>
+        </ul>
+      </li>
+      <li>단어를 표현하는 가장 단순한 방법 = 세어 보기 (count-based approach)
+        <ul>
+          <li>자주 사용되는 단어 사전(vocabulary)을 구축</li>
+          <li>단어의 등장 횟수나 빈도에 따른 숫자 배열 생성</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="figrow" style="align-items:flex-start">
+      <figure class="plain" style="flex:1 1 380px"><img src="assets/week02/s05-bow-vectors.png" alt="‘개’, ‘고양이’, ‘강아지’ 등 각 단어를 사전 위치 하나만 1인 긴 벡터로 표현한 예" style="max-height:170px"><figcaption>단어 하나 = 사전 길이만큼의 0과 1 (박은정, “한국어와 NLTK, Gensim의 만남”, PyCon Korea 2015)</figcaption></figure>
+      <figure style="flex:0 1 300px"><img src="assets/week02/s05-vocab.jpg" alt="편지 한 통을 단어 사전(dinner, about, prince, call, work, nigerian …)의 등장 여부 0/1 배열로 바꾸는 그림" style="max-height:230px"><figcaption>문서 하나 = 사전의 각 단어가 등장했는지(0/1) 또는 몇 번 등장했는지</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="간단한 스팸 메일 분류기">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>간단한 스팸 메일 분류기</h2>
+  <div class="body">
+    <div class="io-flow">
+      <div class="io">
+        <table class="tbl mini" aria-label="메일을 단어 사전 벡터로 바꾼 예">
+          <tr><td>dinner</td><td>0</td></tr><tr><td>about</td><td>1</td></tr><tr><td>prince</td><td>1</td></tr><tr><td>call</td><td>0</td></tr><tr><td>nigerian</td><td>1</td></tr><tr><td>…</td><td>…</td></tr>
+        </table>
+        <div style="margin-top:8px">입력변수<div class="ink">단어 사전에 들어 있는<br>단어 수만큼</div></div>
+      </div>
+      <svg class="nn" data-layers="5,4,4,1" data-in="x₁,x₂,x₃,…,xᵥ" data-hdots="1" data-out="ŷ" role="img" aria-label="사전 크기만큼의 입력을 받아 스팸 여부를 출력하는 인공신경망"></svg>
+      <div class="io">출력변수<div class="ink">스팸 여부 [0 / 1]</div></div>
+    </div>
+    <p class="muted center">1강의 필기숫자 인식과 같은 구조다. 입력이 픽셀 784개에서 “단어 수만큼”으로 바뀌었을 뿐이다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="더 나은 방법은 없을까?">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>더 나은 방법은 없을까?</h2>
+  <div class="body">
+    <ul class="bul"><li>단어의 <b>특징</b>을 숫자로 표현하기 — 단어마다 “성별은 얼마, 왕족은 얼마…”</li></ul>
+    <div class="figrow" style="gap:28px;align-items:center">
+      <div class="io" style="text-align:center;color:var(--red);font-weight:800;line-height:1.4">300개<br>변수<div style="font-size:26px;line-height:1">⬍</div></div>
+      <table class="tbl">
+        <thead><tr><th>특징</th><th>Man</th><th>Woman</th><th>King</th><th>Queen</th><th>Apple</th><th>Orange</th></tr></thead>
+        <tbody>
+          <tr><th>성별</th><td>−1</td><td>1</td><td>−0.95</td><td>0.97</td><td>0.00</td><td>0.01</td></tr>
+          <tr><th>왕족</th><td>0.01</td><td>0.02</td><td>0.93</td><td>0.95</td><td>−0.01</td><td>0.00</td></tr>
+          <tr><th>나이</th><td>0.03</td><td>0.02</td><td>0.7</td><td>0.69</td><td>0.03</td><td>−0.02</td></tr>
+          <tr><th>음식</th><td>0.04</td><td>0.01</td><td>0.02</td><td>0.01</td><td>0.95</td><td>0.97</td></tr>
+          <tr class="dim"><th>…</th><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted center">King과 Queen은 “왕족” 축에서 가깝고, Apple과 Orange는 “음식” 축에서 가깝다. 그런데 이 축을 누가 정하고 값을 누가 채우나?</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="단어 임베딩(Word Embedding)">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>단어 임베딩 (Word Embedding)</h2>
+  <div class="body">
+    <ul class="bul"><li>인공신경망이 <b>스스로</b> 단어의 특징을 학습한 결과 — 축의 이름은 없지만, 숫자 300개가 단어의 “뜻”을 담는다</li></ul>
+    <p class="em"><span class="arrow"></span>각각의 단어를 300차원의 공간에 좌표로 찍어 놓은 것!</p>
+    <figure><img src="assets/week02/s08-embedding-map.png" alt="man·woman·king·queen, dog·cat·fish, apple·grape·orange, one·two·three·four가 각각 가까이 모여 있는 2차원 지도" style="max-height:330px"><figcaption>300차원을 2차원으로 눌러서 그린 지도 — 비슷한 뜻의 단어는 가까이 모인다 (Andrew Ng, Coursera)</figcaption></figure>
+    <p class="src"><a href="https://www.coursera.org/learn/nlp-sequence-models/lecture/6Oq70/word-representation" target="_blank" rel="noopener">https://www.coursera.org/learn/nlp-sequence-models/lecture/6Oq70/word-representation</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="단어 임베딩의 특징">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>단어 임베딩의 특징</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week02/s09-analogies.png" alt="세 개의 3차원 그림: man→woman과 king→queen이 평행, walking→walked와 swimming→swam이 평행, 나라→수도 화살표들이 평행" style="max-height:360px"><figcaption>Figure 4. Embeddings can produce remarkable analogies — 성별, 시제, 나라–수도 관계가 같은 “방향”으로 나타난다 (Google ML Crash Course)</figcaption></figure>
+    <p class="src"><a href="https://developers.google.com/machine-learning/crash-course/embeddings/translating-to-a-lower-dimensional-space" target="_blank" rel="noopener">https://developers.google.com/machine-learning/crash-course/embeddings/translating-to-a-lower-dimensional-space</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="“king” – “man” + “woman” = “queen”">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>“king” – “man” + “woman” = “queen”</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week02/s10-king-queen.png" alt="w_king − w_man 벡터에 w_woman을 더하면 w_queen에 가까워지는 평행사변형 그림" style="max-height:400px"></figure>
+    <p class="muted center">단어가 좌표가 되면 단어끼리 더하고 뺄 수 있다. “왕”에서 “남자”를 빼고 “여자”를 더하면 “여왕” 근처에 도착한다.</p>
+    <p class="src"><a href="https://www.ed.ac.uk/informatics/news-events/stories/2019/king-man-woman-queen-the-hidden-algebraic-struct" target="_blank" rel="noopener">https://www.ed.ac.uk/informatics/news-events/stories/2019/king-man-woman-queen-the-hidden-algebraic-struct</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="사랑 + 이별 = ?">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>사랑 + 이별 = ?</h2>
+  <div class="body">
+    <figure><img src="assets/week02/s11-word2vec-kr.png" alt="word2vec.kr에서 ‘사랑+이별’을 검색하니 결과로 ‘추억’이 나온 화면" style="max-height:420px"><figcaption>한국어 임베딩에서 “사랑 + 이별”을 계산한 결과: <b>추억</b> (word2vec.kr)</figcaption></figure>
+    <p class="src"><a href="http://word2vec.kr/search/?query=%EC%82%AC%EB%9E%91%2B%EC%9D%B4%EB%B3%84" target="_blank" rel="noopener">http://word2vec.kr/search/?query=사랑+이별</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="Word2Vec 특허">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>Word2Vec 특허 (US 9,037,464 B1)</h2>
+  <div class="body">
+    <div class="figrow" style="align-items:flex-start">
+      <figure style="flex:1 1 340px"><img src="assets/week02/s12-w2v-paper.png" alt="Mikolov et al., Efficient Estimation of Word Representations in Vector Space 논문 첫 페이지" style="max-height:400px"><figcaption>논문: Mikolov, Chen, Corrado, Dean (Google), “Efficient Estimation of Word Representations in Vector Space” (2013)</figcaption></figure>
+      <div class="stack" style="flex:1 1 300px">
+        <figure><img src="assets/week02/s12-w2v-patent.png" alt="US 9,037,464 B1 특허 서지 — Computing numeric representations of words in a high-dimensional space, 출원인 Google" style="max-height:190px"></figure>
+        <figure class="plain"><img src="assets/week02/s12-w2v-figure.png" alt="특허 도면: 단어 예측 시스템의 임베딩 함수와 분류기" style="max-height:190px"><figcaption>같은 발명을 논문과 특허로 동시에 — “Computing numeric representations of words in a high-dimensional space” (2015 등록)</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="단어 의미의 변화">
+  <div class="kicker">자연어 처리와 단어 임베딩</div>
+  <h2>단어 의미의 변화</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week02/s13-apple-amazon.png" alt="연도별 임베딩에서 apple이 과일·디저트 단어들 근처에서 iphone·samsung 근처로, amazon이 jungle·forest 근처에서 netflix·kindle 근처로 옮겨 가는 그림" style="max-height:400px"><figcaption>연도별로 따로 학습한 임베딩 — apple은 과일에서 IT 기업으로, amazon은 정글에서 온라인 서점으로 이동한다 (Yao et al. 2018)</figcaption></figure>
+    <p class="muted center">임베딩은 “사전에 적힌 뜻”이 아니라 “그 시기 사람들이 그 단어를 어떻게 썼는가”를 담는다.</p>
+    <p class="src"><a href="https://blog.acolyer.org/2018/02/22/dynamic-word-embeddings-for-evolving-semantic-discovery/" target="_blank" rel="noopener">https://blog.acolyer.org/2018/02/22/dynamic-word-embeddings-for-evolving-semantic-discovery/</a></p>
+  </div>
+</section>
+
+    </div><!-- /deck -->
+
+    <nav class="pager" aria-label="페이지 이동">
+      <button class="pbtn prev" id="btnPrev" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span id="prevLabel">이전</span></button>
+      <div class="pinfo"><span class="sec" id="pSec"></span><span class="dots" id="pDots"></span><span class="cnt" id="pCnt"></span></div>
+      <button class="pbtn next" id="btnNext" type="button"><span id="nextLabel">다음</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    </nav>
+  </main>
+</div>
+
+<script>
+(function(){
+  const SECTIONS = [
+    {name:'들어가며', sub:'강의 소개'},
+    {name:'자연어 처리와 단어 임베딩', sub:'말을 숫자로 바꾸기'},
+    {name:'시퀀스 데이터와 순환 신경망', sub:'앞 단어의 기억을 넘기기'},
+    {name:'언어모델과 트랜스포머', sub:'다음 단어 예측하기'},
+    {name:'BERT·GPT와 스케일링 법칙', sub:'크게 만들수록 잘한다'},
+    {name:'사후학습과 ChatGPT', sub:'사람 피드백으로 길들이기'},
+    {name:'기반모델', sub:'하나의 모델, 수많은 용도'},
+    {name:'범용·멀티모달 기반모델', sub:'글을 넘어 이미지·소리로'}
+  ];
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  const secOf = i => +slides[i].dataset.sec;
+  const secIdx = SECTIONS.map((_, s) => slides.map((sl, i) => i).filter(i => secOf(i) === s));
+  let cur = -1;
+
+  /* ---------- 사이드바 목차 ---------- */
+  const toc = document.getElementById('toc');
+  SECTIONS.forEach((s, k) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'toc-link';
+    btn.innerHTML = `<span class="no">${k}</span><span class="nm">${s.name}</span><span class="cnt">${secIdx[k].length}p</span>`;
+    btn.addEventListener('click', () => show(secIdx[k][0]));
+    if (!secIdx[k].length) { btn.disabled = true; btn.querySelector('.cnt').textContent = '준비 중'; }
+    const sub = document.createElement('ul'); sub.className = 'sub';
+    secIdx[k].forEach(i => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = slides[i].dataset.title || slides[i].querySelector('h2,h1')?.textContent || `슬라이드 ${i+1}`;
+      b.addEventListener('click', () => show(i));
+      const l = document.createElement('li'); l.appendChild(b); sub.appendChild(l);
+    });
+    li.appendChild(btn); li.appendChild(sub); toc.appendChild(li);
+  });
+  const tocItems = Array.from(toc.children);
+
+  /* 표지의 목차 버튼 */
+  const co = document.getElementById('coverOutline');
+  if (co) SECTIONS.slice(1).forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span class="num">${k+1}</span><span>${s.name}<small>${s.sub}</small></span>`;
+    b.addEventListener('click', e => { e.stopPropagation(); show(secIdx[k+1][0]); });
+    if (!secIdx[k+1].length) { b.disabled = true; b.querySelector('small').textContent = '준비 중'; }
+    co.appendChild(b);
+  });
+
+  /* ---------- 페이저 ---------- */
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const prevLabel = document.getElementById('prevLabel'), nextLabel = document.getElementById('nextLabel');
+  const pSec = document.getElementById('pSec'), pDots = document.getElementById('pDots'), pCnt = document.getElementById('pCnt');
+  const curNo = document.getElementById('curNo'), totNo = document.getElementById('totNo'), bar = document.getElementById('progressBar');
+  totNo.textContent = N;
+
+  function show(i, replace){
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    if (cur >= 0) { slides[cur].classList.remove('active'); slides[cur].querySelectorAll('video').forEach(v => v.pause()); }
+    cur = i;
+    const sl = slides[i]; sl.classList.add('active');
+    sl.querySelectorAll('video').forEach(v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const s = secOf(i), list = secIdx[s], k = list.indexOf(i);
+
+    tocItems.forEach((li, j) => {
+      const b = li.firstElementChild;
+      b.classList.toggle('active', j === s);
+      b.classList.toggle('done', j < s);
+      li.classList.toggle('open', j === s);
+      li.querySelectorAll('.sub button').forEach((sb, m) => sb.classList.toggle('active', j === s && m === k));
+    });
+    const act = toc.querySelector('.toc-link.active');
+    if (act && window.innerWidth <= 900) act.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+
+    pSec.textContent = SECTIONS[s].name;
+    pCnt.textContent = `${k + 1} / ${list.length} · 전체 ${i + 1} / ${N}`;
+    pDots.innerHTML = '';
+    list.forEach((idx, m) => { const d = document.createElement('i'); if (m === k) d.className = 'on'; d.title = slides[idx].dataset.title || ''; d.addEventListener('click', () => show(idx)); pDots.appendChild(d); });
+
+    btnPrev.disabled = i === 0; btnNext.disabled = i === N - 1;
+    prevLabel.textContent = k === 0 && s > 0 ? `이전 섹션: ${SECTIONS[s - 1].name}` : '이전';
+    nextLabel.textContent = k === list.length - 1 && s < SECTIONS.length - 1 ? `다음 섹션: ${SECTIONS[s + 1].name}` : (i === N - 1 ? '마지막 페이지' : '다음');
+
+    curNo.textContent = i + 1; bar.style.width = ((i + 1) / N * 100) + '%';
+    const h = '#' + (i + 1);
+    if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+    window.scrollTo({top:0, behavior:'auto'});
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} — 2강 대규모 언어모델과 기반모델`;
+  }
+  const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
+  btnPrev.addEventListener('click', () => show(cur - 1));
+  btnNext.addEventListener('click', () => show(cur + 1));
+  window.addEventListener('popstate', () => show(fromHash(), true));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+    else if (e.key === '+' || e.key === '=') { e.preventDefault(); setUserZoom(userZoom * 1.1); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); setUserZoom(userZoom / 1.1); }
+    else if (e.key === '0') { e.preventDefault(); setUserZoom(1); }
+  });
+  /* ---------- 화면 크기에 맞춘 슬라이드 확대 ---------- */
+  const stage = document.getElementById('stage'), zoomVal = document.getElementById('zoomVal');
+  let userZoom = 1;
+  try { userZoom = parseFloat(localStorage.getItem('itm690-w02-zoom')) || 1; } catch (e) {}
+  function applyZoom(){
+    const mobile = window.innerWidth <= 900;
+    const side = mobile ? 0 : 264;
+    const auto = mobile ? 1 : Math.min(1.5, Math.max(1, (window.innerWidth - side) / 1100));
+    const z = Math.max(.6, Math.min(2.4, +(auto * userZoom).toFixed(3)));
+    stage.style.zoom = z;
+    stage.style.minHeight = mobile ? '' : ((window.innerHeight - 64) / z) + 'px';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  function setUserZoom(v){ userZoom = Math.max(.5, Math.min(2, +v.toFixed(3))); try { localStorage.setItem('itm690-w02-zoom', userZoom); } catch (e) {} applyZoom(); }
+  document.getElementById('zoomIn').addEventListener('click', () => setUserZoom(userZoom * 1.1));
+  document.getElementById('zoomOut').addEventListener('click', () => setUserZoom(userZoom / 1.1));
+  zoomVal.addEventListener('click', () => setUserZoom(1));
+  window.addEventListener('resize', applyZoom);
+  applyZoom();
+
+  let tx = null;
+  document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('deck').addEventListener('touchend', e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 70) show(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  /* ---------- 인공신경망 SVG ---------- */
+  function drawNN(svg){
+    const layers = svg.dataset.layers.split(',').map(Number);
+    const inL = (svg.dataset.in || '').split(',').filter(Boolean);
+    const out = svg.dataset.out || '';
+    const outL = (svg.dataset.outl || '').split(',').filter(Boolean);
+    const hdots = svg.dataset.hdots === '1', boxes = svg.dataset.boxes === '1';
+    const W = +svg.dataset.w || 640, H = +svg.dataset.h || 300, r = +svg.dataset.r || 18;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const padL = inL.length ? 40 : 30, padR = out ? 110 : (outL.length ? 96 : 30);
+    const L = layers.length;
+    const xs = layers.map((_, i) => padL + r + (W - padL - padR - 2 * r) * (L > 1 ? i / (L - 1) : 0));
+    const pos = layers.map((n, i) => {
+      const gap = Math.min(r * 3.6, (H - 2 * r - 10) / Math.max(n - 1, 1));
+      return Array.from({length:n}, (_, j) => {
+        const isDots = (i === 0 && inL[j] === '…') || (i === L - 1 && outL[j] === '…') || (hdots && i > 0 && i < L - 1 && j === n - 2);
+        return {x: xs[i], y: H / 2 + (j - (n - 1) / 2) * gap, dots: isDots};
+      });
+    });
+    let s = '';
+    for (let i = 0; i < L - 1; i++) for (const a of pos[i]) for (const b of pos[i + 1]) if (!a.dots && !b.dots) s += `<line class="e" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;
+    if (boxes) for (let i = 1; i < L - 1; i++) { const ys = pos[i].map(p => p.y); s += `<rect class="box" x="${xs[i] - r - 8}" y="${Math.min(...ys) - r - 8}" width="${2 * r + 16}" height="${Math.max(...ys) - Math.min(...ys) + 2 * r + 16}" rx="4"/>`; }
+    pos.forEach((Ly, i) => Ly.forEach((p, j) => {
+      if (p.dots) { s += `<text class="dots" x="${p.x}" y="${p.y + 8}" text-anchor="middle">⋮</text>`; return; }
+      const cls = i === 0 ? 'in' : (i === L - 1 ? 'out' : 'hid');
+      s += `<circle class="${cls}" cx="${p.x}" cy="${p.y}" r="${r}"/>`;
+      if (i === 0 && inL[j] && r >= 14) s += `<text class="nl" x="${p.x}" y="${p.y + 5}" text-anchor="middle">${inL[j]}</text>`;
+      if (i === L - 1 && outL[j]) s += `<text class="ol" x="${p.x + r + 8}" y="${p.y + 6}">${outL[j]}</text>`;
+    }));
+    if (out) { const p = pos[L - 1][Math.floor(pos[L - 1].length / 2)]; s += `<line class="e" x1="${p.x + r}" y1="${p.y}" x2="${p.x + r + 44}" y2="${p.y}" style="stroke-width:1.8;opacity:1" marker-end="url(#nnArr)"/><text class="ol" x="${p.x + r + 54}" y="${p.y + 6}">${out}</text>`; }
+    svg.innerHTML = `<defs><marker id="nnArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker></defs>` + s;
+  }
+  document.querySelectorAll('svg.nn').forEach(drawNN);
+  document.querySelectorAll('ol.roadmap').forEach(ol => {
+    const cur = +ol.dataset.current;
+    ol.innerHTML = SECTIONS.slice(1).map((s, i) => `<li class="${i + 1 === cur ? 'cur' : (i + 1 < cur ? 'done' : '')}"><span class="n">${i + 1}</span>${s.name}</li>`).join('');
+  });
+
+  /* ---------- 인공 뉴런 SVG ---------- */
+  function drawNeuron(svg){
+    const n = +svg.dataset.inputs || 1, split = svg.dataset.split === '1', act = svg.dataset.act === '1';
+    const label = svg.dataset.label || '', compact = svg.dataset.compact === '1';
+    const W = 640, H = n > 1 ? 250 : 220, cx = 340, cy = n > 1 ? 118 : 100, r = 48;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const sub = ['', '₁', '₂', '₃'];
+    let s = `<defs><marker id="neArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1b6fa6"/></marker></defs>`;
+    const ys = n === 1 ? [cy] : n === 2 ? [cy - 40, cy + 40] : [cy - 70, cy, cy + 70];
+    ys.forEach((y, j) => {
+      const x0 = 108, ang = Math.atan2(y - cy, x0 - cx), ex = cx + r * Math.cos(ang), ey = cy + r * Math.sin(ang);
+      s += `<line class="ln" x1="${x0}" y1="${y}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="12" y="${y + 6}">Input <tspan font-style="italic">x${n > 1 ? sub[j + 1] : ''}</tspan></text>`;
+      const mx = (x0 + ex) / 2, my = (y + ey) / 2 - 10;
+      s += `<text class="lab w" x="${mx}" y="${my}" text-anchor="middle">Weight <tspan font-style="italic">w${n > 1 ? sub[j + 1] : ''}</tspan></text>`;
+    });
+    if (!compact) {
+      const bx = 160, by = cy + 92, ang = Math.atan2(by - cy, bx - cx), ex = cx + r * Math.cos(ang), ey = cy + r * Math.sin(ang);
+      s += `<line class="ln" x1="${bx}" y1="${by}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="${bx - 60}" y="${by + 16}">Bias <tspan font-style="italic" class="w" fill="#b0483f">b</tspan></text>`;
+      s += `<line class="ln" x1="${cx + r}" y1="${cy}" x2="${cx + r + 170}" y2="${cy}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="${cx + r + 180}" y="${cy + 6}">Output <tspan font-style="italic">y</tspan></text>`;
+    } else {
+      s += `<line class="ln" x1="${cx + r}" y1="${cy}" x2="${cx + r + 90}" y2="${cy}" marker-end="url(#neArr)"/>`;
+    }
+    s += `<circle class="nb" cx="${cx}" cy="${cy}" r="${r}"/>`;
+    if (split) {
+      s += `<line class="ln" x1="${cx}" y1="${cy - r}" x2="${cx}" y2="${cy + r}"/>`;
+      s += `<text class="z" x="${cx - r / 2}" y="${cy + 7}" text-anchor="middle">z</text>`;
+      s += `<text class="z" x="${cx + r / 2}" y="${cy + 7}" text-anchor="middle">f(z)</text>`;
+    } else if (label === 'formula') {
+      s += `<text class="z" x="${cx}" y="${cy + 6}" text-anchor="middle" style="fill:#22201d;font-size:17px">y = wx + b</text>`;
+    } else if (label) {
+      s += `<text class="z" x="${cx}" y="${cy + 6}" text-anchor="middle">${label}</text>`;
+    }
+    if (act) s += `<text class="act" x="${cx + r * 0.7}" y="${cy - r - 14}">Activation</text>`;
+    svg.innerHTML = s;
+  }
+  document.querySelectorAll('svg.neuron').forEach(drawNeuron);
+
+  show(fromHash(), true);
+})();
+</script>
+</body>
+</html>
