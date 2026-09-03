@@ -1099,7 +1099,8 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
       <div class="step"><span class="no">K</span><b class="ttl">Key</b><p class="prob">“나는 이런 정보 가졌어!” — 각 단어가 내거는 이름표</p></div>
       <div class="step"><span class="no">V</span><b class="ttl">Value</b><p class="prob">만약 (Query, Key) 매칭이 잘 된다면 “다음 계층으로 이 정보를 넘겨줘” — 실제로 전달되는 내용</p></div>
     </div>
-    <figure class="plain"><img src="assets/week02/s44-self-attention.png" alt="세 입력 각각이 query, key, value로 변환되고, query와 key의 점수로 value를 가중합하는 self-attention 계산 그림" style="max-height:230px"><figcaption>문장 안의 모든 단어가 서로에게 질문하고 답한다 — 그래서 “셀프(self)” 어텐션</figcaption></figure>
+    <div class="callout"><b>구조</b> — 모든 단어를 Query, Key, Value로 변환한다. 모든 Query에 대해 Key와 매칭시켜서, 잘 매칭이 되면 Value 값을 다음 계층으로 전달한다.</div>
+    <figure class="plain"><img src="assets/week02/s44-self-attention.png" alt="세 입력 각각이 query, key, value로 변환되고, query와 key의 점수로 value를 가중합하는 self-attention 계산 그림" style="max-height:210px"><figcaption>문장 안의 모든 단어가 서로 매칭 대상이 된다 — 그래서 “셀프(self)” 어텐션</figcaption></figure>
     <p class="src"><a href="https://towardsdatascience.com/illustrated-self-attention-2d627e33b20a" target="_blank" rel="noopener">https://towardsdatascience.com/illustrated-self-attention-2d627e33b20a</a></p>
   </div>
 </section>
