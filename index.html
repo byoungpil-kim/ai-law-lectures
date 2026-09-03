@@ -3,316 +3,65 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>인공지능 경영과 법 (ITM.690) — 2026 가을학기</title>
-<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법, 2026년 가을학기 강의 일정 및 강의자료" />
+<title>AI &amp; Law Lectures — 김병필</title>
+<meta name="description" content="김병필 교수의 인공지능과 법 관련 강의 목록" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#1E40AF" />
 <style>
-  /*
-    파일 규칙
-    - 주차별 강의자료:  week01.html ~ week16.html   (같은 폴더)
-    - PDF 버전:        pdf/week01.pdf ~ pdf/week16.pdf
-    파일이 아직 없으면 버튼이 자동으로 "준비 중"으로 바뀝니다 (GitHub Pages 등 http(s) 환경에서만 동작).
-  */
-  /* Cool-tone Blue Minimalist — miraeitm.github.io 디자인 체계 */
   :root{
     --primary:#1E40AF; --secondary:#3B82F6; --accent:#60A5FA;
     --bg:#F8FAFC; --bg-elev:#FFFFFF; --bg-soft:#EFF4FB;
     --text-primary:#0F172A; --text-secondary:#475569; --border:#E2E8F0;
     --shadow-sm:0 1px 2px rgba(15,23,42,.04); --shadow-md:0 4px 12px rgba(15,23,42,.06);
-    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
-    /* 회차 구분 색 */
-    --c-tech:#1E40AF; --c-law:#0F766E; --c-lab:#B45309; --c-talk:#7C3AED; --rail:#CBD5E1;
+    --radius-lg:16px;
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
   body{
     margin:0;background:var(--bg);color:var(--text-primary);
     font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
   }
-  a{color:var(--primary);text-decoration:none;transition:color .15s ease;} a:hover{color:var(--secondary);}
-  a:focus-visible,button:focus-visible{outline:2px solid var(--secondary);outline-offset:2px;border-radius:6px;}
-
-  /* nav */
-  .topbar{
-    position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:18px;
-    height:64px;padding:0 24px;border-bottom:1px solid var(--border);
-    background:rgba(248,250,252,.85);backdrop-filter:saturate(180%) blur(10px);-webkit-backdrop-filter:saturate(180%) blur(10px);
-  }
-  .topbar-left{display:flex;align-items:center;gap:16px;}
-  .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--text-primary);font-weight:700;font-size:1rem;letter-spacing:-.01em;}
-  .brand-mark{display:grid;width:32px;height:32px;place-items:center;border-radius:50%;color:#fff;background:var(--primary);font-size:13px;font-weight:700;box-shadow:0 1px 3px rgba(15,23,42,.12);}
-  .brand-text{display:block;line-height:1.2;}
-  .brand-text strong{display:block;font-size:.95rem;}
-  .brand-text small{display:block;color:var(--primary);font-size:.72rem;font-weight:600;}
-  .term-tag{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;background:var(--bg-soft);border:1px solid var(--border);color:var(--primary);border-radius:999px;font-size:.78rem;font-weight:500;white-space:nowrap;}
-  .term-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--secondary);}
-  .topbar-links{display:flex;gap:24px;flex-wrap:wrap;justify-content:flex-end;}
-  .topbar-links a{font-size:.9rem;font-weight:500;color:var(--text-secondary);}
-  .topbar-links a:hover{color:var(--primary);}
-
-  main{max-width:1120px;margin:0 auto;padding:0 24px 96px;}
-  .hero{padding:96px 0 64px;border-bottom:1px solid var(--border);}
+  a{color:var(--primary);text-decoration:none;}
+  a:focus-visible{outline:2px solid var(--secondary);outline-offset:2px;border-radius:6px;}
+  main{max-width:720px;margin:0 auto;padding:96px 24px;}
   .section-label{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--secondary);margin-bottom:12px;}
-
-  .hero h1{margin:0 0 10px;font-size:clamp(2.25rem,5vw,3.25rem);line-height:1.2;font-weight:700;letter-spacing:-.02em;}
-  .hero .en{margin:0 0 32px;color:var(--text-secondary);font-size:clamp(1.05rem,1.5vw,1.2rem);}
-  .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px 28px;margin:0;padding:28px;background:var(--bg-elev);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);}
-  .meta div{display:flex;flex-direction:column;gap:3px;}
-  .meta dt{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);}
-  .meta dd{margin:0;font-size:1rem;font-weight:500;color:var(--text-primary);}
-  .hero p.lead{margin:28px 0 0;max-width:720px;color:var(--text-secondary);}
-
-  /* legend */
-  .schedule-head{padding:64px 0 0;}
-  .schedule-head h2{margin:0 0 20px;font-size:clamp(1.75rem,3.5vw,2.25rem);font-weight:600;letter-spacing:-.01em;}
-  .schedule-head p{margin:0 0 28px;color:var(--text-secondary);max-width:720px;}
-  .legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 8px;font-size:.85rem;color:var(--text-secondary);font-weight:500;}
-  .legend span{display:inline-flex;align-items:center;gap:7px;}
-  .dot{width:11px;height:11px;border-radius:3px;background:var(--rail);}
-  .dot.tech{background:var(--c-tech);}  .dot.law{background:var(--c-law);}
-  .dot.lab{background:var(--c-lab);}   .dot.talk{background:var(--c-talk);}
-  .dot.off{background:transparent;border:2px dashed var(--rail);}
-
-  /* schedule */
-  .schedule{margin:0;padding:0;list-style:none;position:relative;}
-  .month{display:flex;align-items:center;gap:12px;margin:32px 0 10px;font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--secondary);}
-  .month::after{content:"";flex:1;height:1px;background:var(--border);}
-  .month:first-child{margin-top:6px;}
-  .week{
-    display:grid;grid-template-columns:74px 6px 1fr auto;gap:0 14px;align-items:center;
-    padding:14px 18px 14px 8px;border-radius:var(--radius-lg);background:var(--bg-elev);border:1px solid var(--border);box-shadow:var(--shadow-sm);margin:0 0 10px;
+  h1{margin:0 0 8px;font-size:clamp(2rem,5vw,2.75rem);line-height:1.2;font-weight:700;letter-spacing:-.02em;}
+  p.lead{margin:0 0 40px;color:var(--text-secondary);}
+  ul{list-style:none;margin:0;padding:0;}
+  li+li{margin-top:10px;}
+  .card{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:18px 22px;border-radius:var(--radius-lg);background:var(--bg-elev);border:1px solid var(--border);box-shadow:var(--shadow-sm);
     transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
   }
-  .week:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent);}
-  .wk{display:flex;flex-direction:column;line-height:1.15;}
-  .wk b{font-size:1.25rem;font-weight:700;letter-spacing:-.02em;color:var(--primary);}
-  .wk small{white-space:nowrap;font-size:.75rem;color:var(--text-secondary);font-weight:500;margin-top:2px;}
-  .bar{width:6px;height:100%;min-height:40px;border-radius:999px;background:var(--rail);}
-  .week.tech .bar{background:var(--c-tech);} .week.law .bar{background:var(--c-law);}
-  .week.lab .bar{background:var(--c-lab);}  .week.talk .bar{background:var(--c-talk);}
-  .ttl{display:flex;flex-direction:column;gap:2px;min-width:0;}
-  .ttl strong{font-size:1.02rem;font-weight:600;}
-  .ttl span{font-size:.92rem;color:var(--text-secondary);}
-  .ttl em{font-style:normal;font-size:.78rem;color:var(--text-secondary);}
-  .acts{display:flex;gap:6px;}
-  .acts a{
-    display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:500;
-    padding:8px 13px;border-radius:var(--radius-md);border:1px solid var(--border);color:var(--primary);background:var(--bg-elev);white-space:nowrap;transition:all .15s ease;
-  }
-  .acts a:hover{border-color:var(--accent);color:var(--secondary);background:var(--bg-soft);}
-  .acts a.pdf{background:var(--primary);border-color:var(--primary);color:#fff;}
-  .acts a.pdf:hover{background:var(--secondary);border-color:var(--secondary);color:#fff;}
-  .acts a[aria-disabled="true"]{color:var(--text-secondary);background:transparent;border-style:dashed;border-color:var(--border);pointer-events:none;}
-  .acts svg{width:14px;height:14px;}
-  .week.off{background:transparent;border-style:dashed;box-shadow:none;padding-top:10px;padding-bottom:10px;}
-  .week.off:hover{transform:none;box-shadow:none;border-color:var(--border);}
-  .week.off .wk b{color:var(--text-secondary);font-weight:600;}
-  .week.off .ttl strong{color:var(--text-secondary);font-weight:500;font-size:.95rem;}
-  .week.off .bar{background:transparent;border:2px dashed var(--rail);width:6px;}
-
-  /* footer */
-  footer{margin-top:72px;padding-top:24px;border-top:1px solid var(--border);color:var(--text-secondary);font-size:.85rem;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;}
-  footer a{color:var(--text-secondary);}
-
-  @media (max-width:640px){
-    .topbar{height:auto;flex-wrap:wrap;row-gap:10px;padding:10px 20px;}
-    .topbar-left{flex-wrap:wrap;row-gap:8px;}
-    .topbar-links{gap:16px;}
-    .hero{padding:56px 0 40px;}
-    .week{grid-template-columns:66px 5px 1fr;row-gap:8px;}
-    .acts{grid-column:3;justify-content:flex-start;} .wk small{font-size:11px;}
-    .bar{grid-row:1 / span 2;}
-    .wk{grid-row:1 / span 2;}
-  }
+  .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent);}
+  .card strong{font-size:1.05rem;font-weight:600;color:var(--text-primary);}
+  .card span{display:block;font-size:.9rem;color:var(--text-secondary);}
+  .card svg{flex:none;width:18px;height:18px;color:var(--primary);}
+  footer{margin-top:72px;padding-top:24px;border-top:1px solid var(--border);color:var(--text-secondary);font-size:.85rem;}
 </style>
 </head>
 <body>
+<main>
+  <span class="section-label">Lectures</span>
+  <h1>인공지능과 법 강의</h1>
+  <p class="lead">김병필 · KAIST 기술경영전문대학원</p>
 
-<header class="topbar">
-  <div class="topbar-left">
-    <a href="#top" class="brand">
-      <span class="brand-mark">AI</span>
-      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
-    </a>
-    <span class="term-tag">2026 가을학기</span>
-  </div>
-  <nav class="topbar-links" aria-label="바로가기">
-    <a href="http://klms.kaist.ac.kr" rel="noopener">KLMS</a>
-  </nav>
-</header>
-
-<main id="top">
-  <section class="hero">
-    <span class="section-label">ITM.690 · 2026 Fall</span>
-    <h1>인공지능 경영과 법</h1>
-    <p class="en">Artificial Intelligence Business &amp; Law — KAIST 기술경영전문대학원</p>
-    <dl class="meta">
-      <div><dt>강의 시간</dt><dd>목요일 19:00 – 22:00</dd></div>
-      <div><dt>강의실</dt><dd>온라인 <a href="https://kaist.zoom.us/j/85630384693?pwd=mtDH1UkDWteb5IfOOS6gfn5eRThK5l.1" rel="noopener">Zoom 링크</a></dd></div>
-      <div><dt>담당 교수</dt><dd>김병필 <a href="mailto:byoungpil.kim@kaist.ac.kr">byoungpil.kim@kaist.ac.kr</a></dd></div>
-      <div><dt>조교</dt><dd>김나현 <a href="mailto:nhkimmm@kaist.ac.kr">nhkimmm@kaist.ac.kr</a></dd></div>
-    </dl>
-  </section>
-
-  <section class="schedule-head" id="schedule">
-    <span class="section-label">Schedule</span>
-    <h2>강의 일정</h2>
-  </section>
-
-  <div class="legend" aria-label="구분">
-    <span><i class="dot tech"></i>이론 · 기술</span>
-    <span><i class="dot law"></i>이론 · 법</span>
-    <span><i class="dot lab"></i>실습</span>
-    <span><i class="dot talk"></i>수강생 발표</span>
-    <span><i class="dot off"></i>휴강</span>
-  </div>
-
-  <ol class="schedule">
-
-    <li class="month" role="presentation">9월</li>
-
-    <li class="week tech" data-week="01">
-      <div class="wk"><b>1</b><small>9/3 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>강의소개 – 인공지능의 기본 개념</strong><span>딥러닝의 등장</span></div>
-      <div class="acts"></div>
+  <ul>
+    <li>
+      <a class="card" href="itm690-2026-fall/">
+        <div>
+          <strong>[KAIST 강의] 2026년 가을학기</strong>
+          <span>ITM.690 인공지능 경영과 법</span>
+        </div>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+      </a>
     </li>
+  </ul>
 
-    <li class="week tech" data-week="02">
-      <div class="wk"><b>2</b><small>9/10 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>자연어 처리 기술과 기반모형</strong><span>foundation models</span></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week lab" data-week="03">
-      <div class="wk"><b>3</b><small>9/17 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>실습 (1) – GitHub 기초, 웹 스크래핑과 데이터 분석</strong><em>부트캠프 1·2강</em></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week off">
-      <div class="wk"><b>4</b><small>9/24 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>휴강 (추석연휴)</strong></div>
-    </li>
-
-    <li class="month" role="presentation">10월</li>
-
-    <li class="week talk" data-week="05">
-      <div class="wk"><b>5</b><small>10/1 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>수강생 발표 (1)</strong><span>자기소개 페이지 및 스크래핑 결과 발표</span></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week law" data-week="06">
-      <div class="wk"><b>6</b><small>10/8 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>인공지능의 법적 쟁점 (1) – 에이전틱 AI 시대의 개인정보 보호와 보안</strong></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week lab" data-week="07">
-      <div class="wk"><b>7</b><small>10/15 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>실습 (2) – 웹 서비스 배포</strong><em>부트캠프 3강</em></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week off">
-      <div class="wk"><b>8</b><small>10/22 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>휴강 (중간고사 기간)</strong></div>
-    </li>
-
-    <li class="week talk" data-week="09">
-      <div class="wk"><b>9</b><small>10/29 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>수강생 발표 (2)</strong><span>자기 업무 적용 사례 및 배포 결과 발표</span></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="month" role="presentation">11월</li>
-
-    <li class="week law" data-week="10">
-      <div class="wk"><b>10</b><small>11/5 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>인공지능의 법적 쟁점 (2) – 인공지능 규제</strong><span>EU AI Act, 인공지능 기본법</span></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week lab" data-week="11">
-      <div class="wk"><b>11</b><small>11/12 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>실습 (3) – 멀티에이전트 시스템 구축</strong><em>부트캠프 4강</em></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week law" data-week="12">
-      <div class="wk"><b>12</b><small>11/19 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>인공지능의 법적 쟁점 (3) – 인공지능과 지식재산권 보호</strong></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week off">
-      <div class="wk"><b>13</b><small>11/26 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>휴강 (학사과정 입학전형 면접)</strong></div>
-    </li>
-
-    <li class="month" role="presentation">12월</li>
-
-    <li class="week talk" data-week="14">
-      <div class="wk"><b>14</b><small>12/3 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>수강생 기말 발표 (1)</strong><span>AI 서비스 MVP + 법적 쟁점</span></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week talk" data-week="15">
-      <div class="wk"><b>15</b><small>12/10 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>수강생 기말 발표 (2)</strong><span>AI 서비스 MVP + 법적 쟁점</span></div>
-      <div class="acts"></div>
-    </li>
-
-    <li class="week off">
-      <div class="wk"><b>16</b><small>12/17 (목)</small></div><i class="bar"></i>
-      <div class="ttl"><strong>휴강 (기말고사 기간, 보강 예비일)</strong></div>
-    </li>
-
-  </ol>
-
-  <footer>
-    <span>© 2026 김병필 · KAIST 기술경영전문대학원</span>
-    <span>강의자료는 수업용으로 제공되며, 외부 배포 시 출처를 밝혀 주세요.</span>
-  </footer>
+  <footer>© 2026 김병필 · KAIST 기술경영전문대학원</footer>
 </main>
-
-<script>
-(function(){
-  var ICON_DOC = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3M6 8h4M6 11h4"/></svg>';
-  var ICON_PDF = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3"/><path d="M3 12v2h10v-2"/></svg>';
-
-  // 각 주차 행에 강의자료 / PDF 버튼 생성
-  document.querySelectorAll('.week[data-week]').forEach(function(li){
-    var n = li.getAttribute('data-week');
-    var acts = li.querySelector('.acts');
-    if(!acts) return;
-    acts.innerHTML =
-      '<a href="week'+n+'.html" data-check>'+ICON_DOC+'강의자료</a>' +
-      '<a class="pdf" href="pdf/week'+n+'.pdf" data-check download>'+ICON_PDF+'PDF</a>';
-  });
-
-  // 파일이 아직 없으면 버튼을 "준비 중"으로 표시 (http/https 에서만 확인)
-  if(location.protocol !== 'http:' && location.protocol !== 'https:') return;
-  document.querySelectorAll('a[data-check]').forEach(function(a){
-    fetch(a.getAttribute('href'), {method:'HEAD', cache:'no-store'}).then(function(r){
-      if(!r.ok) disable(a);
-    }).catch(function(){ /* 네트워크 오류 시 그대로 둠 */ });
-  });
-  function disable(a){
-    a.setAttribute('aria-disabled','true');
-    a.removeAttribute('href');
-    a.removeAttribute('download');
-    a.title = '아직 준비되지 않았습니다';
-    var t = a.lastChild;
-    if(t && t.nodeType === 3) t.textContent = t.textContent.replace(/(강의자료|PDF)$/, '$1 (준비 중)');
-  }
-})();
-</script>
 </body>
 </html>
