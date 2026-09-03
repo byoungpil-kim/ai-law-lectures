@@ -401,6 +401,26 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   .nest{aspect-ratio:4/3;}
   .nest .lv>span{font-size:13px;top:10px;left:12px;}
 }
+/* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
+@page{size:320mm 180mm;margin:0;}
+@media print{
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .topbar,.sidebar,.pager{display:none!important;}
+  .layout{display:block;}
+  .stage{zoom:1!important;min-height:0!important;padding:0!important;display:block;}
+  .deck{display:block;}
+  .slide{display:flex!important;flex-direction:column;zoom:.85;width:calc(320mm / .85);height:calc(180mm / .85);overflow:hidden;box-sizing:border-box;
+    margin:0;border:0;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;animation:none!important;
+    padding:14mm 18mm 12mm;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .two{grid-template-columns:1.1fr .9fr;} .two.eq{grid-template-columns:1fr 1fr;} .two.wide-r{grid-template-columns:.85fr 1.15fr;}
+  .steps{grid-template-columns:repeat(3,1fr);} .io-flow{grid-template-columns:auto 1fr auto;} .pyr{grid-template-columns:150px 1fr 150px;}
+  .poster-grid{grid-template-columns:repeat(4,1fr);} .fn{flex-wrap:nowrap;}
+  .slide.cover{border-radius:0;}
+  .cover-img{border-radius:0;}
+  video{background:#000;}
+  a{text-decoration:none;color:inherit;}
+}
 </style>
 </head>
 <body>
