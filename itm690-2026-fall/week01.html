@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>1강 인공지능의 기본 개념 — 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 1강: 인공지능·머신러닝·인공신경망·딥 러닝의 기본 개념과 미래 인공지능 전망" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6fa6" />
+<style>
+/* 2026 에이전틱 AI 부트캠프(aibootcamp2026) 디자인 토큰을 따른다 */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --ink-soft:#3a3f3b; --muted:#626a64; --line:#d5ddd3; --line-soft:#e9ede6;
+  --brand:#2e9bdb; --brand-dark:#1b6fa6; --brand-deep:#124d78; --sky-light:#e3f1fb;
+  --green:#2f765b; --green-light:#e6f2ec; --amber:#b8792e; --amber-light:#fbf1de; --red:#b0483f; --red-light:#fbe9e7; --navy:#132436;
+  --shadow:0 16px 45px rgba(54,42,31,.12); --shadow-sm:0 2px 10px rgba(21,29,23,.05);
+  --radius:14px; --sidebar-width:264px; --topbar-h:64px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-dark);}
+img,video,svg{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;} }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 clamp(16px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topbar-left{display:flex;align-items:center;gap:18px;min-width:0;}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:0 0 auto;}
+.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:9px;color:#fff;background:var(--brand);font-size:15px;font-weight:800;}
+.brand-text{display:block;line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;}
+.brand-text small{display:block;margin-top:1px;color:var(--muted);font-size:11.5px;font-weight:600;}
+.week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
+.week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
+.progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
+.progress-label b{color:var(--ink);}
+.progress-track{overflow:hidden;height:7px;border-radius:999px;background:#e1e8df;}
+.progress-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-dark),var(--brand));transition:width 220ms ease;}
+
+/* ---------- layout ---------- */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{
+  position:sticky;top:var(--topbar-h);width:var(--sidebar-width);flex:0 0 auto;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:22px 14px 28px;
+  border-right:1px solid var(--line);background:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sidebar-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 8px;}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.toc-link{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:9px;border:0;background:transparent;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.toc-link .no{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;color:var(--muted);font-size:11px;font-weight:900;flex:0 0 auto;}
+.toc-link .nm{flex:1 1 auto;min-width:0;}
+.toc-link .cnt{font-size:11px;font-weight:600;color:var(--muted);opacity:.8;}
+.toc-link:hover{background:var(--sky-light);color:var(--brand-dark);}
+.toc-link.active{background:var(--brand);color:#fff;}
+.toc-link.active .no{background:rgba(255,255,255,.22);color:#fff;}
+.toc-link.active .cnt{color:#fff;opacity:.85;}
+.toc-link.done .no{background:var(--green-light);color:var(--green);}
+.sub{list-style:none;margin:2px 0 6px 22px;padding:0 0 0 12px;display:none;border-left:2px solid var(--line-soft);}
+.toc li.open .sub{display:block;}
+.sub button{
+  display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 10px;border-radius:6px;
+  color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sub button:hover{background:var(--sky-light);color:var(--brand-dark);}
+.sub button.active{color:var(--brand-dark);font-weight:800;}
+.side-hint{margin-top:auto;padding:14px 12px 0;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line-soft);}
+.side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
+
+.stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
+.deck{flex:1 1 auto;}
+.slide{
+  display:none;position:relative;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
+  min-height:calc(100vh - var(--topbar-h) - 20px - 26px - 64px);
+}
+.slide.active{display:flex;animation:fadein .22s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
+.slide h2{margin:0 0 20px;font-size:clamp(22px,2.5vw,30px);line-height:1.3;letter-spacing:-.01em;font-weight:800;}
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0;}
+.slide.top .body{justify-content:flex-start;}
+.body p{margin:0;}
+
+/* ---------- pager ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.pbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brand-dark);font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;max-width:44%;
+}
+.pbtn span{overflow:hidden;text-overflow:ellipsis;}
+.pbtn svg{width:16px;height:16px;flex:0 0 auto;}
+.pbtn:hover{border-color:var(--brand);background:var(--sky-light);transform:translateY(-1px);}
+.pbtn.next{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.pbtn.next:hover{background:var(--brand);border-color:var(--brand);}
+.pbtn:disabled{opacity:.35;cursor:default;transform:none;}
+.pinfo{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;text-align:center;}
+.pinfo .sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-dark);}
+.pinfo .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:360px;}
+.pinfo .dots i{width:8px;height:8px;border-radius:999px;background:#d9e1d6;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.pinfo .dots i:hover{background:var(--brand);}
+.pinfo .dots i.on{background:var(--brand-dark);transform:scale(1.25);}
+.pinfo .cnt{font-size:12px;color:var(--muted);}
+
+/* ---------- cover / section slides ---------- */
+.slide.cover{
+  color:#eef3f7;border-color:transparent;
+  background:radial-gradient(1000px 460px at 85% -10%,rgba(46,155,219,.18),transparent 60%),linear-gradient(180deg,#101f30 0%,var(--navy) 55%,#17293b 100%);
+}
+.slide.cover .kicker{color:#7cc4ee;}
+.slide.cover .kicker .n{color:#9fb4c4;}
+.cover-body{display:flex;flex-direction:column;justify-content:center;gap:18px;flex:1;}
+.cover-kicker{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9d7ec;background:rgba(46,155,219,.15);border:1px solid rgba(46,155,219,.35);padding:7px 14px;border-radius:999px;}
+.cover h1{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.22;letter-spacing:-.02em;color:#fff;}
+.cover h1 em{color:#7cc4ee;font-style:normal;}
+.cover .lead{color:#c9d6e0;font-size:clamp(15px,1.4vw,18px);max-width:640px;}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#dbe7ef;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;}
+.cover .outline{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.cover .outline button{
+  display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:13.5px;
+}
+.cover .outline button:hover{background:rgba(255,255,255,.1);}
+.cover .outline .num{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(124,196,238,.16);color:#7cc4ee;font-size:12px;font-weight:900;display:grid;place-items:center;}
+.cover .outline small{display:block;font-weight:600;color:#a9bdcb;font-size:11.5px;}
+
+.slide.section .body{align-items:center;}
+.slide.section h2{text-align:center;}
+.section-lead{text-align:center;color:var(--muted);max-width:640px;margin:-8px auto 0;}
+
+/* 인공지능 ⊃ 머신러닝 ⊃ 인공신경망 ⊃ 딥 러닝 포함 관계 도식 */
+.nest{position:relative;width:min(100%,720px);aspect-ratio:16/10;margin:0 auto;}
+.nest .lv{position:absolute;border-radius:26px;transition:box-shadow .2s ease;}
+.nest .lv>span{position:absolute;top:16px;left:22px;font-weight:800;font-size:clamp(14px,1.7vw,19px);}
+.nest .l1{inset:0;background:#dbeefb;color:var(--brand-deep);}
+.nest .l2{left:26%;top:19%;right:4%;bottom:4%;background:#a9d5f1;color:var(--brand-deep);}
+.nest .l3{left:44%;top:37%;right:7%;bottom:8%;background:#3f9fd8;color:#fff;}
+.nest .l4{left:58%;top:54%;right:11%;bottom:14%;background:var(--brand-deep);color:#fff;display:grid;place-items:center;}
+.nest .l4>span{position:static;}
+.nest .lv.hi{box-shadow:0 0 0 4px var(--red),0 10px 30px rgba(176,72,63,.25);}
+
+/* ---------- content components ---------- */
+.bul{margin:0;padding-left:1.25em;font-size:clamp(15px,1.25vw,17px);line-height:1.72;}
+.bul>li{margin:0 0 9px;}
+.bul>li:last-child{margin-bottom:0;}
+.bul li::marker{color:var(--brand-dark);}
+.bul ul{list-style:none;margin:5px 0 0;padding-left:1.15em;}
+.bul ul li{position:relative;margin:0 0 4px;color:var(--ink-soft);}
+.bul ul li::before{content:"–";position:absolute;left:-1.1em;color:var(--muted);}
+.bul ul ul li::before{content:"·";}
+.bul ul ul li{font-size:.94em;}
+.bul b{font-weight:800;}
+.bul .arrow{color:var(--red);font-weight:800;}
+.bul .arrow::before{content:"➜ ";}
+.compact{font-size:clamp(14px,1.15vw,16px);}
+.compact>li{margin-bottom:5px;}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+.two.eq{grid-template-columns:1fr 1fr;}
+.two.wide-r{grid-template-columns:.85fr 1.15fr;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.figrow{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+figure{margin:0;text-align:center;min-width:0;}
+figure img,figure video{display:block;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);}
+figure.plain img{border:0;border-radius:0;}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
+.src{font-size:11.5px;color:var(--muted);word-break:break-all;margin-top:auto;padding-top:14px;line-height:1.6;}
+.src a{color:var(--brand-dark);text-decoration:none;}
+.src a:hover{text-decoration:underline;}
+.em{color:var(--red);font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.5;}
+.em.center{text-align:center;}
+.em .arrow::before{content:"➜ ";}
+.callout{border-left:4px solid var(--brand);background:var(--sky-light);padding:12px 16px;border-radius:8px;font-size:15px;}
+.callout.warn{border-color:var(--amber);background:var(--amber-light);}
+.callout.bad{border-color:var(--red);background:var(--red-light);}
+.callout.good{border-color:var(--green);background:var(--green-light);}
+.callout b{font-weight:800;}
+.quote{font-size:clamp(16px,1.45vw,19px);line-height:1.75;border-left:4px solid var(--brand);padding:8px 20px;margin:0;color:var(--ink);}
+.quote cite{display:block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;color:var(--ink-soft);}
+.center{text-align:center;}
+.muted{color:var(--muted);}
+
+.math{font-family:"Cambria","Times New Roman",Georgia,serif;font-size:1.06em;}
+.math i{font-style:italic;}
+.math .w{color:var(--red);font-weight:700;font-style:italic;}
+.fbox{display:inline-block;padding:10px 24px;border:2px solid var(--ink);border-radius:6px;background:#fff;font-family:"Cambria","Times New Roman",Georgia,serif;font-size:clamp(18px,1.9vw,25px);line-height:1.4;}
+.fbox.red{border-color:var(--red);}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 6px;}
+.frac>span{padding:0 6px;}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;}
+.sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;margin:0 4px;}
+.sum>span{font-size:.55em;}
+.sum>b{font-size:1.5em;font-weight:400;}
+
+.tbl{border-collapse:collapse;margin:0 auto;font-size:clamp(13px,1.15vw,15.5px);background:#fff;}
+.tbl th,.tbl td{border:1px solid #9aa39b;padding:8px 16px;text-align:center;line-height:1.35;}
+.tbl th{background:var(--sky-light);font-weight:800;}
+.tbl .hl{background:var(--amber-light);}
+.tbl .dim{color:var(--muted);}
+
+/* f( ) = 함수 표기 */
+.fn{
+  display:flex;align-items:center;justify-content:center;gap:clamp(6px,1.4vw,16px);flex-wrap:nowrap;
+  font-family:"Cambria","Times New Roman",Georgia,serif;padding:6px 0 62px;
+}
+.fn.nolbl{padding-bottom:6px;}
+.fn .f{font-style:italic;font-size:clamp(54px,7vw,92px);line-height:1;}
+.fn .par{font-size:clamp(62px,8.2vw,112px);line-height:1;font-weight:300;color:var(--ink);}
+.fn .eq{font-size:clamp(40px,5.2vw,70px);line-height:1;margin:0 4px;}
+.fn .part{position:relative;display:flex;flex-direction:column;align-items:center;}
+.fn .slot{min-width:clamp(80px,11vw,140px);min-height:56px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(16px,1.6vw,22px);font-weight:700;font-family:"Inter","Noto Sans KR",sans-serif;}
+.fn .slot.blank{border-bottom:3px solid var(--red);}
+.fn .slot img{max-height:clamp(90px,14vw,150px);width:auto;border-radius:6px;}
+.fn .slot.col{flex-direction:column;gap:4px;}
+.fn .slot.col img{max-height:56px;}
+.fn .lbl{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;
+  font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(13px,1.15vw,15.5px);font-weight:800;color:var(--red);
+  border-top:3px solid var(--red);padding-top:6px;text-align:center;line-height:1.35;white-space:nowrap;min-width:100%;
+}
+.fn.sm{padding-bottom:50px;}
+.fn.sm .f{font-size:clamp(40px,4.6vw,60px);}
+.fn.sm .par{font-size:clamp(46px,5.4vw,72px);}
+.fn.sm .eq{font-size:clamp(30px,3.4vw,44px);}
+.fn.sm .slot{min-height:44px;font-size:clamp(14px,1.3vw,17px);}
+.fn.sm .slot img{max-height:clamp(64px,9vw,96px);}
+.fn.sm .lbl{font-size:12.5px;}
+.fn.xs{padding-bottom:0;}
+.fn.xs .f{font-size:36px;} .fn.xs .par{font-size:40px;} .fn.xs .eq{font-size:26px;} .fn.xs .slot{min-height:36px;min-width:60px;font-size:14px;}
+.fn-list{display:flex;flex-direction:column;gap:18px;}
+.fn-list .fn{padding:0;justify-content:flex-start;}
+.fn-list .fn .out{font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(20px,2.4vw,30px);font-weight:700;margin-left:10px;}
+.fn .cjk{font-family:"Noto Sans KR",sans-serif;font-size:clamp(30px,3.6vw,46px);font-weight:800;}
+
+/* 트리 도식 */
+.tree{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;}
+.tnode{padding:10px 20px;border:2px solid var(--ink);border-radius:8px;background:#fff;font-weight:800;font-size:clamp(13px,1.2vw,16px);text-align:center;position:relative;}
+.tnode.hi{border-color:var(--red);background:var(--red-light);color:var(--red);}
+.tnode small{display:block;font-weight:600;color:var(--muted);font-size:.85em;}
+.tree .stem{width:2px;height:26px;background:var(--ink);}
+.tree .row{position:relative;display:grid;gap:12px;width:100%;padding-top:26px;}
+.tree .row::before{content:"";position:absolute;top:0;left:calc(100% / var(--n) / 2);right:calc(100% / var(--n) / 2);height:2px;background:var(--ink);}
+.tree .row>div{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.tree .row>div::before{content:"";position:absolute;top:-26px;width:2px;height:26px;background:var(--ink);}
+.tree .row .desc{font-size:clamp(13px,1.1vw,15px);color:var(--ink-soft);text-align:left;margin:0;padding-left:1.1em;line-height:1.55;}
+.tree .row .desc li{margin-bottom:3px;}
+.hl-note{display:flex;align-items:center;gap:12px;justify-content:center;font-size:13.5px;color:var(--muted);font-weight:600;}
+.hl-note img{height:44px;width:auto;border-radius:6px;}
+.hl-note .ar{color:var(--red);font-size:22px;font-weight:900;}
+
+/* 신경망·뉴런 SVG */
+.nn{width:100%;max-width:680px;height:auto;display:block;margin:0 auto;}
+.nn .in{fill:#fff;stroke:var(--brand-dark);stroke-width:2.2;}
+.nn .hid{fill:#fff;stroke:var(--amber);stroke-width:2.2;}
+.nn .out{fill:#fff;stroke:var(--green);stroke-width:2.2;}
+.nn .e{stroke:#22201d;stroke-width:1.1;opacity:.72;}
+.nn .nl{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:15px;fill:var(--ink);}
+.nn .ol{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:17px;fill:var(--ink);}
+.nn .dots{font-size:22px;font-weight:800;fill:var(--ink);}
+.nn .box{fill:none;stroke:var(--red);stroke-dasharray:7 5;stroke-width:2.2;}
+.nn-wrap{position:relative;}
+.nn-wrap .overlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border:1.5px solid var(--ink);padding:8px 22px;font-weight:800;font-size:clamp(14px,1.4vw,18px);border-radius:6px;white-space:nowrap;}
+.neuron{width:100%;max-width:640px;height:auto;display:block;margin:0 auto;}
+.neuron .nb{fill:#fff;stroke:var(--brand-dark);stroke-width:2.4;}
+.neuron .ln{stroke:var(--brand-dark);stroke-width:2;fill:none;}
+.neuron .lab{font-family:"Cambria","Times New Roman",serif;font-size:17px;font-weight:700;fill:var(--ink);}
+.neuron .w{fill:var(--red);}
+.neuron .z{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:19px;fill:var(--red);font-weight:700;}
+.neuron .act{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--red);}
+.io-flow{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;}
+.io-flow .io{text-align:center;font-weight:800;color:var(--red);font-size:clamp(14px,1.3vw,17px);line-height:1.4;}
+.io-flow .io img{width:clamp(96px,12vw,150px);height:auto;border-radius:8px;border:1px solid var(--line);display:block;margin:0 auto 8px;}
+.io-flow .io .ink{color:var(--ink);font-weight:700;font-size:.9em;}
+.io-flow .outs{list-style:none;margin:0 0 8px;padding:0;font-weight:700;color:var(--ink);font-size:clamp(14px,1.3vw,17px);text-align:left;line-height:1.9;}
+.io-flow .outs li.first{color:var(--green);font-weight:900;}
+
+/* 기타 */
+.media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;}
+.media-grid img,.media-grid video{width:100%;aspect-ratio:16/9;max-height:250px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;background:#000;}
+.media-grid figcaption{font-size:12.5px;}
+.poster-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.poster-grid img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;}
+.cross{position:relative;display:inline-block;}
+.cross::before,.cross::after{content:"";position:absolute;left:50%;top:50%;width:112%;height:8px;background:var(--red);border-radius:4px;transform:translate(-50%,-50%) rotate(45deg);opacity:.92;}
+.cross::after{transform:translate(-50%,-50%) rotate(-45deg);}
+.stackpile{position:relative;height:190px;width:200px;margin:0 auto;}
+.stackpile img{position:absolute;width:120px;height:auto;border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-sm);background:#fff;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
+.step .no{width:30px;height:30px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
+.step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
+.step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
+.step .sol::before{content:"➜ ";}
+.cycle{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;}
+.cycle .node{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;min-height:150px;justify-content:center;}
+.cycle .node img{height:46px;width:auto;}
+.cycle .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.cycle .node p b{display:block;color:var(--red);font-weight:800;}
+.cycle .ar{font-size:30px;color:var(--brand-dark);font-weight:900;}
+.cycle-back{text-align:center;color:var(--muted);font-size:13.5px;font-weight:700;margin-top:-6px;}
+.cycle-back::before{content:"↺ ";color:var(--brand-dark);font-size:18px;}
+.pyr{display:grid;grid-template-columns:150px 1fr 150px;gap:14px;align-items:center;max-width:820px;margin:0 auto;width:100%;}
+.pyr svg{width:100%;height:auto;display:block;}
+.pyr .side{text-align:center;font-weight:800;font-size:14px;line-height:1.5;}
+.pyr .side .ar{display:block;font-size:44px;line-height:1;color:var(--brand-dark);}
+.pyr .side.left .ar{color:var(--muted);}
+.chart-box{width:100%;max-width:760px;margin:0 auto;}
+.chart-box svg{width:100%;height:auto;display:block;}
+.chart-box .axis{stroke:#7b857d;stroke-width:1;}
+.chart-box .grid{stroke:#e1e8df;stroke-width:1;}
+.chart-box .tick{font-size:12px;fill:var(--muted);}
+.chart-box .lbl{font-size:12.5px;font-weight:700;fill:var(--ink);}
+.chart-box .pct{font-size:12px;font-weight:800;fill:var(--ink);}
+.chart-box .ln{fill:none;stroke:var(--brand-dark);stroke-width:2.4;}
+.chart-box .pt{fill:var(--brand-dark);}
+.chart-box .target{stroke:var(--red);stroke-width:2;stroke-dasharray:7 5;}
+.chart-box .ttl{font-size:13px;font-weight:800;fill:var(--muted);}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);}
+.logo-title{display:flex;align-items:center;gap:14px;}
+.logo-title img{height:34px;width:auto;}
+.cover-img{position:absolute;inset:0;border-radius:inherit;overflow:hidden;}
+.cover-img img{width:100%;height:100%;object-fit:cover;object-position:left center;filter:grayscale(1) brightness(.55);}
+.cover .over{position:relative;z-index:1;}
+
+@media (max-width:1100px){ .two,.two.eq,.two.wide-r{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;} }
+@media (max-width:900px){
+  .layout{display:block;}
+  .sidebar{position:sticky;top:var(--topbar-h);width:auto;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:10px 12px;background:rgba(243,246,242,.96);backdrop-filter:blur(8px);z-index:20;flex-direction:row;}
+  .sidebar-title,.sub,.side-hint{display:none!important;}
+  .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
+  .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
+  .toc-link .cnt{display:none;}
+  .slide{min-height:auto;}
+  .stage{min-height:auto;}
+}
+@media (max-width:640px){
+  .topbar{gap:10px;}
+  .week-title{display:none;}
+  .progress-wrap{width:110px;}
+  .pbtn{padding:10px 12px;font-size:13px;}
+  .pbtn span{display:none;}
+  .pbtn svg{width:18px;height:18px;}
+  .poster-grid{grid-template-columns:repeat(2,1fr);}
+  .cycle{grid-template-columns:1fr;}
+  .cycle .ar{transform:rotate(90deg);text-align:center;}
+  .pyr{grid-template-columns:1fr;}
+  .io-flow{grid-template-columns:1fr;}
+  .slide{overflow-x:auto;}
+  .fn{flex-wrap:wrap;gap:4px;padding-bottom:70px;}
+  .fn .f{font-size:44px;} .fn .par{font-size:52px;} .fn .eq{font-size:34px;flex-basis:100%;text-align:center;margin:6px 0;}
+  .fn .slot{min-width:56px;min-height:40px;font-size:14px;}
+  .fn .slot img{max-height:84px;}
+  .fn .slot.col img{max-height:40px;}
+  .fn .lbl{white-space:normal;font-size:12px;min-width:0;width:max-content;max-width:150px;}
+  .fn .part{margin-bottom:8px;}
+  .fn.sm,.fn.xs{padding-bottom:60px;}
+  .fn.nolbl,.fn-list .fn{padding-bottom:0;}
+  .fn.nolbl .eq,.fn-list .fn .eq{flex-basis:auto;}
+  .tbl th,.tbl td{padding:6px 8px;font-size:12.5px;}
+  .nest{aspect-ratio:4/3;}
+  .nest .lv>span{font-size:13px;top:10px;left:12px;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="brand" title="강의 일정으로">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
+    </a>
+    <div class="week-tag"><span class="week-num">1강</span><span class="week-title">인공지능의 기본 개념</span></div>
+  </div>
+  <div class="progress-wrap" aria-label="진행률">
+    <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">87</span></span>
+    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="목차">
+    <div class="sidebar-title">목차</div>
+    <ol class="toc" id="toc"></ol>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="deck" id="deck">
+
+<!-- ===================== 0. 들어가며 ===================== -->
+<section class="slide cover" data-sec="0" data-title="표지">
+  <div class="cover-body">
+    <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 1강</span>
+    <h1>인공지능의 <em>기본 개념</em></h1>
+    <p class="lead">인공지능은 결국 “함수”다. 규칙 기반 접근에서 머신러닝, 인공신경망, 딥 러닝으로 이어지는 흐름을 따라가며, 인공지능이 무엇을 할 수 있고 무엇을 할 수 없는지 이해한다.</p>
+    <div class="meta">
+      <span class="meta-chip">2026. 9. 3.</span>
+      <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
+    </div>
+    <div class="outline" id="coverOutline"></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="인공지능 기술의 발전">
+  <div class="kicker">들어가며</div>
+  <h2>인공지능 기술의 발전</h2>
+  <div class="body">
+    <div class="media-grid">
+      <figure><img src="assets/week01/s02-starcraft1.jpg" alt="1990년대 스타크래프트 게임 화면"><figcaption>게임 AI (1998)</figcaption></figure>
+      <figure><img src="assets/week01/s02-navigation.jpg" alt="2010년대 초 차량용 내비게이션"><figcaption>차량 내비게이션 (2013)</figcaption></figure>
+      <figure><video src="assets/week01/s02-starcraft2.mp4" muted loop playsinline autoplay preload="metadata"></video><figcaption>스타크래프트 II 인공지능 (AlphaStar)</figcaption></figure>
+      <figure><video src="assets/week01/s02-selfdriving.mp4" muted loop playsinline autoplay preload="metadata"></video><figcaption>자율주행차의 인식 화면</figcaption></figure>
+    </div>
+    <p class="em center">10년 동안 어떠한 기술 발전이 있었던 것일까?</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="용어부터 정리하기">
+  <div class="kicker">들어가며</div>
+  <h2>용어부터 정리하기</h2>
+  <div class="body">
+    <ul class="bul" style="font-size:clamp(17px,1.6vw,22px);line-height:2">
+      <li>인공지능 (Artificial Intelligence)</li>
+      <li>머신러닝 (Machine Learning)</li>
+      <li>인공신경망 (Neural Networks)</li>
+      <li>딥 러닝 (Deep Learning)</li>
+    </ul>
+    <p class="muted">네 용어는 서로 별개의 것이 아니라 포함 관계에 있다. 이 강의는 바깥쪽부터 안쪽으로 한 겹씩 들어간다.</p>
+  </div>
+</section>
+
+<!-- ===================== 1. 인공지능 ===================== -->
+<section class="slide section" data-sec="1" data-title="인공지능">
+  <div class="kicker">Section 1</div>
+  <h2>인공지능</h2>
+  <p class="section-lead">가장 바깥 층. “인공지능”이라는 말이 실제로 무엇을 가리키는지부터 정리한다.</p>
+  <div class="body">
+    <div class="nest">
+      <div class="lv l1 hi"><span>인공지능</span></div>
+      <div class="lv l2"><span>머신러닝</span></div>
+      <div class="lv l3"><span>인공신경망</span></div>
+      <div class="lv l4"><span>딥 러닝</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="인공지능 = 함수">
+  <div class="kicker">인공지능</div>
+  <h2>인공지능 = 함수</h2>
+  <div class="body">
+    <div class="fn">
+      <div class="part"><span class="f">f</span><span class="lbl">인공지능</span></div>
+      <span class="par">(</span>
+      <div class="part"><div class="slot blank"></div><span class="lbl">입력 변수</span></div>
+      <span class="par">)</span>
+      <span class="eq">=</span>
+      <div class="part"><div class="slot blank"></div><span class="lbl">출력 변수</span></div>
+    </div>
+    <p class="muted center">인공지능은 입력 변수를 받아 출력 변수를 내놓는 함수로 볼 수 있다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="인공지능 = 함수 (게임)">
+  <div class="kicker">인공지능</div>
+  <h2>인공지능 = 함수</h2>
+  <div class="body">
+    <div class="fn">
+      <div class="part"><span class="f">f</span><span class="lbl">인공지능</span></div>
+      <span class="par">(</span>
+      <div class="part"><div class="slot"><img src="assets/week01/s06-map.jpg" alt="스타크래프트 주변 맵 정보"></div><span class="lbl">입력 변수<br>(주변 맵 정보)</span></div>
+      <span class="par">)</span>
+      <span class="eq">=</span>
+      <div class="part"><div class="slot col"><img src="assets/week01/s06-unit1.png" alt="유닛 1"><img src="assets/week01/s06-unit2.png" alt="유닛 2"><img src="assets/week01/s06-unit3.png" alt="유닛 3"></div><span class="lbl">출력 변수<br>(어느 유닛을 공격하지?)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="인공지능 = 함수 (바둑)">
+  <div class="kicker">인공지능</div>
+  <h2>인공지능 = 함수</h2>
+  <div class="body">
+    <div class="fn">
+      <div class="part"><span class="f">f</span><span class="lbl">인공지능</span></div>
+      <span class="par">(</span>
+      <div class="part"><div class="slot"><img src="assets/week01/s07-board-in.jpg" alt="현재 바둑판 기보"></div><span class="lbl">입력 변수<br>(현재 바둑판 기보)</span></div>
+      <span class="par">)</span>
+      <span class="eq">=</span>
+      <div class="part"><div class="slot"><img src="assets/week01/s07-board-out.jpg" alt="다음에 놓을 수"></div><span class="lbl">출력 변수<br>(다음에 놓을 수)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="“인공지능”의 구현 = 함수 찾기">
+  <div class="kicker">인공지능</div>
+  <h2>“인공지능”의 구현 = 함수 찾기</h2>
+  <div class="body">
+    <div class="figrow">
+      <figure style="flex:0 1 180px"><img src="assets/week01/s08-textbook.png" alt="인공지능 교과서 표지"><figcaption>인공지능 교과서</figcaption></figure>
+      <figure style="flex:1 1 260px"><img src="assets/week01/s08-toc1.png" alt="교과서 차례 1: 소개, 지능형 에이전트, 검색을 통한 문제 해결"></figure>
+      <figure style="flex:1 1 260px"><img src="assets/week01/s08-toc2.png" alt="교과서 차례 2: 고급 검색 기법, 대항 검색, 제약 만족 문제, 논리적 에이전트"></figure>
+    </div>
+    <p class="muted center">교과서의 차례는 곧 “함수를 찾아내는 여러 방법”의 목록이다 — 검색, 제약 만족, 논리 추론, 계획 수립, 지식 표현, 그리고 머신러닝.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="“인공지능”의 구현 방식">
+  <div class="kicker">인공지능</div>
+  <h2>“인공지능”의 구현 방식</h2>
+  <div class="body">
+    <div class="tree">
+      <div class="tnode">인공지능</div>
+      <div class="stem"></div>
+      <div class="row" style="--n:6;grid-template-columns:repeat(6,1fr)">
+        <div><div class="tnode">(경우의 수)<br>탐색</div></div>
+        <div><div class="tnode">제약 만족</div></div>
+        <div><div class="tnode">논리 추론</div></div>
+        <div><div class="tnode">계획 수립</div></div>
+        <div><div class="tnode hi">머신러닝</div></div>
+        <div><div class="tnode">지식 표현</div></div>
+      </div>
+    </div>
+    <div class="hl-note">
+      <img src="assets/week01/s09-alphago.jpg" alt="AlphaGo 로고">
+      <img src="assets/week01/s09-car.png" alt="자율주행차">
+      <span class="ar">➜</span>
+      <span>알파고, 자율주행차 등 최근의 성과는 대부분 <b style="color:var(--red)">머신러닝</b> 방식</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="규칙기반 접근">
+  <div class="kicker">인공지능</div>
+  <h2>규칙기반 접근 (Rule-based Approach)</h2>
+  <div class="body">
+    <div class="fn sm">
+      <div class="part"><span class="f">f</span><span class="lbl">인공지능</span></div>
+      <span class="par">(</span>
+      <div class="part"><div class="slot"><img src="assets/week01/s06-map.jpg" alt="주변 맵 정보"></div><span class="lbl">입력 변수<br>(주변 맵 정보)</span></div>
+      <span class="par">)</span>
+      <span class="eq">=</span>
+      <div class="part"><div class="slot col"><img src="assets/week01/s06-unit1.png" alt=""><img src="assets/week01/s06-unit2.png" alt=""><img src="assets/week01/s06-unit3.png" alt=""></div><span class="lbl">출력 변수<br>(어느 유닛을 공격하지?)</span></div>
+    </div>
+    <ul class="bul">
+      <li>공격 규칙 (rule)
+        <ul>
+          <li>상대방 공격 유닛 &gt; 상대방 비공격 유닛</li>
+          <li>공격력 강한 유닛 &gt; 공격력 약한 유닛</li>
+          <li>가까운 유닛 &gt; 먼 유닛</li>
+          <li>…</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="전문가 시스템">
+  <div class="kicker">인공지능</div>
+  <h2>전문가 시스템</h2>
+  <div class="body">
+    <div class="two">
+      <div class="stack">
+        <figure class="plain"><img src="assets/week01/s11-expert-system.png" alt="Data → Expert system (Rules/Templates) → Results 도식"></figure>
+        <ul class="bul">
+          <li>MYCIN (1975) – 항생제 처방 추천
+            <ul>
+              <li>100여 가지 박테리아 감염 정보 저장</li>
+              <li>증상, 상태, 치료 이력, 검사 결과 등 입력</li>
+              <li>감염 여부·박테리아 유형 판단, 치료법 추천</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <figure><img src="assets/week01/s11-symbolics.jpg" alt="Symbolics 3640 리스프 머신" style="max-height:380px"><figcaption>Symbolics 3640 — 1980년대 전문가 시스템 개발에 쓰인 리스프 머신</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://en.wikipedia.org/wiki/Expert_system" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Expert_system</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="법률 전문가 시스템">
+  <div class="kicker">인공지능</div>
+  <h2>법률 전문가 시스템 (expert system)</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week01/s12-prolog1.png" alt="영국 국적법을 Prolog로 구현한 질의응답 예시" style="max-width:640px"></figure>
+    <figure class="plain"><img src="assets/week01/s12-prolog2.png" alt="Peter가 영국 시민인지 확인하는 추론 결과" style="max-width:640px"><figcaption>Sergot et al. (1986), “The British Nationality Act as a Logic Program”</figcaption></figure>
+    <ul class="bul">
+      <li>한계
+        <ul>
+          <li>저장된 규칙의 수가 200 내지 300건에 이르면 실행 성능이 저하</li>
+          <li>관리자가 규칙을 일일이 유지 관리하는 것이 사실상 불가능</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="머신러닝 방식">
+  <div class="kicker">인공지능</div>
+  <h2>머신러닝 방식</h2>
+  <div class="body">
+    <div class="fn sm">
+      <div class="part"><span class="f">f</span><span class="lbl">인공지능</span></div>
+      <span class="par">(</span>
+      <div class="part"><div class="slot"><img src="assets/week01/s06-map.jpg" alt="주변 맵 정보"></div><span class="lbl">입력 변수<br>(주변 맵 정보)</span></div>
+      <span class="par">)</span>
+      <span class="eq">=</span>
+      <div class="part"><div class="slot col"><img src="assets/week01/s06-unit1.png" alt=""><img src="assets/week01/s06-unit2.png" alt=""><img src="assets/week01/s06-unit3.png" alt=""></div><span class="lbl">출력 변수<br>(어느 유닛을 공격하지?)</span></div>
+    </div>
+    <div class="callout warn" style="display:flex;align-items:center;gap:14px"><img src="assets/week01/s13-idea.png" alt="" style="height:40px"><span>프로게이머들의 플레이 방식을 배워보면 어떨까?</span></div>
+    <p class="em center">데이터를 학습하는 인공지능 = 머신러닝 (Machine Learning)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="머신러닝의 활용 – 알파고">
+  <div class="kicker">인공지능</div>
+  <h2>머신러닝의 활용 – 알파고</h2>
+  <div class="body">
+    <div class="fn sm">
+      <div class="part"><span class="f">f</span><span class="lbl">인공지능</span></div>
+      <span class="par">(</span>
+      <div class="part"><div class="slot"><img src="assets/week01/s07-board-in.jpg" alt="현재 바둑판 기보"></div><span class="lbl">입력 변수<br>(현재 바둑판 기보)</span></div>
+      <span class="par">)</span>
+      <span class="eq">=</span>
+      <div class="part"><div class="slot"><img src="assets/week01/s07-board-out.jpg" alt="다음에 놓을 수"></div><span class="lbl">출력 변수<br>(다음에 놓을 수)</span></div>
+    </div>
+    <div class="figrow">
+      <div class="stackpile" aria-hidden="true">
+        <img src="assets/week01/s14-kifu.jpg" alt="" style="left:0;top:30px;transform:rotate(-6deg)">
+        <img src="assets/week01/s14-kifu.jpg" alt="" style="left:26px;top:18px;transform:rotate(-2deg)">
+        <img src="assets/week01/s14-kifu.jpg" alt="" style="left:52px;top:8px;transform:rotate(3deg)">
+        <img src="assets/week01/s14-kifu.jpg" alt="" style="left:78px;top:0;transform:rotate(7deg)">
+      </div>
+      <p class="em" style="max-width:420px"><span class="arrow"></span>수많은 프로 기사의 기보(입력–출력 쌍)를 학습하여 “다음 수”를 내놓는 함수를 찾아냄</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="인공지능의 구분">
+  <div class="kicker">인공지능</div>
+  <h2>인공지능의 구분</h2>
+  <div class="body">
+    <div class="tree" style="max-width:820px;margin:0 auto">
+      <div class="tnode">AI</div>
+      <div class="stem"></div>
+      <div class="row" style="--n:2;grid-template-columns:repeat(2,1fr)">
+        <div>
+          <div class="tnode">Artificial General Intelligence<small>(AGI)</small></div>
+          <ul class="desc"><li>인간이 할 수 있는 지적 작업을 이해하거나 학습</li><li>강(强) 인공지능</li></ul>
+        </div>
+        <div>
+          <div class="tnode">Artificial Narrow Intelligence<small>(ANI)</small></div>
+          <ul class="desc"><li>특정한 작업을 이해하거나 학습</li><li>약(弱) 인공지능</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="AI Apocalypse">
+  <div class="kicker">인공지능</div>
+  <h2>AI Apocalypse</h2>
+  <div class="body">
+    <div class="two wide-r" style="align-items:stretch">
+      <div class="poster-grid" style="grid-template-columns:repeat(2,1fr)">
+        <img src="assets/week01/s16-terminator.jpg" alt="터미네이터 3 포스터">
+        <img src="assets/week01/s16-westworld.jpg" alt="웨스트월드 포스터">
+        <img src="assets/week01/s16-exmachina.jpg" alt="엑스 마키나 포스터">
+        <img src="assets/week01/s16-her.jpg" alt="영화 Her 포스터">
+      </div>
+      <figure><img src="assets/week01/s16-superintelligence.jpg" alt="닉 보스트롬, 슈퍼인텔리전스 표지" style="max-height:420px"><figcaption>닉 보스트롬, 『슈퍼인텔리전스 — 경로, 위험, 전략』</figcaption></figure>
+    </div>
+    <p class="muted center">대중문화 속 인공지능은 대부분 AGI(강 인공지능)의 모습이다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="이번 강의의 주제 = ANI">
+  <div class="kicker">인공지능</div>
+  <h2>이번 강의의 주제 = ANI</h2>
+  <div class="body">
+    <div class="figrow" style="gap:32px">
+      <figure><span class="cross"><img src="assets/week01/s16-exmachina.jpg" alt="엑스 마키나 포스터 (제외)" style="max-height:300px;width:auto"></span><figcaption>AGI — 이번 강의의 주제가 아님</figcaption></figure>
+      <figure style="flex:1 1 420px"><video src="assets/week01/s17-robot-arm.mp4" muted loop playsinline autoplay preload="metadata" style="max-height:300px;width:100%;object-fit:cover"></video><figcaption>ANI — 특정 작업(물건 집기)을 학습한 로봇 팔</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="ANI의 활용 사례">
+  <div class="kicker">인공지능</div>
+  <h2>ANI의 활용 사례</h2>
+  <div class="body">
+    <div class="fn-list" style="max-width:720px;margin:0 auto;width:100%">
+      <div class="fn nolbl">
+        <span class="f">f</span><span class="par">(</span><div class="slot"><img src="assets/week01/s18-wave.png" alt="음성 파형" style="max-height:60px"></div><span class="par">)</span><span class="eq">=</span><span class="out">“Siri야”</span>
+      </div>
+      <div class="fn nolbl">
+        <span class="f">f</span><span class="par">(</span><div class="slot"><span class="cjk">你好</span></div><span class="par">)</span><span class="eq">=</span><span class="out">“안녕하세요”</span>
+      </div>
+      <div class="fn nolbl">
+        <span class="f">f</span><span class="par">(</span><div class="slot"><img src="assets/week01/s18-xray.jpg" alt="흉부 X-ray" style="max-height:96px"></div><span class="par">)</span><span class="eq">=</span><span class="out">폐렴이 있는지?</span>
+      </div>
+    </div>
+    <p class="muted center">음성 인식, 기계 번역, 의료 영상 판독 — 모두 “입력을 출력으로 대응시키는 함수”다.</p>
+  </div>
+</section>
+
+<!-- ===================== 2. 머신러닝 ===================== -->
+<section class="slide section" data-sec="2" data-title="머신러닝">
+  <div class="kicker">Section 2</div>
+  <h2>머신러닝</h2>
+  <p class="section-lead">데이터로부터 함수를 찾아내는 방법. 가장 단순한 예인 선형 회귀로 원리를 이해한다.</p>
+  <div class="body">
+    <div class="nest">
+      <div class="lv l1"><span>인공지능</span></div>
+      <div class="lv l2 hi"><span>머신러닝</span></div>
+      <div class="lv l3"><span>인공신경망</span></div>
+      <div class="lv l4"><span>딥 러닝</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="머신러닝 = 데이터로부터 함수 찾기">
+  <div class="kicker">머신러닝</div>
+  <h2>머신러닝 = 데이터로부터 함수 찾기</h2>
+  <div class="body">
+    <div class="two">
+      <div class="stack">
+        <ul class="bul">
+          <li>아주 간단한 사례 – 데이터
+            <ul><li>입력 값: 아파트 면적</li><li>출력 값: 아파트 가격</li></ul>
+          </li>
+          <li>문제: 입력 값과 출력 값의 관계는?</li>
+        </ul>
+        <div class="fn sm nolbl">
+          <span class="f">f</span><span class="par">(</span><div class="slot">아파트 면적</div><span class="par">)</span><span class="eq">=</span><div class="slot">아파트 가격</div>
+        </div>
+      </div>
+      <figure><img src="assets/week01/s20-fitted-line.png" alt="면적(Area)과 감정가(Appraised Value)의 산점도와 회귀선"><figcaption><span class="em" style="font-size:15px">➜ 선형회귀</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="단순 선형 회귀">
+  <div class="kicker">머신러닝</div>
+  <h2>단순 선형 회귀</h2>
+  <div class="body">
+    <div class="two">
+      <div class="stack">
+        <ul class="bul">
+          <li><u>가설(Hypothesis)</u>: 주어진 데이터를 표현하는 함수</li>
+          <li>단순 선형 회귀의 가설</li>
+        </ul>
+        <div class="center"><span class="fbox"><i>y</i> = <i>f</i>(<i>x</i>) = <span class="w" style="color:var(--red);font-weight:700"><i>a</i></span><i>x</i> + <span style="color:var(--red);font-weight:700"><i>b</i></span></span></div>
+        <ul class="bul">
+          <li>컴퓨터에게 시킬 일
+            <ul><li>주어진 데이터를 가장 잘 표시하는 <i>a</i> 값과 <i>b</i> 값을 찾는 것!</li></ul>
+          </li>
+        </ul>
+      </div>
+      <figure><img src="assets/week01/s21-lines.png" alt="서로 다른 a, b 값을 가진 세 직선" style="max-height:320px"><figcaption><i>a</i>, <i>b</i>가 달라지면 직선도 달라진다</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="예제 데이터">
+  <div class="kicker">머신러닝</div>
+  <h2>예제 데이터</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:auto 1fr;gap:40px">
+      <table class="tbl" style="font-size:16px">
+        <thead><tr><th>데이터 <i>x</i></th><th>데이터 <i>y</i></th></tr></thead>
+        <tbody><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>2</td></tr><tr><td>2</td><td>4</td></tr><tr><td>3</td><td>6</td></tr></tbody>
+      </table>
+      <figure><img src="assets/week01/s22-scatter.png" alt="(0,0),(1,2),(2,4),(3,6) 산점도" style="max-height:300px"></figure>
+    </div>
+    <p style="font-weight:800">문제: <i>x</i>와 <i>y</i> 사이의 관계는?</p>
+    <div class="em center">슬쩍 봐도 <span class="math"><i>y</i> = 2<i>x</i></span> 네! 너무 쉬운데?<br>하지만 컴퓨터는 직관적으로 알 수가 없음</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="“겐또”라는 말을 아시나요?">
+  <div class="kicker">머신러닝</div>
+  <h2>“겐또”라는 말을 아시나요?</h2>
+  <div class="body">
+    <figure><img src="assets/week01/s23-tweet.png" alt="‘겐또’의 어원에 관한 국립국어원 트위터 문답" style="max-height:520px"><figcaption>일본어 ‘見当(けんとう)’에서 온 말로, ‘어림짐작’·‘예측’을 뜻한다. 컴퓨터도 처음에는 찍어 볼 수밖에 없다.</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="가설의 비용">
+  <div class="kicker">머신러닝</div>
+  <h2>가설의 비용</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>오차 = 컴퓨터가 세운 가설과 실제 데이터 사이의 차이를 제곱 <span class="muted" style="font-size:.9em">[가설이 <span class="math"><i>y</i> = <span class="w">0.5</span><i>x</i></span>인 경우의 예시]</span></li>
+    </ul>
+    <table class="tbl">
+      <thead><tr><th>데이터 <i>x</i></th><th>데이터 <i>y</i></th><th>가설<br><span class="math"><i>ŷ</i> = 0.5<i>x</i></span></th><th>오차<br><span class="math"><i>y</i> − <i>ŷ</i></span></th><th>오차의 제곱<br><span class="math">(<i>y</i> − <i>ŷ</i>)²</span></th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>2</td><td>0.5</td><td>2 − 0.5 = 1.5</td><td>2.25</td></tr>
+        <tr><td>2</td><td>4</td><td>1.0</td><td>4 − 1 = 3.0</td><td>9.0</td></tr>
+        <tr><td>3</td><td>6</td><td>1.5</td><td>6 − 1.5 = 4.5</td><td>20.25</td></tr>
+      </tbody>
+    </table>
+    <ul class="bul">
+      <li>오차의 평균 (= 가설의 비용)
+        <div class="math" style="margin-top:8px;font-size:1.1em"><i>Cost</i> = <span class="frac"><span>{(0 − 0)² + (2 − 0.5)² + (4 − 1.0)² + (6 − 1.5)²}</span><span>4</span></span> = <b>7.875</b></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="머신러닝 학습 방법 (a = 0.4)">
+  <div class="kicker">머신러닝</div>
+  <h2>머신러닝 학습 방법</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>단순한 학습 방법 – 가설을 조금 바꿔보기 <span class="muted" style="font-size:.9em">[가설이 <span class="math"><i>y</i> = <span class="w">0.4</span><i>x</i></span>인 경우의 예시]</span></li>
+    </ul>
+    <table class="tbl">
+      <thead><tr><th>데이터 <i>x</i></th><th>데이터 <i>y</i></th><th>가설<br><span class="math"><i>ŷ</i> = 0.4<i>x</i></span></th><th>오차<br><span class="math"><i>y</i> − <i>ŷ</i></span></th><th>오차의 제곱<br><span class="math">(<i>y</i> − <i>ŷ</i>)²</span></th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>2</td><td>0.4</td><td>2 − 0.4 = 1.6</td><td>2.56</td></tr>
+        <tr><td>2</td><td>4</td><td>0.8</td><td>4 − 0.8 = 3.2</td><td>10.24</td></tr>
+        <tr><td>3</td><td>6</td><td>1.2</td><td>6 − 1.2 = 4.8</td><td>23.04</td></tr>
+      </tbody>
+    </table>
+    <ul class="bul">
+      <li>오차의 평균 (= 가설의 비용)
+        <div class="math" style="margin-top:8px;font-size:1.1em"><i>Cost</i> = <span class="frac"><span>{(0 − 0)² + (2 − 0.4)² + (4 − 0.8)² + (6 − 1.2)²}</span><span>4</span></span> = <b>8.96</b></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="머신러닝 학습 방법 (a = 0.6)">
+  <div class="kicker">머신러닝</div>
+  <h2>머신러닝 학습 방법</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>단순한 학습 방법 – 가설을 조금 바꿔보기 <span class="muted" style="font-size:.9em">[가설이 <span class="math"><i>y</i> = <span class="w">0.6</span><i>x</i></span>인 경우의 예시]</span></li>
+    </ul>
+    <table class="tbl">
+      <thead><tr><th>데이터 <i>x</i></th><th>데이터 <i>y</i></th><th>가설<br><span class="math"><i>ŷ</i> = 0.6<i>x</i></span></th><th>오차<br><span class="math"><i>y</i> − <i>ŷ</i></span></th><th>오차의 제곱<br><span class="math">(<i>y</i> − <i>ŷ</i>)²</span></th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>2</td><td>0.6</td><td>2 − 0.6 = 1.4</td><td>1.96</td></tr>
+        <tr><td>2</td><td>4</td><td>1.2</td><td>4 − 1.2 = 2.8</td><td>7.84</td></tr>
+        <tr><td>3</td><td>6</td><td>1.8</td><td>6 − 1.8 = 4.2</td><td>17.64</td></tr>
+      </tbody>
+    </table>
+    <ul class="bul">
+      <li>오차의 평균 (= 가설의 비용)
+        <div class="math" style="margin-top:8px;font-size:1.1em"><i>Cost</i> = <span class="frac"><span>{(0 − 0)² + (2 − 0.6)² + (4 − 1.2)² + (6 − 1.8)²}</span><span>4</span></span> = <b>6.86</b></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide top" data-sec="2" data-title="머신러닝 = 오차의 최소화">
+  <div class="kicker">머신러닝</div>
+  <h2>머신러닝 = 오차의 최소화</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>예시 데이터
+        <ul>
+          <li><i>a</i> 값이 0.5일 때 오차 평균 = 7.875</li>
+          <li><i>a</i> 값이 0.4일 때 오차 평균 = 8.96</li>
+          <li><i>a</i> 값이 0.6일 때 오차 평균 = 6.86</li>
+          <li>컴퓨터는 <i>a</i> 값을 늘려야 할까? 줄여야 할까?</li>
+          <li class="arrow"><i>a</i> 값이 증가하면 오차가 줄어듦</li>
+          <li class="arrow"><i>a</i> 값을 더 증가시키면서 위 과정을 계속 반복함</li>
+        </ul>
+      </li>
+      <li>비용 함수 (cost function)
+        <ul>
+          <li>주어진 데이터에 가설을 적용했을 때 그 오차를 함수로 표현한 것</li>
+          <li>손실 함수(loss function) 또는 목적 함수(objective function)라고도 함</li>
+        </ul>
+      </li>
+      <li>머신러닝의 목적
+        <ul><li><b>비용함수를 최소화하는 <i>a</i>, <i>b</i> 값을 찾는 것!</b></li></ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="다중 선형 회귀 (예시)">
+  <div class="kicker">머신러닝</div>
+  <h2>다중 선형 회귀</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>하나의 변수(<i>x</i>)만으로 결과(<i>y</i>)를 설명할 수 있는 경우는 거의 없음
+        <ul><li>다중 선형 회귀: 다수의 <i>x</i> 변수를 이용해서 <i>y</i> 값을 예측하기</li></ul>
+      </li>
+      <li>예시 – 아파트 가격 (<i>y</i>)
+        <ul>
+          <li><span class="math"><i>x</i><sub>1</sub></span> = 아파트 평수</li>
+          <li><span class="math"><i>x</i><sub>2</sub></span> = 방 개수</li>
+          <li><span class="math"><i>x</i><sub>3</sub></span> = 층 수</li>
+        </ul>
+      </li>
+    </ul>
+    <table class="tbl">
+      <thead><tr><th><span class="math"><i>x</i><sub>1</sub></span> (평)</th><th><span class="math"><i>x</i><sub>2</sub></span> (개)</th><th><span class="math"><i>x</i><sub>3</sub></span> (층)</th><th><i>y</i> (억)</th></tr></thead>
+      <tbody>
+        <tr><td>18</td><td>2</td><td>5</td><td>2.1</td></tr>
+        <tr><td>32</td><td>3</td><td>10</td><td>3.4</td></tr>
+        <tr class="dim"><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+        <tr><td>48</td><td>4</td><td>3</td><td>5.8</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="다중 선형 회귀 (가설)">
+  <div class="kicker">머신러닝</div>
+  <h2>다중 선형 회귀</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>가설을 세워 보자!</li>
+    </ul>
+    <div class="center"><span class="fbox"><i>y</i> = <span class="w" style="color:var(--red)"><i>w</i><sub>1</sub></span><i>x</i><sub>1</sub> + <span style="color:var(--red)"><i>w</i><sub>2</sub></span><i>x</i><sub>2</sub> + <span style="color:var(--red)"><i>w</i><sub>3</sub></span><i>x</i><sub>3</sub> + <span style="color:var(--red)"><i>b</i></span></span></div>
+    <ul class="bul">
+      <li>비용 함수
+        <ul><li>가설의 예측 값과 학습 데이터 간의 오차의 제곱값을 평균</li></ul>
+      </li>
+      <li>가중치 찾기
+        <ul><li><span class="math"><i>w</i><sub>1</sub>, <i>w</i><sub>2</sub>, <i>w</i><sub>3</sub>, <i>b</i></span> 값을 조금씩 바꿔 가면서 비용 함수를 최소화하는 <span class="math"><i>w</i><sub>1</sub>, <i>w</i><sub>2</sub>, <i>w</i><sub>3</sub>, <i>b</i></span> 값 찾기</li></ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="응용 사례 – 와인 가격 예측하기">
+  <div class="kicker">머신러닝</div>
+  <h2>응용 사례 – 와인 가격 예측하기</h2>
+  <div class="body">
+    <div class="two">
+      <ul class="bul">
+        <li>프린스턴 대학 경제학자는 와인 가격을 예측하는 선형회귀 모델을 개발</li>
+        <li>입력 변수
+          <ul><li>와인 빈티지 (나이)</li><li>포도 성장기의 날씨</li><li>수확철의 강수량</li><li>겨울철의 강수량</li><li>…</li></ul>
+        </li>
+        <li>출력 변수
+          <ul><li>와인의 경매 가격</li></ul>
+        </li>
+      </ul>
+      <figure><img src="assets/week01/s30-ashenfelter.jpg" alt="와인 병을 든 Orley Ashenfelter 교수" style="max-height:400px"><figcaption>Orley Ashenfelter (Princeton)</figcaption></figure>
+    </div>
+    <p class="src"><a href="http://www.liquidasset.com/feature1.html" target="_blank" rel="noopener">http://www.liquidasset.com/feature1.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="와인 평론가의 반응">
+  <div class="kicker">머신러닝</div>
+  <h2>와인 평론가의 반응</h2>
+  <div class="body">
+    <div class="two">
+      <blockquote class="quote">“영화 평론가가 영화를 보지 않고서 배우와 감독만 보고 그 영화가 좋은지 알 수 없는 것과 마찬가지로 [데이터로 와인 가격을 예측하는 것]은 완전히 사기이다.”
+        <cite>– 로버트 파커 (세계적으로 저명한 와인 평론가)</cite>
+      </blockquote>
+      <figure><img src="assets/week01/s31-parker.jpg" alt="Robert M. Parker Jr." style="max-height:360px"><figcaption>Robert M. Parker Jr.</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://en.wikipedia.org/wiki/Robert_M._Parker_Jr." target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Robert_M._Parker_Jr.</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="와인 가격 예측하기 – 결과">
+  <div class="kicker">머신러닝</div>
+  <h2>와인 가격 예측하기 – 결과</h2>
+  <div class="body">
+    <figure><img src="assets/week01/s32-bordeaux.png" alt="Red Bordeaux 와인의 1961년 빈티지 대비 가격과 회귀선" style="max-height:400px"><figcaption>Orley Ashenfelter (1986)</figcaption></figure>
+    <p class="em center"><span class="arrow"></span>일부 전문가들보다 오히려 경매 가격을 더 정확히 예측!</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="머신러닝의 기본 개념">
+  <div class="kicker">머신러닝</div>
+  <h2>머신러닝의 기본 개념</h2>
+  <div class="body">
+    <div class="figrow">
+      <figure style="flex:1 1 300px"><img src="assets/week01/s33-nox.png" alt="NOX 농도와 가격의 산점도와 회귀선" style="max-height:280px"></figure>
+      <figure style="flex:1 1 300px"><img src="assets/week01/s32-bordeaux.png" alt="Red Bordeaux 와인 가격 회귀선" style="max-height:280px"></figure>
+    </div>
+    <div class="em">① 가설은 주어진 데이터(<i>x</i>, <i>y</i>)를 함수로 표현한 것</div>
+    <div class="em">② 머신러닝은 주어진 데이터에 대해 오차를 최소화하는 가설을 찾는 작업</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="이게 다 인공지능과 무슨 상관이지…">
+  <div class="kicker">머신러닝</div>
+  <h2>이게 다 인공지능과 무슨 상관이지…</h2>
+  <div class="body">
+    <figure><img src="assets/week01/s34-grumpy-cat.jpg" alt="심드렁한 표정의 고양이(Grumpy Cat)" style="max-height:460px"></figure>
+  </div>
+</section>
+
+<!-- ===================== 3. 인공신경망 ===================== -->
+<section class="slide section" data-sec="3" data-title="인공신경망">
+  <div class="kicker">Section 3</div>
+  <h2>인공신경망</h2>
+  <p class="section-lead">선형 회귀 모델을 “뉴런”으로 바꿔 부르고, 뉴런을 여러 층으로 쌓으면 인공신경망이 된다.</p>
+  <div class="body">
+    <div class="nest">
+      <div class="lv l1"><span>인공지능</span></div>
+      <div class="lv l2"><span>머신러닝</span></div>
+      <div class="lv l3 hi"><span>인공신경망</span></div>
+      <div class="lv l4"><span>딥 러닝</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="단순 선형회귀 모델">
+  <div class="kicker">인공신경망</div>
+  <h2>단순 선형회귀 모델</h2>
+  <div class="body">
+    <svg class="neuron" data-inputs="1" data-label="formula" role="img" aria-label="입력 x에 가중치 w를 곱하고 편향 b를 더해 출력 y를 내는 단순 선형회귀 모델"></svg>
+    <table class="tbl">
+      <thead><tr><th>Input <i>x</i></th><th>Output <i>y</i></th></tr></thead>
+      <tbody><tr><td>아파트 면적</td><td>아파트 가격</td></tr></tbody>
+    </table>
+    <div class="fn xs nolbl"><span class="f">f</span><span class="par">(</span><div class="slot">아파트 면적</div><span class="par">)</span><span class="eq">=</span><div class="slot">아파트 가격</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="인공 뉴런 (Artificial Neuron)">
+  <div class="kicker">인공신경망</div>
+  <h2>인공 뉴런 (Artificial Neuron)</h2>
+  <div class="body">
+    <svg class="neuron" data-inputs="1" data-label="Neuron" role="img" aria-label="입력 x, 가중치 w, 편향 b, 출력 y를 가진 인공 뉴런"></svg>
+    <table class="tbl">
+      <thead><tr><th>Input <i>x</i></th><th>Output <i>y</i></th></tr></thead>
+      <tbody><tr><td>아파트 면적</td><td>아파트 가격</td></tr></tbody>
+    </table>
+    <div class="fn xs nolbl"><span class="f">f</span><span class="par">(</span><div class="slot">아파트 면적</div><span class="par">)</span><span class="eq">=</span><div class="slot">아파트 가격</div></div>
+    <p class="muted center">선형회귀 모델과 똑같은 구조를 “뉴런”이라고 부르기로 하자.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="인공 뉴런 – 가중합 z">
+  <div class="kicker">인공신경망</div>
+  <h2>인공 뉴런 (Artificial Neuron)</h2>
+  <div class="body">
+    <svg class="neuron" data-inputs="1" data-split="1" role="img" aria-label="뉴런 내부를 둘로 나눠 왼쪽에 가중합 z를 표시"></svg>
+    <div class="center"><span class="fbox red"><i>z</i> = <i>w</i><i>x</i> + <i>b</i></span></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="인공 뉴런 – 활성화 함수">
+  <div class="kicker">인공신경망</div>
+  <h2>인공 뉴런 (Artificial Neuron)</h2>
+  <div class="body">
+    <div class="two">
+      <div class="stack">
+        <svg class="neuron" data-inputs="1" data-split="1" data-act="1" role="img" aria-label="가중합 z에 활성화 함수 f를 적용해 y를 출력하는 뉴런"></svg>
+        <div class="center stack" style="gap:8px">
+          <span class="math" style="font-size:clamp(18px,1.8vw,24px)"><i>z</i> = <i>w</i><i>x</i> + <i>b</i></span>
+          <span class="fbox red"><i>y</i> = <i>f</i>(<i>z</i>)</span>
+        </div>
+      </div>
+      <figure><img src="assets/week01/s39-logistic.png" alt="시그모이드(로지스틱) 함수 곡선" style="max-height:240px"><figcaption>활성화 함수의 예 — 시그모이드 함수</figcaption></figure>
+    </div>
+    <p class="em"><span class="arrow"></span>선형(linear)이 아닌 함수도 학습 가능!</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="인공 뉴런 – 다수 입력">
+  <div class="kicker">인공신경망</div>
+  <h2>인공 뉴런 (Artificial Neuron)</h2>
+  <div class="body">
+    <div class="two">
+      <svg class="neuron" data-inputs="3" data-split="1" data-act="1" role="img" aria-label="세 입력 x1, x2, x3에 각각 가중치를 곱해 더한 뒤 활성화 함수를 거치는 뉴런"></svg>
+      <div class="stack center">
+        <span class="fbox red"><i>z</i> = <i>w</i><sub>1</sub><i>x</i><sub>1</sub> + <i>w</i><sub>2</sub><i>x</i><sub>2</sub> + <i>w</i><sub>3</sub><i>x</i><sub>3</sub> + <i>b</i></span>
+        <span class="math" style="font-size:clamp(18px,1.8vw,24px)"><i>y</i> = <i>f</i>(<i>z</i>)</span>
+      </div>
+    </div>
+    <div class="figrow" style="gap:32px">
+      <table class="tbl">
+        <thead><tr><th>Input <i>x</i><sub>1</sub></th><th>Input <i>x</i><sub>2</sub></th><th>Input <i>x</i><sub>3</sub></th><th>Output <i>y</i></th></tr></thead>
+        <tbody><tr><td>아파트 면적</td><td>방 개수</td><td>교통 편의성</td><td>아파트 가격</td></tr></tbody>
+      </table>
+      <div class="fn xs nolbl"><span class="f">f</span><span class="par">(</span><div class="slot col" style="line-height:1.3;font-size:13px">아파트 면적<br>방 개수<br>교통 편의성</div><span class="par">)</span><span class="eq">=</span><div class="slot">아파트 가격</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="실제 뉴런 vs 인공 뉴런">
+  <div class="kicker">인공신경망</div>
+  <h2>실제 뉴런 vs 인공 뉴런</h2>
+  <div class="body">
+    <div class="two eq">
+      <figure><svg class="neuron" data-inputs="3" data-split="1" data-act="1" role="img" aria-label="인공 뉴런"></svg><figcaption>인공 뉴런 — 입력·가중치·가중합·활성화·출력</figcaption></figure>
+      <figure><img src="assets/week01/s41-neuron-bio.png" alt="실제 뉴런: 수상돌기, 시냅스, 세포체, 축삭돌기" style="max-height:300px"><figcaption>실제 뉴런 — 수상돌기(입력)·세포체·축삭돌기(출력)·시냅스(연결 강도)</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="인공신경망이란?">
+  <div class="kicker">인공신경망</div>
+  <h2>인공신경망이란?</h2>
+  <div class="body">
+    <svg class="nn" data-layers="3,3,2,1" data-in="x₁,x₂,x₃" data-out="h(x)" role="img" aria-label="입력층 3개, 은닉층 3개·2개, 출력층 1개로 이루어진 인공신경망"></svg>
+    <div class="two">
+      <ul class="bul">
+        <li>인공 뉴런을 여러 단위로 쌓은 네트워크</li>
+        <li><b style="color:var(--red)">인공신경망 = 복잡한 함수 표현의 일종</b></li>
+      </ul>
+      <div class="center"><span class="fbox red"><i>F</i>(<i>x</i>) = <span class="sum"><span><i>N</i></span><b>Σ</b><span><i>i</i>=1</span></span> <i>v</i><sub><i>i</i></sub> <i>φ</i>(<i>w</i><sub><i>i</i></sub><sup>T</sup><i>x</i> + <i>b</i><sub><i>i</i></sub>)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="초기의 (아날로그) 인공 신경망">
+  <div class="kicker">인공신경망</div>
+  <h2>초기의 (아날로그) 인공 신경망</h2>
+  <div class="body">
+    <div class="figrow">
+      <figure style="flex:1 1 300px"><img src="assets/week01/s43-analog1.jpg" alt="Mark I Perceptron 장치" style="max-height:400px"></figure>
+      <figure style="flex:1 1 300px"><img src="assets/week01/s43-analog2.jpg" alt="퍼셉트론의 배선" style="max-height:400px"></figure>
+    </div>
+    <p class="muted center">Mark I Perceptron (1958) — 가중치를 전위차계(가변 저항)로 구현하고, 모터로 손잡이를 돌려 가중치를 조정했다.</p>
+  </div>
+</section>
+
+<section class="slide top" data-sec="3" data-title="Universal Approximation Theorem">
+  <div class="kicker">인공신경망</div>
+  <h2>Universal Approximation Theorem</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>Universal Approximation Theorem</b>
+        <ul>
+          <li lang="en">“In the mathematical theory of artificial neural networks, the universal approximation theorem states that a feed-forward network with a single hidden layer containing a finite number of neurons can approximate continuous functions on compact subsets of R<sup>n</sup>, under mild assumptions on the activation function.” (Wikipedia)</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="callout"><b>TL;DR</b> – “인공 신경망을 이용하면 어떠한 함수라도 근사(近似, approximation)해 낼 수 있다”</div>
+  </div>
+</section>
+
+<section class="slide top" data-sec="3" data-title="인공신경망의 잠재력">
+  <div class="kicker">인공신경망</div>
+  <h2>인공신경망의 잠재력</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>Universal Approximation Theorem</b>
+        <ul>
+          <li>세상 만사를 수치화할 수 있고, 그렇게 수치화된 변수들의 관계를 어떤 함수로 표현할 수 있다고 가정해 봄</li>
+          <li>컴퓨터로 다수의 뉴런으로 구성된 인공 신경망을 구축함</li>
+          <li>만약 머신러닝의 반복을 통해 가중치를 찾아 낼 수 있다면, 인공 신경망은 세상의 어떠한 함수라도 근사해 낼 수 있음</li>
+          <li><b>이것은 세상 만사를 컴퓨터로 근사해 낼 수 있다는 뜻!</b></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="인공신경망과 머신러닝 (Quiz)">
+  <div class="kicker">인공신경망</div>
+  <h2>인공신경망과 머신러닝</h2>
+  <div class="body">
+    <svg class="nn" data-layers="3,3,2,1" data-in="x₁,x₂,x₃" data-out="h(x)" role="img" aria-label="3-3-2-1 인공신경망"></svg>
+    <p style="font-weight:800;font-size:clamp(15px,1.4vw,18px)"><span class="badge">Quiz</span> 위 인공신경망은 가중치(<span class="math"><i>w</i><sub>1</sub>, <i>w</i><sub>2</sub>, …</span>)를 몇 개나 학습해야 할까? (<i>b</i> 제외)</p>
+    <div class="callout" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+      <span class="muted" style="font-size:13px;font-weight:700">[힌트 – 개별 뉴런의 구조]</span>
+      <svg class="neuron" data-inputs="3" data-split="1" data-compact="1" style="max-width:360px" role="img" aria-label="입력 3개인 뉴런"></svg>
+      <svg class="neuron" data-inputs="2" data-split="1" data-compact="1" style="max-width:340px" role="img" aria-label="입력 2개인 뉴런"></svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="인공신경망과 머신러닝 (풀이)">
+  <div class="kicker">인공신경망</div>
+  <h2>인공신경망과 머신러닝</h2>
+  <div class="body">
+    <svg class="nn" data-layers="3,3,2,1" data-in="x₁,x₂,x₃" data-out="h(x)" role="img" aria-label="3-3-2-1 인공신경망"></svg>
+    <p style="font-weight:800;font-size:clamp(15px,1.4vw,18px)"><span class="badge">Quiz</span> 위 인공신경망은 가중치(<span class="math"><i>w</i><sub>1</sub>, <i>w</i><sub>2</sub>, …</span>)를 몇 개나 학습해야 할까? (<i>b</i> 제외)</p>
+    <ul class="bul compact">
+      <li>각 뉴런의 연결 선마다 서로 다른 가중치가 존재
+        <ul>
+          <li>Input layer → 1<sup>st</sup> hidden layer: 3 × 3 = <b>9개</b> <span class="math">(<i>w</i><sub>11</sub>, <i>w</i><sub>12</sub>, <i>w</i><sub>13</sub>, <i>w</i><sub>21</sub>, …, <i>w</i><sub>33</sub>)</span></li>
+          <li>1<sup>st</sup> hidden layer → 2<sup>nd</sup> hidden layer: 3 × 2 = <b>6개</b> <span class="math">(<i>w</i><sub>11</sub>, <i>w</i><sub>12</sub>, <i>w</i><sub>21</sub>, <i>w</i><sub>22</sub>, <i>w</i><sub>31</sub>, <i>w</i><sub>32</sub>)</span></li>
+          <li>2<sup>nd</sup> hidden layer → output layer: 2 × 1 = <b>2개</b> <span class="math">(<i>w</i><sub>1</sub>, <i>w</i><sub>2</sub>)</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="인공신경망 학습 방법 = 머신러닝 학습 방법">
+  <div class="kicker">인공신경망</div>
+  <h2>인공신경망 학습 방법 = 머신러닝 학습 방법</h2>
+  <div class="body">
+    <svg class="nn" data-layers="3,3,2,1" data-in="x₁,x₂,x₃" data-out="h(x)" style="max-width:560px" role="img" aria-label="3-3-2-1 인공신경망"></svg>
+    <ul class="bul">
+      <li>단순 선형 회귀: <i>a</i>, <i>b</i> 값을 바꿔 가면서 가설의 예측치와 학습 데이터 간 오차를 최소화하는 <i>a</i>, <i>b</i>를 찾음</li>
+      <li>인공 신경망: <i>w</i> 값들을 바꿔 가면서 인공 신경망의 예측치와 학습 데이터 간 오차를 최소화하는 <i>w</i>를 찾음</li>
+    </ul>
+    <p class="em center"><span class="arrow"></span>선형회귀 가중치 학습법과 기본 원리는 동일</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="예제 – 필기숫자인식">
+  <div class="kicker">인공신경망</div>
+  <h2>예제 – 필기숫자인식</h2>
+  <div class="body">
+    <figure><img src="assets/week01/s49-mnist.png" alt="MNIST 필기숫자 데이터 예시: 0부터 9까지 손글씨" style="max-height:360px"><figcaption>MNIST 데이터셋</figcaption></figure>
+    <ul class="bul">
+      <li>미국 국립표준기술연구소(NIST)가 수집한 미국인들의 필기숫자 데이터</li>
+      <li>총 6만 건(숫자 1개당 6천 건)의 데이터</li>
+    </ul>
+    <p class="src"><a href="https://m-alcu.github.io/assets/mnist.png" target="_blank" rel="noopener">https://m-alcu.github.io/assets/mnist.png</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="필기숫자의 표현">
+  <div class="kicker">인공신경망</div>
+  <h2>필기숫자를 숫자로 표현하면?</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:auto 1fr;gap:28px">
+      <figure><img src="assets/week01/s50-digit5.png" alt="손글씨 숫자 5" style="width:120px"><figcaption>손글씨 “5”</figcaption></figure>
+      <figure class="plain"><img src="assets/week01/s50-pixels.png" alt="28×28 픽셀 값 행렬" style="max-height:380px"><figcaption>가로 28개 × 세로 28개 픽셀의 밝기 값 (0~255)</figcaption></figure>
+    </div>
+    <div class="figrow" style="gap:24px">
+      <span style="font-weight:700">모든 점(Pixel)의 수는?</span>
+      <span class="fbox">가로 28 × 세로 28 = 784개</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="필기숫자인식 인공신경망">
+  <div class="kicker">인공신경망</div>
+  <h2>필기숫자인식 인공신경망</h2>
+  <div class="body">
+    <div class="io-flow">
+      <div class="io"><img src="assets/week01/s50-digit5.png" alt="손글씨 숫자 5">입력변수<br>784개</div>
+      <svg class="nn" data-layers="5,4,4,1" data-in="x₁,x₂,x₃,…,x₇₈₄" data-hdots="1" data-out="y" role="img" aria-label="입력 784개, 은닉층 여러 개, 출력 10개인 인공신경망"></svg>
+      <div class="io">출력변수<br>10개<div class="ink">(0 ~ 9 중 어느 숫자인가)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4. 딥 러닝 ===================== -->
+<section class="slide section" data-sec="4" data-title="딥 러닝">
+  <div class="kicker">Section 4</div>
+  <h2>딥 러닝</h2>
+  <p class="section-lead">인공신경망을 아주 깊게 쌓으면 훨씬 복잡한 함수를 표현할 수 있다. 그것이 왜 최근에야 가능해졌는가.</p>
+  <div class="body">
+    <div class="nest">
+      <div class="lv l1"><span>인공지능</span></div>
+      <div class="lv l2"><span>머신러닝</span></div>
+      <div class="lv l3"><span>인공신경망</span></div>
+      <div class="lv l4 hi"><span>딥 러닝</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="더 어려운 문제">
+  <div class="kicker">딥 러닝</div>
+  <h2>더 어려운 문제</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>ImageNet 사물 식별 문제
+        <ul>
+          <li>1,400만 건 이상의 이미지 데이터 (평균 이미지 크기 482×418)</li>
+          <li>20,000개 이상의 카테고리로 분류</li>
+        </ul>
+      </li>
+    </ul>
+    <figure><img src="assets/week01/s53-imagenet.jpg" alt="ImageNet 이미지 모음" style="max-height:360px;width:100%;object-fit:cover"></figure>
+    <p class="src"><a href="http://www.image-net.org/" target="_blank" rel="noopener">http://www.image-net.org/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="인공신경망으로 사물을 식별하려면?">
+  <div class="kicker">딥 러닝</div>
+  <h2>인공신경망으로 사물을 식별하려면?</h2>
+  <div class="body">
+    <div class="io-flow">
+      <div class="io"><img src="assets/week01/s54-cat.jpg" alt="고양이 사진">입력변수<br>65,536개<div class="ink">(256×256)</div></div>
+      <svg class="nn" data-layers="5,4,4,1" data-in="x₁,x₂,x₃,…,x₆₅₅₃₆" data-hdots="1" data-out="y" role="img" aria-label="입력 65,536개인 인공신경망"></svg>
+      <div class="io">출력변수<br>(20,000개)</div>
+    </div>
+    <p class="muted center">입력이 6만 5천 개, 출력이 2만 개. 얕은 신경망으로는 이 관계를 표현하기 어렵다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="딥 러닝(Deep Learning)의 개념">
+  <div class="kicker">딥 러닝</div>
+  <h2>딥 러닝 (Deep Learning)의 개념</h2>
+  <div class="body">
+    <div class="em">심층 인공신경망 = 매우 많은 수의 인공뉴런을 층층이 쌓은 인공신경망<br><span class="arrow"></span>딥 러닝 = 심층 인공신경망 학습 방법</div>
+    <div class="io-flow">
+      <div class="io"><img src="assets/week01/s54-cat.jpg" alt="고양이 사진"><span class="ink">입력변수<br>65,536개<br>(256×256)</span></div>
+      <div class="nn-wrap"><svg class="nn" data-layers="6,7,7,7,7,6" data-r="9" data-w="640" data-h="300" role="img" aria-label="뉴런이 매우 많은 심층 인공신경망"></svg><span class="overlay">매우 많은 뉴런</span></div>
+      <div class="io"><ul class="outs"><li class="first">고양이 0.85</li><li>개 0.11</li><li>호랑이 0.03</li><li>…</li></ul><span class="ink">출력변수</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="딥 러닝의 어려움">
+  <div class="kicker">딥 러닝</div>
+  <h2>딥 러닝의 어려움</h2>
+  <div class="body">
+    <div class="io-flow">
+      <div class="io"><img src="assets/week01/s54-cat.jpg" alt="고양이 사진"><span class="ink">입력변수<br>65,536개<br>(256×256)</span></div>
+      <svg class="nn" data-layers="6,7,7,7,7,6" data-r="9" data-w="640" data-h="300" data-boxes="1" role="img" aria-label="은닉층마다 붉은 점선 상자가 표시된 심층 인공신경망"></svg>
+      <div class="io"><ul class="outs"><li class="first">고양이 0.85</li><li>개 0.11</li><li>호랑이 0.03</li><li>…</li></ul><span class="ink">출력변수<br>(20,000개)</span></div>
+    </div>
+    <p class="em center">학습해야 할 가중치가 너무 많다!</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="이 문제를 어떻게 해결했을까?">
+  <div class="kicker">딥 러닝</div>
+  <h2>이 문제를 어떻게 해결했을까?</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">1</span><p class="prob">수많은 가중치를 학습시키기 위해 <u>많은 연산</u>이 소요</p><p class="sol">연산 능력의 향상</p></div>
+      <div class="step"><span class="no">2</span><p class="prob">수많은 가중치를 학습시키기 위해 <u>많은 데이터</u>가 필요</p><p class="sol">빅데이터 시대의 도래</p></div>
+      <div class="step"><span class="no">3</span><p class="prob">수많은 가중치를 학습시키기 위해 <u>효율적인 계산 방법</u>이 필요</p><p class="sol">인공신경망 알고리즘의 발전</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(1) 연산 능력의 향상 – 무어의 법칙">
+  <div class="kicker">딥 러닝 · (1) 연산 능력</div>
+  <h2>(1) 연산 능력의 향상 – 무어의 법칙</h2>
+  <div class="body">
+    <p style="font-weight:700">무어의 법칙 – “매 2년마다 반도체 집적회로의 성능이 2배로 증가한다”</p>
+    <figure><img src="assets/week01/s58-moore.png" alt="1971–2018년 집적회로의 트랜지스터 수 추이 (Moore's Law)" style="max-height:440px"><figcaption>Moore’s Law — 집적회로당 트랜지스터 수 (1971–2018), Our World in Data</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(1) 연산 능력의 향상 – GPU의 활용">
+  <div class="kicker">딥 러닝 · (1) 연산 능력</div>
+  <h2>(1) 연산 능력의 향상 – GPU의 활용</h2>
+  <div class="body">
+    <p style="font-weight:700">그래픽 처리 장치(Graphics Processing Unit, GPU) <span class="em" style="font-size:1em"><span class="arrow"></span>인공신경망 학습 계산 용도에 적합!</span></p>
+    <div class="two eq" style="align-items:stretch">
+      <div class="stack">
+        <figure><img src="assets/week01/s59-geforce.jpg" alt="GeForce RTX 그래픽카드" style="max-height:170px;width:100%;object-fit:cover"></figure>
+        <figure><img src="assets/week01/s59-ffxv.jpg" alt="게임 Final Fantasy XV 벤치마크 화면" style="max-height:170px;width:100%;object-fit:cover"><figcaption>게임 그래픽용으로 개발된 GPU</figcaption></figure>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week01/s59-google-tpu.png" alt="Google Cloud의 AI 가속기 서버 랙" style="max-height:170px;width:100%;object-fit:cover"></figure>
+        <figure><img src="assets/week01/s59-nvidia.jpg" alt="NVIDIA Tesla P100" style="max-height:170px;width:100%;object-fit:contain"><figcaption>인공신경망 학습 전용 가속기로 발전</figcaption></figure>
+      </div>
+    </div>
+    <p class="src">https://www.forbes.com · <a href="https://cloud.google.com" target="_blank" rel="noopener">https://cloud.google.com</a> · <a href="https://www.nvidia.com" target="_blank" rel="noopener">https://www.nvidia.com</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(2) 빅데이터 시대의 도래">
+  <div class="kicker">딥 러닝 · (2) 빅데이터</div>
+  <h2>(2) 빅데이터 시대의 도래</h2>
+  <div class="body">
+    <div class="two">
+      <ul class="bul">
+        <li>빅데이터의 3V
+          <ul><li>Volume (양)</li><li>Variety (다양성)</li><li>Velocity (속도)</li></ul>
+        </li>
+      </ul>
+      <figure class="plain"><img src="assets/week01/s60-bigdata.png" alt="빅데이터의 3V: Volume, Variety, Velocity 도식" style="max-height:380px"></figure>
+    </div>
+    <p class="src"><a href="https://en.wikipedia.org/wiki/Big_data" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Big_data</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="빅데이터 학습 데이터의 구축">
+  <div class="kicker">딥 러닝 · (2) 빅데이터</div>
+  <h2>빅데이터 학습 데이터의 구축</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>ImageNet 데이터 예시
+        <ul>
+          <li>2006년 Fei-Fei Li 교수가 시작</li>
+          <li>대규모 데이터베이스 축적 &amp; 수작업으로 건건이 이미지 분류</li>
+          <li><b>“빅데이터 축적을 통해 이미지 인식 인공지능의 성능을 향상시키자!”</b></li>
+        </ul>
+      </li>
+    </ul>
+    <figure><img src="assets/week01/s61-feifei.jpg" alt="TED 강연 중인 Fei-Fei Li" style="max-height:320px"><figcaption>Fei-Fei Li, TED 2015</figcaption></figure>
+    <p class="src"><a href="https://www.ted.com/speakers/fei_fei_li" target="_blank" rel="noopener">https://www.ted.com/speakers/fei_fei_li</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(3) 새로운 알고리즘의 발전">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>(3) 새로운 알고리즘의 발전</h2>
+  <div class="body">
+    <ul class="bul"><li>20세기까지의 혁신 기술 – 특허를 통해 보호</li></ul>
+    <div class="figrow" style="gap:40px">
+      <figure><img src="assets/week01/s62-wright.png" alt="라이트 형제의 비행기 특허 도면" style="max-height:380px"><figcaption>라이트 형제 비행기 특허 (1906)</figcaption></figure>
+      <figure><img src="assets/week01/s62-haber.png" alt="하버의 질소 고정법 특허 도면" style="max-height:380px"><figcaption>하버의 질소 고정법 특허 (1916)</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="기술의 공유와 확산">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>기술의 공유와 확산</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>21세기의 혁신 기술 – 오픈 소스 기반
+        <ul><li>(예시) GitHub – 프로그램 소스코드 공유 사이트</li></ul>
+      </li>
+    </ul>
+    <div class="figrow" style="align-items:flex-start">
+      <figure style="flex:0 1 300px"><img src="assets/week01/s63-github1.png" alt="GitHub 시작 안내 화면"></figure>
+      <figure style="flex:1 1 380px"><img src="assets/week01/s63-github2.png" alt="GitHub 저장소 화면"></figure>
+    </div>
+    <p class="src"><a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="연구 성과의 공유">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>연구 성과의 공유</h2>
+  <div class="body">
+    <ul class="bul"><li>arXiv – 논문 공유 사이트</li></ul>
+    <figure><img src="assets/week01/s64-arxiv.png" alt="arXiv에서 deep learning 검색 결과" style="max-height:420px"></figure>
+    <p class="src"><a href="https://arxiv.org/" target="_blank" rel="noopener">https://arxiv.org/</a></p>
+  </div>
+</section>
+
+<section class="slide top" data-sec="4" data-title="경진대회를 통한 경쟁">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>경진대회를 통한 경쟁</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>Netflix Prize – Netflix의 알고리즘을 10% 개선 시 100만 달러
+        <ul>
+          <li>학습 데이터
+            <ul>
+              <li>&lt;user, movie, date of grade, grade(1~5)&gt; 100,480,507건</li>
+              <li>이용자 – 480,189명 (익명), 영화 – 17,770개</li>
+              <li>이용자당 평균 200개 영화 평가</li>
+              <li>영화당 평균 5,000 이용자 평가</li>
+            </ul>
+          </li>
+          <li>평가 데이터
+            <ul>
+              <li>Quiz set: &lt;user, movie, date of grade, grade(1~5)&gt; 1,408,342건 (순위표)</li>
+              <li>Test set: &lt;user, movie, date of grade&gt; 1,408,789건 (최종 평가)</li>
+            </ul>
+          </li>
+          <li>평가 방법
+            <ul><li>이용자 평가 결과와의 평균 제곱근 오차 (Root Mean Square Error, RMSE)</li></ul>
+          </li>
+        </ul>
+      </li>
+      <li>참가자
+        <ul><li>186개국 41,305팀 51,051명 참가</li></ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="Netflix Prize 순위표">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>Netflix Prize 순위표</h2>
+  <div class="body">
+    <figure><img src="assets/week01/s66-netflix-leaderboard.png" alt="Netflix Prize 리더보드 (2008–2009)" style="max-height:520px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="Netflix Prize 결과">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>Netflix Prize 결과</h2>
+  <div class="body">
+    <div class="chart-box">
+      <svg viewBox="0 0 700 350" role="img" aria-label="Netflix Prize 진행에 따른 Quiz Set RMSE 변화: trivial algorithm 1.054, Cinematch 0.9514, 2007 Progress Prize 0.8712, 2008 Progress Prize 0.8616, Grand Prize 0.8554 (목표 0.8563)">
+        <g class="grid">
+          <line x1="90" y1="42.4" x2="650" y2="42.4"/><line x1="90" y1="104.3" x2="650" y2="104.3"/><line x1="90" y1="166.2" x2="650" y2="166.2"/><line x1="90" y1="228.1" x2="650" y2="228.1"/>
+        </g>
+        <line class="axis" x1="90" y1="30" x2="90" y2="290"/><line class="axis" x1="90" y1="290" x2="650" y2="290"/>
+        <g class="tick" text-anchor="end">
+          <text x="82" y="46">1.05</text><text x="82" y="108">1.00</text><text x="82" y="170">0.95</text><text x="82" y="232">0.90</text><text x="82" y="294">0.85</text>
+        </g>
+        <text class="ttl" transform="translate(28,200) rotate(-90)" text-anchor="middle">RMS Error on Quiz Set</text>
+        <line class="target" x1="90" y1="282.3" x2="650" y2="282.3"/>
+        <text class="pct" x="96" y="276">목표 0.8563 (10.00% 개선)</text>
+        <polyline class="ln" points="150,37.4 260,164.5 370,263.8 480,275.7 590,283.4"/>
+        <g class="pt"><circle cx="150" cy="37.4" r="5"/><circle cx="260" cy="164.5" r="5"/><circle cx="370" cy="263.8" r="5"/><circle cx="480" cy="275.7" r="5"/><circle cx="590" cy="283.4" r="5"/></g>
+        <g class="pct" text-anchor="middle">
+          <text x="175" y="30">1.054</text><text x="290" y="158">0.9514</text><text x="370" y="250">8.43%</text><text x="480" y="262">9.44%</text><text x="590" y="269">10.09%</text>
+        </g>
+        <g class="lbl" text-anchor="middle">
+          <text x="150" y="312">trivial algorithm</text><text x="260" y="312">Cinematch</text><text x="370" y="312">2007 Progress</text><text x="370" y="327">Prize</text><text x="480" y="312">2008 Progress</text><text x="480" y="327">Prize</text><text x="590" y="312">Grand Prize</text>
+        </g>
+        <text class="ttl" x="370" y="346" text-anchor="middle">개선율(%)은 Netflix 자체 알고리즘 Cinematch 대비</text>
+      </svg>
+    </div>
+    <p class="muted center">3년에 걸친 경쟁 끝에 2009년 BellKor’s Pragmatic Chaos 팀이 10.09% 개선으로 100만 달러를 수상</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="경진대회 사이트">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>경진대회 사이트</h2>
+  <div class="body">
+    <ul class="bul"><li>Kaggle – 다양한 온라인 인공지능 경진대회</li></ul>
+    <div class="figrow" style="align-items:flex-start">
+      <figure style="flex:1 1 300px"><img src="assets/week01/s68-kaggle1.png" alt="Kaggle 경진대회 목록"></figure>
+      <figure style="flex:1 1 320px"><img src="assets/week01/s68-kaggle2.png" alt="Kaggle COVID-19 예측 대회 페이지"></figure>
+    </div>
+    <p class="src"><a href="https://www.kaggle.com/" target="_blank" rel="noopener">https://www.kaggle.com/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="Kaggle – 실시간 순위표">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>Kaggle – 실시간 순위표 (Leaderboard)</h2>
+  <div class="body">
+    <figure><img src="assets/week01/s69-kaggle-leaderboard.png" alt="Kaggle Deepfake Detection Challenge 리더보드" style="max-height:480px"></figure>
+    <p class="src"><a href="https://www.kaggle.com/c/deepfake-detection-challenge/leaderboard" target="_blank" rel="noopener">https://www.kaggle.com/c/deepfake-detection-challenge/leaderboard</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="인공지능 학습 사이클">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>인공지능 학습 사이클</h2>
+  <div class="body">
+    <div class="cycle">
+      <div class="node"><img src="assets/week01/s70-kaggle-logo.png" alt="Kaggle"><p>Kaggle 등 다양한 경진대회<b>➜ 동기 부여</b></p></div>
+      <span class="ar">➜</span>
+      <div class="node"><img src="assets/week01/s70-github-logo.png" alt="GitHub"><p>GitHub에 공개된 소스코드<b>➜ 실습을 통한 학습</b></p></div>
+      <span class="ar">➜</span>
+      <div class="node"><img src="assets/week01/s70-arxiv-logo.png" alt="arXiv.org"><p>연구 논문 실시간 공유<b>➜ 최신 이론 전파</b></p></div>
+    </div>
+    <p class="cycle-back">새로운 이론은 다시 경진대회에서 검증된다 — 선순환</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="ImageNet Challenge">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2 class="logo-title"><img src="assets/week01/s71-imagenet-logo.jpg" alt="ImageNet"> Challenge</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>ImageNet 데이터를 이용하여 사물을 식별하기
+        <ul>
+          <li>2010년 오류율 28%, 2011년 오류율 26%</li>
+          <li class="arrow">과연 컴퓨터가 사물을 인식할 수 있을까? 불가능한 도전은 아닐까?</li>
+        </ul>
+      </li>
+    </ul>
+    <figure><img src="assets/week01/s53-imagenet.jpg" alt="ImageNet 이미지 모음" style="max-height:320px;width:100%;object-fit:cover"></figure>
+    <p class="src"><a href="http://www.image-net.org/" target="_blank" rel="noopener">http://www.image-net.org/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="ImageNet Challenge – 결과">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2 class="logo-title"><img src="assets/week01/s71-imagenet-logo.jpg" alt="ImageNet"> Challenge</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week01/s72-results.png" alt="ImageNet-2012 오류율: AlexNet 16.4%, Clarifai 11.2%, VGG-16 7.4%, GoogLeNet-19 6.7%, ResNet-152 3.57%, 사람 5%" style="max-height:400px"><figcaption>Fig. 5. Accuracy for ImageNet challenge with different DL models — 2012 AlexNet 16.4% → 2015 ResNet-152 3.57% (사람 5%)</figcaption></figure>
+    <p class="em center"><span class="arrow"></span>사람보다 더 정확하게 사물을 식별!</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="인공지능 기술 공유 시대의 종말?">
+  <div class="kicker">딥 러닝 · (3) 알고리즘</div>
+  <h2>인공지능 기술 공유 시대의 종말?</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>최근 일부 대규모 언어모형 인공지능은 더 이상 기술 상세정보를 공개하지 않음
+        <ul><li>영업상의 이익</li><li>악의자의 오용 방지</li></ul>
+      </li>
+      <li>예시 – GPT-4 기술 보고서
+        <ul><li><b>경쟁 환경(competitive landscape)과 안전에의 함의(safety implications)를 고려하여</b> 아키텍처(모델 크기 등), 하드웨어, 학습 연산, 데이터세트 구성, 학습방법 등에 대한 추가 세부정보를 포함하지 않는다고 명시</li></ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week01/s73-gpt4-title.png" alt="GPT-4 Technical Report, OpenAI" style="max-width:520px"></figure>
+    <figure class="plain"><img src="assets/week01/s73-gpt4-text.png" alt="GPT-4 Technical Report 2절 Scope and Limitations 본문" style="max-width:640px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="요약">
+  <div class="kicker">딥 러닝</div>
+  <h2>요약</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>인공신경망이란?
+        <ul><li>인공 뉴런을 여러 단위로 쌓은 네트워크 = 복잡한 함수의 일종</li></ul>
+      </li>
+      <li>인공 신경망이 하는 일은?
+        <ul><li>= 입력 값에 출력 값을 대응(mapping)시키는 것</li></ul>
+      </li>
+      <li>딥러닝이란?
+        <ul><li>인공 신경망을 여러 층으로 구성한 것 = 훨씬 더 복잡한 함수를 표현</li></ul>
+      </li>
+    </ul>
+    <div class="figrow" style="gap:40px">
+      <div class="fn sm">
+        <div class="part"><span class="f">f</span><span class="lbl">인공지능</span></div>
+        <span class="par">(</span>
+        <div class="part"><div class="slot blank" style="min-width:80px"></div><span class="lbl">입력 변수</span></div>
+        <span class="par">)</span>
+        <span class="eq">=</span>
+        <div class="part"><div class="slot blank" style="min-width:80px"></div><span class="lbl">출력 변수</span></div>
+      </div>
+      <span class="fbox red"><i>F</i>(<i>x</i>) = <span class="sum"><span><i>N</i></span><b>Σ</b><span><i>i</i>=1</span></span> <i>v</i><sub><i>i</i></sub> <i>φ</i>(<i>w</i><sub><i>i</i></sub><sup>T</sup><i>x</i> + <i>b</i><sub><i>i</i></sub>)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5. 미래 인공지능 ===================== -->
+<section class="slide cover section" data-sec="5" data-title="미래 인공지능">
+  <div class="cover-img"><img src="assets/week01/s75-einstein.jpg" alt=""></div>
+  <div class="over kicker">Section 5</div>
+  <div class="over cover-body" style="align-items:flex-end;text-align:right">
+    <h1>미래 인공지능</h1>
+    <p class="lead" style="max-width:520px">AI 연구자들은 인간 수준의 기계지능이 언제 올 것이라고 보는가. 전문가 설문조사 결과와 그 해석을 살펴본다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="Thousands of AI Authors on the Future of AI">
+  <div class="kicker">미래 인공지능</div>
+  <h2>AI 연구자 2,778명에게 물었다</h2>
+  <div class="body">
+    <div class="two">
+      <figure><img src="assets/week01/s76-paper.png" alt="논문 첫 페이지: Thousands of AI Authors on the Future of AI (Preprint, January 2024)" style="max-height:480px"></figure>
+      <div class="stack">
+        <p style="font-weight:800;font-size:clamp(16px,1.5vw,20px)" lang="en">Thousands of AI Authors on the Future of AI</p>
+        <p class="muted">Katja Grace 외 (AI Impacts), Preprint, January 2024</p>
+        <ul class="bul compact">
+          <li>최상위 AI 학회에 논문을 발표한 연구자 2,778명 설문</li>
+          <li>2028년까지 다양한 이정표(결제 사이트를 처음부터 자율 구축, 인기 가수 스타일의 신곡 작곡, LLM 미세조정 등)가 달성될 확률 50% 이상</li>
+          <li>모든 과제에서 기계가 인간을 능가할 확률: 2027년 10%, 2047년 50% — 1년 전 조사보다 13년 앞당겨짐</li>
+          <li>모든 직업이 완전 자동화될 확률: 2037년 10%, 2116년 50% (2022년 조사에서는 2164년)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide top" data-sec="5" data-title="고수준 기계지능(HLMI)">
+  <div class="kicker">미래 인공지능</div>
+  <h2>고수준 기계지능 (HLMI)</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>고수준 기계지능 (High-Level Machine Intelligence, HLMI)
+        <ul>
+          <li>정의: 고수준 기계 지능(HLMI)은 인간의 조력을 받지 않는 기계가 모든 과제(task)를 인간 작업자보다 더 저렴하고 더 잘 수행할 수 있을 때 달성됨. 인간이 하는 것이 본질적으로 유리한 과제(예: 배심원으로 인정)는 제외.</li>
+          <li><b>도입 여부가 아니라 실현 가능성을 고려할 것</b></li>
+          <li>예측 전제: 인간의 과학 활동이 중대한 부정적 혼란(major negative disruption) 없이 계속될 것</li>
+        </ul>
+      </li>
+      <li>결과: <b>2047년</b> 내 HLMI가 실현될 가능성이 50%로 예상 (50% chance of HLMI by 2047)
+        <ul>
+          <li><b>2022년 설문조사 결과 2060년 (13년 단축)</b></li>
+          <li><b>2016년 설문조사 결과 2061년 (14년 단축)</b></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="HLMI 도래 가능성">
+  <div class="kicker">미래 인공지능</div>
+  <h2>HLMI 도래 가능성</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week01/s78-hlmi.png" alt="연도별 HLMI 달성 확률 곡선: 2023년 종합 예측(빨강)과 2022년 종합 예측(파랑), 95% 신뢰구간과 개별 응답 표본" style="max-height:480px"><figcaption>2023 Aggregate Forecast (빨강) vs 2022 Aggregate Forecast (파랑), 95% 신뢰구간 · 얇은 선은 개별 응답자의 예측 표본</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="감마 분포(Gamma Distribution)">
+  <div class="kicker">미래 인공지능</div>
+  <h2>감마 분포 (Gamma Distribution)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>감마분포
+        <ul>
+          <li>어떤 사건이 θ의 시간마다 발생하는 경우, <i>k</i>번째 사건이 일어날 때까지 걸리는 시간을 모델링</li>
+          <li>각 사건은 상호 독립이라고 가정함</li>
+        </ul>
+      </li>
+      <li>HLMI 달성 시간 예측 모델링
+        <ul>
+          <li>HLMI 달성에 <i>k</i>개의 기술적 돌파구(breakthrough)가 필요하고, 각 돌파구 달성에 θ년의 시간이 필요</li>
+          <li>설문에 응답한 AI 연구자들은 각기 다른 관념을 가지고 있을 것</li>
+          <li>앞의 그래프는 설문 응답을 통해 각 연구자 내심의 감마분포를 추정, 종합한 결과</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="figrow">
+      <figure class="plain"><img src="assets/week01/s79-gamma-pdf.png" alt="감마 분포의 확률밀도함수" style="max-height:220px"><figcaption>확률밀도함수</figcaption></figure>
+      <figure class="plain"><img src="assets/week01/s79-gamma-cdf.png" alt="감마 분포의 누적분포함수" style="max-height:220px"><figcaption>누적분포함수</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://en.wikipedia.org/wiki/Gamma_distribution" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Gamma_distribution</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="AI 전문가 간의 의견 차이">
+  <div class="kicker">미래 인공지능</div>
+  <h2>AI 전문가 간의 의견 차이</h2>
+  <div class="body">
+    <div class="two wide-r">
+      <ul class="bul compact">
+        <li>2050년까지 90% 이상의 확률로 HLMI가 달성될 것이라는 AI 연구자들
+          <ul>
+            <li><b>작은 <i>k</i>값을 가정</b> – 현재의 AI 모델 구조가 HLMI 달성에 <u>적합하다</u>고 판단 ➜ 적은 추가 혁신이 필요</li>
+            <li><b>작은 θ값을 가정</b> – (현재의 AI 투자 증가 등으로 인해) <u>중대한 혁신이 자주 일어날 것</u>으로 전망</li>
+          </ul>
+        </li>
+        <li>2100년이 되어도 HLMI가 달성될 확률이 50% 미만이라는 AI 연구자들
+          <ul>
+            <li><b>큰 <i>k</i>값을 가정</b> – 현재의 AI 모델 구조가 HLMI 달성에 <u>적합하지 않다</u>고 판단 ➜ 많은 추가 혁신이 필요</li>
+            <li><b>큰 θ값을 가정</b> – HLMI 달성에 필요한 <u>중대한 혁신은 빈번하게 일어나지 않을 것</u>으로 판단</li>
+          </ul>
+        </li>
+      </ul>
+      <figure class="plain"><img src="assets/week01/s78-hlmi.png" alt="HLMI 확률 곡선. 왼쪽 위의 가파른 곡선들(낙관론)과 오른쪽 아래의 완만한 곡선들(비관론)" style="max-height:380px"><figcaption>왼쪽 위 가파른 곡선 = 낙관적 응답자, 오른쪽 아래 완만한 곡선 = 비관적 응답자</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="AI 전문가 간의 의견 차이 – Hinton vs LeCun">
+  <div class="kicker">미래 인공지능</div>
+  <h2>AI 전문가 간의 의견 차이</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <figure><img src="assets/week01/s81-hinton.png" alt="Geoffrey Hinton — “Humanity is just a passing phase for evolutionary intelligence.”" style="max-height:220px;width:100%;object-fit:cover"><figcaption><b>Possible End of Humanity from AI?</b><br>Geoffrey Hinton at MIT Technology Review’s EmTech Digital<br><a href="https://www.youtube.com/watch?v=sitHS6UDMJc" target="_blank" rel="noopener">https://www.youtube.com/watch?v=sitHS6UDMJc</a></figcaption></figure>
+        <figure class="plain"><img src="assets/week01/s81-hinton-quote.png" alt="Hinton 인용문: AI 모델이 우리보다 똑똑해질 가능성을 심각하게 받아들여야 한다" style="max-height:150px"><figcaption><a href="https://www.utoronto.ca/news/risks-artificial-intelligence-must-be-considered-technology-evolves-geoffrey-hinton" target="_blank" rel="noopener">utoronto.ca/news/risks-artificial-intelligence-must-be-considered…</a></figcaption></figure>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week01/s81-lecun.png" alt="Yann LeCun과 Lex Fridman 대담" style="max-height:220px;width:100%;object-fit:cover"><figcaption><b>AI cannot understand reality</b> | Yann LeCun and Lex Fridman<br><a href="https://www.youtube.com/watch?v=RX5N30uIUUA" target="_blank" rel="noopener">https://www.youtube.com/watch?v=RX5N30uIUUA</a></figcaption></figure>
+        <figure class="plain"><img src="assets/week01/s81-lecun-tweet.png" alt="Yann LeCun 트윗: 인간 수준 AI 이전에 고양이·개 수준 AI에 먼저 도달해야 하며, 우리는 아직 근처에도 가지 못했다" style="max-height:150px"><figcaption><a href="https://twitter.com/ylecun/status/1622300311573651458" target="_blank" rel="noopener">https://twitter.com/ylecun/status/1622300311573651458</a></figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide top" data-sec="5" data-title="노동의 완전 자동화">
+  <div class="kicker">미래 인공지능</div>
+  <h2>노동의 완전 자동화</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>노동의 완전 자동화 (Full Automation of Labor, FAOL)
+        <ul>
+          <li>어떤 직업(occupation)이 완전히 자동화될 수 있다는 것은 인간의 조력을 받지 않는 기계가 해당 직업을 인간 작업자보다 더 저렴하고 더 잘 수행할 수 있는 경우를 뜻함. 인간이 하는 것이 본질적으로 유리한 직업의 측면(예: 배심원으로 인정)은 제외.</li>
+          <li><b>도입 여부가 아니라 실현 가능성을 고려할 것</b></li>
+          <li>‘노동의 완전 자동화’는 모든 직업이 완전히 자동화될 수 있는 때를 뜻함. 즉, 어떤 직업에 있어서도 기계가 인간 작업자보다 더 저렴하고 더 잘 작업을 수행할 수 있는 때를 지칭함.</li>
+        </ul>
+      </li>
+      <li>특정 직업의 완전 자동화 가능 시점 예상
+        <ul><li>설문 대상: 트럭 운전사, 외과의사, 소매점 판매원, AI 연구자</li></ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week01/s82-milestones.png" alt="이정표별 달성 예상 연도: 트럭 운전사, 소매점 판매원부터 AI 연구자, 모든 직업의 완전 자동화까지" style="max-height:260px"><figcaption>과제(task)·직업(job)별 50% 달성 예상 연도</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="노동의 완전 자동화 도래 가능성">
+  <div class="kicker">미래 인공지능</div>
+  <h2>노동의 완전 자동화 도래 가능성</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>노동의 완전 자동화 발생 확률이 50%가 되는 시점 예측치는 <b>2116년</b>
+        <ul><li><b>2022년 설문조사 결과 2164년 (48년 단축)</b></li></ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week01/s83-faol.png" alt="연도별 노동 완전 자동화 확률 곡선 (2023년·2022년 종합 예측)" style="max-height:420px"></figure>
+  </div>
+</section>
+
+<section class="slide top" data-sec="5" data-title="HLMI vs FAOL">
+  <div class="kicker">미래 인공지능</div>
+  <h2>고수준 기계지능(HLMI) vs 노동 완전자동화(FAOL)</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>FAOL 확률 50% 예측은 HLMI 확률 50% 예측보다 60년 이상 늦음
+        <ul><li>2016, 2022, 2023년에서 일관되게 존재하는 차이</li></ul>
+      </li>
+      <li>왜 이러한 차이가 존재하는가?
+        <ul>
+          <li>FAOL과 HLMI는 유사한 것 – HLMI가 달성된다면 조만간 FAOL이 달성될 수 있어야 함</li>
+          <li>예측의 차이는 프레이밍 효과(framing effect) 때문이라고 볼 수 있음</li>
+          <li>“과제(task)” vs “직업(occupation)”의 차이 때문이라고도 볼 여지가 있음</li>
+          <li>답변자들이 질문상의 명시적 요건(도입 여부가 아니라 실현 가능성을 고려할 것)에도 불구하고, 양자를 달리 해석하였을 수도 있음
+            <ul>
+              <li>FAOL은 물리적 조작을 포함, HLMI는 물리적 조작을 포함하지 않는 것으로 해석</li>
+              <li>FAOL은 adoption을 포함, HLMI는 adoption을 포함하지 않는 것으로 해석</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="인간 지능의 위계와 자동화">
+  <div class="kicker">미래 인공지능</div>
+  <h2>인간 지능의 위계와 자동화</h2>
+  <div class="body">
+    <div class="pyr">
+      <div class="side left"><span class="ar">⬆</span>(과거)<br>자동화 순서 전망</div>
+      <svg viewBox="0 0 400 300" role="img" aria-label="위에서부터 예술 창작, 화이트칼라 노동, 블루칼라 노동으로 이루어진 피라미드">
+        <polygon points="200,20 380,280 20,280" fill="#dbeefb" stroke="#1b6fa6" stroke-width="2"/>
+        <polygon points="200,20 260,107 140,107" fill="#124d78"/>
+        <polygon points="140,107 260,107 320,193 80,193" fill="#3f9fd8"/>
+        <polygon points="80,193 320,193 380,280 20,280" fill="#a9d5f1"/>
+        <g font-family="Inter, Noto Sans KR, sans-serif" font-weight="800" font-size="17" text-anchor="middle">
+          <text x="200" y="80" fill="#fff">예술 창작</text>
+          <text x="200" y="157" fill="#fff">화이트칼라 노동</text>
+          <text x="200" y="244" fill="#124d78">블루칼라 노동</text>
+        </g>
+      </svg>
+      <div class="side">AI 도입 활용<span class="ar">⬇</span></div>
+    </div>
+    <p class="muted center">과거에는 단순 노동부터 자동화될 것으로 보았지만, 생성형 AI는 창작과 지식 노동부터 파고들고 있다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="기술 예측의 어려움">
+  <div class="kicker">미래 인공지능</div>
+  <h2>기술 예측의 어려움</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <figure><img src="assets/week01/s86-preece.jpg" alt="“The Americans have need of the telephone, but we do not. We have plenty of messenger boys.” — Sir William Preece, 1876" style="max-height:300px;width:100%;object-fit:cover"><figcaption>William Preece (영국 체신청 수석 엔지니어), 1876<br><a href="https://www.quotesplanet.com/telephone-quotes" target="_blank" rel="noopener">https://www.quotesplanet.com/telephone-quotes</a></figcaption></figure>
+      <figure class="plain"><img src="assets/week01/s86-watson.png" alt="“I think that there is a world market for maybe five computers.” — Thomas J. Watson, IBM 회장, 1943 (전해지는 말)" style="max-height:300px"><figcaption>Thomas J. Watson (IBM 회장), 1943<br><a href="https://www.scientificamerican.com/article/pogue-all-time-worst-tech-predictions/" target="_blank" rel="noopener">scientificamerican.com/article/pogue-all-time-worst-tech-predictions/</a></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="마치며">
+  <div class="kicker">미래 인공지능</div>
+  <h2>마치며</h2>
+  <div class="body">
+    <figure><img src="assets/week01/s87-jfk.png" alt="“Man is still the most extraordinary computer of all.” — John F. Kennedy" style="max-height:340px"></figure>
+    <p class="src"><a href="https://www.forbes.com/quotes/5248/" target="_blank" rel="noopener">https://www.forbes.com/quotes/5248/</a></p>
+  </div>
+</section>
+
+    </div><!-- /deck -->
+
+    <nav class="pager" aria-label="페이지 이동">
+      <button class="pbtn prev" id="btnPrev" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span id="prevLabel">이전</span></button>
+      <div class="pinfo"><span class="sec" id="pSec"></span><span class="dots" id="pDots"></span><span class="cnt" id="pCnt"></span></div>
+      <button class="pbtn next" id="btnNext" type="button"><span id="nextLabel">다음</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    </nav>
+  </main>
+</div>
+
+<script>
+(function(){
+  const SECTIONS = [
+    {name:'들어가며', sub:'강의 소개'},
+    {name:'인공지능', sub:'인공지능 = 함수'},
+    {name:'머신러닝', sub:'데이터로부터 함수 찾기'},
+    {name:'인공신경망', sub:'뉴런을 쌓아 만든 함수'},
+    {name:'딥 러닝', sub:'깊게 쌓으면 왜 강해지나'},
+    {name:'미래 인공지능', sub:'전문가들은 언제라고 보나'}
+  ];
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  const secOf = i => +slides[i].dataset.sec;
+  const secIdx = SECTIONS.map((_, s) => slides.map((sl, i) => i).filter(i => secOf(i) === s));
+  let cur = -1;
+
+  /* ---------- 사이드바 목차 ---------- */
+  const toc = document.getElementById('toc');
+  SECTIONS.forEach((s, k) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'toc-link';
+    btn.innerHTML = `<span class="no">${k}</span><span class="nm">${s.name}</span><span class="cnt">${secIdx[k].length}p</span>`;
+    btn.addEventListener('click', () => show(secIdx[k][0]));
+    const sub = document.createElement('ul'); sub.className = 'sub';
+    secIdx[k].forEach(i => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = slides[i].dataset.title || slides[i].querySelector('h2,h1')?.textContent || `슬라이드 ${i+1}`;
+      b.addEventListener('click', () => show(i));
+      const l = document.createElement('li'); l.appendChild(b); sub.appendChild(l);
+    });
+    li.appendChild(btn); li.appendChild(sub); toc.appendChild(li);
+  });
+  const tocItems = Array.from(toc.children);
+
+  /* 표지의 목차 버튼 */
+  const co = document.getElementById('coverOutline');
+  if (co) SECTIONS.slice(1).forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span class="num">${k+1}</span><span>${s.name}<small>${s.sub}</small></span>`;
+    b.addEventListener('click', e => { e.stopPropagation(); show(secIdx[k+1][0]); });
+    co.appendChild(b);
+  });
+
+  /* ---------- 페이저 ---------- */
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const prevLabel = document.getElementById('prevLabel'), nextLabel = document.getElementById('nextLabel');
+  const pSec = document.getElementById('pSec'), pDots = document.getElementById('pDots'), pCnt = document.getElementById('pCnt');
+  const curNo = document.getElementById('curNo'), totNo = document.getElementById('totNo'), bar = document.getElementById('progressBar');
+  totNo.textContent = N;
+
+  function show(i, replace){
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    if (cur >= 0) { slides[cur].classList.remove('active'); slides[cur].querySelectorAll('video').forEach(v => v.pause()); }
+    cur = i;
+    const sl = slides[i]; sl.classList.add('active');
+    sl.querySelectorAll('video').forEach(v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const s = secOf(i), list = secIdx[s], k = list.indexOf(i);
+
+    tocItems.forEach((li, j) => {
+      const b = li.firstElementChild;
+      b.classList.toggle('active', j === s);
+      b.classList.toggle('done', j < s);
+      li.classList.toggle('open', j === s);
+      li.querySelectorAll('.sub button').forEach((sb, m) => sb.classList.toggle('active', j === s && m === k));
+    });
+    const act = toc.querySelector('.toc-link.active');
+    if (act && window.innerWidth <= 900) act.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+
+    pSec.textContent = SECTIONS[s].name;
+    pCnt.textContent = `${k + 1} / ${list.length} · 전체 ${i + 1} / ${N}`;
+    pDots.innerHTML = '';
+    list.forEach((idx, m) => { const d = document.createElement('i'); if (m === k) d.className = 'on'; d.title = slides[idx].dataset.title || ''; d.addEventListener('click', () => show(idx)); pDots.appendChild(d); });
+
+    btnPrev.disabled = i === 0; btnNext.disabled = i === N - 1;
+    prevLabel.textContent = k === 0 && s > 0 ? `이전 섹션: ${SECTIONS[s - 1].name}` : '이전';
+    nextLabel.textContent = k === list.length - 1 && s < SECTIONS.length - 1 ? `다음 섹션: ${SECTIONS[s + 1].name}` : (i === N - 1 ? '마지막 페이지' : '다음');
+
+    curNo.textContent = i + 1; bar.style.width = ((i + 1) / N * 100) + '%';
+    const h = '#' + (i + 1);
+    if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+    window.scrollTo({top:0, behavior:'auto'});
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} — 1강 인공지능의 기본 개념`;
+  }
+  const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
+  btnPrev.addEventListener('click', () => show(cur - 1));
+  btnNext.addEventListener('click', () => show(cur + 1));
+  window.addEventListener('popstate', () => show(fromHash(), true));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+  });
+  let tx = null;
+  document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('deck').addEventListener('touchend', e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 70) show(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  /* ---------- 인공신경망 SVG ---------- */
+  function drawNN(svg){
+    const layers = svg.dataset.layers.split(',').map(Number);
+    const inL = (svg.dataset.in || '').split(',').filter(Boolean);
+    const out = svg.dataset.out || '';
+    const hdots = svg.dataset.hdots === '1', boxes = svg.dataset.boxes === '1';
+    const W = +svg.dataset.w || 640, H = +svg.dataset.h || 300, r = +svg.dataset.r || 18;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const padL = inL.length ? 40 : 30, padR = out ? 110 : 30;
+    const L = layers.length;
+    const xs = layers.map((_, i) => padL + r + (W - padL - padR - 2 * r) * (L > 1 ? i / (L - 1) : 0));
+    const pos = layers.map((n, i) => {
+      const gap = Math.min(r * 3.6, (H - 2 * r - 10) / Math.max(n - 1, 1));
+      return Array.from({length:n}, (_, j) => {
+        const isDots = (i === 0 && inL[j] === '…') || (hdots && i > 0 && i < L - 1 && j === n - 2);
+        return {x: xs[i], y: H / 2 + (j - (n - 1) / 2) * gap, dots: isDots};
+      });
+    });
+    let s = '';
+    for (let i = 0; i < L - 1; i++) for (const a of pos[i]) for (const b of pos[i + 1]) if (!a.dots && !b.dots) s += `<line class="e" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;
+    if (boxes) for (let i = 1; i < L - 1; i++) { const ys = pos[i].map(p => p.y); s += `<rect class="box" x="${xs[i] - r - 8}" y="${Math.min(...ys) - r - 8}" width="${2 * r + 16}" height="${Math.max(...ys) - Math.min(...ys) + 2 * r + 16}" rx="4"/>`; }
+    pos.forEach((Ly, i) => Ly.forEach((p, j) => {
+      if (p.dots) { s += `<text class="dots" x="${p.x}" y="${p.y + 8}" text-anchor="middle">⋮</text>`; return; }
+      const cls = i === 0 ? 'in' : (i === L - 1 ? 'out' : 'hid');
+      s += `<circle class="${cls}" cx="${p.x}" cy="${p.y}" r="${r}"/>`;
+      if (i === 0 && inL[j] && r >= 14) s += `<text class="nl" x="${p.x}" y="${p.y + 5}" text-anchor="middle">${inL[j]}</text>`;
+    }));
+    if (out) { const p = pos[L - 1][Math.floor(pos[L - 1].length / 2)]; s += `<line class="e" x1="${p.x + r}" y1="${p.y}" x2="${p.x + r + 44}" y2="${p.y}" style="stroke-width:1.8;opacity:1" marker-end="url(#nnArr)"/><text class="ol" x="${p.x + r + 54}" y="${p.y + 6}">${out}</text>`; }
+    svg.innerHTML = `<defs><marker id="nnArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker></defs>` + s;
+  }
+  document.querySelectorAll('svg.nn').forEach(drawNN);
+
+  /* ---------- 인공 뉴런 SVG ---------- */
+  function drawNeuron(svg){
+    const n = +svg.dataset.inputs || 1, split = svg.dataset.split === '1', act = svg.dataset.act === '1';
+    const label = svg.dataset.label || '', compact = svg.dataset.compact === '1';
+    const W = 640, H = n > 1 ? 250 : 220, cx = 340, cy = n > 1 ? 118 : 100, r = 48;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const sub = ['', '₁', '₂', '₃'];
+    let s = `<defs><marker id="neArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1b6fa6"/></marker></defs>`;
+    const ys = n === 1 ? [cy] : n === 2 ? [cy - 40, cy + 40] : [cy - 70, cy, cy + 70];
+    ys.forEach((y, j) => {
+      const x0 = 108, ang = Math.atan2(y - cy, x0 - cx), ex = cx + r * Math.cos(ang), ey = cy + r * Math.sin(ang);
+      s += `<line class="ln" x1="${x0}" y1="${y}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="12" y="${y + 6}">Input <tspan font-style="italic">x${n > 1 ? sub[j + 1] : ''}</tspan></text>`;
+      const mx = (x0 + ex) / 2, my = (y + ey) / 2 - 10;
+      s += `<text class="lab w" x="${mx}" y="${my}" text-anchor="middle">Weight <tspan font-style="italic">w${n > 1 ? sub[j + 1] : ''}</tspan></text>`;
+    });
+    if (!compact) {
+      const bx = 160, by = cy + 92, ang = Math.atan2(by - cy, bx - cx), ex = cx + r * Math.cos(ang), ey = cy + r * Math.sin(ang);
+      s += `<line class="ln" x1="${bx}" y1="${by}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="${bx - 60}" y="${by + 16}">Bias <tspan font-style="italic" class="w" fill="#b0483f">b</tspan></text>`;
+      s += `<line class="ln" x1="${cx + r}" y1="${cy}" x2="${cx + r + 170}" y2="${cy}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="${cx + r + 180}" y="${cy + 6}">Output <tspan font-style="italic">y</tspan></text>`;
+    } else {
+      s += `<line class="ln" x1="${cx + r}" y1="${cy}" x2="${cx + r + 90}" y2="${cy}" marker-end="url(#neArr)"/>`;
+    }
+    s += `<circle class="nb" cx="${cx}" cy="${cy}" r="${r}"/>`;
+    if (split) {
+      s += `<line class="ln" x1="${cx}" y1="${cy - r}" x2="${cx}" y2="${cy + r}"/>`;
+      s += `<text class="z" x="${cx - r / 2}" y="${cy + 7}" text-anchor="middle">z</text>`;
+      s += `<text class="z" x="${cx + r / 2}" y="${cy + 7}" text-anchor="middle">f(z)</text>`;
+    } else if (label === 'formula') {
+      s += `<text class="z" x="${cx}" y="${cy + 6}" text-anchor="middle" style="fill:#22201d;font-size:17px">y = wx + b</text>`;
+    } else if (label) {
+      s += `<text class="z" x="${cx}" y="${cy + 6}" text-anchor="middle">${label}</text>`;
+    }
+    if (act) s += `<text class="act" x="${cx + r * 0.7}" y="${cy - r - 14}">Activation</text>`;
+    svg.innerHTML = s;
+  }
+  document.querySelectorAll('svg.neuron').forEach(drawNeuron);
+
+  show(fromHash(), true);
+})();
+</script>
+</body>
+</html>
