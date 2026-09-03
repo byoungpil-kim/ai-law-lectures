@@ -422,6 +422,9 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 .cover .outline button:disabled:hover{background:rgba(255,255,255,.045);}
 
 /* ---------- 섹션 2: RNN 도식, seq2seq, 영상 카드 ---------- */
+.lat{width:100%;max-width:560px;height:auto;display:block;margin:0 auto;}
+.lat .pred{fill:#e3f1fb;stroke:#1b6fa6;stroke-width:1.8;} .lat .hid{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;stroke-dasharray:6 4;} .lat .obs{fill:#fbe9e7;stroke:#b0483f;stroke-width:1.8;}
+.lat .a{stroke:#22201d;stroke-width:1.8;} .lat .t{font-family:"Inter","Noto Sans KR",sans-serif;font-size:13px;font-weight:800;fill:var(--ink);} .lat .v{font-family:"Cambria","Times New Roman",serif;font-size:13px;fill:var(--ink-soft);} .lat .tm{font-family:"Inter",sans-serif;font-size:13px;font-weight:700;fill:var(--muted);}
 .rnn{width:100%;max-width:800px;height:auto;display:block;margin:0 auto;}
 .rnn .in{fill:#fbe9e7;stroke:#b0483f;stroke-width:1.8;}
 .rnn .hid{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;}
@@ -756,9 +759,63 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
+<section class="slide" data-sec="2" data-title="Intuition – 잠재 변수">
+  <div class="kicker">시퀀스 데이터와 순환 신경망</div>
+  <h2>Intuition — 보이지 않는 “상태”가 있다</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr">
+      <ul class="bul compact">
+        <li>잠재 변수 (Latent Variable, Hidden Variable)
+          <ul>
+            <li>“관측되는 현상은 관측되지 않는 잠재 변수의 발현”</li>
+            <li>잠재 변수: 기상의 상황 &nbsp;·&nbsp; 관측 현상: 기온, 습도, 구름량, …</li>
+          </ul>
+        </li>
+        <li>우리는 잠재 변수를 곧바로 알 수 없음
+          <ul>
+            <li>관측 값을 이용하여 잠재 변수를 추정</li>
+            <li>새로운 현상이 관측되면 기존 잠재 변수를 업데이트</li>
+          </ul>
+        </li>
+        <li class="arrow">이 숨은 상태(hidden variable)가 “지금까지 본 것”을 요약한다 — 뒤에서 볼 문맥(context) 벡터의 원형</li>
+      </ul>
+      <svg class="lat" viewBox="0 0 560 330" role="img" aria-label="t−1과 t 두 시점에서 관측 변수가 잠재 변수를 갱신하고, 잠재 변수가 예측을 내며, 잠재 변수는 다음 시점으로 전달되는 도식">
+        <defs><marker id="latArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker></defs>
+        <g class="col" transform="translate(40,0)">
+          <rect class="pred" x="0" y="30" width="200" height="56" rx="8"/><text x="100" y="52" text-anchor="middle" class="t">Prediction ⟨t−1⟩</text><text x="100" y="74" text-anchor="middle" class="v">(0.2)</text>
+          <rect class="hid" x="0" y="130" width="200" height="56" rx="8"/><text x="100" y="152" text-anchor="middle" class="t">Hidden Variable ⟨t−1⟩</text><text x="100" y="174" text-anchor="middle" class="v">(0.2, 0.5, …, −0.7)</text>
+          <rect class="obs" x="0" y="230" width="200" height="56" rx="8"/><text x="100" y="252" text-anchor="middle" class="t">Observed Variable ⟨t−1⟩</text><text x="100" y="274" text-anchor="middle" class="v">(1.2, −0.3, …, 0.8)</text>
+          <line class="a" x1="100" y1="230" x2="100" y2="190" marker-end="url(#latArr)"/><line class="a" x1="100" y1="130" x2="100" y2="90" marker-end="url(#latArr)"/>
+          <text x="100" y="318" text-anchor="middle" class="tm">⟨t−1⟩</text>
+        </g>
+        <g class="col" transform="translate(320,0)">
+          <rect class="pred" x="0" y="30" width="200" height="56" rx="8"/><text x="100" y="52" text-anchor="middle" class="t">Prediction ⟨t⟩</text><text x="100" y="74" text-anchor="middle" class="v">(0.8)</text>
+          <rect class="hid" x="0" y="130" width="200" height="56" rx="8"/><text x="100" y="152" text-anchor="middle" class="t">Hidden Variable ⟨t⟩</text><text x="100" y="174" text-anchor="middle" class="v">(0.3, 0.8, …, 0.1)</text>
+          <rect class="obs" x="0" y="230" width="200" height="56" rx="8"/><text x="100" y="252" text-anchor="middle" class="t">Observed Variable ⟨t⟩</text><text x="100" y="274" text-anchor="middle" class="v">(0.6, 0.1, …, −0.3)</text>
+          <line class="a" x1="100" y1="230" x2="100" y2="190" marker-end="url(#latArr)"/><line class="a" x1="100" y1="130" x2="100" y2="90" marker-end="url(#latArr)"/>
+          <text x="100" y="318" text-anchor="middle" class="tm">⟨t⟩</text>
+        </g>
+        <line class="a" x1="4" y1="158" x2="36" y2="158" marker-end="url(#latArr)"/>
+        <line class="a" x1="240" y1="158" x2="316" y2="158" marker-end="url(#latArr)"/>
+        <line class="a" x1="520" y1="158" x2="554" y2="158" marker-end="url(#latArr)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
 <section class="slide" data-sec="2" data-title="순환 신경망(RNN)의 기본 개념">
   <div class="kicker">시퀀스 데이터와 순환 신경망</div>
   <h2>순환 신경망 (RNN)의 기본 개념</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week02/s19-rnn-concept.png" alt="t−1, t, t+1 세 시점의 신경망. 아래 빨간 상자가 입력, 가운데 녹색 점선 상자가 은닉 상태, 위 파란 상자가 출력이며 은닉 상태가 다음 시점으로 전달된다" style="max-height:380px"></figure>
+    <p class="em center">⟨t−1⟩ 단계 상태 정보(Hidden Variable)로 ⟨t⟩ 단계 상태 정보 업데이트</p>
+    <p class="muted center">1강의 신경망(입력층–은닉층–출력층)을 시점마다 하나씩 두고, 은닉층끼리 옆으로 연결한 것이 순환 신경망이다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="RNN 모델 – 영화평 예제">
+  <div class="kicker">시퀀스 데이터와 순환 신경망</div>
+  <h2>RNN 모델 – 영화평 읽기</h2>
   <div class="body">
     <p style="font-weight:700">문제 – 다음 영화평은 긍정적인가? <span class="muted">(0 / 1 이진분류)</span> &nbsp; “This movie is a true masterpiece.”</p>
     <svg class="rnn" data-words="This,movie,is,a,true,masterpiece,." data-mode="concept" role="img" aria-label="단어를 하나씩 순서대로 넣으면 상태가 옆으로 전달되는 순환 신경망 도식"></svg>
