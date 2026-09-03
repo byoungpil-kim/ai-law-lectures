@@ -1437,31 +1437,6 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="기반모델의 발전 배경">
-  <div class="kicker">기반모델</div>
-  <h2>기반모델의 발전 배경</h2>
-  <div class="body">
-    <p style="font-weight:700">2018년 자연어 처리(NLP) 분야의 혁신에서 비롯</p>
-    <div class="steps" style="grid-template-columns:1fr 1fr">
-      <div class="step"><span class="no">1</span><b class="ttl">전이 학습 (transfer learning)</b>
-        <ul class="bul compact">
-          <li>하나의 과제로부터 학습한 지식을 다른 작업에 적용</li>
-          <li>사전학습(pretraining) 단계에서는 대리 과제(예: 다음 단어 예측)를 수행</li>
-          <li>관심 있는 다운스트림 작업에는 미세조정(fine-tuning)을 통해 사용</li>
-        </ul>
-      </div>
-      <div class="step"><span class="no">2</span><b class="ttl">규모의 확장 (scale)</b>
-        <ul class="bul compact">
-          <li>컴퓨터 하드웨어의 발전 – 4년 동안 GPU 처리량과 메모리가 10배 증가</li>
-          <li>Transformer 아키텍처 – 병렬 처리 활용</li>
-          <li>훨씬 더 많은 데이터 가용성 – 자기지도학습 방식의 활용</li>
-        </ul>
-      </div>
-    </div>
-    <blockquote class="quote">“전이 학습”을 통해 기반모델이 가능해지고, “규모 확장”을 통해 기반모델이 강력해졌다.<cite lang="en">Transfer learning is what makes foundation models possible, but scale is what makes them powerful. — Bommasani et al. (2021)</cite></blockquote>
-  </div>
-</section>
-
 <section class="slide" data-sec="6" data-title="기반모델의 학습 – 자기지도 학습">
   <div class="kicker">기반모델</div>
   <h2>기반모델의 학습 – 자기지도 학습</h2>
@@ -1560,21 +1535,6 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
       <li><b>“2030년에는 무엇이 가능해질까?” 누구도 쉽사리 답하기 어려움</b></li>
     </ul>
     <div class="callout warn"><b>경영·법의 관점</b> — 어떤 능력이 언제 나타날지 개발자도 미리 알지 못한다면, 그 위험을 누가 어떻게 평가하고 책임질 것인가가 문제가 된다. 이후 강의(안전, 규제)에서 다룬다.</div>
-  </div>
-</section>
-
-<section class="slide" data-sec="6" data-title="[참고] 창발성 주장에 대한 반론">
-  <div class="kicker">기반모델</div>
-  <h2>[참고] 창발성 주장에 대한 반론</h2>
-  <div class="body">
-    <div class="two" style="grid-template-columns:1fr 1fr;align-items:center">
-      <div class="stack">
-        <p style="font-weight:700">Schaeffer, Miranda, and Koyejo (2023) “Are Emergent Abilities of Large Language Models a Mirage?”</p>
-        <blockquote class="quote" lang="en" style="font-size:14px">“Recent work claims that large language models display emergent abilities, abilities not present in smaller-scale models that are present in larger-scale models. … Here, we present an alternative explanation for emergent abilities: that for a particular task and model family, when analyzing fixed model outputs, emergent abilities appear due to the researcher’s choice of metric rather than due to fundamental changes in model behavior with scale.”</blockquote>
-        <p class="muted" style="font-size:14px">“정답/오답”처럼 딱 떨어지는 지표로 재면 갑자기 나타나는 것처럼 보이지만, 연속적인 지표로 재면 규모에 따라 매끄럽게 좋아진다는 주장</p>
-      </div>
-      <figure class="plain"><img src="assets/week02/s90-mirage.png" alt="같은 모델 출력을 정확도(위)로 재면 급격한 도약이 보이고, 토큰 편집 거리(아래)로 재면 매끄럽게 개선되는 그래프" style="max-height:360px"><figcaption>Figure 3 — 위: 정확도(불연속 지표), 아래: 토큰 편집 거리(연속 지표)</figcaption></figure>
-    </div>
   </div>
 </section>
 
@@ -1759,7 +1719,6 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
       <li><b>기반모델</b> — 하나의 모델을 여러 용도에 쓰는 균질화, 예상하지 못한 능력이 나타나는 창발성</li>
       <li><b>범용·멀티모달</b> — 이미지·소리도 같은 구조로 다루며, 비전·로봇·수학 문제 풀이로 확장</li>
     </ol>
-    <div class="callout">다음 강의 예고 — 답하기 전에 “생각”하는 추론 모델과, 도구를 쓰는 에이전트는 후속 강의에서 다룬다.</div>
   </div>
 </section>
 
