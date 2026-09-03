@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3강 실습 (1) GitHub 기초, 웹 스크래핑과 데이터 분석 — 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 3강 실습: 에이전틱 AI, Cowork·Claude Code 설치, GitHub Pages 배포, 웹앱, 크롤링의 경계, Cowork 웹 스크래핑과 탐색적 분석, 판결문 지도" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6fa6" />
+<style>
+/* 2026 에이전틱 AI 부트캠프(aibootcamp2026) 디자인 토큰을 따른다 */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --ink-soft:#3a3f3b; --muted:#626a64; --line:#d5ddd3; --line-soft:#e9ede6;
+  --brand:#2e9bdb; --brand-dark:#1b6fa6; --brand-deep:#124d78; --sky-light:#e3f1fb;
+  --green:#2f765b; --green-light:#e6f2ec; --amber:#b8792e; --amber-light:#fbf1de; --red:#b0483f; --red-light:#fbe9e7; --navy:#132436;
+  --shadow:0 16px 45px rgba(54,42,31,.12); --shadow-sm:0 2px 10px rgba(21,29,23,.05);
+  --radius:14px; --sidebar-width:264px; --topbar-h:64px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-dark);}
+img,video,svg{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;} }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 clamp(16px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topbar-left{display:flex;align-items:center;gap:18px;min-width:0;}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:0 0 auto;}
+.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:9px;color:#fff;background:var(--brand);font-size:15px;font-weight:800;}
+.brand-text{display:block;line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;}
+.brand-text small{display:block;margin-top:1px;color:var(--muted);font-size:11.5px;font-weight:600;}
+.week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
+.week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.zoom-ctl{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;}
+.zoom-ctl button{border:0;background:transparent;padding:6px 10px;font-size:13px;font-weight:800;color:var(--brand-dark);cursor:pointer;line-height:1;}
+.zoom-ctl button:hover{background:var(--sky-light);}
+.zoom-ctl .zv{min-width:44px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);border-right:1px solid var(--line);padding:6px 4px;cursor:pointer;}
+.progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
+.progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
+.progress-label b{color:var(--ink);}
+.progress-track{overflow:hidden;height:7px;border-radius:999px;background:#e1e8df;}
+.progress-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-dark),var(--brand));transition:width 220ms ease;}
+
+/* ---------- layout ---------- */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{
+  position:sticky;top:var(--topbar-h);width:var(--sidebar-width);flex:0 0 auto;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:22px 14px 28px;
+  border-right:1px solid var(--line);background:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sidebar-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 8px;}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.toc-link{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:9px;border:0;background:transparent;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.toc-link .no{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;color:var(--muted);font-size:11px;font-weight:900;flex:0 0 auto;}
+.toc-link .nm{flex:1 1 auto;min-width:0;}
+.toc-link .cnt{font-size:11px;font-weight:600;color:var(--muted);opacity:.8;}
+.toc-link:hover{background:var(--sky-light);color:var(--brand-dark);}
+.toc-link.active{background:var(--brand);color:#fff;}
+.toc-link.active .no{background:rgba(255,255,255,.22);color:#fff;}
+.toc-link.active .cnt{color:#fff;opacity:.85;}
+.toc-link.done .no{background:var(--green-light);color:var(--green);}
+.sub{list-style:none;margin:2px 0 6px 22px;padding:0 0 0 12px;display:none;border-left:2px solid var(--line-soft);}
+.toc li.open .sub{display:block;}
+.sub button{
+  display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 10px;border-radius:6px;
+  color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sub button:hover{background:var(--sky-light);color:var(--brand-dark);}
+.sub button.active{color:var(--brand-dark);font-weight:800;}
+.side-hint{margin-top:auto;padding:14px 12px 0;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line-soft);}
+.side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
+
+.stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
+.deck{flex:1 1 auto;display:flex;flex-direction:column;}
+.slide{
+  display:none;position:relative;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
+}
+.slide.active{display:flex;flex:1 1 auto;animation:fadein .22s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
+.slide h2{margin:0 0 20px;font-size:clamp(22px,2.5vw,30px);line-height:1.3;letter-spacing:-.01em;font-weight:800;}
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0;}
+.slide.top .body{justify-content:flex-start;}
+.body p{margin:0;}
+
+/* ---------- pager ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.pbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brand-dark);font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;max-width:44%;
+}
+.pbtn span{overflow:hidden;text-overflow:ellipsis;}
+.pbtn svg{width:16px;height:16px;flex:0 0 auto;}
+.pbtn:hover{border-color:var(--brand);background:var(--sky-light);transform:translateY(-1px);}
+.pbtn.next{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.pbtn.next:hover{background:var(--brand);border-color:var(--brand);}
+.pbtn:disabled{opacity:.35;cursor:default;transform:none;}
+.pinfo{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;text-align:center;}
+.pinfo .sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-dark);}
+.pinfo .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:360px;}
+.pinfo .dots i{width:8px;height:8px;border-radius:999px;background:#d9e1d6;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.pinfo .dots i:hover{background:var(--brand);}
+.pinfo .dots i.on{background:var(--brand-dark);transform:scale(1.25);}
+.pinfo .cnt{font-size:12px;color:var(--muted);}
+
+/* ---------- cover / section slides ---------- */
+.slide.cover{
+  color:#eef3f7;border-color:transparent;
+  background:radial-gradient(1000px 460px at 85% -10%,rgba(46,155,219,.18),transparent 60%),linear-gradient(180deg,#101f30 0%,var(--navy) 55%,#17293b 100%);
+}
+.slide.cover .kicker{color:#7cc4ee;}
+.slide.cover .kicker .n{color:#9fb4c4;}
+.cover-body{display:flex;flex-direction:column;justify-content:center;gap:18px;flex:1;}
+.cover-kicker{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9d7ec;background:rgba(46,155,219,.15);border:1px solid rgba(46,155,219,.35);padding:7px 14px;border-radius:999px;}
+.cover h1{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.22;letter-spacing:-.02em;color:#fff;}
+.cover h1 em{color:#7cc4ee;font-style:normal;}
+.cover .lead{color:#c9d6e0;font-size:clamp(15px,1.4vw,18px);max-width:640px;}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#dbe7ef;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;}
+.cover .outline{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.cover .outline button{
+  display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:13.5px;
+}
+.cover .outline button:hover{background:rgba(255,255,255,.1);}
+.cover .outline .num{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(124,196,238,.16);color:#7cc4ee;font-size:12px;font-weight:900;display:grid;place-items:center;}
+.cover .outline small{display:block;font-weight:600;color:#a9bdcb;font-size:11.5px;}
+
+.slide.section .body{align-items:center;}
+.slide.section h2{text-align:center;}
+.section-lead{text-align:center;color:var(--muted);max-width:640px;margin:-8px auto 0;}
+
+/* 인공지능 ⊃ 머신러닝 ⊃ 인공신경망 ⊃ 딥 러닝 포함 관계 도식 */
+.nest{position:relative;width:min(100%,720px);aspect-ratio:16/10;margin:0 auto;}
+.nest .lv{position:absolute;border-radius:26px;transition:box-shadow .2s ease;}
+.nest .lv>span{position:absolute;top:16px;left:22px;font-weight:800;font-size:clamp(14px,1.7vw,19px);}
+.nest .l1{inset:0;background:#dbeefb;color:var(--brand-deep);}
+.nest .l2{left:26%;top:19%;right:4%;bottom:4%;background:#a9d5f1;color:var(--brand-deep);}
+.nest .l3{left:44%;top:37%;right:7%;bottom:8%;background:#3f9fd8;color:#fff;}
+.nest .l4{left:58%;top:54%;right:11%;bottom:14%;background:var(--brand-deep);color:#fff;display:grid;place-items:center;}
+.nest .l4>span{position:static;}
+.nest .lv.hi{box-shadow:0 0 0 4px var(--red),0 10px 30px rgba(176,72,63,.25);}
+
+/* ---------- content components ---------- */
+.bul{margin:0;padding-left:1.25em;font-size:clamp(15px,1.25vw,17px);line-height:1.72;}
+.bul>li{margin:0 0 9px;}
+.bul>li:last-child{margin-bottom:0;}
+.bul li::marker{color:var(--brand-dark);}
+.bul ul{list-style:none;margin:5px 0 0;padding-left:1.15em;}
+.bul ul li{position:relative;margin:0 0 4px;color:var(--ink-soft);}
+.bul ul li::before{content:"–";position:absolute;left:-1.1em;color:var(--muted);}
+.bul ul ul li::before{content:"·";}
+.bul ul ul li{font-size:.94em;}
+.bul b{font-weight:800;}
+.bul .arrow{color:var(--red);font-weight:800;}
+.bul .arrow::before{content:"➜ ";}
+.compact{font-size:clamp(14px,1.15vw,16px);}
+.compact>li{margin-bottom:5px;}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+.two.eq{grid-template-columns:1fr 1fr;}
+.two.wide-r{grid-template-columns:.85fr 1.15fr;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.figrow{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+figure{margin:0;text-align:center;min-width:0;}
+figure img,figure video{display:block;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);}
+figure.plain img{border:0;border-radius:0;}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
+.src{font-size:11.5px;color:var(--muted);word-break:break-all;margin-top:auto;padding-top:14px;line-height:1.6;}
+.src a{color:var(--brand-dark);text-decoration:none;}
+.src a:hover{text-decoration:underline;}
+.em{color:var(--red);font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.5;}
+.em.center{text-align:center;}
+.em .arrow::before{content:"➜ ";}
+.callout{border-left:4px solid var(--brand);background:var(--sky-light);padding:12px 16px;border-radius:8px;font-size:15px;}
+.callout.warn{border-color:var(--amber);background:var(--amber-light);}
+.callout.bad{border-color:var(--red);background:var(--red-light);}
+.callout.good{border-color:var(--green);background:var(--green-light);}
+.callout b{font-weight:800;}
+.quote{font-size:clamp(16px,1.45vw,19px);line-height:1.75;border-left:4px solid var(--brand);padding:8px 20px;margin:0;color:var(--ink);}
+.quote cite{display:block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;color:var(--ink-soft);}
+.center{text-align:center;}
+.muted{color:var(--muted);}
+
+.math{font-family:"Cambria","Times New Roman",Georgia,serif;font-size:1.06em;}
+.math i{font-style:italic;}
+.math .w{color:var(--red);font-weight:700;font-style:italic;}
+.fbox{display:inline-block;padding:10px 24px;border:2px solid var(--ink);border-radius:6px;background:#fff;font-family:"Cambria","Times New Roman",Georgia,serif;font-size:clamp(18px,1.9vw,25px);line-height:1.4;}
+.fbox.red{border-color:var(--red);}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 6px;}
+.frac>span{padding:0 6px;}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;}
+.sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;margin:0 4px;}
+.sum>span{font-size:.55em;}
+.sum>b{font-size:1.5em;font-weight:400;}
+
+.tbl{border-collapse:collapse;margin:0 auto;font-size:clamp(13px,1.15vw,15.5px);background:#fff;}
+.tbl th,.tbl td{border:1px solid #9aa39b;padding:8px 16px;text-align:center;line-height:1.35;}
+.tbl th{background:var(--sky-light);font-weight:800;}
+.tbl .hl{background:var(--amber-light);}
+.tbl .dim{color:var(--muted);}
+
+/* f( ) = 함수 표기 */
+.fn{
+  display:flex;align-items:center;justify-content:center;gap:clamp(6px,1.4vw,16px);flex-wrap:nowrap;
+  font-family:"Cambria","Times New Roman",Georgia,serif;padding:6px 0 62px;
+}
+.fn.nolbl{padding-bottom:6px;}
+.fn .f{font-style:italic;font-size:clamp(54px,7vw,92px);line-height:1;}
+.fn .par{font-size:clamp(62px,8.2vw,112px);line-height:1;font-weight:300;color:var(--ink);}
+.fn .eq{font-size:clamp(40px,5.2vw,70px);line-height:1;margin:0 4px;}
+.fn .part{position:relative;display:flex;flex-direction:column;align-items:center;}
+.fn .slot{min-width:clamp(80px,11vw,140px);min-height:56px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(16px,1.6vw,22px);font-weight:700;font-family:"Inter","Noto Sans KR",sans-serif;}
+.fn .slot.blank{border-bottom:3px solid var(--red);}
+.fn .slot img{max-height:clamp(90px,14vw,150px);width:auto;border-radius:6px;}
+.fn .slot.col{flex-direction:column;gap:4px;}
+.fn .slot.col img{max-height:56px;}
+.fn .lbl{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;
+  font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(13px,1.15vw,15.5px);font-weight:800;color:var(--red);
+  border-top:3px solid var(--red);padding-top:6px;text-align:center;line-height:1.35;white-space:nowrap;min-width:100%;
+}
+.fn.sm{padding-bottom:50px;}
+.fn.sm .f{font-size:clamp(40px,4.6vw,60px);}
+.fn.sm .par{font-size:clamp(46px,5.4vw,72px);}
+.fn.sm .eq{font-size:clamp(30px,3.4vw,44px);}
+.fn.sm .slot{min-height:44px;font-size:clamp(14px,1.3vw,17px);}
+.fn.sm .slot img{max-height:clamp(64px,9vw,96px);}
+.fn.sm .lbl{font-size:12.5px;}
+.fn.xs{padding-bottom:0;}
+.fn.xs .f{font-size:36px;} .fn.xs .par{font-size:40px;} .fn.xs .eq{font-size:26px;} .fn.xs .slot{min-height:36px;min-width:60px;font-size:14px;}
+.fn-list{display:flex;flex-direction:column;gap:18px;}
+.fn-list .fn{padding:0;justify-content:flex-start;}
+.fn-list .fn .out{font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(20px,2.4vw,30px);font-weight:700;margin-left:10px;}
+.fn .cjk{font-family:"Noto Sans KR",sans-serif;font-size:clamp(30px,3.6vw,46px);font-weight:800;}
+
+/* 트리 도식 */
+.tree{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;}
+.tnode{padding:10px 20px;border:2px solid var(--ink);border-radius:8px;background:#fff;font-weight:800;font-size:clamp(13px,1.2vw,16px);text-align:center;position:relative;}
+.tnode.hi{border-color:var(--red);background:var(--red-light);color:var(--red);}
+.tnode.dots{border:0;background:transparent;font-size:1.6em;padding:4px 0;letter-spacing:.1em;}
+.tnode small{display:block;font-weight:600;color:var(--muted);font-size:.85em;}
+.tree .stem{width:2px;height:26px;background:var(--ink);}
+.tree .row{position:relative;display:grid;gap:12px;width:100%;padding-top:26px;}
+.tree .row::before{content:"";position:absolute;top:0;left:calc(100% / var(--n) / 2);right:calc(100% / var(--n) / 2);height:2px;background:var(--ink);}
+.tree .row>div{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.tree .row>div::before{content:"";position:absolute;top:-26px;width:2px;height:26px;background:var(--ink);}
+.tree .row .desc{font-size:clamp(13px,1.1vw,15px);color:var(--ink-soft);text-align:left;margin:0;padding-left:1.1em;line-height:1.55;}
+.tree .row .desc li{margin-bottom:3px;}
+.hl-note{display:flex;align-items:center;gap:12px;justify-content:center;font-size:13.5px;color:var(--muted);font-weight:600;}
+.hl-note img{height:44px;width:auto;border-radius:6px;}
+.hl-note .ar{color:var(--red);font-size:22px;font-weight:900;}
+
+/* 신경망·뉴런 SVG */
+.nn{width:100%;max-width:680px;height:auto;display:block;margin:0 auto;}
+.nn .in{fill:#fff;stroke:var(--brand-dark);stroke-width:2.2;}
+.nn .hid{fill:#fff;stroke:var(--amber);stroke-width:2.2;}
+.nn .out{fill:#fff;stroke:var(--green);stroke-width:2.2;}
+.nn .e{stroke:#22201d;stroke-width:1.1;opacity:.72;}
+.nn .nl{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:15px;fill:var(--ink);}
+.nn .ol{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:17px;fill:var(--ink);}
+.nn .dots{font-size:22px;font-weight:800;fill:var(--ink);}
+.nn .box{fill:none;stroke:var(--red);stroke-dasharray:7 5;stroke-width:2.2;}
+.nn-wrap{position:relative;}
+.nn-wrap .overlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border:1.5px solid var(--ink);padding:8px 22px;font-weight:800;font-size:clamp(14px,1.4vw,18px);border-radius:6px;white-space:nowrap;}
+.neuron{width:100%;max-width:640px;height:auto;display:block;margin:0 auto;}
+.neuron .nb{fill:#fff;stroke:var(--brand-dark);stroke-width:2.4;}
+.neuron .ln{stroke:var(--brand-dark);stroke-width:2;fill:none;}
+.neuron .lab{font-family:"Cambria","Times New Roman",serif;font-size:17px;font-weight:700;fill:var(--ink);}
+.neuron .w{fill:var(--red);}
+.neuron .z{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:19px;fill:var(--red);font-weight:700;}
+.neuron .act{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--red);}
+.io-flow{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;}
+.io-flow .io{text-align:center;font-weight:800;color:var(--red);font-size:clamp(14px,1.3vw,17px);line-height:1.4;}
+.io-flow .io img{width:clamp(96px,12vw,150px);height:auto;border-radius:8px;border:1px solid var(--line);display:block;margin:0 auto 8px;}
+.io-flow .io .ink{color:var(--ink);font-weight:700;font-size:.9em;}
+.io-flow .outs{list-style:none;margin:0 0 8px;padding:0;font-weight:700;color:var(--ink);font-size:clamp(14px,1.3vw,17px);text-align:left;line-height:1.9;}
+.io-flow .outs li.first{color:var(--green);font-weight:900;}
+
+/* 기타 */
+.media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;}
+.media-grid img,.media-grid video{width:100%;aspect-ratio:16/9;max-height:250px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;background:#000;}
+.media-grid figcaption{font-size:12.5px;}
+.poster-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.poster-grid img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;}
+.cross{position:relative;display:inline-block;}
+.cross::before,.cross::after{content:"";position:absolute;left:50%;top:50%;width:112%;height:8px;background:var(--red);border-radius:4px;transform:translate(-50%,-50%) rotate(45deg);opacity:.92;}
+.cross::after{transform:translate(-50%,-50%) rotate(-45deg);}
+.stackpile{position:relative;height:190px;width:200px;margin:0 auto;}
+.stackpile img{position:absolute;width:120px;height:auto;border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-sm);background:#fff;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
+.step .no{width:30px;height:30px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
+.step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
+.step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
+.step .sol::before{content:"➜ ";}
+.cycle{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;}
+.cycle .node{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;min-height:150px;justify-content:center;}
+.cycle .node img{height:46px;width:auto;}
+.cycle .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.cycle .node p b{display:block;color:var(--red);font-weight:800;}
+.cycle .ar{font-size:30px;color:var(--brand-dark);font-weight:900;}
+.tri{position:relative;width:min(100%,780px);aspect-ratio:780/480;margin:0 auto;}
+.tri-arrows{position:absolute;inset:0;width:100%;height:100%;}
+.tri-arrows path{fill:none;stroke:var(--brand-dark);stroke-width:3;}
+.tri .node{position:absolute;width:32%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:center;}
+.tri .node img{height:44px;width:auto;}
+.tri .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.tri .node p b{display:block;color:var(--red);font-weight:800;}
+.tri .n1{left:1%;top:3%;}
+.tri .n2{right:1%;top:3%;}
+.tri .n3{left:34%;bottom:2%;}
+.cycle-back{text-align:center;color:var(--muted);font-size:13.5px;font-weight:700;margin-top:-6px;}
+.cycle-back::before{content:"↺ ";color:var(--brand-dark);font-size:18px;}
+.pyr{display:grid;grid-template-columns:150px 1fr 150px;gap:14px;align-items:center;max-width:820px;margin:0 auto;width:100%;}
+.pyr svg{width:100%;height:auto;display:block;}
+.pyr .side{text-align:center;font-weight:800;font-size:14px;line-height:1.5;}
+.pyr .side .ar{display:block;font-size:44px;line-height:1;color:var(--brand-dark);}
+.pyr .side.left .ar{color:var(--muted);}
+.chart-box{width:100%;max-width:760px;margin:0 auto;}
+.chart-box svg{width:100%;height:auto;display:block;}
+.chart-box .axis{stroke:#7b857d;stroke-width:1;}
+.chart-box .grid{stroke:#e1e8df;stroke-width:1;}
+.chart-box .tick{font-size:12px;fill:var(--muted);}
+.chart-box .lbl{font-size:12.5px;font-weight:700;fill:var(--ink);}
+.chart-box .pct{font-size:12px;font-weight:800;fill:var(--ink);}
+.chart-box .ln{fill:none;stroke:var(--brand-dark);stroke-width:2.4;}
+.chart-box .pt{fill:var(--brand-dark);}
+.chart-box .target{stroke:var(--red);stroke-width:2;stroke-dasharray:7 5;}
+.chart-box .ttl{font-size:13px;font-weight:800;fill:var(--muted);}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);}
+.logo-title{display:flex;align-items:center;gap:14px;}
+.logo-title img{height:34px;width:auto;}
+.cover-img{position:absolute;inset:0;border-radius:inherit;overflow:hidden;}
+.cover-img img{width:100%;height:100%;object-fit:cover;object-position:left center;filter:grayscale(1) brightness(.55);}
+.cover .over{position:relative;z-index:1;}
+
+@media (max-width:1100px){ .two,.two.eq,.two.wide-r{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;} }
+@media (max-width:900px){
+  .layout{display:block;}
+  .sidebar{position:sticky;top:var(--topbar-h);width:auto;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:10px 12px;background:rgba(243,246,242,.96);backdrop-filter:blur(8px);z-index:20;flex-direction:row;}
+  .sidebar-title,.sub,.side-hint{display:none!important;}
+  .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
+  .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
+  .toc-link .cnt{display:none;}
+  .stage{min-height:auto;}
+}
+@media (max-width:640px){
+  .topbar{gap:10px;}
+  .week-title{display:none;}
+  .zoom-ctl{display:none;}
+  .progress-wrap{width:110px;}
+  .pbtn{padding:10px 12px;font-size:13px;}
+  .pbtn span{display:none;}
+  .pbtn svg{width:18px;height:18px;}
+  .poster-grid{grid-template-columns:repeat(2,1fr);}
+  .tri{aspect-ratio:auto;display:flex;flex-direction:column;gap:10px;}
+  .tri-arrows{display:none;}
+  .tri .node{position:static;width:100%;}
+  .pyr{grid-template-columns:1fr;}
+  .io-flow{grid-template-columns:1fr;}
+  .slide{overflow-x:auto;}
+  .fn{flex-wrap:wrap;gap:4px;padding-bottom:70px;}
+  .fn .f{font-size:44px;} .fn .par{font-size:52px;} .fn .eq{font-size:34px;flex-basis:100%;text-align:center;margin:6px 0;}
+  .fn .slot{min-width:56px;min-height:40px;font-size:14px;}
+  .fn .slot img{max-height:84px;}
+  .fn .slot.col img{max-height:40px;}
+  .fn .lbl{white-space:normal;font-size:12px;min-width:0;width:max-content;max-width:150px;}
+  .fn .part{margin-bottom:8px;}
+  .fn.sm,.fn.xs{padding-bottom:60px;}
+  .fn.nolbl,.fn-list .fn{padding-bottom:0;}
+  .fn.nolbl .eq,.fn-list .fn .eq{flex-basis:auto;}
+  .tbl th,.tbl td{padding:6px 8px;font-size:12.5px;}
+  .nest{aspect-ratio:4/3;}
+  .nest .lv>span{font-size:13px;top:10px;left:12px;}
+}
+/* ---------- 2강 추가 컴포넌트 ---------- */
+.roadmap{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px;}
+.roadmap li{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:700;color:var(--muted);}
+.roadmap li .n{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;font-size:11px;font-weight:900;}
+.roadmap li.cur{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;transform:scale(1.06);box-shadow:0 8px 20px rgba(27,111,166,.25);}
+.roadmap li.cur .n{background:rgba(255,255,255,.22);color:#fff;}
+.roadmap li.done{background:var(--green-light);border-color:#cfe3d8;color:var(--green);}
+.roadmap li.done .n{background:#fff;color:var(--green);}
+.step .ttl{display:block;font-size:16px;font-weight:800;color:var(--ink);}
+.step .bul{padding-left:1.1em;}
+.tbl.mini{font-size:12px;margin:0;}
+.tbl.mini th{padding:3px 10px;font-size:11px;}
+.tbl.mini tr.dim td{padding:0 10px;line-height:1;}
+.tbl.mini td{padding:3px 10px;text-align:left;}
+.tbl.mini td:last-child{text-align:center;font-weight:700;}
+.toc-link:disabled{opacity:.5;cursor:default;}
+.toc-link:disabled:hover{background:transparent;color:var(--muted);}
+.cover .outline button:disabled{opacity:.45;cursor:default;}
+.cover .outline button:disabled:hover{background:rgba(255,255,255,.045);}
+
+/* ---------- 섹션 2: RNN 도식, seq2seq, 영상 카드 ---------- */
+.lat{width:100%;max-width:560px;height:auto;display:block;margin:0 auto;}
+.lat .pred{fill:#e3f1fb;stroke:#1b6fa6;stroke-width:1.8;} .lat .hid{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;stroke-dasharray:6 4;} .lat .obs{fill:#fbe9e7;stroke:#b0483f;stroke-width:1.8;}
+.lat .a{stroke:#22201d;stroke-width:1.8;} .lat .t{font-family:"Inter","Noto Sans KR",sans-serif;font-size:13px;font-weight:800;fill:var(--ink);} .lat .v{font-family:"Cambria","Times New Roman",serif;font-size:13px;fill:var(--ink-soft);} .lat .tm{font-family:"Inter",sans-serif;font-size:13px;font-weight:700;fill:var(--muted);}
+.rnn{width:100%;max-width:800px;height:auto;display:block;margin:0 auto;}
+.rnn .enc{fill:#fbf1de;stroke:#b8792e;stroke-width:1.8;}
+.rnn .dec{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;}
+.rnn .ctx{fill:#fff;stroke:#b0483f;stroke-width:2.2;}
+.rnn .ctxt{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:800;fill:var(--brand-dark);letter-spacing:.06em;}
+.rnn .ctxv{font-family:"Cambria","Times New Roman",serif;font-size:13px;fill:var(--ink);}
+.rnn .in{fill:#fbe9e7;stroke:#b0483f;stroke-width:1.8;}
+.rnn .hid{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;}
+.rnn .out{fill:#e3f1fb;stroke:#1b6fa6;stroke-width:1.8;}
+.rnn .ar{stroke:#22201d;stroke-width:1.6;fill:none;}
+.rnn .fb{stroke:#b0483f;stroke-width:2;fill:none;}
+.rnn .w{font-family:"Inter","Noto Sans KR",sans-serif;font-size:14px;font-weight:700;fill:var(--ink);}
+.rnn .lab{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:13px;fill:var(--ink-soft);}
+.rnn .tag{font-family:"Inter","Noto Sans KR",sans-serif;font-size:11.5px;font-weight:700;fill:var(--muted);}
+.rnn .big{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--brand-dark);}
+.onehot{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
+.oh{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.oh b{font-family:"Cambria","Times New Roman",serif;font-size:15px;font-weight:700;}
+.oh .v{display:flex;flex-direction:column;align-items:center;padding:4px 10px;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:8px;font-family:"Cambria","Times New Roman",serif;font-size:15px;line-height:1.35;}
+.oh .v span{min-width:1em;text-align:center;}
+.oh.dots{align-self:center;font-size:22px;font-weight:800;color:var(--muted);}
+.oh-note{align-self:center;font-size:12.5px;color:var(--muted);line-height:1.5;max-width:150px;}
+.s2s{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;}
+.s2s-txt{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:15px;font-weight:700;white-space:nowrap;}
+.s2s-ar{color:var(--brand-dark);font-size:20px;font-weight:900;}
+.s2s-box{display:flex;flex-direction:column;align-items:center;justify-content:center;width:74px;height:60px;border-radius:10px;color:#fff;font-weight:800;font-size:14px;line-height:1.2;}
+.s2s-box small{font-weight:600;font-size:10.5px;opacity:.85;}
+.s2s-box.enc{background:#d97706;} .s2s-box.dec{background:#2f765b;}
+.s2s-ctx{display:flex;flex-direction:column;align-items:stretch;border:2px solid var(--red);border-radius:8px;padding:3px 5px;background:#fff;font-size:11.5px;font-weight:700;text-align:center;min-width:56px;}
+.s2s-ctx b{font-size:10.5px;color:var(--brand-dark);letter-spacing:.04em;margin-bottom:2px;}
+.s2s-ctx span{background:var(--sky-light);margin:1px 0;padding:1px 4px;border-radius:3px;}
+.vid-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.vid{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;transition:transform .15s ease,box-shadow .15s ease;}
+.vid:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);border-color:var(--brand);}
+.vid img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;display:block;background:#000;}
+.vid span{font-size:12.5px;font-weight:700;line-height:1.4;}
+.vid span::before{content:"▶ ";color:var(--red);}
+
+/* ---------- 섹션 3 ---------- */
+.tbl.lm{font-size:clamp(15px,1.4vw,19px);}
+.tbl.lm td.s{text-align:left;font-family:"Cambria","Times New Roman",serif;padding:8px 22px;}
+.tbl.lm td.ok{color:var(--green);font-weight:900;} .tbl.lm td.no{color:var(--red);font-weight:900;}
+.tbl.lm td.why{font-size:.85em;font-weight:800;color:var(--brand-dark);background:var(--sky-light);}
+.guess{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;}
+.guess .g{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 26px;border-radius:12px;border:1px solid var(--line);background:var(--bg);min-width:160px;}
+.guess .g b{font-size:clamp(18px,1.8vw,24px);font-family:"Cambria","Times New Roman",serif;}
+.guess .g span{font-size:14px;font-weight:800;}
+.guess .up2{border-color:var(--green);background:var(--green-light);} .guess .up2 span{color:var(--green);}
+.guess .up{border-color:#cfe3d8;} .guess .up span{color:var(--green);}
+.guess .down{border-color:var(--red);background:var(--red-light);} .guess .down span{color:var(--red);}
+
+/* ---------- 섹션 5: 그림 위 강조 상자 ---------- */
+.hl-img{position:relative;display:block;margin:0 auto;width:100%;}
+.hl-img img{display:block;width:100%;height:auto;border-radius:8px;}
+.hl-img .hl-box{position:absolute;border:3px solid var(--red);border-radius:8px;box-shadow:0 0 0 2px rgba(255,255,255,.6);pointer-events:none;}
+
+/* ---------- 섹션 7: 정리 목록 ---------- */
+.recap{margin:0;padding:0;list-style:none;counter-reset:rc;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;}
+.recap li{counter-increment:rc;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:14.5px;line-height:1.55;}
+.recap li::before{content:counter(rc);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:7px;background:var(--brand-dark);color:#fff;font-weight:900;font-size:12px;display:grid;place-items:center;}
+.recap li b{display:block;color:var(--brand-dark);}
+@media (max-width:760px){.recap{grid-template-columns:1fr;}}
+
+/* ---------- 3강 컴포넌트 ---------- */
+.prompt{position:relative;margin:0;padding:14px 84px 14px 18px;border-radius:12px;background:var(--navy);color:#eef3f7;font-family:"Inter","Noto Sans KR",sans-serif;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-all;}
+.prompt::before{content:"💬 프롬프트";position:absolute;top:-10px;left:14px;font-size:11px;font-weight:800;background:var(--brand);color:#fff;padding:2px 9px;border-radius:999px;}
+.prompt .copy{position:absolute;top:10px;right:10px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:12px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;}
+.prompt .copy:hover{background:rgba(255,255,255,.18);}
+.prompt.sm{font-size:13px;padding:12px 78px 12px 14px;}
+.code{margin:0;padding:10px 14px;border-radius:10px;background:#f4f6f3;border:1px solid var(--line);font-family:ui-monospace,Consolas,Menlo,monospace;font-size:12.5px;line-height:1.45;white-space:pre-wrap;word-break:break-all;color:var(--ink);}
+.follow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px;}
+.follow b{color:var(--muted);font-weight:700;margin-right:4px;}
+.follow span{background:var(--sky-light);color:var(--brand-dark);border:1px solid #cfe6f6;border-radius:999px;padding:4px 10px;font-weight:700;}
+.follow span::before{content:"↩ ";}
+code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(--brand-dark);font-family:ui-monospace,Consolas,Menlo,monospace;font-size:.92em;}
+.harness{display:flex;justify-content:center;}
+.hbox{border:1.5px dashed var(--amber);background:var(--amber-light);border-radius:14px;padding:14px 18px 12px;width:100%;max-width:420px;}
+.hlabel{font-size:12px;font-weight:800;color:#8a5a1e;margin-bottom:10px;}
+.engine{border:1.5px solid var(--brand);background:var(--sky-light);border-radius:10px;padding:12px;text-align:center;font-weight:800;}
+.engine small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:3px;}
+.harr{text-align:center;font-size:12px;color:var(--muted);padding:8px 0;}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tools span{border:1.5px solid var(--green);background:var(--green-light);border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;}
+.ctxbar{display:flex;align-items:flex-end;justify-content:center;gap:28px;height:220px;padding:0 20px;}
+.ctxbar div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:90px;font-size:12.5px;color:var(--muted);}
+.ctxbar span{display:block;width:100%;background:linear-gradient(180deg,var(--brand),var(--brand-dark));border-radius:8px 8px 0 0;}
+.ctxbar b{margin-top:6px;color:var(--ink);}
+.loop{display:grid;grid-template-columns:repeat(9,auto);gap:8px;align-items:center;justify-content:center;}
+.lnode{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center;font-weight:800;font-size:14px;min-width:120px;}
+.lnode.user{background:var(--sky-light);border-color:#cfe6f6;}
+.lnode small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:3px;}
+.lar{color:var(--brand-dark);font-size:22px;font-weight:900;}
+.tbl.cmp{width:100%;font-size:14px;}
+.tbl.cmp th small{display:block;font-weight:600;color:var(--muted);font-size:11px;}
+.tbl.cmp td{text-align:left;}
+@media (max-width:900px){.loop{grid-template-columns:1fr;} .lar{transform:rotate(90deg);}}
+
+/* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
+@page{size:320mm 180mm;margin:0;}
+@media print{
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .topbar,.sidebar,.pager{display:none!important;}
+  .layout{display:block;}
+  .stage{zoom:1!important;min-height:0!important;padding:0!important;display:block;}
+  .deck{display:block;}
+  .slide{display:flex!important;flex-direction:column;zoom:.85;width:calc(320mm / .85);height:calc(180mm / .85);overflow:hidden;box-sizing:border-box;
+    margin:0;border:0;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;animation:none!important;
+    padding:14mm 18mm 12mm;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .two{grid-template-columns:1.1fr .9fr;} .two.eq{grid-template-columns:1fr 1fr;} .two.wide-r{grid-template-columns:.85fr 1.15fr;}
+  .steps{grid-template-columns:repeat(3,1fr);} .io-flow{grid-template-columns:auto 1fr auto;} .pyr{grid-template-columns:150px 1fr 150px;}
+  .poster-grid{grid-template-columns:repeat(4,1fr);} .fn{flex-wrap:nowrap;}
+  .slide.cover{border-radius:0;}
+  .cover-img{border-radius:0;}
+  video{background:#000;}
+  a{text-decoration:none;color:inherit;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="brand" title="강의 일정으로">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
+    </a>
+    <div class="week-tag"><span class="week-num">3강</span><span class="week-title">실습 (1) – GitHub 기초, 웹 스크래핑과 데이터 분석</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="zoom-ctl" role="group" aria-label="슬라이드 크기">
+      <button type="button" id="zoomOut" title="작게 (−)">A−</button>
+      <span class="zv" id="zoomVal" title="자동 크기로 되돌리기 (0)">100%</span>
+      <button type="button" id="zoomIn" title="크게 (+)">A+</button>
+    </div>
+    <div class="progress-wrap" aria-label="진행률">
+      <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">0</span></span>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="목차">
+    <div class="sidebar-title">목차</div>
+    <ol class="toc" id="toc"></ol>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · <kbd>+</kbd> <kbd>−</kbd> 크기 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="deck" id="deck">
+
+<!-- ===================== 0. 들어가며 ===================== -->
+<section class="slide cover" data-sec="0" data-title="표지">
+  <div class="cover-body">
+    <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 3강 · 실습 (1)</span>
+    <h1>GitHub 기초, <em>웹 스크래핑과 데이터 분석</em></h1>
+    <p class="lead">코드를 쓰지 않고 AI에게 정확히 요청하는 법을 익힌다. 개인 사이트를 만들어 GitHub Pages로 공개하고, Cowork로 공개 웹 데이터를 수집해 탐색적 분석과 판결문 지도까지 그린다.</p>
+    <div class="meta">
+      <span class="meta-chip">2026. 9. 17.</span>
+      <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
+      <span class="meta-chip">2026 에이전틱 AI 부트캠프 1·2주차 자료 기반</span>
+    </div>
+    <div class="outline" id="coverOutline"></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="오늘 준비물">
+  <div class="kicker">들어가며</div>
+  <h2>오늘 준비물과 진행 순서</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+      <div class="step"><span class="no">1</span><b class="ttl">Claude 계정 (Pro 이상)</b><p class="prob">claude.ai 로그인. 데스크톱 앱과 크롬 확장은 §2에서 설치</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">GitHub 계정</b><p class="prob">없으면 §3에서 만든다. 아이디가 곧 사이트 주소가 되니 미리 생각해 둘 것</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">작업 폴더</b><p class="prob">Windows는 <code>C:\claude</code>, macOS는 <code>~/claude</code>. 한글·공백 없는 짧은 경로</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">이 페이지</b><p class="prob">프롬프트마다 “복사” 버튼이 있다. 붙여 넣고, 결과를 보고, 말로 고쳐 달라고 한다</p></div>
+    </div>
+    <div class="callout">오늘의 원칙 — 코드를 직접 쓰는 것이 목표가 아니다. <b>원하는 결과를 짧게 말하고, 결과를 보고, 고쳐 달라고 다시 말하는 것</b>이 전부다. 처음부터 긴 지시문을 쓰지 않는다 — 한두 문장으로 시작해서 피드백을 주고받으며 구체화한다. 이 흐름은 개인 사이트 만들기에서도, 판결문 수백 건 수집에서도 같다.</div>
+    <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프</a> 1주차(웹앱 만들고 배포하기)·2주차(데이터 수집과 임베딩 분석). 임베딩 추출은 2강에서 다뤘으므로 오늘은 건너뛴다.</p>
+  </div>
+</section>
+
+<!-- ===================== 1. 에이전틱 AI 한눈에 ===================== -->
+<section class="slide section" data-sec="1" data-title="에이전틱 AI 한눈에">
+  <div class="kicker">Section 1</div>
+  <h2>에이전틱 AI 한눈에</h2>
+  <p class="section-lead">오늘 쓸 Cowork와 Claude Code는 대화 상대가 아니라 “도구를 실행하는” 에이전트다. 2강의 언어모델이 어떻게 스스로 움직이게 되는지 세 장으로 본다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="1"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="복잡한 계산은 계산기에게 시킨다">
+  <div class="kicker">에이전틱 AI 한눈에</div>
+  <h2>복잡한 계산은 계산기에게 시킨다 — 엔진과 하네스</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:center">
+      <ul class="bul compact">
+        <li>언어모델(2강)은 큰 자릿수 곱셈이나 복리 계산을 암산하면 자주 틀린다</li>
+        <li>그래서 모델에게 “이 수식을 계산기로 실행해 줘”라는 <b>신호를 텍스트로 출력하는 능력</b>을 주었다</li>
+        <li>모델(엔진)은 텍스트만 생성할 뿐 아무것도 실행하지 못한다. 엔진을 감싼 <b>하네스(harness)</b>가 출력을 지켜보다가 도구 호출 신호를 감지하면, 알맞은 도구를 밖에서 실행하고 결과를 다시 엔진의 대화 기록에 넣어 준다</li>
+        <li>웹 검색도 같다 — 검색은 엔진이 아니라 하네스가 수행하고, 검색 결과 페이지가 통째로 대화 기록에 붙는다</li>
+      </ul>
+      <div class="harness">
+        <div class="hbox"><div class="hlabel">실행기 (하네스)</div>
+          <div class="engine">🧠 LLM 엔진<small>텍스트만 생성 — 계산·검색 능력 없음</small></div>
+          <div class="harr">⇅ 도구 실행 요청 ↓ · 결과 반환 ↑</div>
+          <div class="tools"><span>🧮 계산기</span><span>🌐 웹 검색</span><span>📁 파일 읽기·쓰기</span><span>🖥️ 프로그램 실행</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="도구를 쓸수록 기억이 쌓인다">
+  <div class="kicker">에이전틱 AI 한눈에</div>
+  <h2>도구를 쓸수록 “기억”이 쌓인다 — 컨텍스트 윈도우</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>검색 결과나 계산 결과, 읽어 온 파일 내용은 요약 없이 <b>대화 기록(컨텍스트)에 그대로 붙는다</b></li>
+      <li>초기 모델은 이 공간이 A4 몇 장 수준이었지만, 지금은 책 여러 권 분량까지 한 번에 참조한다</li>
+      <li>그래서 Cowork에게 “판결문 300건을 읽고 정리해 줘”가 가능하다 — 대신 컨텍스트가 커질수록 느려지고 비용이 든다</li>
+    </ul>
+    <div class="ctxbar" aria-label="세대별 컨텍스트 길이(로그 스케일)">
+      <div><span style="height:12%"></span><b>2020</b><small>~2K 토큰</small></div>
+      <div><span style="height:30%"></span><b>2022</b><small>~8K</small></div>
+      <div><span style="height:62%"></span><b>2023</b><small>~100K</small></div>
+      <div><span style="height:82%"></span><b>2024</b><small>~200K</small></div>
+      <div><span style="height:100%"></span><b>2025~</b><small>~1M</small></div>
+    </div>
+    <p class="muted center">막대 높이 = 한 번에 처리할 수 있는 토큰 수(로그 스케일, 대표 모델 기준 근사치). 토큰 1개 ≈ 한국어 1~2글자</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="에이전틱 AI 루프">
+  <div class="kicker">에이전틱 AI 한눈에</div>
+  <h2>이게 바로 우리가 매일 쓰는 에이전틱 AI</h2>
+  <div class="body">
+    <div class="loop">
+      <div class="lnode user">👤 사용자 요청<small>“자기소개 사이트 만들어 줘”</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">📝 계획 세우기<small>어떤 도구를 어떤 순서로</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">🔧 도구 실행<small>검색 · 파일 쓰기 · 실행</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">🗂️ 컨텍스트 누적<small>결과가 기록에 쌓임</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">🔍 검토<small>충분한가? 아니면 재계획 ↻</small></div>
+    </div>
+    <ul class="bul compact">
+      <li>모델이 다음 단어를 예측하며 응답을 만드는 동안, 그 안에서 <b>어떤 도구를 어떤 순서로 쓸지 계획</b>을 세운다</li>
+      <li>도구 결과가 컨텍스트에 쌓이면 모델이 검토한다. 충분하면 답변으로 마무리하고, 부족하면 계획 단계로 돌아가 도구를 다시 쓴다</li>
+      <li>단어 예측 · 계획 · 도구 실행 · 컨텍스트 누적 · 검토 — 이 다섯 가지가 계속 맞물려 도는 것이 에이전틱 AI다. 오늘 Cowork에게 요청할 때도 이 루프가 그대로 돈다</li>
+    </ul>
+    <p class="muted">모델이 답하기 전에 “생각”하는 추론 모델의 원리는 후속 강의에서 다룬다.</p>
+  </div>
+</section>
+
+<!-- ===================== 2. 세 개의 작업대와 설치 ===================== -->
+<section class="slide section" data-sec="2" data-title="세 개의 작업대와 설치">
+  <div class="kicker">Section 2</div>
+  <h2>세 개의 작업대와 설치</h2>
+  <p class="section-lead">같은 Claude지만 AI의 손발이 어디에 놓여 있는지가 다르다. Chat은 묻는 곳, Cowork는 맡기는 곳, Code는 내 컴퓨터에서 돌리는 곳.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="2"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="Chat · Cowork · Claude Code">
+  <div class="kicker">세 개의 작업대와 설치</div>
+  <h2>같은 Claude, 세 개의 작업대 — Chat · Cowork · Claude Code</h2>
+  <div class="body">
+    <table class="tbl cmp">
+      <thead><tr><th></th><th>Claude Chat<small>브라우저 claude.ai</small></th><th>Cowork<small>데스크톱 앱 · 오늘의 주력</small></th><th>Claude Code<small>데스크톱 앱 · 내 PC에서 실행</small></th></tr></thead>
+      <tbody>
+        <tr><th>AI가 일하는 곳</th><td>대화창</td><td>클라우드 컨테이너 (자체 파일시스템·파이썬·인터넷)</td><td>내 PC</td></tr>
+        <tr><th>내 파일 접근</th><td>업로드한 파일만</td><td>연동 폴더 읽기/쓰기</td><td>폴더 직접 읽기/쓰기/실행</td></tr>
+        <tr><th>프로그램 실행</th><td>—</td><td>클라우드에서 실행</td><td>내 PC에서 실행 (서버 가동)</td></tr>
+        <tr><th>어울리는 작업</th><td>질문·초안·요약, 분 단위 왕복</td><td>수집·분석·문서 파이프라인, 시간 단위 자율 작업</td><td>백엔드·자동화, 세션 단위 개발</td></tr>
+        <tr><th>한계</th><td>내 파일시스템·장시간 작업 접근 불가</td><td>내 PC에서 프로그램을 “실행”하지는 못함</td><td>내 PC를 직접 건드리는 만큼 사고의 대가도 내 쪽</td></tr>
+      </tbody>
+    </table>
+    <p class="em center">Chat은 묻는 곳, Cowork는 맡기는 곳, Code는 (내 컴퓨터에서) 돌리는 곳</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="오늘은 무엇을 어디서">
+  <div class="kicker">세 개의 작업대와 설치</div>
+  <h2>오늘은 무엇을 어디서 하나</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">§3</span><b class="ttl">개인 사이트 만들기 — Chat 또는 Cowork</b><p class="prob">index.html 파일 하나를 받아 GitHub에 직접 업로드한다. 보너스로 Claude Code가 커밋·푸시까지 대신하는 방법을 본다</p></div>
+      <div class="step"><span class="no">§4</span><b class="ttl">웹앱 만들기 — Chat 또는 Cowork</b><p class="prob">HTML 안에 프로그램(계산·그래프)을 넣은 금융 플래너. 파일 하나로 끝나므로 서버가 필요 없다</p></div>
+      <div class="step"><span class="no">§6·7</span><b class="ttl">웹 스크래핑과 분석 — Cowork</b><p class="prob">수백 건을 수집해 파일로 쌓고, 시간 단위로 도는 자율 작업. 결과는 연동한 내 PC 폴더에 CSV·텍스트로 남는다</p></div>
+    </div>
+    <div class="callout bad"><b>설치 전에 알아둘 것 — 손발을 주는 일에는 위험이 따른다.</b> 지금부터 설치할 도구는 내 파일을 읽고, 쓰고, 지우고, 인터넷으로 보낼 수 있다. 파일 파괴, 데이터 유출, 프롬프트 인젝션(수집한 웹페이지 속에 숨은 지시문을 AI가 명령으로 착각하는 공격) 같은 위험이 따라온다. 두 가지 습관: ① 모든 작업은 <b>전용 폴더 하나 안에서만</b> — 사고가 나도 피해가 그 폴더를 넘지 않는다. ② 실행 승인 요청은 <b>반드시 읽고</b> 누른다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="설치 ① 데스크톱 앱과 폴더 연동">
+  <div class="kicker">세 개의 작업대와 설치</div>
+  <h2>설치 ① — Claude 데스크톱 앱 + 작업 폴더 연동 + 크롬 확장</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+      <div class="step"><span class="no">1</span><b class="ttl">데스크톱 앱 설치</b><p class="prob"><a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a>에서 Windows / macOS 설치 파일을 받아 실행하고, 쓰던 계정으로 로그인</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">작업 폴더 만들기</b><p class="prob"><code>C:\claude</code> (macOS <code>~/claude</code>). 바탕화면처럼 경로가 길고 한글이 섞인 위치는 나중에 오류의 원인이 된다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">Cowork에 폴더 연동</b><p class="prob">앱에서 Cowork를 열고 이 폴더를 연동. Cowork가 클라우드에서 만든 파일이 이 폴더로 내려온다</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">Claude in Chrome 설치</b><p class="prob"><a href="https://claude.ai/chrome" target="_blank" rel="noopener">claude.ai/chrome</a>의 링크로 크롬 확장을 설치. 스크롤·클릭해야 내용이 나오는 동적 사이트 수집용 (§5)</p></div>
+    </div>
+    <p style="font-weight:700">연동 확인 — 파일이 정말 내 PC에 떨어지는지</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>연동한 폴더에 test.csv 예시 파일 하나 만들어줘.</pre>
+    <p class="muted">탐색기(또는 Finder)에서 그 폴더를 열어 test.csv가 보이면 준비 완료. 1주차 방식(claude.ai에서 결과물을 하나씩 내려받기)과 갈리는 지점이 여기다 — 폴더를 연동하면 수집한 CSV와 파일 수백 개가 알아서 이 폴더에 저장된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="설치 ② Claude Code">
+  <div class="kicker">세 개의 작업대와 설치</div>
+  <h2>설치 ② — Claude Code (데스크톱 앱 안에 이미 있다)</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <ul class="bul compact">
+        <li>따로 설치할 것이 없다. 데스크톱 앱에서 Cowork를 골랐던 자리에서 <b>Code</b>를 고르면 된다 (Pro 이상 구독이면 추가 비용 없음)</li>
+        <li>터미널을 쓰지 않는다 — 원래 명령줄 도구(CLI)로 알려져 있지만, 이 수업에서는 앱 안의 Code만 쓴다. 하는 일은 같다: 내 PC의 폴더를 직접 읽고·쓰고·실행</li>
+        <li>작업 폴더는 설치 ①에서 만든 <code>C:\claude</code>를 그대로 연다 — Cowork와 Code가 <b>같은 폴더</b>를 보게 하는 것이 핵심</li>
+      </ul>
+      <div class="stack">
+        <p style="font-weight:700;margin:0">첫 대화 — 파이썬 확인</p>
+        <pre class="prompt"><button class="copy" type="button">복사</button>파이썬이 설치되어 있는지 버전을 확인해줘. 없다면 설치 방법을 안내해줘.</pre>
+        <div class="callout warn"><b>내 PC에서 실행된다 = 책임도 내 PC.</b> 파일을 지우거나 프로그램을 설치하는 것처럼 되돌리기 어려운 일 앞에서 Code는 확인을 요청한다. 내용을 읽고 승인하고, 작업은 전용 폴더 안에서만 한다. 중요한 폴더는 백업 후 실습.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3. GitHub 기초 ===================== -->
+<section class="slide section" data-sec="3" data-title="GitHub 기초 — 개인 사이트 배포">
+  <div class="kicker">Section 3</div>
+  <h2>GitHub 기초 — 개인 브랜딩 사이트 만들고 공개하기</h2>
+  <p class="section-lead">AI에게 요청해 자기소개 사이트(index.html)를 만들고, GitHub Pages로 https://[내아이디].github.io 라는 실제 주소에 배포한다. 약 20분.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="3"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="무엇을 만드나">
+  <div class="kicker">GitHub 기초</div>
+  <h2>이 실습에서 무엇을 만드나</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">?</span><b class="ttl">왜 개인 브랜딩 사이트</b><p class="prob">이력서보다 유연하고, SNS보다 전문적이다. 링크 하나로 나를 소개하는 가장 쉬운 방법</p></div>
+      <div class="step"><span class="no">?</span><b class="ttl">왜 GitHub Pages</b><p class="prob">완전 무료로, 평생 유지되는 공개 URL을 받는다</p></div>
+      <div class="step"><span class="no">!</span><b class="ttl">오늘의 목표</b><p class="prob">브랜딩 설계 → 프롬프트 작성 → 사이트 생성 → GitHub 배포까지 하나의 흐름으로 완주</p></div>
+    </div>
+    <div class="callout">강사 예시: <a href="https://miraeitm.github.io/" target="_blank" rel="noopener">miraeitm.github.io</a> — 소개·관심영역·연구 프로젝트·AI 봇·라이프로그·연락처. 지금 보고 있는 이 강의자료도 같은 방식(AI에게 요청해 HTML 파일로)으로 만들어졌다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="브랜딩 설계 4가지">
+  <div class="kicker">GitHub 기초</div>
+  <h2>Part 1 · 브랜딩 설계 — 프롬프트 쓰기 전에 4가지만 정리하기</h2>
+  <div class="body">
+    <p class="muted">좋은 프롬프트는 좋은 기획에서 나온다. 아래 4가지를 정하면 프롬프트가 명확해지고 결과물도 좋아진다.</p>
+    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+      <div class="step"><span class="no">1</span><b class="ttl">목적</b><p class="prob">이직·취업 준비 / 네트워킹 / 포트폴리오 아카이빙 / 실습 삼아</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">청중</b><p class="prob">채용 담당자 / 같은 분야 연구자·협업 파트너 / 투자자 / 친구·SNS / 특정 커뮤니티</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">톤앤매너</b><p class="prob">진지하고 전문적 / 유머러스하고 개성 있게 / 미니멀 / 화려하고 임팩트 있게</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">메시지</b><p class="prob">방문자가 무엇을 기억하고 돌아갔으면 좋겠나 — 한 문장</p></div>
+    </div>
+    <pre class="prompt"><button class="copy" type="button">복사</button>나를 소개하는 개인 브랜딩 사이트를 index.html 한 파일로 만들어줘.
+이름은 [이름], 소속은 [소속], 관심 분야는 [분야]야.</pre>
+    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>톤을 더 미니멀하게</span><span>프로젝트 카드 3개 추가해줘</span><span>연락처 섹션은 이메일만</span><span>휴대폰에서도 잘 보이게</span></div>
+    <p class="muted">학술적이지 않아도 된다 — 레트로 아케이드형, 터미널/해커형, 팝아트 매거진형처럼 전혀 다른 스타일도 좋은 개인 사이트가 된다. 강사 사이트와 비슷하게 하려면 “https://miraeitm.github.io/ 웹사이트와 유사한 스타일로 작성해줘”를 덧붙인다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="index.html 만들기">
+  <div class="kicker">GitHub 기초</div>
+  <h2>Part 2 · index.html 만들기 — 요청하고, 보고, 고쳐 달라고 하기</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <figure><img src="assets/week03/cowork-preview.png" alt="왼쪽은 대화창, 오른쪽은 생성된 index.html이 바로 렌더된 미리보기 창" style="max-height:300px"><figcaption>답변의 파일(index.html)을 클릭하면 오른쪽에 미리보기가 뜬다 — 따로 내려받거나 브라우저를 열 필요가 없다</figcaption></figure>
+      <div class="stack">
+        <ul class="bul compact">
+          <li>Part 1의 프롬프트를 그대로 붙여 넣고 전송. 이름·소속·프로젝트·연락처 같은 실제 정보는 프롬프트 뒤에 이어서</li>
+          <li>마음에 안 드는 부분은 자연스러운 말로 고쳐 달라고 한다 — 몇 번이든</li>
+        </ul>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>전체 색상을 차분한 네이비 + 화이트 톤으로 바꿔줘.</pre>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>다크모드 버튼을 오른쪽 위에 추가해줘.</pre>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>"주요 프로젝트" 섹션을 카드 3개로 추가하고, 각 카드에 제목·한 줄 설명·링크를 넣어줘.</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="다운로드와 GitHub 용어">
+  <div class="kicker">GitHub 기초</div>
+  <h2>Part 3·4 · 파일로 받기, 그리고 GitHub 용어 4가지</h2>
+  <div class="body">
+    <div class="callout warn"><b>파일 이름은 반드시 index.html.</b> GitHub Pages는 index.html이라는 이름의 파일을 홈페이지로 인식한다. index (1).html처럼 조금이라도 다르면 사이트가 뜨지 않는다.</div>
+    <p style="font-weight:700">GitHub — 코드·파일을 인터넷에 보관하고 공유하는 서비스. 실제 작업은 클릭 몇 번이면 충분하니, 뜻만 알아 두자.</p>
+    <table class="tbl" style="width:100%">
+      <tbody>
+        <tr><th style="width:26%">GitHub (깃허브)</th><td style="text-align:left">파일을 인터넷에 보관하고 공유하는 서비스. “파일용 클라우드 저장소”</td></tr>
+        <tr><th>Repository (저장소·레포)</th><td style="text-align:left">프로젝트 하나가 들어가는 폴더. 우리 사이트 파일(index.html)이 담길 공간</td></tr>
+        <tr><th>Commit (커밋)</th><td style="text-align:left">변경 내용을 “이 시점의 저장본”으로 기록하는 것. 게임의 세이브 포인트와 비슷</td></tr>
+        <tr><th>Push / Upload (업로드)</th><td style="text-align:left">내 파일을 GitHub 저장소로 올려보내는 것. 이 작업이 끝나야 인터넷에 반영된다</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="가입과 저장소 만들기">
+  <div class="kicker">GitHub 기초</div>
+  <h2>Part 4·5 · GitHub 가입과 저장소 만들기</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:start">
+      <div class="stack">
+        <div class="steps" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="step"><span class="no">1</span><b class="ttl">가입</b><p class="prob"><a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>에서 이메일로 가입, 무료(Free) 플랜. 인증 메일의 링크를 눌러 활성화</p></div>
+          <div class="step"><span class="no">2</span><b class="ttl">아이디(Username)</b><p class="prob">공개 URL에 그대로 들어간다. 예) dochon-lee → https://dochon-lee.github.io. 영문·숫자·하이픈만</p></div>
+          <div class="step"><span class="no">3</span><b class="ttl">새 저장소</b><p class="prob">우측 상단 + → New repository. 이름은 정확히 <b>[내아이디].github.io</b>, Public, “Add a README”는 끄고 빈 저장소로</p></div>
+        </div>
+        <div class="callout">이름을 정확히 지어야 하는 이유 — 저장소 이름이 [내아이디].github.io가 아니면 주소가 https://[내아이디].github.io/저장소이름처럼 길어진다. 개인 대표 사이트라면 이 방식이 가장 깔끔하다.</div>
+      </div>
+      <figure><img src="assets/week03/empty-repo.png" alt="GitHub에 새로 만든 빈 저장소 화면 — Quick setup 안내와 저장소 주소" style="max-height:260px"><figcaption>저장소를 만들면 이런 빈 화면이 나온다. 아직 파일이 없는 정상 상태 — 다음 장에서 index.html을 올린다</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="업로드와 Pages 배포">
+  <div class="kicker">GitHub 기초</div>
+  <h2>Part 6·7 · index.html 업로드 → GitHub Pages로 배포</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:repeat(3,1fr)">
+      <div class="step"><span class="no">1</span><b class="ttl">Add file → Upload files</b><p class="prob">방금 만든 저장소 화면에서 클릭. Part 3에서 저장한 index.html을 화면 위로 드래그</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">Commit changes</b><p class="prob">페이지 하단의 Commit changes 버튼을 눌러 저장을 마친다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">Settings → Pages</b><p class="prob">저장소 상단 Settings → 왼쪽 메뉴 Pages. Branch를 <b>main</b>으로 고르고 Save. 1~2분 뒤 https://[내아이디].github.io 접속</p></div>
+    </div>
+    <div class="callout good"><b>축하합니다 — 내 손으로 만든 사이트가 인터넷에 있다.</b> 이 주소를 명함·이메일 서명·SNS 프로필에 붙여 보자. 내용을 키우려면 Cowork에게 추가해 달라고 요청하고, 같은 이름(index.html)으로 다시 업로드하면 사이트가 갱신된다.</div>
+    <p class="muted">바로 안 떠도 정상 — 배포 후 URL이 반영되기까지 1~2분 걸린다. 잠시 기다렸다가 새로고침.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="보너스 · Claude Code로 GitHub 연동">
+  <div class="kicker">GitHub 기초</div>
+  <h2>보너스 · Claude Code로 GitHub 연동하기 — 수정 → 커밋 → 푸시를 대신 시키기</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>지금까지는 파일을 받아 매번 직접 업로드했다. Claude Code는 작업 폴더와 GitHub 저장소를 한 번 연결해 두면, 이후 “고쳐 줘”만 해도 <b>수정 → 커밋 → 푸시</b>까지 알아서 처리한다</li>
+      <li>빈 폴더(예: my-site)를 만들고 그 폴더를 Claude Code의 작업 폴더로 연다. 처음 푸시할 때 GitHub 로그인 안내가 나오면 한 번만 로그인</li>
+    </ul>
+    <div class="two eq" style="align-items:start">
+      <pre class="prompt"><button class="copy" type="button">복사</button>이 폴더에 나를 소개하는 홈페이지를 index.html 한 파일로 만들어줘.</pre>
+      <pre class="prompt"><button class="copy" type="button">복사</button>이 폴더를 https://github.com/[내아이디]/[내아이디].github.io 저장소에 올려줘.</pre>
+    </div>
+    <div class="callout">이후부터는 원하는 내용을 말한 뒤 <b>“변경사항 커밋하고 푸시해줘”</b>라고만 하면 된다. 몇 분 안에 공개 사이트에 그대로 나타난다.</div>
+  </div>
+</section>
+
+<!-- ===================== 4. 웹앱과 HTML 활용 ===================== -->
+<section class="slide section" data-sec="4" data-title="웹앱 만들기와 HTML 활용">
+  <div class="kicker">Section 4</div>
+  <h2>웹앱 만들기와 HTML 활용</h2>
+  <p class="section-lead">정적인 소개 페이지 다음은 HTML 안에 실제 프로그램(계산·그래프)을 넣은 앱이다. 그리고 보고서·계획서·과제도 HTML로 만드는 이유.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="4"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="HTML · CSS · JavaScript">
+  <div class="kicker">웹앱 만들기와 HTML 활용</div>
+  <h2>HTML 파일 하나는 세 가지 언어로 되어 있다</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <pre class="code">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    button { background: skyblue; border-radius: 8px; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;button id="hi"&gt;눌러보세요&lt;/button&gt;
+  &lt;script&gt;
+    document.getElementById('hi').onclick = () =&gt; alert('안녕!');
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      <div class="steps" style="grid-template-columns:1fr">
+        <div class="step"><span class="no">H</span><b class="ttl">HTML — 뼈대</b><p class="prob">무엇이 있는지: 제목, 버튼, 입력창 같은 요소. 위 예시에서는 “버튼이 하나 있다”</p></div>
+        <div class="step"><span class="no">C</span><b class="ttl">CSS — 겉모습</b><p class="prob">어떻게 보이는지: 색상, 크기, 배치. “하늘색 배경, 둥근 모서리”</p></div>
+        <div class="step"><span class="no">J</span><b class="ttl">JavaScript — 동작</b><p class="prob">무엇을 계산하고 무엇이 움직이는지. “누르면 알림창이 뜬다”. 서버 없이 내 브라우저 안에서 그대로 실행된다</p></div>
+      </div>
+    </div>
+    <p class="muted center">게임도, 그래프도, 시뮬레이션도 이 재료로 만든다 — 규모만 커질 뿐 원리는 같다. 이 강의자료의 슬라이드 넘기기도 JavaScript 몇십 줄이다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="금융 플래너 만들기">
+  <div class="kicker">웹앱 만들기와 HTML 활용</div>
+  <h2>실습 · 금융 플래너 — 복리 그래프에서 몬테카를로 시뮬레이션까지</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <div class="stack">
+        <ul class="bul compact">
+          <li><b>복리 계산 그래프</b> — 연간 저축액·수익률·기간 슬라이더를 움직이면 원금 누적과 복리 총자산이 그래프로 바뀐다</li>
+          <li><b>몬테카를로 시뮬레이션</b> — 매년 같은 수익률 대신, 실제 S&amp;P 500의 1928~2024년 연간 수익률에서 무작위로 뽑아 수백 번 반복해 결과의 분포(하위 10% / 중앙값 / 상위 10%)를 본다</li>
+          <li>교육용 예시이며 투자 조언이 아니다. 과거 수익률이 미래를 보장하지 않는다</li>
+        </ul>
+      </div>
+      <pre class="prompt"><button class="copy" type="button">복사</button>연간 저축액·수익률·기간을 슬라이더로 바꾸면 복리 그래프가 그려지는
+금융 플래너를 HTML 한 파일로 만들어줘.</pre>
+      <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>실제 S&amp;P 500 연간 수익률로 몬테카를로 시뮬레이션도 추가해줘</span><span>하위 10%·중앙값·상위 10%를 보여줘</span><span>“다시 뽑기” 버튼</span><span>은퇴 나이도 넣어줘</span></div>
+    </div>
+    <p class="muted">확장해 보기 — “은퇴 나이”, “인플레이션 반영”, 시장이 흔들릴 때 볼 투자 명언 카드(“멘탈 관리기”) 같은 조건을 말로 추가해 달라고 하면 된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="배포하고 내 사이트에 연결하기">
+  <div class="kicker">웹앱 만들기와 HTML 활용</div>
+  <h2>배포하고 내 사이트에 연결하기 — 두 번째 저장소</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+      <div class="step"><span class="no">1</span><b class="ttl">파일 받기</b><p class="prob">완성한 플래너를 이번에도 <b>index.html</b>로 저장 — 새 저장소의 대표 파일이 되기 때문</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">새 저장소</b><p class="prob">+ → New repository. 이번엔 이름을 자유롭게 (예: financial-planner). Public, README 없이</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">업로드 + Pages</b><p class="prob">Upload files → Commit. Settings → Pages → Branch main → Save. 1~2분 뒤 https://[내아이디].github.io/financial-planner/</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">내 사이트에 링크</b><p class="prob">자기소개 사이트에 프로젝트 카드를 추가해 달라고 요청하고, 같은 이름으로 다시 업로드(덮어쓰기)</p></div>
+    </div>
+    <pre class="prompt"><button class="copy" type="button">복사</button>내 소개 사이트(index.html)에 금융 플래너 프로젝트 카드를 추가해줘.
+링크: https://[내아이디].github.io/financial-planner/</pre>
+    <p class="muted">저장소 하나 = 프로젝트 하나. 이렇게 프로젝트를 늘려 가면 개인 사이트가 곧 포트폴리오가 된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="HTML로 할 수 있는 것들">
+  <div class="kicker">웹앱 만들기와 HTML 활용</div>
+  <h2>보고서도, 계획서도, 과제도 — 이제는 HTML로</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <div class="stack">
+        <p style="font-weight:700;margin:0">HTML이 Markdown(또는 워드)보다 나은 다섯 가지 이유 — Thariq Shihipar(Anthropic), “The Unreasonable Effectiveness of HTML”</p>
+        <ul class="bul compact">
+          <li><b>정보 밀도</b> — 표, 디자인, 그림, 인터랙티브 요소를 한 파일에</li>
+          <li><b>시각적 명확성</b> — 100줄 넘는 글은 안 읽히지만, 탭·카드·내부 링크가 있는 페이지는 훑어 읽힌다</li>
+          <li><b>공유 용이성</b> — 브라우저에서 바로 열리므로 첨부파일보다 실제로 읽힐 확률이 높다</li>
+          <li><b>양방향 인터랙션</b> — 슬라이더·토글을 조작하고, 결과를 다시 AI에게 가져올 수 있다</li>
+          <li><b>풍부한 컨텍스트</b> — 파일, 코드, 대화 기록을 그대로 살려 담는다</li>
+        </ul>
+      </div>
+      <figure><img src="assets/week03/md-vs-html.png" alt="같은 문서를 Markdown 240줄로 스크롤하며 읽는 것과 HTML 탭·카드로 한눈에 보는 것의 비교" style="max-height:300px"><figcaption>같은 내용 — 왼쪽은 Markdown 240줄, 오른쪽은 탭과 카드로 구조화한 HTML</figcaption></figure>
+    </div>
+    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+      <div class="step"><span class="no">①</span><b class="ttl">기획서·계획·탐색</b><p class="prob">제안서를 4가지 버전으로 나란히 비교</p></div>
+      <div class="step"><span class="no">②</span><b class="ttl">문서 비교·설명</b><p class="prob">계약서 수정 전/후를 색과 이유 설명으로 대조</p></div>
+      <div class="step"><span class="no">③</span><b class="ttl">리포트·학습 자료</b><p class="prob">다이어그램·주석과 함께 정리한 설명 페이지</p></div>
+      <div class="step"><span class="no">④</span><b class="ttl">커스텀 편집 도구</b><p class="prob">내 데이터에 딱 맞는, 한 번 쓰고 버리는 전용 보드</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="맞춤 사이트와 도메인">
+  <div class="kicker">웹앱 만들기와 HTML 활용</div>
+  <h2>한 걸음 더 — “우리만을 위한 사이트”, 그리고 나만의 도메인</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:start">
+      <div class="stack">
+        <p>특정한 사람·상황만을 위한 맞춤 페이지를 만들어 링크 하나로 공유하면, 카톡·이메일·엑셀·캡처에 흩어져 있던 정보를 모두가 같은 화면에서 본다. 시중 협업 도구는 모두에게 맞추느라 내 상황엔 안 맞는 항목이 가득하지만, AI에게 부탁해 만드는 사이트는 딱 이 사건, 딱 이 회원에게만 맞춰져 있다. 만드는 데 몇 분이면 되니 필요 없어지면 버려도 아깝지 않다.</p>
+        <div class="steps" style="grid-template-columns:repeat(3,1fr)">
+          <div class="step"><span class="no">⚖️</span><b class="ttl">소송 사건 대시보드</b><p class="prob">변호사 → 의뢰인. 쟁점별 우리 주장/상대 주장, 증거 목록, 재판 일정</p></div>
+          <div class="step"><span class="no">💪</span><b class="ttl">PT 회원 관리 페이지</b><p class="prob">트레이너 → 회원. 체중 변화 그래프, 운동 계획, 피드백</p></div>
+          <div class="step"><span class="no">🏖️</span><b class="ttl">가족 여행 플래너</b><p class="prob">2박 3일 일정·숙소·식사·준비물을 온 가족이 같은 링크로</p></div>
+        </div>
+      </div>
+      <div class="stack">
+        <p style="font-weight:700;margin:0">선택 · 나만의 도메인 연결 — 방법을 미리 설명하지 않는다. 이 프롬프트로 물어보고 답을 따라 하는 것이 실습</p>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>내 GitHub Pages 사이트(https://[내아이디].github.io)에
+Cloudflare로 내 도메인을 연결하고 싶어. 초보자 기준으로 순서대로 알려줘.</pre>
+        <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>도메인은 어디서 사는 게 좋아? 비용은?</span><span>네임서버가 뭐야?</span><span>이 화면에서 뭘 눌러야 해? [캡처 첨부]</span></div>
+        <p class="muted" style="font-size:13px">도메인은 유료(.com 연 1만 원 안팎), Cloudflare의 DNS 관리는 무료. DNS 변경은 반영까지 최대 24~48시간.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5. 크롤링 ===================== -->
+<section class="slide section" data-sec="5" data-title="크롤링 — 무엇을, 어디까지">
+  <div class="kicker">Section 5</div>
+  <h2>크롤링 — 무엇을, 어디까지 모을 수 있나</h2>
+  <p class="section-lead">실습에 들어가기 전의 판단 기준. 웹에서 무엇을 모을 수 있는지, 어디까지 모아도 되는지, 사이트 구조에 따라 어떤 도구가 필요한지.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="5"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="크롤링이란 — 무엇을 모을 수 있나">
+  <div class="kicker">크롤링</div>
+  <h2>크롤링이란 — 무엇을 모을 수 있나</h2>
+  <div class="body">
+    <p>크롤링(crawling)·스크래핑(scraping)은 웹페이지에 이미 공개되어 있는 정보를 구조화된 데이터(표·CSV·JSON)로 모으는 일이다. 사람이 브라우저로 읽는 것을 프로그램이 대신 읽고, 흩어진 내용을 분석 가능한 형태로 정리한다.</p>
+    <div class="steps" style="grid-template-columns:repeat(3,1fr)">
+      <div class="step"><span class="no">📰</span><b class="ttl">뉴스 기사·보도자료</b><p class="prob">특정 이슈가 언제, 얼마나, 어떤 논조로 다뤄졌는지 — 이슈 트렌드 분석</p></div>
+      <div class="step"><span class="no">🛒</span><b class="ttl">커머스 목록·상품 리뷰</b><p class="prob">베스트셀러 순위, 가격 변동, 소비자 불만 키워드 — 시장·소비자 분석</p></div>
+      <div class="step"><span class="no">⚖️</span><b class="ttl">판례·법령·특허</b><p class="prob">판결문에서 반복되는 인정 요건, 유사 선행 특허 — 요건 분석·선행 조사</p></div>
+      <div class="step"><span class="no">💼</span><b class="ttl">채용 공고</b><p class="prob">직무별 요구 스킬, 연봉 범위, 채용 수요의 변화 — 노동시장 분석</p></div>
+      <div class="step"><span class="no">🎓</span><b class="ttl">학술 초록·연구 동향</b><p class="prob">특정 주제의 연구가 언제부터 급증했는지, 핵심 저자는 누구인지</p></div>
+      <div class="step"><span class="no">💬</span><b class="ttl">커뮤니티·앱 리뷰</b><p class="prob">사용자 여론, 반복되는 불만, 경쟁 제품과의 비교 — 여론·VOC 분석</p></div>
+    </div>
+    <p class="muted">오늘 실제로 해 볼 것 — 온라인 서점의 경제·경영 베스트셀러를 성별×연령대 조합별로 소량(239권) 수집해 “세대·성별에 따라 어떤 책을 읽는가”에 데이터로 답하고, 같은 방법을 판결문 895건에 적용한 연구용 분석 사례를 본다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="법적·윤리적 경계 (1)">
+  <div class="kicker">크롤링</div>
+  <h2>법적·윤리적 경계 — “긁을 수 있다”와 “긁어도 된다”는 다르다</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="callout bad"><b>① 페이월(paywall) 뒤의 콘텐츠 — 하지 마세요</b><br>구독·결제·로그인 장벽 뒤에 있는 콘텐츠(유료 기사, 구독형 DB, 전자책)의 자동 수집은 거의 예외 없이 약관에서 금지되어 있고, 접근 제한을 우회하는 행위 자체가 별도의 법적 문제(기술적 보호조치 침해, 부정 접근 등)를 일으킬 수 있다. 페이월이 보이면 대상에서 제외하는 것을 기본값으로.</div>
+      <div class="callout warn"><b>② 약관상 금지 = 항상 불법? — 그렇지는 않다</b><br>공개된 페이지라도 약관에 “자동화된 수집 금지” 조항이 있는 사이트가 많다. 다만 약관이 곧 최종 결론은 아니다. 공정이용(fair use)까지 금지하는 약관 조항은 무효로 판단될 수 있다. 핵심은 내 수집이 공정이용에 해당하는지 스스로 평가하는 것.</div>
+    </div>
+    <div class="callout good"><b>공정이용 평가의 감각</b> — 수업 과제나 연구 목적으로 공개된 페이지를 소량 수집해 내부 분석에만 쓰는 경우라면 공정이용으로 인정될 가능성이 높다. 반대로 수집물을 상업적으로 재배포하거나, 원본 사이트를 대체하는 서비스를 만들거나, 대량 수집으로 서버에 부담을 주면 공정이용과 멀어진다. 오늘 실습(상업 서점의 공개 목록을 수업 목적으로 소량 수집·내부 분석)이 이 평가를 통과하는 전형적 사례다.</div>
+    <p class="muted">본 자료는 일반적인 교육 안내이며, 구체적 사안에 대한 법률 자문이 아니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="기본 수칙 4가지">
+  <div class="kicker">크롤링</div>
+  <h2>③ 그 밖의 기본 수칙 — 비영리 · 소량 · 내부 분석</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+      <div class="step"><span class="no">1</span><b class="ttl">robots.txt 확인</b><p class="prob">사이트 주소 뒤에 /robots.txt를 붙이면 수집 허용/금지 경로가 나온다. Cowork에 “이 사이트 robots.txt 확인해줘”</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">서버 배려</b><p class="prob">요청 사이에 간격을 두고, 필요한 만큼만. 오늘 실습도 그룹별 Top 20, 분석에 필요한 소량만</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">개인정보</b><p class="prob">닉네임·프로필·작성자 정보도 개인정보일 수 있다. 분석에 불필요하면 수집 단계에서 제외(익명화)</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">출처 기록</b><p class="prob">수집 일시·URL·조건을 데이터와 함께 저장하면 연구 재현성과 인용 문제를 함께 해결</p></div>
+    </div>
+    <p class="em center">이 수업의 실습은 전부 “비영리 · 소량 · 내부 분석”의 범위 안에서 설계되어 있다. 각자 연구에 응용할 때도 이 세 단어를 기준으로.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="정적 vs 동적">
+  <div class="kicker">크롤링</div>
+  <h2>정적 vs 동적 — 사이트 구조에 따라 도구가 다르다</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="callout good"><b>정적(static) — URL만으로 수집 가능</b>
+        <ul class="bul compact" style="margin-top:6px">
+          <li>주소만 바꿔도 원하는 목록이 그대로 열린다 (페이지 번호, 검색 조건이 URL에 드러남)</li>
+          <li>정부·공공기관 게시판, 오래된 게시판형 사이트</li>
+          <li>Cowork에 URL 규칙만 알려 주면 바로 수집</li>
+        </ul>
+      </div>
+      <div class="callout warn"><b>동적(dynamic) — 브라우저가 필요</b>
+        <ul class="bul compact" style="margin-top:6px">
+          <li>스크롤·클릭해야 내용이 나타나고 URL은 그대로</li>
+          <li>SNS 피드, 쇼핑몰 리뷰 더보기, 지도, 로그인 화면</li>
+          <li>브라우저 확장(Claude in Chrome)으로 — AI가 내 브라우저가 이미 그려낸 최종 화면을 읽고, 스크롤과 클릭도 대신한다</li>
+        </ul>
+      </div>
+    </div>
+    <table class="tbl" style="width:100%">
+      <thead><tr><th></th><th>Cowork 단독 수집</th><th>크롬 확장 수집</th></tr></thead>
+      <tbody>
+        <tr><th>읽는 대상</th><td>서버가 보내주는 HTML</td><td>브라우저가 그려낸 최종 화면</td></tr>
+        <tr><th>맞는 사이트</th><td>정적 — URL 규칙이 있는 목록</td><td>동적 — 스크롤·클릭·로그인 화면</td></tr>
+        <tr><th>강점</th><td>대량·반복 수집, 백그라운드 실행</td><td>사람이 보는 것은 무엇이든 수집</td></tr>
+        <tr><th>유의점</th><td>동적 내용은 비어 있을 수 있음</td><td>내 계정·내 브라우저로 하는 일 — 책임도 내 계정에</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">확인 방법 — 주소창의 URL만 바꿔서(페이지 번호, 조건) 목록이 바로 열리면 정적. 스크롤하거나 버튼을 눌러야만 내용이 나타나고 URL은 그대로라면 동적.</p>
+  </div>
+</section>
+
+<!-- ===================== 6. Cowork 웹 스크래핑 ===================== -->
+<section class="slide section" data-sec="6" data-title="Cowork로 웹 스크래핑">
+  <div class="kicker">Section 6</div>
+  <h2>Cowork로 웹 스크래핑 — 복사–붙여넣기 수백 번 대신, 문장 하나</h2>
+  <p class="section-lead">웹페이지를 일일이 복사해 엑셀에 붙여넣던 일을 “이 페이지에서 이런 정보를 뽑아 줘”로 끝낸다. 결과는 연동한 내 PC 폴더에 CSV와 본문 파일로 남는다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="6"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="실습 대상 — YES24 베스트셀러">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>실습 대상 — YES24 경제·경영 베스트셀러 (성별 × 연령대)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>먼저 <code>C:\claude</code> 아래에 실습용 폴더 <code>C:\claude\bestseller</code>를 만들고, 데스크톱 앱에서 Cowork를 열어 이 폴더를 연동한다. 연동을 건너뛰면 수집은 성공해도 결과 파일이 클라우드에만 남아 내 PC에서 열 수 없다</li>
+      <li>YES24 베스트셀러 목록은 URL의 파라미터로 조건이 표현되는, 스크래핑 입문에 좋은 구조다</li>
+    </ul>
+    <pre class="code">…/bestseller?categoryNumber=001001025&amp;pageNumber=1&amp;pageSize=24&amp;<b>age=10</b>&amp;<b>sex=F</b></pre>
+    <p class="muted">→ “경제·경영 분야, 10대 여성 독자의 베스트셀러 1페이지”. age(10~60)와 sex(F/M)만 바꾸면 12개 그룹의 목록이 나온다. 주소만 바꿔도 목록이 통째로 열린다 = 정적으로 접근 가능하다는 신호. 이 URL 규칙은 AI가 스스로 알아내기도 하지만, 알려 주면 빠르다.</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>이 페이지의 베스트셀러를 성별×연령대 조합별로 Top 20씩 수집해서
+연동 폴더에 bestseller.csv로 저장해줘.
+https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;pageNumber=1&amp;pageSize=24&amp;age=10&amp;sex=F</pre>
+    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>저자·출판사·출간월·판매가·평점도 넣어줘</span><span>엑셀에서 한글이 깨져 — UTF-8 BOM으로</span><span>요청 사이에 간격을 두고, 끝나면 그룹별 건수를 표로</span></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="프롬프트의 4요소와 결과 파일">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>수집 프롬프트의 핵심 4요소, 그리고 결과는 파일로 남는다</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <div class="steps" style="grid-template-columns:1fr 1fr">
+        <div class="step"><span class="no">1</span><b class="ttl">시작 URL과 규칙</b><p class="prob">무엇을 바꾸면 다른 목록이 나오는지</p></div>
+        <div class="step"><span class="no">2</span><b class="ttl">뽑을 항목(컬럼)</b><p class="prob">순위·제목·저자·출판사·출간월·판매가·평점</p></div>
+        <div class="step"><span class="no">3</span><b class="ttl">저장 형식</b><p class="prob">CSV / JSON. 엑셀용은 UTF-8 BOM</p></div>
+        <div class="step"><span class="no">4</span><b class="ttl">저장 위치</b><p class="prob">연동 폴더 안의 경로. 빠뜨리면 결과가 클라우드에만 남는다</p></div>
+      </div>
+      <figure><img src="assets/week03/yes24-table.png" alt="수집 결과 CSV를 성별·연령대로 필터해 보는 표. 20대 여성 Top 5" style="max-height:280px"><figcaption>실제 수집 결과 239권 (2026-08-04 기준) — 10대 여성은 목록 자체가 19권</figcaption></figure>
+    </div>
+    <div class="callout"><b>표는 CSV, 긴 본문은 개별 파일.</b> CSV 한 칸에 판결문 전문 같은 긴 글을 밀어 넣으면 줄바꿈·쉼표 때문에 파일이 깨진다. 목록(메타데이터)은 CSV로, 본문은 사건번호처럼 알아볼 수 있는 이름을 붙인 개별 텍스트 파일로 나눠 저장한다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="수집 후 — 탐색적 분석(EDA)">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>수집 후 — 탐색적 분석(EDA)도 프롬프트 하나로</h2>
+  <div class="body">
+    <p>수집은 절반이다. 나머지 절반은 “이 데이터가 무슨 이야기를 하는가”를 찾는 탐색적 분석(Exploratory Data Analysis)이다.</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>수집한 베스트셀러 데이터로, 지금 성별과 나이대별로 어떤 책을
+선호하는지 보여주는 분석자료를 만들어보자.</pre>
+    <p class="muted">지시는 이 정도면 충분하다 — 유사도 행렬, 공통 도서, 키워드 분류 같은 분석 방법은 AI가 알아서 고른다. 결과를 보고 “성별 차이와 세대 차이 중 뭐가 더 커?”, “유사도 행렬은 평균을 흰색으로 두고 이질적인 그룹이 드러나게 다시 그려줘”처럼 후속 지시로 다듬는 것이 실제 작업 흐름이다.</p>
+    <figure class="plain"><img src="assets/week03/eda-tiles.png" alt="분석 결과 요약 4개: 11/12 국민 재테크서, 0.00 10대 남녀 유사도, 0.67 40·50대 남성 유사도, .34 vs .29 세대가 성별보다 큰 경계" style="max-height:150px"><figcaption>분석 결과 요약 — 세대와 성별은 정말 다른 책을 읽을까?</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="EDA 결과 (1)">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>EDA 결과 (1) — 모두가 읽는 책, 그리고 나이에 따른 주제 이동</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <figure><img src="assets/week03/canon.png" alt="12개 그룹 중 몇 개 목록에 등장했는가 상위 12권 막대 그래프. 나의 첫 번째 부동산 교과서와 돈, 뜨겁게 사랑하고 차갑게 다루어라가 11개 그룹" style="max-height:330px"><figcaption>모든 세대가 함께 읽는 책 — 12개 그룹 중 11개 목록에 등장한 “국민 재테크서”</figcaption></figure>
+      <figure><img src="assets/week03/topic.png" alt="제목에 ETF·배당·연금·포트폴리오가 들어간 책 수를 성별·연령대별로 나타낸 막대 그래프" style="max-height:330px"><figcaption>나이가 들수록 “배당·연금”으로 — 남성은 10대 1권 → 50대 5권, 60대엔 절세·자산 정리 주제로</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="EDA 결과 (2)">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>EDA 결과 (2) — 성별 차이 vs 세대 차이</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr;align-items:start">
+      <div class="stack">
+        <figure><img src="assets/week03/gap.png" alt="같은 성별에서 세대 간격이 벌어질 때의 평균 유사도 막대(.38, .31, .24, .16, .07)와 같은 세대 남녀 평균 .34 점선" style="max-height:230px"><figcaption>한 세대(10살) 차이(.38)는 성별 차이(.34)보다 작지만, 두 세대 이상 벌어지면 세대 차이가 성별 차이를 압도한다</figcaption></figure>
+        <figure><img src="assets/week03/unique.png" alt="다른 11개 그룹 어디에도 없는 고유 도서 수. 10대 여성 16권, 10대 남성 13권으로 압도적" style="max-height:200px"><figcaption>10대만 다른 세상 — 10대 여성 목록 19권 중 16권이 고유(진로·교양서)</figcaption></figure>
+      </div>
+      <figure><img src="assets/week03/matrix.png" alt="여성 연령대(행) × 남성 연령대(열)의 자카드 유사도 행렬. 10대 여성 행이 전부 붉고, 40·50대끼리는 파랗다" style="max-height:440px"><figcaption>누구와 누가 같은 책을 읽나 — 자카드 유사도, 흰색 = 전체 평균(.28). 대각선이 “같은 세대의 남녀”</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="패턴 6가지">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>패턴 6가지 — 숫자가 말해 주는 것</h2>
+  <div class="body">
+    <ol class="recap">
+      <li><b>세대를 관통하는 캐논이 있다</b>『나의 첫 번째 부동산 교과서』『돈, 뜨겁게 사랑하고 차갑게 다루어라』는 12개 그룹 중 11개 목록에 등장</li>
+      <li><b>10대는 완전히 다른 목록을 읽는다</b>10대 남녀는 겹치는 책이 0권. 여학생은 진로·직업 탐색서, 남학생은 거시경제·산업·창업서</li>
+      <li><b>성별 차이보다 세대 차이가 크다</b>같은 세대 남녀 .34 > 같은 성별 세대 간 .29. 단, 인접 세대(.38)는 성별 장벽보다 가깝다</li>
+      <li><b>나이가 오를수록 “연금·배당”으로, 60대엔 “자산 정리”로</b>ETF·배당·연금 책은 남성 50대 5권까지 늘고 60대엔 절세·자산 정리가 들어온다</li>
+      <li><b>AI 책은 오히려 중장년·고령 목록에 많다</b>AI 교양서는 60대 이상 남성·50대 여성이 최다. 10대 남성은 AI를 “주식 자동매매 도구”로 소비</li>
+      <li><b>같은 데이터에서 후속 질문이 나온다</b>“10대 목록은 누가(본인? 부모?) 구매한 것일까?” — EDA의 끝은 결론이 아니라 더 좋은 질문</li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="연구 적용 — 판결문 수집">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>연구 적용 사례 — 판결문 895건 수집: 목록 먼저, 본문은 천천히</h2>
+  <div class="body">
+    <p>같은 파이프라인(수집 → 분류 → 반복 패턴 추출)을 연구용 데이터에 적용한 사례. “직장 내 괴롭힘”이 언급된 지방법원 판결 895건을 수집해 유형별로 분류하고, 법원이 손해배상을 인정할 때 반복 적용하는 요건을 추출했다. 판결문처럼 본문이 긴 자료를 수백 건 수집할 때는 한 번에 긁지 않는다.</p>
+    <div class="two eq" style="align-items:start">
+      <pre class="prompt"><button class="copy" type="button">복사</button>검색 결과 목록(사건번호·법원·선고일·링크)만 먼저 rulings.csv로 저장해줘.
+본문은 아직 받지 마.</pre>
+      <pre class="prompt"><button class="copy" type="button">복사</button>rulings.csv에서 아직 안 받은 사건 30건만 본문을 받아서
+rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시해줘.
+(시간을 두고 여러 번 반복)</pre>
+    </div>
+    <div class="callout">① 목록(메타데이터)만 먼저 CSV로, ② 본문은 그 목록을 보며 시간 간격을 두고 조금씩 — 서버에 부하를 주지 않기 위한 예의이자, 중간에 끊겨도 CSV에 진행 상황이 남아 이어서 할 수 있는 요령. 파일명에 법원을 넣는 이유 — 사건번호는 법원이 다르면 겹칠 수 있다(같은 2022가단12345가 여러 법원에).</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="마크다운 변환과 요약">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>3단계 — 본문을 마크다운(.md)으로 변환하며 요약도 함께</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.8fr 1.2fr;align-items:start">
+      <div class="stack">
+        <p>수집 직후의 .txt는 판결문이 한 덩어리 글이라 어디까지가 사실관계이고 어디부터가 법원의 판단인지 구분되지 않는다. 중간 제목을 붙여 구조를 드러내고, 어차피 전문을 읽는 김에 2줄 요약도 만들어 둔다.</p>
+        <pre class="code"># 서울중앙지방법원 2022가단5252694
+## 사건 개요
+기숙학원 야간사감인 원고가 임금체불 진정 후…
+## 법원의 판단
+- 집단 따돌림에 해당한다고 판단
+- 위자료 500만 원 인정</pre>
+        <p class="muted" style="font-size:13px">마크다운 = 글의 구조를 기호 몇 개(#, ##, -)로 표시하는 텍스트 형식. 메모장으로도 열리고, 사람도 AI도 “어디에 무엇이 있는지”를 구조로 파악한다.</p>
+      </div>
+      <pre class="prompt"><button class="copy" type="button">복사</button>rulings/의 txt 파일들을 md로 바꿔줘. 사실관계·주장·판단·결론이 나뉘는 곳마다
+## 제목을 붙이고, 맨 위에 2줄 요약을 넣어줘. 원문 문장은 바꾸지 말고.</pre>
+      <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>요약만 모아 rulings_summary.csv로도 저장해줘</span><span>맨 위에 사건번호·법원·선고일·소송결과도</span><span>판단 부분이 안 나뉘었어 — 다시</span></div>
+    </div>
+    <p class="muted">요약을 이때 만드는 이유 — 나중에 따로 시키면 같은 전문을 한 번 더 읽어야 해서 시간도 비용도 두 배. 이 2줄 요약은 “요지를 훑고 고른 사건만 전문을 읽는” 질의응답 스킬(§8)의 재료가 된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="수집에서 보고서까지">
+  <div class="kicker">Cowork로 웹 스크래핑</div>
+  <h2>수집 → 변환 → 분석 → 보고서</h2>
+  <div class="body">
+    <div class="loop" style="grid-template-columns:repeat(7,auto);justify-content:center">
+      <div class="lnode">📥 수집<small>목록 CSV + 본문 895건</small></div><span class="lar">➜</span>
+      <div class="lnode">📝 변환<small>.md + 2줄 요약</small></div><span class="lar">➜</span>
+      <div class="lnode">🔍 탐색적 분석<small>유형 분류, 반복 요건</small></div><span class="lar">➜</span>
+      <div class="lnode">📄 보고서<small>인정 요건 ①~⑥</small></div>
+    </div>
+    <pre class="prompt"><button class="copy" type="button">복사</button>수집한 판결문에 대해 탐색적 분석을 하라.
+탐색적 분석의 목적은 민사 손해배상 소송(직장 내 괴롭힘을 근거로 한
+불법행위 손해배상) 사건에서 직장 내 괴롭힘으로 인정된 요건을
+파악하는 것임.</pre>
+    <p class="muted">이 지시 하나로 판결 895건 → 4개 사건유형 분류 → 인정 요건 ①~⑥ 도출 보고서가 나왔다. 분석의 목적만 지시했고, 요건 추출과 긍정/부정 사례 대비 같은 구성은 AI가 목적에 맞춰 스스로 발전시킨 것이다. 보고서 원문: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week2/week2-example-workplace-harassment-report.html" target="_blank" rel="noopener">직장 내 괴롭힘 민사 손해배상 인정 요건 분석</a></p>
+    <div class="callout good"><b>직접 해보기</b> — 관심 분야의 정적 사이트 하나를 골라 수집 프롬프트를 변형해 100건 이상 수집하고, EDA 프롬프트로 패턴 3가지를 찾아보자. 결과 CSV가 내 폴더에 실제로 저장됐는지 꼭 확인.</div>
+  </div>
+</section>
+
+<!-- ===================== 7. 데이터 분석 — 판결문 지도 ===================== -->
+<section class="slide section" data-sec="7" data-title="데이터 분석 — 판결문 지도">
+  <div class="kicker">Section 7</div>
+  <h2>데이터 분석 — 판결문 347건의 지도</h2>
+  <p class="section-lead">2강에서 본 임베딩(문서를 숫자 배열로)을 판결문에 적용하면, 비슷한 판결끼리 묶이고 한 장의 지도가 된다. 점 하나가 판결 한 건이다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="7"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="분석 요청과 처리 순서">
+  <div class="kicker">데이터 분석 — 판결문 지도</div>
+  <h2>분석 요청과 처리 순서 — 요청은 두 문장</h2>
+  <div class="body">
+    <p>판결문 347건의 본문을 임베딩 모델에 넣어 얻은 4,096차원 벡터가 JSON 파일 347개로 연동 폴더에 있다(2강의 임베딩을 문서 단위로 적용한 것. 추출 방법은 부트캠프 2주차 ④ 자료). Cowork에 그 폴더의 파일을 쓰라고 지시하면 된다.</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>연동 폴더에 저장된 판결문 임베딩 JSON 파일들을 이용해서
+클러스터링 + 차원축소 + 시각화 작업을 수행하고, 이 과정을 html로 작성하라.</pre>
+    <div class="loop" style="grid-template-columns:repeat(7,auto);justify-content:center">
+      <div class="lnode">① 벡터 적재<small>JSON 347개 → 347 × 4,096 행렬</small></div><span class="lar">➜</span>
+      <div class="lnode">② 클러스터링<small>K-means로 비슷한 판결끼리 묶기</small></div><span class="lar">➜</span>
+      <div class="lnode">③ 차원축소<small>UMAP으로 4,096차원 → 2차원</small></div><span class="lar">➜</span>
+      <div class="lnode">④ 지도<small>산점도 + 클러스터 색 + 툴팁</small></div>
+    </div>
+    <div class="callout warn"><b>순서에 주의</b> — 클러스터링은 원본 4,096차원 벡터에서 수행하고, 2차원 좌표는 보여 주기 위해서만 쓴다. 압축된 2차원에서 군집을 찾으면 압축 과정에서 생긴 왜곡까지 군집으로 오인할 수 있다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="클러스터링 — k 고르기">
+  <div class="kicker">데이터 분석 — 판결문 지도</div>
+  <h2>클러스터링 — 비슷한 판결끼리 자동으로 묶기, 몇 개로?</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>K-means는 “서로 가까운 벡터끼리 k개의 그룹으로 나누라”는 알고리즘. 사람이 정할 것은 하나, <b>몇 개의 그룹(k)</b>으로 나눌 것인가</li>
+      <li><b>실루엣 계수</b> — 군집이 얼마나 또렷하게 나뉘었는지를 재는 값(−1~1). 같은 군집 안의 점들과 가까울수록, 다른 군집과 멀수록 1에 가깝다. 계산은 AI가 하므로 값을 읽고 판단하는 것만 알면 된다</li>
+    </ul>
+    <table class="tbl">
+      <thead><tr><th>k</th><th>3</th><th>4</th><th>5 (선택)</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+      <tbody><tr><th>실루엣</th><td>.124</td><td>.123</td><td class="hl"><b>.100</b></td><td>.093</td><td>.102</td><td>.107</td><td>.103</td><td>.102</td></tr></tbody>
+    </table>
+    <div class="callout"><b>지표가 아니라 해석이 결정했다.</b> 점수만 보면 k=3이 최선이지만, k=3의 군집은 크고 뭉뚱그려진 덩어리였다. k=5에서 비로소 법률가가 읽어도 말이 되는 다섯 유형(전형 폭언형 / 기각형 / 성희롱 결합형 / 인사분쟁 복합형 / 자살·유족소송형)이 나타났다. 군집 개수는 통계 지표를 참고하되, 최종 결정은 도메인 해석 가능성이 한다. 실루엣 0.1대라는 낮은 값도 기억해 두자 — 텍스트 임베딩의 군집 경계는 원래 흐릿하며, 라벨은 “칸막이”가 아니라 “경향”이다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="차원축소 — 4,096차원을 2차원으로">
+  <div class="kicker">데이터 분석 — 판결문 지도</div>
+  <h2>차원축소 — 4,096차원을 2차원 지도로</h2>
+  <div class="body">
+    <p>4,096개의 숫자는 사람 눈으로 볼 수 없다. UMAP은 “고차원에서 이웃이던 점은 2차원에서도 이웃이 되도록” 좌표를 다시 배치하는 알고리즘이다.</p>
+    <div class="steps">
+      <div class="step"><span class="no">🌍</span><b class="ttl">지구본 → 종이 지도</b><p class="prob">둥근 지구를 평평한 종이에 옮기면 어딘가는 반드시 일그러진다. 4,096차원 → 2차원도 같다 — 이웃 관계는 지키고, 먼 거리의 정확성은 포기한다</p></div>
+      <div class="step"><span class="no">📏</span><b class="ttl">믿을 것과 안 믿을 것</b><p class="prob">“가까이 붙은 점들은 정말 비슷하다”는 믿어도 된다. “두 섬 사이의 거리가 정확히 2배 멀다”는 믿으면 안 된다</p></div>
+      <div class="step"><span class="no">🎲</span><b class="ttl">재현성</b><p class="prob">UMAP·K-means 모두 무작위 초기화가 있어 실행마다 모양이 조금씩 달라진다. 연구에서는 난수 시드를 고정(이번 작업은 42)해 같은 그림이 다시 나오게 한다</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="판결문 지도">
+  <div class="kicker">데이터 분석 — 판결문 지도</div>
+  <h2>판결문 347건의 의미 지도</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:start">
+      <figure><img src="assets/week03/map.png" alt="직장 내 괴롭힘 손해배상 판결 347건의 UMAP 2차원 지도. 다섯 클러스터가 색으로 구분되고, 자살·유족소송형이 오른쪽 아래 외딴 섬으로 떨어져 있다" style="max-height:440px"><figcaption>점 하나 = 판결 한 건. 본문 임베딩(4,096차원) → K-means 5개 군집 → UMAP 2D. 좌표축 자체에는 의미가 없다. <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week2/week2-05-judgment-map-clustering.html" target="_blank" rel="noopener">직접 탐색하기 ↗</a></figcaption></figure>
+      <figure class="plain"><img src="assets/week03/clusters.png" alt="다섯 클러스터 카드: 인사분쟁 복합형 76건 인용률 39%, 전형 폭언·모욕형 101건 96%, 자살·유족소송형 35건 69%, 성희롱 결합형 55건 82%, 증거부족·기각형 80건 20%" style="max-height:440px"><figcaption>다섯 유형과 각 사건 수·인용률</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="지도 읽기 — 유형이 승패를 예고한다">
+  <div class="kicker">데이터 분석 — 판결문 지도</div>
+  <h2>지도 읽기 — 사건 유형이 승패를 예고한다</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr;align-items:start">
+      <figure class="plain"><img src="assets/week03/cite-rate.png" alt="클러스터별 인용률: 전형 폭언·모욕형 96%, 성희롱 결합형 82%, 자살·유족소송형 69%, 인사분쟁 복합형 39%, 증거부족·기각형 20%" style="max-height:260px"><figcaption>클러스터별 인용률 (원고승 + 원고일부승 비율)</figcaption></figure>
+      <ol class="recap" style="grid-template-columns:1fr">
+        <li><b>클러스터가 소송 결과와 함께 나뉘었다</b>상급자의 폭언·모욕이라는 전형적 서사는 인용률 96%, 증거가 진술뿐이거나 동료 갈등에 머문 사건은 20%. 임베딩은 승패를 배운 적이 없는데도 사실관계의 유형만으로 결과가 갈리는 구조를 드러냈다</li>
+        <li><b>자살·유족소송은 외딴 섬이다</b>유족이 원고이고 일실수입·인과관계가 쟁점인, 구조가 다른 사건 — 임베딩이 이 차이를 정확히 분리했다</li>
+        <li><b>판결문 임베딩은 “사실 + 판단 논리”를 함께 담는다</b>기각형 클러스터는 “증거만으로는 인정하기 어렵다”는 기각 논리의 문장들이 닮았기 때문이기도 하다. 무엇을 임베딩했는지에 따라 지도의 의미가 달라진다</li>
+        <li><b>경계는 흐릿하다 — 지도는 가설이다</b>패턴을 확정하려면 지도가 가리킨 사건들의 판결문 원문으로 돌아가 직접 확인하는 것이 다음 순서</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="직접 해보기 — 재현용 프롬프트">
+  <div class="kicker">데이터 분석 — 판결문 지도</div>
+  <h2>직접 해보기 — 여러분의 데이터로 같은 지도를</h2>
+  <div class="body">
+    <p>리뷰·초록·기사 무엇이든, 임베딩 JSON만 있으면 같은 지도를 만들 수 있다. 데이터만 바뀔 뿐 절차는 동일하다.</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>연동 폴더의 임베딩 JSON으로 클러스터링하고 지도처럼 시각화해줘.
+바로 실행하지 말고 계획부터 보여줘.</pre>
+    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>k는 몇 개가 좋아? 선택지를 줘</span><span>k=5로 가자</span><span>각 클러스터의 대표 사건 3건씩 보여줘</span><span>인용률을 클러스터별로</span></div>
+    <ol class="recap">
+      <li><b>클러스터링은 원본 고차원 벡터에서</b>2D 좌표는 표시용으로만</li>
+      <li><b>k는 실루엣 계수 + 대표 문서 읽기</b>해석 가능성으로 결정</li>
+      <li><b>UMAP 지도에서 믿을 것은 “이웃”</b>믿지 말 것은 “먼 거리”</li>
+      <li><b>난수 시드를 고정</b>같은 그림이 다시 나온다</li>
+      <li><b>지도가 보여준 패턴은 가설</b>확인은 원문으로</li>
+      <li><b>“바로 실행하지 말고 계획부터”</b>선택지를 보고 내가 고른다 — 오늘 배운 요청 습관</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===================== 8. 더 해보기와 정리 ===================== -->
+<section class="slide section" data-sec="8" data-title="더 해보기와 정리">
+  <div class="kicker">Section 8</div>
+  <h2>더 해보기와 정리</h2>
+  <p class="section-lead">오늘 쌓은 데이터와 절차를 다음에 어떻게 이어 갈 수 있는지, 그리고 3강 정리.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="8"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="더 해보기 · 스킬과 계보도">
+  <div class="kicker">더 해보기와 정리</div>
+  <h2>더 해보기 — 반복 절차를 파일로, 인용 관계를 지도로</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="callout"><b>나만의 스킬 만들기</b> — 판결문 347건에 “이런 경우도 회사 책임이 인정됐나”를 반복해서 묻는다면, 그 절차(요지 목록 훑기 → 고른 사건만 전문 읽기 → 사건번호 인용)를 SKILL.md 파일 한 장에 적어 폴더에 두면 관련 질문마다 AI가 자동으로 같은 절차로 답한다. 가이드라인·사내 규정을 함께 넣으면 “찾기”에서 “판단하기”로 올라간다.
+        <pre class="prompt sm" style="margin-top:10px"><button class="copy" type="button">복사</button>직장 내 괴롭힘 판례 질문에 답하는 스킬을 만들어줘.
+요약 CSV를 먼저 훑고, 고른 사건은 전문을 읽고 사건번호를 인용해서 답하게.</pre>
+        <p class="muted" style="font-size:13px;margin:8px 0 0"><a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week2/week2-06-building-skills.html" target="_blank" rel="noopener">원문 자료: 나만의 스킬 만들기 ↗</a></p>
+      </div>
+      <div class="callout good"><b>논문 계보도 만들기</b> — 같은 파이프라인(수집 → 구조화 → 시각화)을 논문 인용 관계에 얹는다. 연구 질문 한 줄로 씨앗 논문 → 조상(참고문헌) → 후예(피인용)를 수집해 시간축 네트워크로 그리면, 읽기 순서와 열린 연구 질문이 프롬프트 한 번에 나온다.
+        <pre class="prompt sm" style="margin-top:10px"><button class="copy" type="button">복사</button>내 연구 질문은 "[한 줄]"이야. 주요 논문과 그 뿌리 논문을 모아
+인용 관계를 시간축 계보도로 그려줘.</pre>
+        <p class="muted" style="font-size:13px;margin:8px 0 0"><a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week2/week2-07-citation-genealogy-research.html" target="_blank" rel="noopener">원문 자료: 논문 계보도 만들기 ↗</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="3강 정리">
+  <div class="kicker">더 해보기와 정리</div>
+  <h2>3강 정리</h2>
+  <div class="body">
+    <ol class="recap">
+      <li><b>에이전틱 AI</b>모델은 텍스트만 만들고, 하네스가 도구를 실행한다. 결과는 컨텍스트에 쌓이고, 계획–실행–검토가 반복된다</li>
+      <li><b>세 개의 작업대</b>Chat은 묻는 곳, Cowork는 맡기는 곳, Code는 내 컴퓨터에서 돌리는 곳. 작업은 전용 폴더 안에서만, 승인은 읽고 누른다</li>
+      <li><b>GitHub 기초</b>저장소 = 프로젝트 폴더, 커밋 = 저장본, 푸시 = 올리기. [내아이디].github.io 저장소에 index.html을 올리면 사이트가 된다</li>
+      <li><b>웹앱과 HTML</b>HTML(뼈대)·CSS(겉모습)·JavaScript(동작)가 파일 하나에. 보고서·계획서·맞춤 페이지도 HTML로</li>
+      <li><b>크롤링의 경계</b>페이월 금지, 약관은 최종 결론이 아니며 공정이용으로 스스로 평가. 비영리·소량·내부 분석. 정적은 URL로, 동적은 브라우저 확장으로</li>
+      <li><b>웹 스크래핑</b>프롬프트의 4요소(URL 규칙·항목·형식·위치). 표는 CSV, 본문은 개별 파일. 목록 먼저, 본문은 천천히. 수집 직후 EDA</li>
+      <li><b>판결문 지도</b>임베딩 → K-means(k는 해석 가능성으로) → UMAP(이웃만 믿기) → 지도는 가설, 확인은 원문으로</li>
+    </ol>
+    <div class="callout">과제(수강생 발표 1, 10/1) — 자기소개 페이지와 스크래핑 결과를 발표한다. 오늘 만든 사이트 주소와, 관심 분야에서 100건 이상 수집한 CSV·패턴 3가지를 준비해 오자.</div>
+  </div>
+</section>
+
+    </div><!-- /deck -->
+
+    <nav class="pager" aria-label="페이지 이동">
+      <button class="pbtn prev" id="btnPrev" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span id="prevLabel">이전</span></button>
+      <div class="pinfo"><span class="sec" id="pSec"></span><span class="dots" id="pDots"></span><span class="cnt" id="pCnt"></span></div>
+      <button class="pbtn next" id="btnNext" type="button"><span id="nextLabel">다음</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    </nav>
+  </main>
+</div>
+
+<script>
+(function(){
+  const SECTIONS = [
+    {name:'들어가며', sub:'준비물과 원칙'},
+    {name:'에이전틱 AI 한눈에', sub:'엔진·하네스·루프'},
+    {name:'세 개의 작업대와 설치', sub:'Chat · Cowork · Code'},
+    {name:'GitHub 기초', sub:'개인 사이트 배포'},
+    {name:'웹앱과 HTML 활용', sub:'금융 플래너, 보고서도 HTML로'},
+    {name:'크롤링 — 무엇을, 어디까지', sub:'법적 경계, 정적 vs 동적'},
+    {name:'Cowork로 웹 스크래핑', sub:'수집과 탐색적 분석'},
+    {name:'데이터 분석 — 판결문 지도', sub:'클러스터링 · 차원축소'},
+    {name:'더 해보기와 정리', sub:'스킬 · 계보도 · 정리'}
+  ];
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  const secOf = i => +slides[i].dataset.sec;
+  const secIdx = SECTIONS.map((_, s) => slides.map((sl, i) => i).filter(i => secOf(i) === s));
+  let cur = -1;
+
+  /* ---------- 사이드바 목차 ---------- */
+  const toc = document.getElementById('toc');
+  SECTIONS.forEach((s, k) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'toc-link';
+    btn.innerHTML = `<span class="no">${k}</span><span class="nm">${s.name}</span><span class="cnt">${secIdx[k].length}p</span>`;
+    btn.addEventListener('click', () => show(secIdx[k][0]));
+    if (!secIdx[k].length) { btn.disabled = true; btn.querySelector('.cnt').textContent = '준비 중'; }
+    const sub = document.createElement('ul'); sub.className = 'sub';
+    secIdx[k].forEach(i => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = slides[i].dataset.title || slides[i].querySelector('h2,h1')?.textContent || `슬라이드 ${i+1}`;
+      b.addEventListener('click', () => show(i));
+      const l = document.createElement('li'); l.appendChild(b); sub.appendChild(l);
+    });
+    li.appendChild(btn); li.appendChild(sub); toc.appendChild(li);
+  });
+  const tocItems = Array.from(toc.children);
+
+  /* 표지의 목차 버튼 */
+  const co = document.getElementById('coverOutline');
+  if (co) SECTIONS.slice(1).forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span class="num">${k+1}</span><span>${s.name}<small>${s.sub}</small></span>`;
+    b.addEventListener('click', e => { e.stopPropagation(); show(secIdx[k+1][0]); });
+    if (!secIdx[k+1].length) { b.disabled = true; b.querySelector('small').textContent = '준비 중'; }
+    co.appendChild(b);
+  });
+
+  /* ---------- 페이저 ---------- */
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const prevLabel = document.getElementById('prevLabel'), nextLabel = document.getElementById('nextLabel');
+  const pSec = document.getElementById('pSec'), pDots = document.getElementById('pDots'), pCnt = document.getElementById('pCnt');
+  const curNo = document.getElementById('curNo'), totNo = document.getElementById('totNo'), bar = document.getElementById('progressBar');
+  totNo.textContent = N;
+
+  function show(i, replace){
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    if (cur >= 0) { slides[cur].classList.remove('active'); slides[cur].querySelectorAll('video').forEach(v => v.pause()); }
+    cur = i;
+    const sl = slides[i]; sl.classList.add('active');
+    sl.querySelectorAll('video').forEach(v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const s = secOf(i), list = secIdx[s], k = list.indexOf(i);
+
+    tocItems.forEach((li, j) => {
+      const b = li.firstElementChild;
+      b.classList.toggle('active', j === s);
+      b.classList.toggle('done', j < s);
+      li.classList.toggle('open', j === s);
+      li.querySelectorAll('.sub button').forEach((sb, m) => sb.classList.toggle('active', j === s && m === k));
+    });
+    const act = toc.querySelector('.toc-link.active');
+    if (act && window.innerWidth <= 900) act.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+
+    pSec.textContent = SECTIONS[s].name;
+    pCnt.textContent = `${k + 1} / ${list.length} · 전체 ${i + 1} / ${N}`;
+    pDots.innerHTML = '';
+    list.forEach((idx, m) => { const d = document.createElement('i'); if (m === k) d.className = 'on'; d.title = slides[idx].dataset.title || ''; d.addEventListener('click', () => show(idx)); pDots.appendChild(d); });
+
+    btnPrev.disabled = i === 0; btnNext.disabled = i === N - 1;
+    prevLabel.textContent = k === 0 && s > 0 ? `이전 섹션: ${SECTIONS[s - 1].name}` : '이전';
+    nextLabel.textContent = k === list.length - 1 && s < SECTIONS.length - 1 ? `다음 섹션: ${SECTIONS[s + 1].name}` : (i === N - 1 ? '마지막 페이지' : '다음');
+
+    curNo.textContent = i + 1; bar.style.width = ((i + 1) / N * 100) + '%';
+    const h = '#' + (i + 1);
+    if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+    window.scrollTo({top:0, behavior:'auto'});
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} — 3강 실습 (1)`;
+  }
+  const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
+  btnPrev.addEventListener('click', () => show(cur - 1));
+  btnNext.addEventListener('click', () => show(cur + 1));
+  window.addEventListener('popstate', () => show(fromHash(), true));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+    else if (e.key === '+' || e.key === '=') { e.preventDefault(); setUserZoom(userZoom * 1.1); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); setUserZoom(userZoom / 1.1); }
+    else if (e.key === '0') { e.preventDefault(); setUserZoom(1); }
+  });
+  /* ---------- 화면 크기에 맞춘 슬라이드 확대 ---------- */
+  const stage = document.getElementById('stage'), zoomVal = document.getElementById('zoomVal');
+  let userZoom = 1;
+  try { userZoom = parseFloat(localStorage.getItem('itm690-w03-zoom')) || 1; } catch (e) {}
+  function applyZoom(){
+    const mobile = window.innerWidth <= 900;
+    const side = mobile ? 0 : 264;
+    const auto = mobile ? 1 : Math.min(1.5, Math.max(1, (window.innerWidth - side) / 1100));
+    const z = Math.max(.6, Math.min(2.4, +(auto * userZoom).toFixed(3)));
+    stage.style.zoom = z;
+    stage.style.minHeight = mobile ? '' : ((window.innerHeight - 64) / z) + 'px';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  function setUserZoom(v){ userZoom = Math.max(.5, Math.min(2, +v.toFixed(3))); try { localStorage.setItem('itm690-w03-zoom', userZoom); } catch (e) {} applyZoom(); }
+  document.getElementById('zoomIn').addEventListener('click', () => setUserZoom(userZoom * 1.1));
+  document.getElementById('zoomOut').addEventListener('click', () => setUserZoom(userZoom / 1.1));
+  zoomVal.addEventListener('click', () => setUserZoom(1));
+  window.addEventListener('resize', applyZoom);
+  applyZoom();
+
+  let tx = null;
+  document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('deck').addEventListener('touchend', e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 70) show(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  /* ---------- 인공신경망 SVG ---------- */
+  function drawNN(svg){
+    const layers = svg.dataset.layers.split(',').map(Number);
+    const inL = (svg.dataset.in || '').split(',').filter(Boolean);
+    const out = svg.dataset.out || '';
+    const outL = (svg.dataset.outl || '').split(',').filter(Boolean);
+    const hdots = svg.dataset.hdots === '1', boxes = svg.dataset.boxes === '1';
+    const W = +svg.dataset.w || 640, H = +svg.dataset.h || 300, r = +svg.dataset.r || 18;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const padL = inL.length ? 40 : 30, padR = out ? 110 : (outL.length ? 96 : 30);
+    const L = layers.length;
+    const xs = layers.map((_, i) => padL + r + (W - padL - padR - 2 * r) * (L > 1 ? i / (L - 1) : 0));
+    const pos = layers.map((n, i) => {
+      const gap = Math.min(r * 3.6, (H - 2 * r - 10) / Math.max(n - 1, 1));
+      return Array.from({length:n}, (_, j) => {
+        const isDots = (i === 0 && inL[j] === '…') || (i === L - 1 && outL[j] === '…') || (hdots && i > 0 && i < L - 1 && j === n - 2);
+        return {x: xs[i], y: H / 2 + (j - (n - 1) / 2) * gap, dots: isDots};
+      });
+    });
+    let s = '';
+    for (let i = 0; i < L - 1; i++) for (const a of pos[i]) for (const b of pos[i + 1]) if (!a.dots && !b.dots) s += `<line class="e" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;
+    if (boxes) for (let i = 1; i < L - 1; i++) { const ys = pos[i].map(p => p.y); s += `<rect class="box" x="${xs[i] - r - 8}" y="${Math.min(...ys) - r - 8}" width="${2 * r + 16}" height="${Math.max(...ys) - Math.min(...ys) + 2 * r + 16}" rx="4"/>`; }
+    pos.forEach((Ly, i) => Ly.forEach((p, j) => {
+      if (p.dots) { s += `<text class="dots" x="${p.x}" y="${p.y + 8}" text-anchor="middle">⋮</text>`; return; }
+      const cls = i === 0 ? 'in' : (i === L - 1 ? 'out' : 'hid');
+      s += `<circle class="${cls}" cx="${p.x}" cy="${p.y}" r="${r}"/>`;
+      if (i === 0 && inL[j] && r >= 14) s += `<text class="nl" x="${p.x}" y="${p.y + 5}" text-anchor="middle">${inL[j]}</text>`;
+      if (i === L - 1 && outL[j]) s += `<text class="ol" x="${p.x + r + 8}" y="${p.y + 6}">${outL[j]}</text>`;
+    }));
+    if (out) { const p = pos[L - 1][Math.floor(pos[L - 1].length / 2)]; s += `<line class="e" x1="${p.x + r}" y1="${p.y}" x2="${p.x + r + 44}" y2="${p.y}" style="stroke-width:1.8;opacity:1" marker-end="url(#nnArr)"/><text class="ol" x="${p.x + r + 54}" y="${p.y + 6}">${out}</text>`; }
+    svg.innerHTML = `<defs><marker id="nnArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker></defs>` + s;
+  }
+  document.querySelectorAll('svg.nn').forEach(drawNN);
+  document.querySelectorAll('ol.roadmap').forEach(ol => {
+    const cur = +ol.dataset.current;
+    ol.innerHTML = SECTIONS.slice(1).map((s, i) => `<li class="${i + 1 === cur ? 'cur' : (i + 1 < cur ? 'done' : '')}"><span class="n">${i + 1}</span>${s.name}</li>`).join('');
+  });
+
+  /* ---------- 인공 뉴런 SVG ---------- */
+  function drawNeuron(svg){
+    const n = +svg.dataset.inputs || 1, split = svg.dataset.split === '1', act = svg.dataset.act === '1';
+    const label = svg.dataset.label || '', compact = svg.dataset.compact === '1';
+    const W = 640, H = n > 1 ? 250 : 220, cx = 340, cy = n > 1 ? 118 : 100, r = 48;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const sub = ['', '₁', '₂', '₃'];
+    let s = `<defs><marker id="neArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1b6fa6"/></marker></defs>`;
+    const ys = n === 1 ? [cy] : n === 2 ? [cy - 40, cy + 40] : [cy - 70, cy, cy + 70];
+    ys.forEach((y, j) => {
+      const x0 = 108, ang = Math.atan2(y - cy, x0 - cx), ex = cx + r * Math.cos(ang), ey = cy + r * Math.sin(ang);
+      s += `<line class="ln" x1="${x0}" y1="${y}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="12" y="${y + 6}">Input <tspan font-style="italic">x${n > 1 ? sub[j + 1] : ''}</tspan></text>`;
+      const mx = (x0 + ex) / 2, my = (y + ey) / 2 - 10;
+      s += `<text class="lab w" x="${mx}" y="${my}" text-anchor="middle">Weight <tspan font-style="italic">w${n > 1 ? sub[j + 1] : ''}</tspan></text>`;
+    });
+    if (!compact) {
+      const bx = 160, by = cy + 92, ang = Math.atan2(by - cy, bx - cx), ex = cx + r * Math.cos(ang), ey = cy + r * Math.sin(ang);
+      s += `<line class="ln" x1="${bx}" y1="${by}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="${bx - 60}" y="${by + 16}">Bias <tspan font-style="italic" class="w" fill="#b0483f">b</tspan></text>`;
+      s += `<line class="ln" x1="${cx + r}" y1="${cy}" x2="${cx + r + 170}" y2="${cy}" marker-end="url(#neArr)"/>`;
+      s += `<text class="lab" x="${cx + r + 180}" y="${cy + 6}">Output <tspan font-style="italic">y</tspan></text>`;
+    } else {
+      s += `<line class="ln" x1="${cx + r}" y1="${cy}" x2="${cx + r + 90}" y2="${cy}" marker-end="url(#neArr)"/>`;
+    }
+    s += `<circle class="nb" cx="${cx}" cy="${cy}" r="${r}"/>`;
+    if (split) {
+      s += `<line class="ln" x1="${cx}" y1="${cy - r}" x2="${cx}" y2="${cy + r}"/>`;
+      s += `<text class="z" x="${cx - r / 2}" y="${cy + 7}" text-anchor="middle">z</text>`;
+      s += `<text class="z" x="${cx + r / 2}" y="${cy + 7}" text-anchor="middle">f(z)</text>`;
+    } else if (label === 'formula') {
+      s += `<text class="z" x="${cx}" y="${cy + 6}" text-anchor="middle" style="fill:#22201d;font-size:17px">y = wx + b</text>`;
+    } else if (label) {
+      s += `<text class="z" x="${cx}" y="${cy + 6}" text-anchor="middle">${label}</text>`;
+    }
+    if (act) s += `<text class="act" x="${cx + r * 0.7}" y="${cy - r - 14}">Activation</text>`;
+    svg.innerHTML = s;
+  }
+  document.querySelectorAll('svg.neuron').forEach(drawNeuron);
+
+  /* ---------- 순환 신경망 도식 ---------- */
+  const sub = k => String(k).split('').map(c => '₀₁₂₃₄₅₆₇₈₉'[+c]).join('');
+  function drawRNN(svg, idx){
+    const words = svg.dataset.words.split(','), mode = svg.dataset.mode || 'concept', out = svg.dataset.out || '';
+    const n = words.length, colW = 104, W = Math.max(760, (n - 1) * colW + 260) + (svg.dataset.ctx ? 180 : 0), bw = 46, bh = 42;
+    const H = mode === 'concept' ? 250 : 320;
+    const yH = mode === 'concept' ? 96 : 160, yIn = mode === 'concept' ? 186 : 250, yOut = 56, yLab = yIn + bh / 2 + 22;
+    const ctx = svg.dataset.ctx || '';
+    const x0 = (W - (n - 1) * colW) / 2 + (ctx ? 90 : 0), xs = words.map((_, i) => x0 + i * colW);
+    const id = 'rnnArr' + idx, idr = 'rnnArrR' + idx;
+    let s = `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker><marker id="${idr}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b0483f"/></marker></defs>`;
+    const box = (cls, x, y) => `<rect class="${cls}" x="${x - bw / 2}" y="${y - bh / 2}" width="${bw}" height="${bh}" rx="7"/>`;
+    xs.forEach((x, i) => {
+      s += box('hid', x, yH) + `<text class="lab" x="${x}" y="${yH + 5}" text-anchor="middle">h${sub(i + 1)}</text>`;
+      if (i < n - 1) s += `<line class="ar" x1="${x + bw / 2}" y1="${yH}" x2="${xs[i + 1] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/>`;
+    });
+    xs.forEach((x, i) => {
+      s += box('in', x, yIn) + `<line class="ar" x1="${x}" y1="${yIn - bh / 2}" x2="${x}" y2="${yH + bh / 2 + 2}" marker-end="url(#${id})"/>`;
+      if (mode === 'gen') {
+        s += `<text class="lab" x="${x}" y="${yIn + 5}" text-anchor="middle">${i === 0 ? 'x₁' : 'ŷ' + sub(i)}</text>`;
+        if (i === 0) s += `<text class="w" x="${x}" y="${yLab}" text-anchor="middle">⟨START⟩</text>`;
+      } else {
+        s += `<text class="lab" x="${x}" y="${yIn + 5}" text-anchor="middle">x${sub(i + 1)}</text><text class="w" x="${x}" y="${yLab}" text-anchor="middle">${words[i]}</text>`;
+      }
+    });
+    s += `<text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yH + 5}" text-anchor="end">상태(기억)</text><text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yIn + 5}" text-anchor="end">입력</text>`;
+    if (mode === 'm2o') {
+      const x = xs[n - 1];
+      s += box('out', x, yOut) + `<line class="ar" x1="${x}" y1="${yH - bh / 2}" x2="${x}" y2="${yOut + bh / 2 + 2}" marker-end="url(#${id})"/><text class="lab" x="${x}" y="${yOut + 5}" text-anchor="middle">ŷ</text><text class="big" x="${x + bw / 2 + 10}" y="${yOut + 6}">${out}</text>`;
+      s += `<text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yOut + 5}" text-anchor="end">출력</text>`;
+    } else if (mode === 'gen') {
+      s += `<text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yOut + 5}" text-anchor="end">출력</text>`;
+      xs.forEach((x, i) => {
+        s += box('out', x, yOut) + `<line class="ar" x1="${x}" y1="${yH - bh / 2}" x2="${x}" y2="${yOut + bh / 2 + 2}" marker-end="url(#${id})"/><text class="lab" x="${x}" y="${yOut + 5}" text-anchor="middle">ŷ${sub(i + 1)}</text><text class="w" x="${x}" y="${yOut - bh / 2 - 10}" text-anchor="middle">${words[i]}</text>`;
+        if (i < n - 1) { const nx = xs[i + 1], mx = x + colW / 2; s += `<path class="fb" d="M${x + bw / 2} ${yOut} H${mx} V${yIn} H${nx - bw / 2 - 2}" marker-end="url(#${idr})"/>`; }
+      });
+    }
+    if (ctx) { s += `<line class="ar" x1="${xs[0] - bw / 2 - 150}" y1="${yH}" x2="${xs[0] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/><text class="w" x="${xs[0] - bw / 2 - 156}" y="${yH - 12}" text-anchor="end" style="fill:#b0483f">${svg.dataset.ctxlabel || '앞선 문장 정보'}</text><text class="lab" x="${xs[0] - bw / 2 - 156}" y="${yH + 8}" text-anchor="end">${ctx}</text>`; }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = s;
+  }
+  document.querySelectorAll('svg.rnn:not(.s2sd)').forEach(drawRNN);
+
+  /* ---------- 인코더–문맥 벡터–디코더 도식 ---------- */
+  function drawS2S(svg, idx){
+    const enc = svg.dataset.words.split(','), dec = svg.dataset.outw.split(',');
+    const colW = 96, bw = 46, bh = 42, ctxW = 118, gap = 26, n = enc.length, m = dec.length;
+    const W = 150 + (n - 1) * colW + bw + gap + ctxW + gap + bw + (m - 1) * colW + 110, H = 330;
+    const yOut = 62, yH = 168, yIn = 258, yLab = yIn + bh / 2 + 20;
+    const xe = enc.map((_, i) => 130 + i * colW);
+    const xc = xe[n - 1] + bw / 2 + gap + ctxW / 2;
+    const xd = dec.map((_, i) => xc + ctxW / 2 + gap + bw / 2 + i * colW);
+    const id = 'sqArr' + idx, idr = 'sqArrR' + idx;
+    let s = `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker><marker id="${idr}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b0483f"/></marker></defs>`;
+    const box = (cls, x, y) => `<rect class="${cls}" x="${x - bw / 2}" y="${y - bh / 2}" width="${bw}" height="${bh}" rx="7"/>`;
+    const sb = k => String(k).split('').map(c => '₀₁₂₃₄₅₆₇₈₉'[+c]).join('');
+    xe.forEach((x, i) => {
+      s += box('enc', x, yH) + `<text class="lab" x="${x}" y="${yH + 5}" text-anchor="middle">h${sb(i + 1)}</text>`;
+      s += box('in', x, yIn) + `<line class="ar" x1="${x}" y1="${yIn - bh / 2}" x2="${x}" y2="${yH + bh / 2 + 2}" marker-end="url(#${id})"/><text class="w" x="${x}" y="${yLab}" text-anchor="middle">${enc[i]}</text>`;
+      if (i < n - 1) s += `<line class="ar" x1="${x + bw / 2}" y1="${yH}" x2="${xe[i + 1] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/>`;
+    });
+    s += `<line class="ar" x1="${xe[n - 1] + bw / 2}" y1="${yH}" x2="${xc - ctxW / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/>`;
+    s += `<rect class="ctx" x="${xc - ctxW / 2}" y="${yH - 46}" width="${ctxW}" height="92" rx="9"/><text class="ctxt" x="${xc}" y="${yH - 22}" text-anchor="middle">CONTEXT</text><text class="ctxv" x="${xc}" y="${yH - 2}" text-anchor="middle">0.15, 0.21,</text><text class="ctxv" x="${xc}" y="${yH + 16}" text-anchor="middle">−0.11, 0.91,</text><text class="ctxv" x="${xc}" y="${yH + 34}" text-anchor="middle">…</text>`;
+    s += `<line class="ar" x1="${xc + ctxW / 2}" y1="${yH}" x2="${xd[0] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/>`;
+    xd.forEach((x, i) => {
+      s += box('dec', x, yH) + `<text class="lab" x="${x}" y="${yH + 5}" text-anchor="middle">h${sb(n + i + 1)}</text>`;
+      s += box('in', x, yIn) + `<line class="ar" x1="${x}" y1="${yIn - bh / 2}" x2="${x}" y2="${yH + bh / 2 + 2}" marker-end="url(#${id})"/>`;
+      s += `<text class="w" x="${x}" y="${yLab}" text-anchor="middle">${i === 0 ? '⟨START⟩' : dec[i - 1]}</text>`;
+      s += box('out', x, yOut) + `<line class="ar" x1="${x}" y1="${yH - bh / 2}" x2="${x}" y2="${yOut + bh / 2 + 2}" marker-end="url(#${id})"/><text class="w" x="${x}" y="${yOut - bh / 2 - 10}" text-anchor="middle">${dec[i]}</text>`;
+      if (i < m - 1) { const nx = xd[i + 1], mx = x + colW / 2; s += `<path class="fb" d="M${x + bw / 2} ${yOut} H${mx} V${yIn} H${nx - bw / 2 - 2}" marker-end="url(#${idr})"/>`; }
+      else s += `<line class="ar" x1="${x + bw / 2}" y1="${yH}" x2="${x + bw / 2 + 30}" y2="${yH}" marker-end="url(#${id})"/>`;
+    });
+    s += `<text class="tag" x="${xe[0] - bw / 2 - 10}" y="${yH + 5}" text-anchor="end">상태(기억)</text><text class="tag" x="${xe[0] - bw / 2 - 10}" y="${yIn + 5}" text-anchor="end">입력</text><text class="tag" x="${xe[0] - bw / 2 - 10}" y="${yOut + 5}" text-anchor="end">출력</text>`;
+    s += `<text class="big" x="${(xe[0] + xe[n - 1]) / 2}" y="${yLab + 34}" text-anchor="middle" style="fill:#b8792e">인코더 (Encoder) — 읽기</text>`;
+    s += `<text class="big" x="${xc}" y="${yLab + 34}" text-anchor="middle" style="fill:#b0483f">문맥 벡터 (context vector)</text>`;
+    s += `<text class="big" x="${(xd[0] + xd[m - 1]) / 2}" y="${yLab + 34}" text-anchor="middle" style="fill:#2f765b">디코더 (Decoder) — 쓰기</text>`;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H + 40}`); svg.innerHTML = s;
+  }
+  document.querySelectorAll('svg.s2sd').forEach(drawS2S);
+
+  /* ---------- 프롬프트 복사 ---------- */
+  document.querySelectorAll('.prompt .copy').forEach(btn => btn.addEventListener('click', () => {
+    const pre = btn.parentElement, text = Array.from(pre.childNodes).filter(n => n !== btn).map(n => n.textContent).join('').trim();
+    const done = () => { btn.textContent = '복사됨'; setTimeout(() => btn.textContent = '복사', 1500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, done); else done();
+  }));
+
+  show(fromHash(), true);
+})();
+</script>
+</body>
+</html>
