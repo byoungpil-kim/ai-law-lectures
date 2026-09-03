@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026가합12345 옹벽 기울어짐 손해배상 사건 | 법무법인 한결</title>
+<style>
+  :root{
+    --navy:#1c2b45;
+    --navy-2:#26374f;
+    --slate:#5b6878;
+    --slate-l:#8b95a3;
+    --line:#e3e7ed;
+    --line-2:#eef1f5;
+    --bg:#f7f8fa;
+    --blue:#2f5d9e;
+    --blue-bg:#eef3fb;
+    --red:#a4453e;
+    --red-bg:#fbefee;
+    --amber:#b8792e;
+    --amber-bg:#fdf4e6;
+    --green:#2f7357;
+    --green-bg:#eaf5ef;
+    --card-r:13px;
+    --shadow:0 1px 2px rgba(28,43,69,.05), 0 6px 18px rgba(28,43,69,.06);
+    --shadow-s:0 1px 2px rgba(28,43,69,.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--navy);
+    font-size:15px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 64px;}
+
+  /* ---------- HEADER ---------- */
+  .topbar{
+    background-color:#1c2b45;
+    background-image:linear-gradient(158deg,#22334f 0%,#1c2b45 55%,#172239 100%);
+    color:#fff;
+    border-bottom:1px solid #16223a;
+  }
+  .topbar-inner{max-width:1180px;margin:0 auto;padding:22px 20px 26px;}
+  .firm{
+    display:flex;align-items:center;gap:9px;
+    font-size:12.5px;letter-spacing:.14em;color:#9fb2cd;text-transform:none;
+    margin-bottom:14px;
+  }
+  .firm .mark{
+    width:22px;height:22px;border:1.5px solid #6f88ad;border-radius:5px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:11px;letter-spacing:0;color:#c6d5e8;font-weight:700;
+  }
+  .firm .sep{color:#4a6086;}
+  .hd-main{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;justify-content:space-between;}
+  .hd-left{min-width:260px;flex:1 1 420px;}
+  h1.case-title{
+    font-size:27px;line-height:1.3;margin:0 0 10px;font-weight:700;letter-spacing:-.02em;
+  }
+  .case-meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;color:#b7c6da;}
+  .case-meta b{color:#e7eef7;font-weight:600;}
+  .case-meta .divider{color:#41577c;}
+  .hd-right{
+    flex:0 0 auto;display:flex;flex-direction:column;gap:10px;align-items:flex-end;
+  }
+  .dday{
+    display:inline-flex;align-items:center;gap:10px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(174,197,228,.28);
+    border-radius:11px;padding:10px 15px;
+  }
+  .dday .lbl{font-size:11.5px;color:#a8bdd8;line-height:1.35;}
+  .dday .lbl b{display:block;color:#fff;font-size:13px;font-weight:600;}
+  .dday .badge{
+    background:#c9563f;color:#fff;font-weight:700;font-size:16px;
+    padding:5px 11px;border-radius:8px;letter-spacing:-.01em;
+    box-shadow:0 2px 8px rgba(201,86,63,.35);
+  }
+  .progress-block{margin-top:22px;}
+  .progress-top{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-size:12.5px;color:#a8bdd8;margin-bottom:7px;
+  }
+  .progress-top b{color:#fff;font-size:13.5px;}
+  .bar{height:7px;background:rgba(255,255,255,.13);border-radius:99px;overflow:hidden;}
+  .bar > i{
+    display:block;height:100%;width:45%;border-radius:99px;
+    background:linear-gradient(90deg,#4a7cc4,#7aa6dd);
+  }
+  .phases{
+    display:flex;justify-content:space-between;margin-top:8px;
+    font-size:11px;color:#7d93b3;gap:4px;
+  }
+  .phases span.on{color:#cfdff2;font-weight:600;}
+
+  /* ---------- SECTION ---------- */
+  section{margin-top:34px;}
+  .sec-head{display:flex;align-items:baseline;gap:11px;margin-bottom:14px;flex-wrap:wrap;}
+  .sec-head h2{
+    font-size:18px;margin:0;font-weight:700;letter-spacing:-.02em;color:var(--navy);
+  }
+  .sec-head .sub{font-size:12.5px;color:var(--slate-l);}
+  .sec-head .rule{flex:1;height:1px;background:var(--line);min-width:20px;}
+
+  /* ---------- STAT CARDS ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px;}
+  .stat{
+    background:#fff;border:1px solid var(--line);border-radius:var(--card-r);
+    padding:17px 18px 15px;box-shadow:var(--shadow-s);position:relative;overflow:hidden;
+  }
+  .stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);opacity:.85;}
+  .stat.s2::before{background:var(--green);}
+  .stat.s3::before{background:var(--red);}
+  .stat.s4::before{background:var(--amber);}
+  .stat .k{font-size:12.5px;color:var(--slate);letter-spacing:-.01em;}
+  .stat .v{font-size:30px;font-weight:700;letter-spacing:-.035em;margin-top:5px;line-height:1.1;}
+  .stat .v small{font-size:15px;font-weight:600;color:var(--slate);margin-left:2px;letter-spacing:-.01em;}
+  .stat .n{font-size:11.5px;color:var(--slate-l);margin-top:5px;}
+  .stat.s3 .v{color:var(--red);}
+  .stat.s4 .v{color:var(--navy);}
+
+  /* ---------- BADGES ---------- */
+  .pill{
+    display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:-.01em;
+    padding:3px 9px;border-radius:99px;line-height:1.55;white-space:nowrap;
+  }
+  .pill.blue{background:var(--blue-bg);color:#28518c;}
+  .pill.red{background:var(--red-bg);color:var(--red);}
+  .pill.amber{background:var(--amber-bg);color:#96601f;}
+  .pill.green{background:var(--green-bg);color:var(--green);}
+  .pill.grey{background:#eff1f4;color:#5b6878;}
+
+  /* ---------- ISSUES ---------- */
+  .issue{
+    background:#fff;border:1px solid var(--line);border-radius:var(--card-r);
+    box-shadow:var(--shadow-s);margin-bottom:12px;overflow:hidden;
+    transition:box-shadow .18s ease, border-color .18s ease;
+  }
+  .issue.open{box-shadow:var(--shadow);border-color:#d3dbe6;}
+  .issue-head{
+    display:flex;align-items:flex-start;gap:13px;padding:16px 18px;cursor:pointer;
+    user-select:none;background:#fff;
+  }
+  .issue-head:hover{background:#fbfcfd;}
+  .issue-num{
+    flex:0 0 auto;width:27px;height:27px;border-radius:8px;background:#f0f3f8;color:#3c557d;
+    font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;
+  }
+  .issue.open .issue-num{background:var(--navy);color:#fff;}
+  .issue-body-h{flex:1;min-width:0;}
+  .issue-title{font-size:15.5px;font-weight:700;letter-spacing:-.02em;line-height:1.45;}
+  .issue-sub{font-size:12.5px;color:var(--slate-l);margin-top:3px;}
+  .issue-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center;}
+  .chev{
+    flex:0 0 auto;color:#9aa5b4;font-size:12px;margin-top:6px;transition:transform .2s ease;
+  }
+  .issue.open .chev{transform:rotate(180deg);color:#5b6878;}
+  .issue-panel{display:none;border-top:1px solid var(--line-2);padding:0 18px 18px;background:#fcfdfe;}
+  .issue.open .issue-panel{display:block;}
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+  .side{
+    border:1px solid var(--line);border-radius:11px;padding:15px 16px 14px;background:#fff;
+  }
+  .side.ours{border-color:#cfdcef;background:#f8fbff;}
+  .side.theirs{border-color:#e6d6d4;background:#fdfaf9;}
+  .side-h{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+  .side-h .dot{width:8px;height:8px;border-radius:99px;}
+  .side.ours .dot{background:var(--blue);}
+  .side.theirs .dot{background:var(--red);}
+  .side-h .t{font-size:13px;font-weight:700;letter-spacing:-.01em;}
+  .side.ours .t{color:#28518c;}
+  .side.theirs .t{color:var(--red);}
+  .side-h .who{font-size:11.5px;color:var(--slate-l);margin-left:auto;}
+  .side p{margin:0 0 10px;font-size:13.5px;line-height:1.72;color:#33415a;}
+  .side p:last-of-type{margin-bottom:12px;}
+  .ev-label{font-size:11px;color:var(--slate-l);letter-spacing:.03em;margin-bottom:6px;}
+  .ev-tags{display:flex;flex-wrap:wrap;gap:5px;}
+  .ev{
+    font-size:11.5px;padding:3px 8px;border-radius:6px;border:1px solid;line-height:1.5;
+    font-weight:500;white-space:nowrap;
+  }
+  .side.ours .ev{background:#eaf1fb;border-color:#cadcf3;color:#2b5590;}
+  .side.theirs .ev{background:#f7eceb;border-color:#e9d3d1;color:#8f3b35;}
+  .note{
+    margin-top:14px;background:#fff;border:1px solid var(--line);border-left:3px solid var(--amber);
+    border-radius:9px;padding:11px 14px;font-size:13px;color:#4a5568;line-height:1.68;
+  }
+  .note b{color:#8d5c1c;font-weight:700;}
+
+  /* ---------- TABLE ---------- */
+  .tbl-wrap{
+    background:#fff;border:1px solid var(--line);border-radius:var(--card-r);
+    box-shadow:var(--shadow-s);overflow:hidden;
+  }
+  .tbl-scroll{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.3px;}
+  thead th{
+    background:#f4f6f9;text-align:left;font-weight:600;color:#4b5a70;font-size:12px;
+    padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap;letter-spacing:.01em;
+  }
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle;color:#33415a;}
+  tbody tr:last-child td{border-bottom:0;}
+  tbody tr:hover{background:#fafbfd;}
+  td.code{font-weight:700;color:var(--navy);white-space:nowrap;font-size:12.8px;}
+  td.code.eul{color:var(--red);}
+  td.name{min-width:210px;color:#22314a;}
+  td.name span{display:block;font-size:11.5px;color:var(--slate-l);margin-top:1px;}
+  td.dt{white-space:nowrap;color:var(--slate);font-size:12.5px;}
+  td.rel{white-space:nowrap;font-size:12.5px;color:var(--slate);}
+  .tbl-foot{
+    padding:11px 15px;font-size:12px;color:var(--slate-l);background:#fbfcfd;border-top:1px solid var(--line-2);
+    display:flex;flex-wrap:wrap;gap:6px 16px;
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .tl{
+    background:#fff;border:1px solid var(--line);border-radius:var(--card-r);
+    box-shadow:var(--shadow-s);padding:24px 24px 8px;
+  }
+  .tl-list{position:relative;margin:0;padding:0 0 0 30px;list-style:none;}
+  .tl-list::before{
+    content:"";position:absolute;left:9px;top:5px;bottom:16px;width:2px;background:var(--line);
+  }
+  .tl-item{position:relative;padding:0 0 20px;}
+  .tl-item::before{
+    content:"";position:absolute;left:-27px;top:4px;width:20px;height:20px;border-radius:99px;
+    background:#fff;border:2px solid var(--line);box-sizing:border-box;
+  }
+  .tl-item.done::before{
+    background:var(--green);border-color:var(--green);
+  }
+  .tl-item.done::after{
+    content:"";position:absolute;left:-21.5px;top:9.5px;width:8px;height:4.5px;
+    border-left:1.8px solid #fff;border-bottom:1.8px solid #fff;transform:rotate(-45deg);
+  }
+  .tl-item.now::before{background:#fff;border-color:var(--blue);box-shadow:0 0 0 4px rgba(47,93,158,.13);}
+  .tl-item.todo::before{border-style:dashed;border-color:#c9d1dc;}
+  .tl-date{font-size:12px;color:var(--slate-l);letter-spacing:.01em;}
+  .tl-title{font-size:14.5px;font-weight:600;letter-spacing:-.01em;margin-top:1px;}
+  .tl-desc{font-size:13px;color:var(--slate);margin-top:3px;line-height:1.62;}
+  .tl-item.todo .tl-title,.tl-item.todo .tl-date,.tl-item.todo .tl-desc{opacity:.52;}
+  .tl-item .tl-tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;}
+
+  /* ---------- COLLAB ---------- */
+  .collab{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start;}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--card-r);
+    box-shadow:var(--shadow-s);padding:19px 20px;
+  }
+  .card h3{
+    font-size:14px;margin:0 0 14px;font-weight:700;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:7px;
+  }
+  .card h3 .cnt{font-size:11.5px;color:var(--slate-l);font-weight:500;}
+  .member{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid var(--line-2);}
+  .member:last-child{border-bottom:0;padding-bottom:0;}
+  .member .av{
+    width:34px;height:34px;border-radius:99px;background:#f1f4f8;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 auto;
+  }
+  .member .nm{font-size:13.5px;font-weight:600;letter-spacing:-.01em;}
+  .member .rl{font-size:11.5px;color:var(--slate-l);margin-top:1px;}
+  .member .on{margin-left:auto;width:7px;height:7px;border-radius:99px;background:#43a06f;flex:0 0 auto;}
+  .member .off{margin-left:auto;width:7px;height:7px;border-radius:99px;background:#d2d8e0;flex:0 0 auto;}
+
+  .log{display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--line-2);}
+  .log:last-child{border-bottom:0;}
+  .log .av{
+    width:32px;height:32px;border-radius:99px;background:#f1f4f8;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 auto;
+  }
+  .log .lb{flex:1;min-width:0;}
+  .log .lh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .log .who{font-size:13px;font-weight:700;letter-spacing:-.01em;}
+  .log .role{font-size:11px;color:var(--slate-l);}
+  .log .tm{font-size:11.5px;color:var(--slate-l);margin-left:auto;white-space:nowrap;}
+  .log .msg{font-size:13.4px;color:#3a475e;margin-top:3px;line-height:1.7;white-space:pre-wrap;}
+  .log.new{animation:fadeIn .35s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:none;}}
+
+  .form-box{margin-top:16px;border-top:1px solid var(--line);padding-top:16px;}
+  .form-box label{font-size:13px;font-weight:600;display:block;margin-bottom:8px;letter-spacing:-.01em;}
+  .form-box label span{font-weight:400;color:var(--slate-l);font-size:12px;display:block;margin-top:2px;}
+  textarea{
+    width:100%;min-height:82px;resize:vertical;padding:11px 13px;border:1px solid #d8dfe8;
+    border-radius:9px;font-family:inherit;font-size:13.5px;line-height:1.65;color:#26364f;
+    background:#fcfdfe;outline:none;transition:border-color .15s, box-shadow .15s;
+  }
+  textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,93,158,.11);background:#fff;}
+  .form-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap;}
+  button.submit{
+    background:var(--navy);color:#fff;border:0;border-radius:9px;padding:10px 20px;
+    font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;letter-spacing:-.01em;
+    transition:background .15s, transform .08s;
+  }
+  button.submit:hover{background:#28395a;}
+  button.submit:active{transform:translateY(1px);}
+  .hint{font-size:11.5px;color:var(--slate-l);}
+  .hint.ok{color:var(--green);font-weight:600;}
+
+  .chk{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--line-2);cursor:pointer;}
+  .chk:last-child{border-bottom:0;padding-bottom:0;}
+  .chk input{
+    appearance:none;-webkit-appearance:none;width:18px;height:18px;border:1.5px solid #c3ccd8;
+    border-radius:5px;margin:2px 0 0;flex:0 0 auto;cursor:pointer;position:relative;background:#fff;
+    transition:background .13s,border-color .13s;
+  }
+  .chk input:checked{background:var(--blue);border-color:var(--blue);}
+  .chk input:checked::after{
+    content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;
+    border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(42deg);
+  }
+  .chk .ct{display:block;font-size:13.5px;letter-spacing:-.01em;line-height:1.55;}
+  .chk .cd{display:block;font-size:11.5px;color:var(--slate-l);margin-top:2px;line-height:1.5;}
+  .chk.done .ct{text-decoration:line-through;color:var(--slate-l);}
+  .chk.done .cd{text-decoration:line-through;}
+  .chk-bar{margin-top:13px;font-size:12px;color:var(--slate-l);}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin-top:44px;border-top:1px solid var(--line);padding:22px 0 0;
+    font-size:12.5px;color:var(--slate-l);line-height:1.75;
+  }
+  .foot-badge{
+    display:inline-block;background:#fdf4e6;color:#8d5c1c;border:1px solid #f0dcbb;
+    padding:9px 14px;border-radius:9px;font-size:12.5px;font-weight:600;margin-bottom:11px;
+  }
+  footer .fine{max-width:780px;}
+  footer .brand{margin-top:14px;font-size:11.5px;color:#a6aeba;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .stats{grid-template-columns:1fr 1fr;}
+    .collab{grid-template-columns:1fr;}
+    .grid-2{grid-template-columns:1fr;}
+  }
+  @media (max-width:680px){
+    .versus{grid-template-columns:1fr;}
+    h1.case-title{font-size:21px;}
+    .hd-right{align-items:flex-start;width:100%;}
+    .wrap{padding:0 14px 48px;}
+    .topbar-inner{padding:18px 14px 22px;}
+    .tl{padding:18px 16px 4px;}
+    .card{padding:16px;}
+  }
+  @media (max-width:430px){
+    .stats{grid-template-columns:1fr;gap:10px;}
+    .stat .v{font-size:26px;}
+    h1.case-title{font-size:19px;}
+    .phases{display:none;}
+    .issue-head{padding:14px;gap:10px;}
+    .issue-panel{padding:0 14px 14px;}
+    .log .tm{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="firm">
+      <span class="mark">韓</span>
+      <span>법무법인 한결</span>
+      <span class="sep">|</span>
+      <span>사건 전용 협업 페이지</span>
+    </div>
+
+    <div class="hd-main">
+      <div class="hd-left">
+        <h1 class="case-title">옹벽 기울어짐 손해배상 청구 사건</h1>
+        <div class="case-meta">
+          <span>사건번호 <b>2026가합12345</b></span>
+          <span class="divider">·</span>
+          <span>서울중앙지방법원 <b>제14민사부</b></span>
+          <span class="divider">·</span>
+          <span>담당변호사 <b>김정우</b></span>
+          <span class="divider">·</span>
+          <span>의뢰인 <b>박성호</b></span>
+        </div>
+      </div>
+      <div class="hd-right">
+        <div class="dday">
+          <div class="lbl">다음 기일 · 2차 변론기일<b>2026. 08. 19. (수) 14:00</b></div>
+          <div class="badge">D-18</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-block">
+      <div class="progress-top">
+        <span>사건 진행률 · 소 제기 후 <b>147일</b> 경과</span>
+        <span><b>45%</b> 진행</span>
+      </div>
+      <div class="bar"><i style="width:45%"></i></div>
+      <div class="phases">
+        <span class="on">소장 접수</span>
+        <span class="on">답변서</span>
+        <span class="on">1차 변론</span>
+        <span class="on">현장검증 · 감정</span>
+        <span>2차 변론</span>
+        <span>변론종결</span>
+        <span>선고</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ STATS ============ -->
+  <div class="stats">
+    <div class="stat s1">
+      <div class="k">주요 쟁점</div>
+      <div class="v">4<small>건</small></div>
+      <div class="n">우세 1 · 진행중 1 · 불리 1 · 검토 1</div>
+    </div>
+    <div class="stat s2">
+      <div class="k">확보 증거</div>
+      <div class="v">12<small>건</small></div>
+      <div class="n">검토완료 7 · 검토중 3 · 추가필요 2</div>
+    </div>
+    <div class="stat s3">
+      <div class="k">다음 기일까지</div>
+      <div class="v">D-18</div>
+      <div class="n">2026. 08. 19. 2차 변론기일</div>
+    </div>
+    <div class="stat s4">
+      <div class="k">청구금액</div>
+      <div class="v">8,500<small>만원</small></div>
+      <div class="n">보수공사비 6,200 + 위자료 등 2,300</div>
+    </div>
+  </div>
+
+  <!-- ============ 사실관계 요약 ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>사실관계 요약</h2>
+      <span class="sub">담당변호사 정리 · 최종 수정 2026. 07. 28.</span>
+      <span class="rule"></span>
+    </div>
+    <div class="card" style="padding:20px 22px;">
+      <p style="margin:0;font-size:14px;line-height:1.85;color:#33415a;">
+        의뢰인 박성호는 2021년 3월 경기 OO시 소재 단독주택을 신축하여 거주해 왔습니다. 주택 뒤편 경사면에는 신축 당시
+        <b>(주)대성건설</b>이 시공한 높이 3.2m의 콘크리트 옹벽이 설치되어 있습니다. 2025년 하반기부터 주택 뒤편 논
+        (경작자 <b>이순덕</b>)에서 상시 다량의 물이 흘러나와 옹벽 배면 지반이 지속적으로 포화되었고,
+        2026년 3월 집중호우 이후 옹벽이 주택 방향으로 기울어지기 시작했습니다.
+        2026년 6월 현장 실측 결과 <b>최대 기울기 약 7도</b>, 수직 균열 6개소 · 수평 균열 3개소가 확인되었으며,
+        주택 기초에도 균열이 전이되고 있어 붕괴 위험이 제기된 상태입니다.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;">
+        <span class="pill grey">피고1 (주)대성건설 (시공사)</span>
+        <span class="pill grey">피고2 이순덕 (인접 논 경작자)</span>
+        <span class="pill amber">붕괴 위험 · 긴급성 주장 중</span>
+        <span class="pill blue">감정 진행중 (건축구조 · 지반)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 쟁점 ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>주요 쟁점</h2>
+      <span class="sub">카드를 클릭하면 양측 주장과 근거 증거를 비교해 볼 수 있습니다</span>
+      <span class="rule"></span>
+    </div>
+
+    <!-- 쟁점 1 -->
+    <div class="issue" data-issue>
+      <div class="issue-head" data-toggle>
+        <div class="issue-num">①</div>
+        <div class="issue-body-h">
+          <div class="issue-title">옹벽 기울어짐의 원인 규명 — 논에서 유입된 물인가, 시공 부실인가</div>
+          <div class="issue-sub">인과관계 입증이 사건 전체의 승패를 좌우하는 선결 쟁점</div>
+          <div class="issue-tags">
+            <span class="pill blue">감정 진행중</span>
+            <span class="pill grey">담당 김정우 · 최영배 감정인</span>
+            <span class="pill grey">관련 증거 5건</span>
+          </div>
+        </div>
+        <div class="chev">▼</div>
+      </div>
+      <div class="issue-panel">
+        <div class="versus">
+          <div class="side ours">
+            <div class="side-h"><span class="dot"></span><span class="t">우리 주장 (원고)</span><span class="who">박성호 측</span></div>
+            <p>옹벽은 준공 후 4년 6개월간 아무런 변형 없이 유지되어 왔으며, 기울어짐이 시작된 시점은 인접 논의 담수 배출이 상시화된 2025년 하반기 이후입니다. 즉 시간적 선후관계가 명백합니다.</p>
+            <p>지반조사보고서에 따르면 옹벽 배면 성토층의 함수비가 정상치의 2.3배에 달하고, 배면 지하수위가 설계 기준선보다 1.4m 높게 형성되어 있습니다. 이는 자연 강우만으로는 설명되지 않는 수치로, 인접 논에서의 지속적 유입 외에 다른 원인을 상정하기 어렵습니다.</p>
+            <p>불법행위로 인한 손해배상에서 인과관계는 자연과학적 증명이 아니라 경험칙에 비추어 상당한 정도의 개연성이 인정되면 족하다는 것이 대법원 판례의 일관된 취지입니다. 이 사건에서는 그 개연성이 충분히 소명됩니다.</p>
+            <div class="ev-label">근거 증거</div>
+            <div class="ev-tags">
+              <span class="ev">갑 제3호증 옹벽 균열 사진</span>
+              <span class="ev">갑 제5호증 지반조사보고서</span>
+              <span class="ev">갑 제8호증 기상청 강우량 자료</span>
+              <span class="ev">갑 제9호증 현장 동영상</span>
+            </div>
+          </div>
+          <div class="side theirs">
+            <div class="side-h"><span class="dot"></span><span class="t">상대 주장 (피고)</span><span class="who">(주)대성건설 측</span></div>
+            <p>2026년 3월 해당 지역 누적 강우량은 평년 대비 187%에 달하는 이례적 집중호우였으므로, 옹벽 변형은 통상의 예견 범위를 벗어난 자연력에 기인한 것이라고 주장합니다.</p>
+            <p>준공검사확인증 및 시공 당시 감리보고서상 옹벽은 관련 설계기준을 충족하여 시공되었고, 배수공(유공관 및 배수구멍)도 설계도서대로 설치되었다는 입장입니다.</p>
+            <p>나아가 원고가 준공 이후 옹벽 상부에 조경석과 화단을 추가로 설치하여 설계하중을 초과시킨 것이 변형의 직접 원인이라고 다투고 있습니다.</p>
+            <div class="ev-label">근거 증거</div>
+            <div class="ev-tags">
+              <span class="ev">을 제2호증 준공검사확인증</span>
+              <span class="ev">을 제3호증 감리보고서</span>
+              <span class="ev">을 제5호증 조경 시공 사진</span>
+            </div>
+          </div>
+        </div>
+        <div class="note"><b>대응 방향 ·</b> 감정인 최영배에게 (1) 배면 지하수 유입 경로, (2) 상부 추가하중의 기여도 정량 평가, (3) 집중호우 단독 원인 가능성 세 항목을 감정사항으로 특정하여 신청하였습니다. 감정 결과가 8월 12일 제출 예정이며, 이 결과에 따라 쟁점 ②·④의 주장 비중을 조정합니다.</div>
+      </div>
+    </div>
+
+    <!-- 쟁점 2 -->
+    <div class="issue" data-issue>
+      <div class="issue-head" data-toggle>
+        <div class="issue-num">②</div>
+        <div class="issue-body-h">
+          <div class="issue-title">시공사 (주)대성건설에 대한 하자담보책임 청구 가능 여부</div>
+          <div class="issue-sub">민법 제667조 이하 수급인의 하자담보책임 · 배수시설 시공의 적정성</div>
+          <div class="issue-tags">
+            <span class="pill green">우세</span>
+            <span class="pill grey">담당 김정우 · 정한샘</span>
+            <span class="pill grey">관련 증거 4건</span>
+          </div>
+        </div>
+        <div class="chev">▼</div>
+      </div>
+      <div class="issue-panel">
+        <div class="versus">
+          <div class="side ours">
+            <div class="side-h"><span class="dot"></span><span class="t">우리 주장 (원고)</span><span class="who">박성호 측</span></div>
+            <p>옹벽 배면의 배수시설은 설계도서상 유공관 및 필터층이 전 구간에 시공되도록 되어 있으나, 현장검증 결과 실제로는 좌측 12m 구간에만 설치되어 있고 우측 구간에는 배수구멍조차 확인되지 않았습니다.</p>
+            <p>도급계약의 목적물에 하자가 있는 경우 도급인은 민법 제667조에 따라 하자보수 또는 이에 갈음하는 손해배상을 청구할 수 있으며, 이때 하자의 존재만 입증하면 되고 수급인의 고의·과실은 요건이 아닙니다.</p>
+            <p>설령 집중호우가 있었다 하더라도, 배수시설이 설계대로 시공되었다면 배면 수압이 이 정도로 상승하지 않았을 것이므로 하자와 손해 사이의 인과관계도 인정됩니다.</p>
+            <div class="ev-label">근거 증거</div>
+            <div class="ev-tags">
+              <span class="ev">갑 제2호증 도급계약서 및 설계도서</span>
+              <span class="ev">갑 제5호증 지반조사보고서</span>
+              <span class="ev">갑 제10호증 현장검증조서</span>
+              <span class="ev">갑 제11호증 배수구 미시공 사진</span>
+            </div>
+          </div>
+          <div class="side theirs">
+            <div class="side-h"><span class="dot"></span><span class="t">상대 주장 (피고)</span><span class="who">(주)대성건설 측</span></div>
+            <p>배수시설은 현장 여건에 따라 감리자의 승인을 받아 변경 시공한 것으로 설계 변경 절차를 거친 정상 시공이며, 하자가 아니라고 주장합니다.</p>
+            <p>또한 준공검사 및 사용승인이 적법하게 이루어졌으므로 목적물이 계약 내용에 적합하게 완성되었다고 다투고 있습니다.</p>
+            <p>가사 하자가 인정되더라도 하자보수비는 원고 주장액의 30% 수준인 1,900만원을 넘지 않는다는 입장입니다.</p>
+            <div class="ev-label">근거 증거</div>
+            <div class="ev-tags">
+              <span class="ev">을 제2호증 준공검사확인증</span>
+              <span class="ev">을 제3호증 감리보고서</span>
+              <span class="ev">을 제6호증 설계변경 승인서(사본)</span>
+            </div>
+          </div>
+        </div>
+        <div class="note"><b>대응 방향 ·</b> 피고가 제출한 을 제6호증 설계변경 승인서는 원본 미제출 상태이며 감리자 서명 필적에 다툼의 여지가 있어 <b>문서제출명령 및 원본 확인</b>을 신청할 예정입니다. 이 쟁점 자체는 우세하나, 아래 쟁점 ③(소멸시효)이 인정되면 청구가 차단될 수 있어 연동 관리가 필요합니다.</div>
+      </div>
+    </div>
+
+    <!-- 쟁점 3 -->
+    <div class="issue" data-issue>
+      <div class="issue-head" data-toggle>
+        <div class="issue-num">③</div>
+        <div class="issue-body-h">
+          <div class="issue-title">하자담보책임 소멸시효 도과 여부 — 민법 제670조 vs 제671조</div>
+          <div class="issue-sub">완공 후 5년 경과 · 이 사건 최대 쟁점이자 가장 불리한 지점</div>
+          <div class="issue-tags">
+            <span class="pill red">불리 · 최대 쟁점</span>
+            <span class="pill amber">최우선 대응</span>
+            <span class="pill grey">담당 김정우 · 정한샘</span>
+          </div>
+        </div>
+        <div class="chev">▼</div>
+      </div>
+      <div class="issue-panel">
+        <div class="versus">
+          <div class="side ours">
+            <div class="side-h"><span class="dot"></span><span class="t">우리 주장 (원고)</span><span class="who">박성호 측</span></div>
+            <p>민법 제670조의 1년 제척기간은 원칙 규정이나, 제671조 제1항은 토지·건물 기타 공작물의 수급인에 대하여 목적물의 하자에 관한 담보책임 기간을 <b>5년</b>(석조·콘크리트조 등 견고한 구조는 <b>10년</b>)으로 정하고 있습니다.</p>
+            <p>이 사건 옹벽은 철근콘크리트 구조물로서 제671조 제1항 단서의 '석조, 석회조, 연와조, 금속 기타 이와 유사한 재료로 조성된 것'에 해당하므로 담보책임 기간은 <b>10년</b>이며, 준공일(2021. 3. 22.)로부터 5년이 경과했더라도 기간 내 청구입니다.</p>
+            <p>또한 하자로 인하여 목적물이 멸실·훼손된 경우 그 날로부터 1년 내 청구하면 된다는 제671조 제2항에 따라, 균열을 최초 인지한 2026년 3월을 기산점으로 보아도 청구는 적법합니다.</p>
+            <div class="ev-label">근거 증거</div>
+            <div class="ev-tags">
+              <span class="ev">갑 제1호증 부동산등기부등본</span>
+              <span class="ev">갑 제2호증 도급계약서</span>
+              <span class="ev">갑 제3호증 옹벽 균열 사진</span>
+              <span class="ev">갑 제12호증 최초 하자통보 내용증명</span>
+            </div>
+          </div>
+          <div class="side theirs">
+            <div class="side-h"><span class="dot"></span><span class="t">상대 주장 (피고)</span><span class="who">(주)대성건설 측</span></div>
+            <p>옹벽은 주택 본체와 구별되는 부속 구조물로서 제671조 제1항 단서의 '견고한 건물'에 해당하지 않으므로 담보책임 기간은 5년이며, 준공일로부터 5년이 경과하여 이미 도과했다고 주장합니다.</p>
+            <p>나아가 원고가 2024년경부터 옹벽 상부의 미세 균열을 인지하고 있었음에도 아무런 조치를 취하지 않았으므로, 민법 제670조의 1년 기간도 이미 경과했다고 다투고 있습니다.</p>
+            <p>도급계약 특약 제18조에 하자보수 책임기간을 '준공 후 3년'으로 정한 약정이 있음을 들어, 당사자 사이의 합의가 우선한다는 주장도 병행하고 있습니다.</p>
+            <div class="ev-label">근거 증거</div>
+            <div class="ev-tags">
+              <span class="ev">을 제1호증 준공도면 및 사용승인서</span>
+              <span class="ev">을 제4호증 도급계약 특약사항</span>
+              <span class="ev">을 제7호증 2024년 이웃 진술서</span>
+            </div>
+          </div>
+        </div>
+        <div class="note"><b>대응 방향 ·</b> 이 쟁점이 사건의 승패를 가르는 핵심입니다. ① 옹벽의 구조 형식(철근콘크리트)을 감정으로 확정하여 제671조 10년 적용을 관철하고, ② 특약에 의한 담보책임 기간 단축은 수급인이 알고 고지하지 않은 하자에 대해서는 효력이 없다는 민법 제672조의 취지를 원용하며, ③ 예비적으로 쟁점 ④의 불법행위 구성(제750조·제758조)을 별도 청구원인으로 유지합니다. <b>내부 승소 가능성 평가: 45%</b></div>
+      </div>
+    </div>
+
+    <!-- 쟁점 4 -->
+    <div class="issue" data-issue>
+      <div class="issue-head" data-toggle>
+        <div class="issue-num">④</div>
+        <div class="issue-body-h">
+          <div class="issue-title">인접 논 경작자 이순덕에 대한 손해배상 청구 가능성</div>
+          <div class="issue-sub">민법 제758조 공작물책임 / 제750조 불법행위 · 예비적 청구원인</div>
+          <div class="issue-tags">
+            <span class="pill amber">검토필요</span>
+            <span class="pill grey">담당 정한샘 · 이수진</span>
+            <span class="pill grey">관련 증거 3건</span>
+          </div>
+        </div>
+        <div class="chev">▼</div>
+      </div>
+      <div class="issue-panel">
+        <div class="versus">
+          <div class="side ours">
+            <div class="side-h"><span class="dot"></span><span class="t">우리 주장 (원고)</span><span class="who">박성호 측</span></div>
+            <p>이순덕이 관리하는 논의 배수로 및 물꼬는 민법 제758조의 '공작물'에 해당하며, 인접 대지로 물이 상시 유출되도록 방치한 것은 공작물의 설치·보존상 하자에 해당합니다. 공작물책임은 점유자에게 무과실에 가까운 책임을 지우므로 입증 부담이 상대적으로 가볍습니다.</p>
+            <p>예비적으로, 2025년 9월과 11월 두 차례 구두로 배수 문제를 알렸음에도 아무런 조치를 취하지 않은 점에서 민법 제750조의 과실에 의한 불법행위도 성립합니다.</p>
+            <p>토지 소유자는 이웃 토지에 손해를 가하지 않도록 적당한 조처를 할 의무가 있고(민법 제217조 참조), 통상의 용도를 넘어 인접지에 피해를 주는 배수는 수인한도를 초과한다는 것이 대법원 판례의 취지입니다.</p>
+            <div class="ev-label">근거 증거</div>
+            <div class="ev-tags">
+              <span class="ev">갑 제6호증 논 배수로 현황 사진</span>
+              <span class="ev">갑 제7호증 이웃 진술서(3인)</span>
+              <span class="ev">갑 제8호증 기상청 강우량 자료</span>
+            </div>
+          </div>
+          <div class="side theirs">
+            <div class="side-h"><span class="dot"></span><span class="t">상대 주장 (피고)</span><span class="who">이순덕 측</span></div>
+            <p>해당 논은 30년 이상 같은 방식으로 경작되어 온 통상적인 농업 활동이며, 물을 대고 빼는 것은 벼농사의 본질적 행위로서 위법성이 없다고 주장합니다.</p>
+            <p>배수로는 마을 공동 관리 시설로서 자신에게 단독 관리 권한이나 책임이 없으며, 공작물의 점유자에 해당하지 않는다는 입장입니다.</p>
+            <p>또한 옹벽 시공 당시 원고가 배면 배수 대책을 세우지 않은 것이 근본 원인이므로, 설령 책임이 인정되더라도 과실상계로 대폭 감액되어야 한다고 다투고 있습니다.</p>
+            <div class="ev-label">근거 증거</div>
+            <div class="ev-tags">
+              <span class="ev">을 제8호증 농지원부</span>
+              <span class="ev">을 제9호증 마을 이장 확인서</span>
+            </div>
+          </div>
+        </div>
+        <div class="note"><b>대응 방향 ·</b> 배수로의 실질적 점유·관리 주체를 확정하기 위해 <b>OO시청 및 마을회에 대한 사실조회</b>를 신청할 예정입니다(8월 8일 신청 예정). 시공사에 대한 청구가 소멸시효로 차단될 경우 이 쟁점이 주된 청구원인이 되므로, 감정 결과 제출 전까지 증거 보강이 필요합니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 증거 ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>제공받은 증거 목록</h2>
+      <span class="sub">총 12건 · 최종 갱신 2026. 07. 30.</span>
+      <span class="rule"></span>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:96px;">증거번호</th>
+            <th>명칭</th>
+            <th style="width:112px;">제출자</th>
+            <th style="width:104px;">접수일</th>
+            <th style="width:104px;">관련 쟁점</th>
+            <th style="width:96px;">상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="code">갑 제1호증</td>
+            <td class="name">부동산등기부등본<span>토지 및 건물 각 1통</span></td>
+            <td>박성호</td><td class="dt">2026.03.24</td><td class="rel">③</td>
+            <td><span class="pill green">검토완료</span></td>
+          </tr>
+          <tr>
+            <td class="code">갑 제2호증</td>
+            <td class="name">도급계약서 및 설계도서<span>(주)대성건설, 2020.11.05 체결</span></td>
+            <td>박성호</td><td class="dt">2026.03.24</td><td class="rel">②, ③</td>
+            <td><span class="pill green">검토완료</span></td>
+          </tr>
+          <tr>
+            <td class="code">갑 제3호증</td>
+            <td class="name">옹벽 균열 사진 (24매)<span>2026.03.11 촬영 · 기울기 실측 포함</span></td>
+            <td>박성호</td><td class="dt">2026.03.24</td><td class="rel">①, ③</td>
+            <td><span class="pill green">검토완료</span></td>
+          </tr>
+          <tr>
+            <td class="code">갑 제5호증</td>
+            <td class="name">지반조사보고서<span>한국지반조사원, 2026.05.18</span></td>
+            <td>김정우</td><td class="dt">2026.05.20</td><td class="rel">①, ②</td>
+            <td><span class="pill green">검토완료</span></td>
+          </tr>
+          <tr>
+            <td class="code">갑 제6호증</td>
+            <td class="name">인접 논 배수로 현황 사진<span>물꼬 및 유출 지점 12매</span></td>
+            <td>이수진</td><td class="dt">2026.05.27</td><td class="rel">④</td>
+            <td><span class="pill amber">검토중</span></td>
+          </tr>
+          <tr>
+            <td class="code">갑 제7호증</td>
+            <td class="name">이웃 주민 진술서 (3인)<span>배수 상황 목격 진술 · 인감 첨부</span></td>
+            <td>박성호</td><td class="dt">2026.06.03</td><td class="rel">④</td>
+            <td><span class="pill amber">검토중</span></td>
+          </tr>
+          <tr>
+            <td class="code">갑 제8호증</td>
+            <td class="name">기상청 강우량 자료<span>2025.01~2026.04 일별 관측 자료</span></td>
+            <td>이수진</td><td class="dt">2026.06.03</td><td class="rel">①, ④</td>
+            <td><span class="pill green">검토완료</span></td>
+          </tr>
+          <tr>
+            <td class="code">갑 제10호증</td>
+            <td class="name">현장검증조서<span>2026.06.24 법원 현장검증 결과</span></td>
+            <td>법원</td><td class="dt">2026.06.26</td><td class="rel">①, ②</td>
+            <td><span class="pill green">검토완료</span></td>
+          </tr>
+          <tr>
+            <td class="code">갑 제12호증</td>
+            <td class="name">하자통보 내용증명<span>2026.03.30 발송 · 배달증명 첨부</span></td>
+            <td>김정우</td><td class="dt">2026.04.02</td><td class="rel">③</td>
+            <td><span class="pill green">검토완료</span></td>
+          </tr>
+          <tr>
+            <td class="code eul">을 제2호증</td>
+            <td class="name">준공검사확인증<span>2021.03.22 · OO시청 발급</span></td>
+            <td>(주)대성건설</td><td class="dt">2026.04.28</td><td class="rel">①, ②, ③</td>
+            <td><span class="pill amber">검토중</span></td>
+          </tr>
+          <tr>
+            <td class="code eul">을 제6호증</td>
+            <td class="name">설계변경 승인서 (사본)<span>원본 미제출 · 필적 확인 필요</span></td>
+            <td>(주)대성건설</td><td class="dt">2026.07.14</td><td class="rel">②</td>
+            <td><span class="pill red">추가필요</span></td>
+          </tr>
+          <tr>
+            <td class="code">감정신청서</td>
+            <td class="name">건축구조 · 지반 감정신청서<span>감정인 최영배 지정 · 결과 8월 제출 예정</span></td>
+            <td>김정우</td><td class="dt">2026.07.02</td><td class="rel">①, ②, ③</td>
+            <td><span class="pill red">추가필요</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="tbl-foot">
+        <span>갑 = 원고 제출 증거 · 을 = 피고 제출 증거</span>
+        <span>· 추가필요 2건은 8월 12일까지 확보 목표</span>
+        <span>· 문의: 사무장 이수진 (내선 214)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 타임라인 ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>진행 일정</h2>
+      <span class="sub">2026년 · 완료 5건 · 예정 4건</span>
+      <span class="rule"></span>
+    </div>
+    <div class="tl">
+      <ul class="tl-list">
+        <li class="tl-item done">
+          <div class="tl-date">2026. 03. 06. (금)</div>
+          <div class="tl-title">소장 접수</div>
+          <div class="tl-desc">서울중앙지방법원 제14민사부 배당. 피고 (주)대성건설, 이순덕 2인에 대한 손해배상 청구.</div>
+          <div class="tl-tags"><span class="pill green">완료</span><span class="pill grey">청구금액 8,500만원</span></div>
+        </li>
+        <li class="tl-item done">
+          <div class="tl-date">2026. 04. 28. (화)</div>
+          <div class="tl-title">피고 답변서 수령</div>
+          <div class="tl-desc">시공사는 소멸시효 도과 및 집중호우 불가항력을, 경작자는 통상적 농업 활동임을 각 주장.</div>
+          <div class="tl-tags"><span class="pill green">완료</span><span class="pill red">소멸시효 항변 제기</span></div>
+        </li>
+        <li class="tl-item done">
+          <div class="tl-date">2026. 05. 21. (목) 14:00</div>
+          <div class="tl-title">1차 변론기일</div>
+          <div class="tl-desc">쟁점 정리 및 현장검증·감정 신청. 재판부가 소멸시효 쟁점에 대한 보충 주장을 요청.</div>
+          <div class="tl-tags"><span class="pill green">완료</span><span class="pill grey">준비서면 1차 제출</span></div>
+        </li>
+        <li class="tl-item done">
+          <div class="tl-date">2026. 06. 24. (수) 10:00</div>
+          <div class="tl-title">현장검증 실시</div>
+          <div class="tl-desc">재판부·양측 대리인 참여. 옹벽 우측 구간 배수구 미시공 사실이 조서에 기재됨.</div>
+          <div class="tl-tags"><span class="pill green">완료</span><span class="pill blue">유리한 조서 확보</span></div>
+        </li>
+        <li class="tl-item done">
+          <div class="tl-date">2026. 07. 02. (목)</div>
+          <div class="tl-title">감정인 지정</div>
+          <div class="tl-desc">건축구조기술사 최영배 감정인으로 지정. 감정료 480만원 예납 완료.</div>
+          <div class="tl-tags"><span class="pill green">완료</span><span class="pill grey">감정료 예납</span></div>
+        </li>
+        <li class="tl-item now">
+          <div class="tl-date">2026. 08. 08. (토) 예정</div>
+          <div class="tl-title">사실조회 신청 (OO시청 · 마을회)</div>
+          <div class="tl-desc">인접 논 배수로의 관리 주체 및 설치 경위 확인. 쟁점 ④ 보강 목적.</div>
+          <div class="tl-tags"><span class="pill blue">준비중</span><span class="pill grey">담당 정한샘</span></div>
+        </li>
+        <li class="tl-item todo">
+          <div class="tl-date">2026. 08. 12. (수) 예정</div>
+          <div class="tl-title">감정 결과 제출 예정</div>
+          <div class="tl-desc">기울어짐 원인, 상부 하중 기여도, 옹벽 구조 형식 3개 항목에 대한 감정 회신 예정.</div>
+          <div class="tl-tags"><span class="pill grey">예정</span></div>
+        </li>
+        <li class="tl-item todo">
+          <div class="tl-date">2026. 08. 19. (수) 14:00</div>
+          <div class="tl-title">2차 변론기일</div>
+          <div class="tl-desc">감정 결과에 대한 양측 의견 진술 및 준비서면 2차 제출. 의뢰인 출석 권장.</div>
+          <div class="tl-tags"><span class="pill amber">D-18</span><span class="pill grey">의뢰인 출석 권장</span></div>
+        </li>
+        <li class="tl-item todo">
+          <div class="tl-date">2026. 09. 중 예상</div>
+          <div class="tl-title">변론종결 및 조정 회부 가능성</div>
+          <div class="tl-desc">감정 결과가 유리할 경우 조정을 통한 조기 해결도 함께 검토 예정.</div>
+          <div class="tl-tags"><span class="pill grey">예정</span></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 협업 ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>협업 · 커뮤니케이션</h2>
+      <span class="sub">이 페이지에 남기는 내용은 담당 변호사와 사무장에게 함께 전달됩니다</span>
+      <span class="rule"></span>
+    </div>
+
+    <div class="collab">
+      <!-- 참여자 -->
+      <div class="card">
+        <h3>참여자 <span class="cnt">5명</span></h3>
+        <div class="member"><div class="av">⚖️</div><div><div class="nm">김정우</div><div class="rl">담당변호사 · 법무법인 한결</div></div><span class="on"></span></div>
+        <div class="member"><div class="av">🏠</div><div><div class="nm">박성호</div><div class="rl">의뢰인 · 주택 소유자</div></div><span class="on"></span></div>
+        <div class="member"><div class="av">📁</div><div><div class="nm">이수진</div><div class="rl">사무장 · 증거 정리 담당</div></div><span class="on"></span></div>
+        <div class="member"><div class="av">📐</div><div><div class="nm">최영배</div><div class="rl">건축 감정인 · 구조기술사</div></div><span class="off"></span></div>
+        <div class="member"><div class="av">📚</div><div><div class="nm">정한샘</div><div class="rl">협력 변호사 · 시효·공작물책임</div></div><span class="off"></span></div>
+
+        <div style="margin-top:18px;border-top:1px solid var(--line);padding-top:15px;">
+          <h3 style="margin-bottom:10px;">의뢰인 준비 항목 <span class="cnt" id="chkCnt">0/4</span></h3>
+          <label class="chk">
+            <input type="checkbox" data-chk>
+            <span><span class="ct">2024년 이전 옹벽 사진 찾기</span><span class="cd">휴대폰·카카오톡 사진첩 확인 (시효 쟁점 핵심)</span></span>
+          </label>
+          <label class="chk">
+            <input type="checkbox" data-chk>
+            <span><span class="ct">이순덕 씨와 나눈 대화 기록</span><span class="cd">문자·통화 목록 캡처 (2025년 9월·11월)</span></span>
+          </label>
+          <label class="chk">
+            <input type="checkbox" data-chk>
+            <span><span class="ct">옹벽 상부 조경 공사 자료</span><span class="cd">시공 업체·견적서·시기 확인</span></span>
+          </label>
+          <label class="chk">
+            <input type="checkbox" data-chk>
+            <span><span class="ct">8월 19일 변론기일 출석 확인</span><span class="cd">서울중앙지법 서관 456호 · 13:40 로비 집결</span></span>
+          </label>
+          <div class="chk-bar" id="chkBar">항목을 클릭하면 완료 처리됩니다.</div>
+        </div>
+      </div>
+
+      <!-- 로그 -->
+      <div class="card">
+        <h3>최근 커뮤니케이션 <span class="cnt" id="logCnt">5건</span></h3>
+        <div id="logList">
+          <div class="log">
+            <div class="av">⚖️</div>
+            <div class="lb">
+              <div class="lh"><span class="who">김정우</span><span class="role">담당변호사</span><span class="tm">2026.07.30 17:42</span></div>
+              <div class="msg">감정인 최영배 기술사와 어제 현장 동행했습니다. 옹벽 배면 함수비가 예상보다 높게 나와 인과관계 주장에 유리합니다. 감정서는 8월 12일 제출 예정이고, 도착하는 대로 이 페이지에 요약해 올리겠습니다.</div>
+            </div>
+          </div>
+          <div class="log">
+            <div class="av">🏠</div>
+            <div class="lb">
+              <div class="lh"><span class="who">박성호</span><span class="role">의뢰인</span><span class="tm">2026.07.29 21:15</span></div>
+              <div class="msg">변호사님, 창고 정리하다가 2023년 여름에 찍은 사진이 나왔습니다. 그때는 옹벽에 균열이 전혀 없었는데 이게 도움이 될까요? 파일로 보내드리겠습니다.</div>
+            </div>
+          </div>
+          <div class="log">
+            <div class="av">📁</div>
+            <div class="lb">
+              <div class="lh"><span class="who">이수진</span><span class="role">사무장</span><span class="tm">2026.07.28 11:03</span></div>
+              <div class="msg">피고 측이 제출한 을 제6호증(설계변경 승인서)은 사본만 접수되어 있습니다. 원본 제출을 요구하는 문서제출명령 신청서 초안 올려두었습니다. 검토 부탁드립니다.</div>
+            </div>
+          </div>
+          <div class="log">
+            <div class="av">📚</div>
+            <div class="lb">
+              <div class="lh"><span class="who">정한샘</span><span class="role">협력변호사</span><span class="tm">2026.07.25 15:20</span></div>
+              <div class="msg">민법 제671조 적용 관련 검토의견 정리했습니다. 옹벽을 철근콘크리트 구조로 확정할 수 있다면 10년 기간 주장이 충분히 가능합니다. 감정사항에 '구조 형식 확인'을 명시적으로 포함시키는 것이 중요합니다.</div>
+            </div>
+          </div>
+          <div class="log">
+            <div class="av">📐</div>
+            <div class="lb">
+              <div class="lh"><span class="who">최영배</span><span class="role">감정인</span><span class="tm">2026.07.21 09:48</span></div>
+              <div class="msg">8월 5일 오전에 2차 현장 실측 예정입니다. 옹벽 배면 시추 2공 추가로 진행하겠습니다. 의뢰인분 입회가 가능하시면 좋겠습니다.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-box">
+          <label for="memoInput">추가로 기억나는 사실이나 자료가 있으면 남겨주세요
+            <span>사소해 보이는 내용도 사건에 중요한 단서가 될 수 있습니다. 남겨주시면 담당 변호사가 확인합니다.</span>
+          </label>
+          <textarea id="memoInput" placeholder="예) 2025년 가을에 논 주인분이 물꼬를 크게 튼 걸 본 적이 있습니다."></textarea>
+          <div class="form-row">
+            <button class="submit" id="memoBtn" type="button">등록하기</button>
+            <span class="hint" id="memoHint">작성자: 박성호 (의뢰인)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="foot-badge">⚠️ 이 페이지는 KAIST I&amp;TM AI 부트캠프 예시용으로 만든 가상의 사건입니다.</div>
+    <div class="fine">
+      사건번호, 당사자, 사실관계, 증거자료, 진행 일정 등 이 페이지에 등장하는 모든 내용은 교육 목적으로 창작된 것이며 실제 사건이나 실존 인물·법인과 무관합니다.
+      여기에 기재된 법률 논리와 조문 해석은 <b>실제 법률 자문이 아니며</b>, 어떠한 법적 효력이나 책임의 근거가 되지 않습니다.
+      실제 법률 문제는 반드시 자격을 갖춘 변호사와 상담하시기 바랍니다.
+      입력한 내용은 브라우저 메모리에만 임시로 저장되며 새로고침하면 사라집니다.
+    </div>
+    <div class="brand">KAIST I&amp;TM 에이전틱 AI 부트캠프 · 예시 산출물 · 법무법인 한결(가상)</div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 1. 쟁점 아코디언 ---------- */
+  var heads = document.querySelectorAll('[data-toggle]');
+  for (var i = 0; i < heads.length; i++) {
+    (function (head) {
+      head.addEventListener('click', function () {
+        var card = head.parentNode;
+        card.classList.toggle('open');
+      });
+    })(heads[i]);
+  }
+  // 첫 번째 쟁점은 기본으로 펼쳐 둔다
+  var firstIssue = document.querySelector('[data-issue]');
+  if (firstIssue) { firstIssue.classList.add('open'); }
+
+  /* ---------- 2. 커뮤니케이션 로그 (메모리 전용) ---------- */
+  var logList = document.getElementById('logList');
+  var logCnt  = document.getElementById('logCnt');
+  var input   = document.getElementById('memoInput');
+  var btn     = document.getElementById('memoBtn');
+  var hint    = document.getElementById('memoHint');
+
+  var logCount = logList ? logList.getElementsByClassName('log').length : 0;
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function nowLabel() {
+    var d = new Date();
+    return d.getFullYear() + '.' + pad(d.getMonth() + 1) + '.' + pad(d.getDate()) +
+           ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+
+  function addLog(text) {
+    var wrap = document.createElement('div');
+    wrap.className = 'log new';
+
+    var av = document.createElement('div');
+    av.className = 'av';
+    av.textContent = '🏠';
+
+    var lb = document.createElement('div');
+    lb.className = 'lb';
+
+    var lh = document.createElement('div');
+    lh.className = 'lh';
+
+    var who = document.createElement('span');
+    who.className = 'who';
+    who.textContent = '박성호';
+
+    var role = document.createElement('span');
+    role.className = 'role';
+    role.textContent = '의뢰인';
+
+    var tm = document.createElement('span');
+    tm.className = 'tm';
+    tm.textContent = nowLabel();
+
+    lh.appendChild(who);
+    lh.appendChild(role);
+    lh.appendChild(tm);
+
+    var msg = document.createElement('div');
+    msg.className = 'msg';
+    msg.textContent = text;
+
+    lb.appendChild(lh);
+    lb.appendChild(msg);
+    wrap.appendChild(av);
+    wrap.appendChild(lb);
+
+    logList.insertBefore(wrap, logList.firstChild);
+
+    logCount = logCount + 1;
+    if (logCnt) { logCnt.textContent = logCount + '건'; }
+  }
+
+  if (btn) {
+    btn.addEventListener('click', function () {
+      var text = input.value.replace(/^\s+|\s+$/g, '');
+      if (!text) {
+        hint.textContent = '내용을 입력한 뒤 등록해 주세요.';
+        hint.className = 'hint';
+        input.focus();
+        return;
+      }
+      addLog(text);
+      input.value = '';
+      hint.textContent = '✓ 등록되었습니다. 담당 변호사에게 전달됩니다.';
+      hint.className = 'hint ok';
+    });
+  }
+
+  if (input) {
+    input.addEventListener('input', function () {
+      if (hint.className.indexOf('ok') !== -1) {
+        hint.textContent = '작성자: 박성호 (의뢰인)';
+        hint.className = 'hint';
+      }
+    });
+  }
+
+  /* ---------- 3. 체크리스트 ---------- */
+  var boxes = document.querySelectorAll('[data-chk]');
+  var chkCnt = document.getElementById('chkCnt');
+  var chkBar = document.getElementById('chkBar');
+
+  function refreshChk() {
+    var done = 0;
+    for (var j = 0; j < boxes.length; j++) {
+      if (boxes[j].checked) { done++; }
+    }
+    if (chkCnt) { chkCnt.textContent = done + '/' + boxes.length; }
+    if (chkBar) {
+      chkBar.textContent = (done === boxes.length && boxes.length > 0)
+        ? '✓ 준비 항목을 모두 완료하셨습니다. 감사합니다!'
+        : '항목을 클릭하면 완료 처리됩니다. (' + (boxes.length - done) + '건 남음)';
+    }
+  }
+
+  for (var k = 0; k < boxes.length; k++) {
+    (function (box) {
+      box.addEventListener('change', function () {
+        var label = box.parentNode;
+        if (box.checked) { label.classList.add('done'); }
+        else { label.classList.remove('done'); }
+        refreshChk();
+      });
+    })(boxes[k]);
+  }
+  refreshChk();
+})();
+</script>
+</body>
+</html>

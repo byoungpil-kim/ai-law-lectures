@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>3강 실습 (1) GitHub 기초, 웹 스크래핑과 데이터 분석 — 인공지능 경영과 법 (ITM.690)</title>
+<title>3강 실습 (1) GitHub 기초, 웹 스크래핑과 데이터 분석 · 인공지능 경영과 법 (ITM.690)</title>
 <meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 3강 실습: 에이전틱 AI, Cowork·Claude Code 설치, GitHub Pages 배포, 웹앱, 크롤링의 경계, Cowork 웹 스크래핑과 탐색적 분석, 판결문 지도" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -524,6 +524,11 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 
 /* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
 @page{size:320mm 180mm;margin:0;}
+.step.link{text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;}
+.step.link:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--brand);}
+.step.link .ttl::after{content:" ↗";color:var(--brand);font-size:13px;}
+.step .pp{font-size:12.5px;color:var(--brand-dark);background:var(--sky-light);border-radius:8px;padding:6px 10px;margin-top:auto;line-height:1.5;}
+.step .bul{margin:0;}
 @media print{
   html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .topbar,.sidebar,.pager{display:none!important;}
@@ -582,7 +587,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   <div class="cover-body">
     <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 3강 · 실습 (1)</span>
     <h1>GitHub 기초, <em>웹 스크래핑과 데이터 분석</em></h1>
-    <p class="lead">코드를 쓰지 않고 AI에게 정확히 요청하는 법을 익힌다. 개인 사이트를 만들어 GitHub Pages로 공개하고, Cowork로 공개 웹 데이터를 수집해 탐색적 분석과 판결문 지도까지 그린다.</p>
+    <p class="lead">코드를 쓰지 않고 AI에게 정확히 요청하는 법을 익힌다. 개인 사이트를 만들어 GitHub Pages로 공개하고, Cowork로 공개 웹 데이터를 수집해 탐색적 분석, 임베딩, 판결문 지도, 스킬, 논문 계보도까지 만든다.</p>
     <div class="meta">
       <span class="meta-chip">2026. 9. 17.</span>
       <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
@@ -597,13 +602,13 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   <h2>오늘 준비물과 진행 순서</h2>
   <div class="body">
     <div class="steps" style="grid-template-columns:repeat(4,1fr)">
-      <div class="step"><span class="no">1</span><b class="ttl">Claude 계정 (Pro 이상)</b><p class="prob">claude.ai 로그인. 데스크톱 앱과 크롬 확장은 §2에서 설치</p></div>
-      <div class="step"><span class="no">2</span><b class="ttl">GitHub 계정</b><p class="prob">없으면 §3에서 만든다. 아이디가 곧 사이트 주소가 되니 미리 생각해 둘 것</p></div>
-      <div class="step"><span class="no">3</span><b class="ttl">작업 폴더</b><p class="prob">Windows는 <code>C:\claude</code>, macOS는 <code>~/claude</code>. 한글·공백 없는 짧은 경로</p></div>
-      <div class="step"><span class="no">4</span><b class="ttl">이 페이지</b><p class="prob">프롬프트마다 “복사” 버튼이 있다. 붙여 넣고, 결과를 보고, 말로 고쳐 달라고 한다</p></div>
+      <div class="step"><span class="no">1</span><b class="ttl">Claude 계정 (Pro 이상)</b><p class="prob">claude.ai 로그인. 데스크톱 앱과 크롬 확장은 §2에서 설치함. ChatGPT Codex를 사용하여도 무방함</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">GitHub 계정</b><p class="prob">없으면 §3에서 만듦. 아이디가 곧 사이트 주소가 되므로 미리 생각해 둘 것</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">작업 폴더</b><p class="prob">Windows는 <code>C:\claude</code>, macOS는 <code>~/claude</code>. 한글·공백 없는 짧은 경로로 만들 것</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">OpenRouter 계정</b><p class="prob">§8 임베딩 추출에 필요함. openrouter.ai 가입과 $5 충전까지 미리 해 두면 좋음</p></div>
     </div>
-    <div class="callout">오늘의 원칙 — 코드를 직접 쓰는 것이 목표가 아니다. <b>원하는 결과를 짧게 말하고, 결과를 보고, 고쳐 달라고 다시 말하는 것</b>이 전부다. 처음부터 긴 지시문을 쓰지 않는다 — 한두 문장으로 시작해서 피드백을 주고받으며 구체화한다. 이 흐름은 개인 사이트 만들기에서도, 판결문 수백 건 수집에서도 같다.</div>
-    <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프</a> 1주차(웹앱 만들고 배포하기)·2주차(데이터 수집과 임베딩 분석). 임베딩 추출은 2강에서 다뤘으므로 오늘은 건너뛴다.</p>
+    <div class="callout">오늘의 원칙: 코드를 직접 쓰는 것이 목표가 아님. <b>원하는 결과를 짧게 말하고, 결과를 보고, 고쳐 달라고 다시 말하는 것</b>이 전부임. 처음부터 긴 지시문을 쓰지 않음. 한두 문장으로 시작해 피드백을 주고받으며 구체화함. 이 흐름은 개인 사이트 만들기에서도, 판결문 수백 건 수집에서도 같음.</div>
+    <p class="muted">이 페이지의 프롬프트마다 “복사” 버튼이 있음. 원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프</a> 1주차(웹앱 만들고 배포하기)·2주차(데이터 수집과 임베딩 분석).</p>
   </div>
 </section>
 
@@ -611,7 +616,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 <section class="slide section" data-sec="1" data-title="에이전틱 AI 한눈에">
   <div class="kicker">Section 1</div>
   <h2>에이전틱 AI 한눈에</h2>
-  <p class="section-lead">오늘 쓸 Cowork와 Claude Code는 대화 상대가 아니라 “도구를 실행하는” 에이전트다. 2강의 언어모델이 어떻게 스스로 움직이게 되는지 세 장으로 본다.</p>
+  <p class="section-lead">오늘 쓸 Cowork와 Claude Code는 대화 상대가 아니라 도구를 실행하는 에이전트다. 2강의 언어모델이 어떻게 스스로 움직이게 되는지 세 장으로 본다.</p>
   <div class="body">
     <ol class="roadmap" data-current="1"></ol>
   </div>
@@ -619,18 +624,18 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 
 <section class="slide" data-sec="1" data-title="복잡한 계산은 계산기에게 시킨다">
   <div class="kicker">에이전틱 AI 한눈에</div>
-  <h2>복잡한 계산은 계산기에게 시킨다 — 엔진과 하네스</h2>
+  <h2>복잡한 계산은 계산기에게 시킨다: 엔진과 하네스</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1fr 1fr;align-items:center">
       <ul class="bul compact">
         <li>언어모델(2강)은 큰 자릿수 곱셈이나 복리 계산을 암산하면 자주 틀린다</li>
         <li>그래서 모델에게 “이 수식을 계산기로 실행해 줘”라는 <b>신호를 텍스트로 출력하는 능력</b>을 주었다</li>
         <li>모델(엔진)은 텍스트만 생성할 뿐 아무것도 실행하지 못한다. 엔진을 감싼 <b>하네스(harness)</b>가 출력을 지켜보다가 도구 호출 신호를 감지하면, 알맞은 도구를 밖에서 실행하고 결과를 다시 엔진의 대화 기록에 넣어 준다</li>
-        <li>웹 검색도 같다 — 검색은 엔진이 아니라 하네스가 수행하고, 검색 결과 페이지가 통째로 대화 기록에 붙는다</li>
+        <li>웹 검색도 같다. 검색은 엔진이 아니라 하네스가 수행하고, 검색 결과 페이지가 통째로 대화 기록에 붙는다</li>
       </ul>
       <div class="harness">
         <div class="hbox"><div class="hlabel">실행기 (하네스)</div>
-          <div class="engine">🧠 LLM 엔진<small>텍스트만 생성 — 계산·검색 능력 없음</small></div>
+          <div class="engine">🧠 LLM 엔진<small>텍스트만 생성. 계산·검색 능력 없음</small></div>
           <div class="harr">⇅ 도구 실행 요청 ↓ · 결과 반환 ↑</div>
           <div class="tools"><span>🧮 계산기</span><span>🌐 웹 검색</span><span>📁 파일 읽기·쓰기</span><span>🖥️ 프로그램 실행</span></div>
         </div>
@@ -641,12 +646,12 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 
 <section class="slide" data-sec="1" data-title="도구를 쓸수록 기억이 쌓인다">
   <div class="kicker">에이전틱 AI 한눈에</div>
-  <h2>도구를 쓸수록 “기억”이 쌓인다 — 컨텍스트 윈도우</h2>
+  <h2>도구를 쓸수록 “기억”이 쌓인다: 컨텍스트 윈도우</h2>
   <div class="body">
     <ul class="bul compact">
       <li>검색 결과나 계산 결과, 읽어 온 파일 내용은 요약 없이 <b>대화 기록(컨텍스트)에 그대로 붙는다</b></li>
       <li>초기 모델은 이 공간이 A4 몇 장 수준이었지만, 지금은 책 여러 권 분량까지 한 번에 참조한다</li>
-      <li>그래서 Cowork에게 “판결문 300건을 읽고 정리해 줘”가 가능하다 — 대신 컨텍스트가 커질수록 느려지고 비용이 든다</li>
+      <li>그래서 Cowork에게 “판결문 300건을 읽고 정리해 줘”가 가능하다. 대신 컨텍스트가 커질수록 느려지고 비용이 든다</li>
     </ul>
     <div class="ctxbar" aria-label="세대별 컨텍스트 길이(로그 스케일)">
       <div><span style="height:12%"></span><b>2020</b><small>~2K 토큰</small></div>
@@ -677,7 +682,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
     <ul class="bul compact">
       <li>모델이 다음 단어를 예측하며 응답을 만드는 동안, 그 안에서 <b>어떤 도구를 어떤 순서로 쓸지 계획</b>을 세운다</li>
       <li>도구 결과가 컨텍스트에 쌓이면 모델이 검토한다. 충분하면 답변으로 마무리하고, 부족하면 계획 단계로 돌아가 도구를 다시 쓴다</li>
-      <li>단어 예측 · 계획 · 도구 실행 · 컨텍스트 누적 · 검토 — 이 다섯 가지가 계속 맞물려 도는 것이 에이전틱 AI다. 오늘 Cowork에게 요청할 때도 이 루프가 그대로 돈다</li>
+      <li>단어 예측 · 계획 · 도구 실행 · 컨텍스트 누적 · 검토. 이 다섯 가지가 계속 맞물려 도는 것이 에이전틱 AI다. 오늘 Cowork에게 요청할 때도 이 루프가 그대로 돈다</li>
     </ul>
     <p class="muted">모델이 답하기 전에 “생각”하는 추론 모델의 원리는 후속 강의에서 다룬다.</p>
   </div>
@@ -695,19 +700,20 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 
 <section class="slide" data-sec="2" data-title="Chat · Cowork · Claude Code">
   <div class="kicker">세 개의 작업대와 설치</div>
-  <h2>같은 Claude, 세 개의 작업대 — Chat · Cowork · Claude Code</h2>
+  <h2>같은 Claude, 세 개의 작업대: Chat · Cowork · Claude Code</h2>
   <div class="body">
     <table class="tbl cmp">
       <thead><tr><th></th><th>Claude Chat<small>브라우저 claude.ai</small></th><th>Cowork<small>데스크톱 앱 · 오늘의 주력</small></th><th>Claude Code<small>데스크톱 앱 · 내 PC에서 실행</small></th></tr></thead>
       <tbody>
         <tr><th>AI가 일하는 곳</th><td>대화창</td><td>클라우드 컨테이너 (자체 파일시스템·파이썬·인터넷)</td><td>내 PC</td></tr>
         <tr><th>내 파일 접근</th><td>업로드한 파일만</td><td>연동 폴더 읽기/쓰기</td><td>폴더 직접 읽기/쓰기/실행</td></tr>
-        <tr><th>프로그램 실행</th><td>—</td><td>클라우드에서 실행</td><td>내 PC에서 실행 (서버 가동)</td></tr>
+        <tr><th>프로그램 실행</th><td>없음</td><td>클라우드에서 실행</td><td>내 PC에서 실행 (서버 가동)</td></tr>
         <tr><th>어울리는 작업</th><td>질문·초안·요약, 분 단위 왕복</td><td>수집·분석·문서 파이프라인, 시간 단위 자율 작업</td><td>백엔드·자동화, 세션 단위 개발</td></tr>
         <tr><th>한계</th><td>내 파일시스템·장시간 작업 접근 불가</td><td>내 PC에서 프로그램을 “실행”하지는 못함</td><td>내 PC를 직접 건드리는 만큼 사고의 대가도 내 쪽</td></tr>
       </tbody>
     </table>
     <p class="em center">Chat은 묻는 곳, Cowork는 맡기는 곳, Code는 (내 컴퓨터에서) 돌리는 곳</p>
+    <p class="muted">ChatGPT 쪽도 대응물이 있다. Chat ↔ ChatGPT, Cowork/Code ↔ Codex. 어느 쪽을 써도 오늘 실습은 그대로 진행할 수 있다.</p>
   </div>
 </section>
 
@@ -716,17 +722,17 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   <h2>오늘은 무엇을 어디서 하나</h2>
   <div class="body">
     <div class="steps">
-      <div class="step"><span class="no">§3</span><b class="ttl">개인 사이트 만들기 — Chat 또는 Cowork</b><p class="prob">index.html 파일 하나를 받아 GitHub에 직접 업로드한다. 보너스로 Claude Code가 커밋·푸시까지 대신하는 방법을 본다</p></div>
-      <div class="step"><span class="no">§4</span><b class="ttl">웹앱 만들기 — Chat 또는 Cowork</b><p class="prob">HTML 안에 프로그램(계산·그래프)을 넣은 금융 플래너. 파일 하나로 끝나므로 서버가 필요 없다</p></div>
-      <div class="step"><span class="no">§6·7</span><b class="ttl">웹 스크래핑과 분석 — Cowork</b><p class="prob">수백 건을 수집해 파일로 쌓고, 시간 단위로 도는 자율 작업. 결과는 연동한 내 PC 폴더에 CSV·텍스트로 남는다</p></div>
+      <div class="step"><span class="no">§3</span><b class="ttl">개인 사이트 만들기: Chat 또는 Cowork</b><p class="prob">index.html 파일 하나를 받아 GitHub에 직접 업로드한다</p></div>
+      <div class="step"><span class="no">§4</span><b class="ttl">웹앱 만들기: Chat 또는 Cowork</b><p class="prob">HTML 안에 프로그램(계산·그래프)을 넣은 금융 플래너. 파일 하나로 끝나므로 서버가 필요 없다</p></div>
+      <div class="step"><span class="no">§6~11</span><b class="ttl">웹 스크래핑과 분석: Cowork</b><p class="prob">수백 건을 수집해 파일로 쌓고, 시간 단위로 도는 자율 작업. 결과는 연동한 내 PC 폴더에 CSV·텍스트·JSON으로 남는다</p></div>
     </div>
-    <div class="callout bad"><b>설치 전에 알아둘 것 — 손발을 주는 일에는 위험이 따른다.</b> 지금부터 설치할 도구는 내 파일을 읽고, 쓰고, 지우고, 인터넷으로 보낼 수 있다. 파일 파괴, 데이터 유출, 프롬프트 인젝션(수집한 웹페이지 속에 숨은 지시문을 AI가 명령으로 착각하는 공격) 같은 위험이 따라온다. 두 가지 습관: ① 모든 작업은 <b>전용 폴더 하나 안에서만</b> — 사고가 나도 피해가 그 폴더를 넘지 않는다. ② 실행 승인 요청은 <b>반드시 읽고</b> 누른다.</div>
+    <div class="callout bad"><b>설치 전에 알아둘 것: 손발을 주는 일에는 위험이 따른다.</b> 지금부터 설치할 도구는 내 파일을 읽고, 쓰고, 지우고, 인터넷으로 보낼 수 있다. 파일 파괴, 데이터 유출, 프롬프트 인젝션(수집한 웹페이지 속에 숨은 지시문을 AI가 명령으로 착각하는 공격) 같은 위험이 따라온다. 두 가지 습관: ① 모든 작업은 <b>전용 폴더 하나 안에서만</b>. 사고가 나도 피해가 그 폴더를 넘지 않는다. ② 실행 승인 요청은 <b>반드시 읽고</b> 누른다.</div>
   </div>
 </section>
 
 <section class="slide" data-sec="2" data-title="설치 ① 데스크톱 앱과 폴더 연동">
   <div class="kicker">세 개의 작업대와 설치</div>
-  <h2>설치 ① — Claude 데스크톱 앱 + 작업 폴더 연동 + 크롬 확장</h2>
+  <h2>설치 ①: Claude 데스크톱 앱 + 작업 폴더 연동 + 크롬 확장</h2>
   <div class="body">
     <div class="steps" style="grid-template-columns:repeat(4,1fr)">
       <div class="step"><span class="no">1</span><b class="ttl">데스크톱 앱 설치</b><p class="prob"><a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a>에서 Windows / macOS 설치 파일을 받아 실행하고, 쓰던 계정으로 로그인</p></div>
@@ -734,24 +740,24 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
       <div class="step"><span class="no">3</span><b class="ttl">Cowork에 폴더 연동</b><p class="prob">앱에서 Cowork를 열고 이 폴더를 연동. Cowork가 클라우드에서 만든 파일이 이 폴더로 내려온다</p></div>
       <div class="step"><span class="no">4</span><b class="ttl">Claude in Chrome 설치</b><p class="prob"><a href="https://claude.ai/chrome" target="_blank" rel="noopener">claude.ai/chrome</a>의 링크로 크롬 확장을 설치. 스크롤·클릭해야 내용이 나오는 동적 사이트 수집용 (§5)</p></div>
     </div>
-    <p style="font-weight:700">연동 확인 — 파일이 정말 내 PC에 떨어지는지</p>
+    <p style="font-weight:700">연동 확인: 파일이 정말 내 PC에 떨어지는지</p>
     <pre class="prompt"><button class="copy" type="button">복사</button>연동한 폴더에 test.csv 예시 파일 하나 만들어줘.</pre>
-    <p class="muted">탐색기(또는 Finder)에서 그 폴더를 열어 test.csv가 보이면 준비 완료. 1주차 방식(claude.ai에서 결과물을 하나씩 내려받기)과 갈리는 지점이 여기다 — 폴더를 연동하면 수집한 CSV와 파일 수백 개가 알아서 이 폴더에 저장된다.</p>
+    <p class="muted">탐색기(또는 Finder)에서 그 폴더를 열어 test.csv가 보이면 준비 완료. 폴더를 연동하면 수집한 CSV와 파일 수백 개가 알아서 이 폴더에 저장된다.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="2" data-title="설치 ② Claude Code">
   <div class="kicker">세 개의 작업대와 설치</div>
-  <h2>설치 ② — Claude Code (데스크톱 앱 안에 이미 있다)</h2>
+  <h2>설치 ②: Claude Code (데스크톱 앱 안에 이미 있다)</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
       <ul class="bul compact">
         <li>따로 설치할 것이 없다. 데스크톱 앱에서 Cowork를 골랐던 자리에서 <b>Code</b>를 고르면 된다 (Pro 이상 구독이면 추가 비용 없음)</li>
-        <li>터미널을 쓰지 않는다 — 원래 명령줄 도구(CLI)로 알려져 있지만, 이 수업에서는 앱 안의 Code만 쓴다. 하는 일은 같다: 내 PC의 폴더를 직접 읽고·쓰고·실행</li>
-        <li>작업 폴더는 설치 ①에서 만든 <code>C:\claude</code>를 그대로 연다 — Cowork와 Code가 <b>같은 폴더</b>를 보게 하는 것이 핵심</li>
+        <li>터미널을 쓰지 않는다. 원래 명령줄 도구(CLI)로 알려져 있지만, 이 수업에서는 앱 안의 Code만 쓴다. 하는 일은 같다: 내 PC의 폴더를 직접 읽고·쓰고·실행</li>
+        <li>작업 폴더는 설치 ①에서 만든 <code>C:\claude</code>를 그대로 연다. Cowork와 Code가 <b>같은 폴더</b>를 보게 하는 것이 핵심</li>
       </ul>
       <div class="stack">
-        <p style="font-weight:700;margin:0">첫 대화 — 파이썬 확인</p>
+        <p style="font-weight:700;margin:0">첫 대화: 파이썬 확인</p>
         <pre class="prompt"><button class="copy" type="button">복사</button>파이썬이 설치되어 있는지 버전을 확인해줘. 없다면 설치 방법을 안내해줘.</pre>
         <div class="callout warn"><b>내 PC에서 실행된다 = 책임도 내 PC.</b> 파일을 지우거나 프로그램을 설치하는 것처럼 되돌리기 어려운 일 앞에서 Code는 확인을 요청한다. 내용을 읽고 승인하고, 작업은 전용 폴더 안에서만 한다. 중요한 폴더는 백업 후 실습.</div>
       </div>
@@ -760,9 +766,9 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 </section>
 
 <!-- ===================== 3. GitHub 기초 ===================== -->
-<section class="slide section" data-sec="3" data-title="GitHub 기초 — 개인 사이트 배포">
+<section class="slide section" data-sec="3" data-title="GitHub 기초: 개인 사이트 배포">
   <div class="kicker">Section 3</div>
-  <h2>GitHub 기초 — 개인 브랜딩 사이트 만들고 공개하기</h2>
+  <h2>GitHub 기초: 개인 브랜딩 사이트 만들고 공개하기</h2>
   <p class="section-lead">AI에게 요청해 자기소개 사이트(index.html)를 만들고, GitHub Pages로 https://[내아이디].github.io 라는 실제 주소에 배포한다. 약 20분.</p>
   <div class="body">
     <ol class="roadmap" data-current="3"></ol>
@@ -778,38 +784,44 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
       <div class="step"><span class="no">?</span><b class="ttl">왜 GitHub Pages</b><p class="prob">완전 무료로, 평생 유지되는 공개 URL을 받는다</p></div>
       <div class="step"><span class="no">!</span><b class="ttl">오늘의 목표</b><p class="prob">브랜딩 설계 → 프롬프트 작성 → 사이트 생성 → GitHub 배포까지 하나의 흐름으로 완주</p></div>
     </div>
-    <div class="callout">강사 예시: <a href="https://miraeitm.github.io/" target="_blank" rel="noopener">miraeitm.github.io</a> — 소개·관심영역·연구 프로젝트·AI 봇·라이프로그·연락처. 지금 보고 있는 이 강의자료도 같은 방식(AI에게 요청해 HTML 파일로)으로 만들어졌다.</div>
+    <p style="font-weight:700;margin:0">예시: 학술적이지 않아도 된다. 클릭해서 열어 보자</p>
+    <div class="steps" style="grid-template-columns:repeat(5,1fr)">
+      <a class="step link" href="https://miraeitm.github.io/" target="_blank" rel="noopener"><span class="no">🎓</span><b class="ttl">강사 사이트</b><p class="prob">소개·연구 프로젝트·AI 봇·라이프로그·연락처</p></a>
+      <a class="step link" href="examples/week03/intro-arcade.html" target="_blank" rel="noopener"><span class="no">🕹️</span><b class="ttl">레트로 아케이드형</b><p class="prob">8비트 캐릭터 스탯 창처럼 능력치 바와 퀘스트 로그로 소개</p></a>
+      <a class="step link" href="examples/week03/intro-terminal.html" target="_blank" rel="noopener"><span class="no">💻</span><b class="ttl">터미널/해커형</b><p class="prob">검은 화면에 초록 글씨, 명령어로 자기소개를 타이핑</p></a>
+      <a class="step link" href="examples/week03/intro-popart.html" target="_blank" rel="noopener"><span class="no">🎨</span><b class="ttl">팝아트 매거진형</b><p class="prob">만화잡지 표지처럼 “이달의 인물” 특집 기사 형식</p></a>
+      <a class="step link" href="https://byoungpil-kim.github.io/kaist-itm-casebook/" target="_blank" rel="noopener"><span class="no">📚</span><b class="ttl">정적 사이트 예시</b><p class="prob">Cowork로 만든 사례집 사이트(kaist-itm-casebook). 개인 소개가 아닌 자료 사이트도 같은 방법</p></a>
+    </div>
+    <p class="muted">지금 보고 있는 이 강의자료도 같은 방식(AI에게 요청해 HTML 파일로)으로 만들어졌다.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="3" data-title="브랜딩 설계 4가지">
   <div class="kicker">GitHub 기초</div>
-  <h2>Part 1 · 브랜딩 설계 — 프롬프트 쓰기 전에 4가지만 정리하기</h2>
+  <h2>Part 1 · 브랜딩 설계: 프롬프트 쓰기 전에 4가지만 정리하기</h2>
   <div class="body">
     <p class="muted">좋은 프롬프트는 좋은 기획에서 나온다. 아래 4가지를 정하면 프롬프트가 명확해지고 결과물도 좋아진다.</p>
     <div class="steps" style="grid-template-columns:repeat(4,1fr)">
       <div class="step"><span class="no">1</span><b class="ttl">목적</b><p class="prob">이직·취업 준비 / 네트워킹 / 포트폴리오 아카이빙 / 실습 삼아</p></div>
       <div class="step"><span class="no">2</span><b class="ttl">청중</b><p class="prob">채용 담당자 / 같은 분야 연구자·협업 파트너 / 투자자 / 친구·SNS / 특정 커뮤니티</p></div>
       <div class="step"><span class="no">3</span><b class="ttl">톤앤매너</b><p class="prob">진지하고 전문적 / 유머러스하고 개성 있게 / 미니멀 / 화려하고 임팩트 있게</p></div>
-      <div class="step"><span class="no">4</span><b class="ttl">메시지</b><p class="prob">방문자가 무엇을 기억하고 돌아갔으면 좋겠나 — 한 문장</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">메시지</b><p class="prob">방문자가 무엇을 기억하고 돌아갔으면 좋겠나. 한 문장</p></div>
     </div>
-    <pre class="prompt"><button class="copy" type="button">복사</button>나를 소개하는 개인 브랜딩 사이트를 index.html 한 파일로 만들어줘.
-이름은 [이름], 소속은 [소속], 관심 분야는 [분야]야.</pre>
-    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>톤을 더 미니멀하게</span><span>프로젝트 카드 3개 추가해줘</span><span>연락처 섹션은 이메일만</span><span>휴대폰에서도 잘 보이게</span></div>
-    <p class="muted">학술적이지 않아도 된다 — 레트로 아케이드형, 터미널/해커형, 팝아트 매거진형처럼 전혀 다른 스타일도 좋은 개인 사이트가 된다. 강사 사이트와 비슷하게 하려면 “https://miraeitm.github.io/ 웹사이트와 유사한 스타일로 작성해줘”를 덧붙인다.</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>나를 소개하는 개인 브랜딩 사이트를 index.html 한 파일로 만들어줘. 이름은 [이름], 소속은 [소속], 관심 분야는 [분야]야.</pre>
+    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>톤을 더 미니멀하게</span><span>프로젝트 카드 3개 추가해줘</span><span>연락처 섹션은 이메일만</span><span>휴대폰에서도 잘 보이게</span><span>https://miraeitm.github.io/ 와 비슷한 스타일로</span></div>
   </div>
 </section>
 
 <section class="slide" data-sec="3" data-title="index.html 만들기">
   <div class="kicker">GitHub 기초</div>
-  <h2>Part 2 · index.html 만들기 — 요청하고, 보고, 고쳐 달라고 하기</h2>
+  <h2>Part 2 · index.html 만들기: 요청하고, 보고, 고쳐 달라고 하기</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
-      <figure><img src="assets/week03/cowork-preview.png" alt="왼쪽은 대화창, 오른쪽은 생성된 index.html이 바로 렌더된 미리보기 창" style="max-height:300px"><figcaption>답변의 파일(index.html)을 클릭하면 오른쪽에 미리보기가 뜬다 — 따로 내려받거나 브라우저를 열 필요가 없다</figcaption></figure>
+      <figure><img src="assets/week03/cowork-preview.png" alt="왼쪽은 대화창, 오른쪽은 생성된 index.html이 바로 렌더된 미리보기 창" style="max-height:300px"><figcaption>답변의 파일(index.html)을 클릭하면 오른쪽에 미리보기가 뜬다. 따로 내려받거나 브라우저를 열 필요가 없다</figcaption></figure>
       <div class="stack">
         <ul class="bul compact">
           <li>Part 1의 프롬프트를 그대로 붙여 넣고 전송. 이름·소속·프로젝트·연락처 같은 실제 정보는 프롬프트 뒤에 이어서</li>
-          <li>마음에 안 드는 부분은 자연스러운 말로 고쳐 달라고 한다 — 몇 번이든</li>
+          <li>마음에 안 드는 부분은 자연스러운 말로 고쳐 달라고 한다. 몇 번이든</li>
         </ul>
         <pre class="prompt sm"><button class="copy" type="button">복사</button>전체 색상을 차분한 네이비 + 화이트 톤으로 바꿔줘.</pre>
         <pre class="prompt sm"><button class="copy" type="button">복사</button>다크모드 버튼을 오른쪽 위에 추가해줘.</pre>
@@ -824,7 +836,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   <h2>Part 3·4 · 파일로 받기, 그리고 GitHub 용어 4가지</h2>
   <div class="body">
     <div class="callout warn"><b>파일 이름은 반드시 index.html.</b> GitHub Pages는 index.html이라는 이름의 파일을 홈페이지로 인식한다. index (1).html처럼 조금이라도 다르면 사이트가 뜨지 않는다.</div>
-    <p style="font-weight:700">GitHub — 코드·파일을 인터넷에 보관하고 공유하는 서비스. 실제 작업은 클릭 몇 번이면 충분하니, 뜻만 알아 두자.</p>
+    <p style="font-weight:700">GitHub: 코드·파일을 인터넷에 보관하고 공유하는 서비스. 실제 작업은 클릭 몇 번이면 충분하니, 뜻만 알아 두자.</p>
     <table class="tbl" style="width:100%">
       <tbody>
         <tr><th style="width:26%">GitHub (깃허브)</th><td style="text-align:left">파일을 인터넷에 보관하고 공유하는 서비스. “파일용 클라우드 저장소”</td></tr>
@@ -847,9 +859,9 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
           <div class="step"><span class="no">2</span><b class="ttl">아이디(Username)</b><p class="prob">공개 URL에 그대로 들어간다. 예) dochon-lee → https://dochon-lee.github.io. 영문·숫자·하이픈만</p></div>
           <div class="step"><span class="no">3</span><b class="ttl">새 저장소</b><p class="prob">우측 상단 + → New repository. 이름은 정확히 <b>[내아이디].github.io</b>, Public, “Add a README”는 끄고 빈 저장소로</p></div>
         </div>
-        <div class="callout">이름을 정확히 지어야 하는 이유 — 저장소 이름이 [내아이디].github.io가 아니면 주소가 https://[내아이디].github.io/저장소이름처럼 길어진다. 개인 대표 사이트라면 이 방식이 가장 깔끔하다.</div>
+        <div class="callout">이름을 정확히 지어야 하는 이유: 저장소 이름이 [내아이디].github.io가 아니면 주소가 https://[내아이디].github.io/저장소이름처럼 길어진다. 개인 대표 사이트라면 이 방식이 가장 깔끔하다.</div>
       </div>
-      <figure><img src="assets/week03/empty-repo.png" alt="GitHub에 새로 만든 빈 저장소 화면 — Quick setup 안내와 저장소 주소" style="max-height:260px"><figcaption>저장소를 만들면 이런 빈 화면이 나온다. 아직 파일이 없는 정상 상태 — 다음 장에서 index.html을 올린다</figcaption></figure>
+      <figure><img src="assets/week03/empty-repo.png" alt="GitHub에 새로 만든 빈 저장소 화면. Quick setup 안내와 저장소 주소" style="max-height:260px"><figcaption>저장소를 만들면 이런 빈 화면이 나온다. 아직 파일이 없는 정상 상태. 다음 장에서 index.html을 올린다</figcaption></figure>
     </div>
   </div>
 </section>
@@ -863,24 +875,8 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
       <div class="step"><span class="no">2</span><b class="ttl">Commit changes</b><p class="prob">페이지 하단의 Commit changes 버튼을 눌러 저장을 마친다</p></div>
       <div class="step"><span class="no">3</span><b class="ttl">Settings → Pages</b><p class="prob">저장소 상단 Settings → 왼쪽 메뉴 Pages. Branch를 <b>main</b>으로 고르고 Save. 1~2분 뒤 https://[내아이디].github.io 접속</p></div>
     </div>
-    <div class="callout good"><b>축하합니다 — 내 손으로 만든 사이트가 인터넷에 있다.</b> 이 주소를 명함·이메일 서명·SNS 프로필에 붙여 보자. 내용을 키우려면 Cowork에게 추가해 달라고 요청하고, 같은 이름(index.html)으로 다시 업로드하면 사이트가 갱신된다.</div>
-    <p class="muted">바로 안 떠도 정상 — 배포 후 URL이 반영되기까지 1~2분 걸린다. 잠시 기다렸다가 새로고침.</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="3" data-title="보너스 · Claude Code로 GitHub 연동">
-  <div class="kicker">GitHub 기초</div>
-  <h2>보너스 · Claude Code로 GitHub 연동하기 — 수정 → 커밋 → 푸시를 대신 시키기</h2>
-  <div class="body">
-    <ul class="bul compact">
-      <li>지금까지는 파일을 받아 매번 직접 업로드했다. Claude Code는 작업 폴더와 GitHub 저장소를 한 번 연결해 두면, 이후 “고쳐 줘”만 해도 <b>수정 → 커밋 → 푸시</b>까지 알아서 처리한다</li>
-      <li>빈 폴더(예: my-site)를 만들고 그 폴더를 Claude Code의 작업 폴더로 연다. 처음 푸시할 때 GitHub 로그인 안내가 나오면 한 번만 로그인</li>
-    </ul>
-    <div class="two eq" style="align-items:start">
-      <pre class="prompt"><button class="copy" type="button">복사</button>이 폴더에 나를 소개하는 홈페이지를 index.html 한 파일로 만들어줘.</pre>
-      <pre class="prompt"><button class="copy" type="button">복사</button>이 폴더를 https://github.com/[내아이디]/[내아이디].github.io 저장소에 올려줘.</pre>
-    </div>
-    <div class="callout">이후부터는 원하는 내용을 말한 뒤 <b>“변경사항 커밋하고 푸시해줘”</b>라고만 하면 된다. 몇 분 안에 공개 사이트에 그대로 나타난다.</div>
+    <div class="callout good"><b>축하합니다. 내 손으로 만든 사이트가 인터넷에 있다.</b> 이 주소를 명함·이메일 서명·SNS 프로필에 붙여 보자. 내용을 키우려면 Cowork에게 추가해 달라고 요청하고, 같은 이름(index.html)으로 다시 업로드하면 사이트가 갱신된다.</div>
+    <p class="muted">바로 안 떠도 정상. 배포 후 URL이 반영되기까지 1~2분 걸린다. 잠시 기다렸다가 새로고침.</p>
   </div>
 </section>
 
@@ -914,144 +910,148 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 &lt;/body&gt;
 &lt;/html&gt;</pre>
       <div class="steps" style="grid-template-columns:1fr">
-        <div class="step"><span class="no">H</span><b class="ttl">HTML — 뼈대</b><p class="prob">무엇이 있는지: 제목, 버튼, 입력창 같은 요소. 위 예시에서는 “버튼이 하나 있다”</p></div>
-        <div class="step"><span class="no">C</span><b class="ttl">CSS — 겉모습</b><p class="prob">어떻게 보이는지: 색상, 크기, 배치. “하늘색 배경, 둥근 모서리”</p></div>
-        <div class="step"><span class="no">J</span><b class="ttl">JavaScript — 동작</b><p class="prob">무엇을 계산하고 무엇이 움직이는지. “누르면 알림창이 뜬다”. 서버 없이 내 브라우저 안에서 그대로 실행된다</p></div>
+        <div class="step"><span class="no">H</span><b class="ttl">HTML: 뼈대</b><p class="prob">무엇이 있는지: 제목, 버튼, 입력창 같은 요소. 위 예시에서는 “버튼이 하나 있다”</p></div>
+        <div class="step"><span class="no">C</span><b class="ttl">CSS: 겉모습</b><p class="prob">어떻게 보이는지: 색상, 크기, 배치. “하늘색 배경, 둥근 모서리”</p></div>
+        <div class="step"><span class="no">J</span><b class="ttl">JavaScript: 동작</b><p class="prob">무엇을 계산하고 무엇이 움직이는지. “누르면 알림창이 뜬다”. 서버 없이 내 브라우저 안에서 그대로 실행된다</p></div>
       </div>
     </div>
-    <p class="muted center">게임도, 그래프도, 시뮬레이션도 이 재료로 만든다 — 규모만 커질 뿐 원리는 같다. 이 강의자료의 슬라이드 넘기기도 JavaScript 몇십 줄이다.</p>
+    <p class="muted center">게임도, 그래프도, 시뮬레이션도 이 재료로 만든다. 규모만 커질 뿐 원리는 같다. 이 강의자료의 슬라이드 넘기기도 JavaScript 몇십 줄이다.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="4" data-title="금융 플래너 만들기">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
-  <h2>실습 · 금융 플래너 — 복리 그래프에서 몬테카를로 시뮬레이션까지</h2>
+  <h2>실습 · 금융 플래너: 복리 그래프에서 몬테카를로 시뮬레이션까지</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <ul class="bul compact">
+        <li><b>복리 계산 그래프</b>: 연간 저축액·수익률·기간 슬라이더를 움직이면 원금 누적과 복리 총자산이 그래프로 바뀐다</li>
+        <li><b>몬테카를로 시뮬레이션</b>: 매년 같은 수익률 대신, 실제 S&amp;P 500의 1928~2024년 연간 수익률에서 무작위로 뽑아 수백 번 반복해 결과의 분포(하위 10% / 중앙값 / 상위 10%)를 본다</li>
+        <li>교육용 예시이며 투자 조언이 아니다. 과거 수익률이 미래를 보장하지 않는다</li>
+      </ul>
       <div class="stack">
-        <ul class="bul compact">
-          <li><b>복리 계산 그래프</b> — 연간 저축액·수익률·기간 슬라이더를 움직이면 원금 누적과 복리 총자산이 그래프로 바뀐다</li>
-          <li><b>몬테카를로 시뮬레이션</b> — 매년 같은 수익률 대신, 실제 S&amp;P 500의 1928~2024년 연간 수익률에서 무작위로 뽑아 수백 번 반복해 결과의 분포(하위 10% / 중앙값 / 상위 10%)를 본다</li>
-          <li>교육용 예시이며 투자 조언이 아니다. 과거 수익률이 미래를 보장하지 않는다</li>
-        </ul>
+        <pre class="prompt"><button class="copy" type="button">복사</button>연간 저축액·수익률·기간을 슬라이더로 바꾸면 복리 그래프가 그려지는 금융 플래너를 HTML 한 파일로 만들어줘.</pre>
+        <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>실제 S&amp;P 500 연간 수익률로 몬테카를로 시뮬레이션도 추가해줘</span><span>하위 10%·중앙값·상위 10%를 보여줘</span><span>“다시 뽑기” 버튼</span><span>은퇴 나이도 넣어줘</span><span>시장이 흔들릴 때 볼 투자 명언 카드도</span></div>
       </div>
-      <pre class="prompt"><button class="copy" type="button">복사</button>연간 저축액·수익률·기간을 슬라이더로 바꾸면 복리 그래프가 그려지는
-금융 플래너를 HTML 한 파일로 만들어줘.</pre>
-      <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>실제 S&amp;P 500 연간 수익률로 몬테카를로 시뮬레이션도 추가해줘</span><span>하위 10%·중앙값·상위 10%를 보여줘</span><span>“다시 뽑기” 버튼</span><span>은퇴 나이도 넣어줘</span></div>
     </div>
-    <p class="muted">확장해 보기 — “은퇴 나이”, “인플레이션 반영”, 시장이 흔들릴 때 볼 투자 명언 카드(“멘탈 관리기”) 같은 조건을 말로 추가해 달라고 하면 된다.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="4" data-title="배포하고 내 사이트에 연결하기">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
-  <h2>배포하고 내 사이트에 연결하기 — 두 번째 저장소</h2>
+  <h2>배포하고 내 사이트에 연결하기: 두 번째 저장소</h2>
   <div class="body">
     <div class="steps" style="grid-template-columns:repeat(4,1fr)">
-      <div class="step"><span class="no">1</span><b class="ttl">파일 받기</b><p class="prob">완성한 플래너를 이번에도 <b>index.html</b>로 저장 — 새 저장소의 대표 파일이 되기 때문</p></div>
+      <div class="step"><span class="no">1</span><b class="ttl">파일 받기</b><p class="prob">완성한 플래너를 이번에도 <b>index.html</b>로 저장. 새 저장소의 대표 파일이 되기 때문</p></div>
       <div class="step"><span class="no">2</span><b class="ttl">새 저장소</b><p class="prob">+ → New repository. 이번엔 이름을 자유롭게 (예: financial-planner). Public, README 없이</p></div>
       <div class="step"><span class="no">3</span><b class="ttl">업로드 + Pages</b><p class="prob">Upload files → Commit. Settings → Pages → Branch main → Save. 1~2분 뒤 https://[내아이디].github.io/financial-planner/</p></div>
-      <div class="step"><span class="no">4</span><b class="ttl">내 사이트에 링크</b><p class="prob">자기소개 사이트에 프로젝트 카드를 추가해 달라고 요청하고, 같은 이름으로 다시 업로드(덮어쓰기)</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">내 사이트에 링크</b><p class="prob">자기소개 사이트에 “금융 플래너 프로젝트 카드를 추가해줘”라고 요청하고, 같은 이름으로 다시 업로드(덮어쓰기)</p></div>
     </div>
-    <pre class="prompt"><button class="copy" type="button">복사</button>내 소개 사이트(index.html)에 금융 플래너 프로젝트 카드를 추가해줘.
-링크: https://[내아이디].github.io/financial-planner/</pre>
     <p class="muted">저장소 하나 = 프로젝트 하나. 이렇게 프로젝트를 늘려 가면 개인 사이트가 곧 포트폴리오가 된다.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="4" data-title="HTML로 할 수 있는 것들">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
-  <h2>보고서도, 계획서도, 과제도 — 이제는 HTML로</h2>
+  <h2>보고서도, 계획서도, 과제도 이제는 HTML로</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
       <div class="stack">
-        <p style="font-weight:700;margin:0">HTML이 Markdown(또는 워드)보다 나은 다섯 가지 이유 — Thariq Shihipar(Anthropic), “The Unreasonable Effectiveness of HTML”</p>
+        <p style="font-weight:700;margin:0">HTML이 Markdown(또는 워드)보다 나은 다섯 가지 이유. Thariq Shihipar(Anthropic), “The Unreasonable Effectiveness of HTML”</p>
         <ul class="bul compact">
-          <li><b>정보 밀도</b> — 표, 디자인, 그림, 인터랙티브 요소를 한 파일에</li>
-          <li><b>시각적 명확성</b> — 100줄 넘는 글은 안 읽히지만, 탭·카드·내부 링크가 있는 페이지는 훑어 읽힌다</li>
-          <li><b>공유 용이성</b> — 브라우저에서 바로 열리므로 첨부파일보다 실제로 읽힐 확률이 높다</li>
-          <li><b>양방향 인터랙션</b> — 슬라이더·토글을 조작하고, 결과를 다시 AI에게 가져올 수 있다</li>
-          <li><b>풍부한 컨텍스트</b> — 파일, 코드, 대화 기록을 그대로 살려 담는다</li>
+          <li><b>정보 밀도</b>: 표, 디자인, 그림, 인터랙티브 요소를 한 파일에</li>
+          <li><b>시각적 명확성</b>: 100줄 넘는 글은 안 읽히지만, 탭·카드·내부 링크가 있는 페이지는 훑어 읽힌다</li>
+          <li><b>공유 용이성</b>: 브라우저에서 바로 열리므로 첨부파일보다 실제로 읽힐 확률이 높다</li>
+          <li><b>양방향 인터랙션</b>: 슬라이더·토글을 조작하고, 결과를 다시 AI에게 가져올 수 있다</li>
+          <li><b>풍부한 컨텍스트</b>: 파일, 코드, 대화 기록을 그대로 살려 담는다</li>
         </ul>
       </div>
-      <figure><img src="assets/week03/md-vs-html.png" alt="같은 문서를 Markdown 240줄로 스크롤하며 읽는 것과 HTML 탭·카드로 한눈에 보는 것의 비교" style="max-height:300px"><figcaption>같은 내용 — 왼쪽은 Markdown 240줄, 오른쪽은 탭과 카드로 구조화한 HTML</figcaption></figure>
+      <figure><img src="assets/week03/md-vs-html.png" alt="같은 문서를 Markdown 240줄로 스크롤하며 읽는 것과 HTML 탭·카드로 한눈에 보는 것의 비교" style="max-height:300px"><figcaption>같은 내용. 왼쪽은 Markdown 240줄, 오른쪽은 탭과 카드로 구조화한 HTML</figcaption></figure>
     </div>
-    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
-      <div class="step"><span class="no">①</span><b class="ttl">기획서·계획·탐색</b><p class="prob">제안서를 4가지 버전으로 나란히 비교</p></div>
-      <div class="step"><span class="no">②</span><b class="ttl">문서 비교·설명</b><p class="prob">계약서 수정 전/후를 색과 이유 설명으로 대조</p></div>
-      <div class="step"><span class="no">③</span><b class="ttl">리포트·학습 자료</b><p class="prob">다이어그램·주석과 함께 정리한 설명 페이지</p></div>
-      <div class="step"><span class="no">④</span><b class="ttl">커스텀 편집 도구</b><p class="prob">내 데이터에 딱 맞는, 한 번 쓰고 버리는 전용 보드</p></div>
+    <p class="muted">원문: <a href="https://claude.com/blog/using-claude-code-the-unreasonable-effectiveness-of-html" target="_blank" rel="noopener">claude.com/blog/using-claude-code-the-unreasonable-effectiveness-of-html</a> · 한국어 소개와 예시: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week1/week1-04-html-effectiveness.html" target="_blank" rel="noopener">HTML의 압도적 효과성 (부트캠프 1주차)</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="HTML 활용 예시 4가지">
+  <div class="kicker">웹앱 만들기와 HTML 활용</div>
+  <h2>실제로 만들어 본 예시 4가지: 클릭해서 열어 보자</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:repeat(2,1fr)">
+      <a class="step link" href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week1/week1-04-html-effectiveness.html#part1" target="_blank" rel="noopener"><span class="no">①</span><b class="ttl">기획서·계획·탐색: 같은 제안서, 4가지 버전</b><p class="prob">인테리어 리모델링 제안서를 가격 데이터 중심 / 선택지 비교 / 비주얼 / 진행 로드맵의 4가지 스타일로 한 파일에 나란히</p><span class="pp">“리모델링 제안서를 4가지 버전으로 만들어서 한 HTML 안에 나란히 비교되게 해줘”</span></a>
+      <a class="step link" href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week1/week1-04-html-effectiveness.html#part2" target="_blank" rel="noopener"><span class="no">②</span><b class="ttl">문서 비교·설명: 계약서 수정본 한눈에</b><p class="prob">공사 기간 60일→90일, 계약금 10%→30% 같은 중요 변경은 빨간색, 문구만 다듬은 곳은 초록색으로. 바뀐 이유를 옆에 설명</p><span class="pp">“계약서 수정 전/후를 비교하는 페이지. 중요한 변경은 빨간색, 문구만 다듬은 건 초록색으로”</span></a>
+      <a class="step link" href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week1/week1-04-html-effectiveness.html#part3" target="_blank" rel="noopener"><span class="no">③</span><b class="ttl">리포트·학습 자료: 제안서를 설명 페이지로</b><p class="prob">상담·실측 → 디자인 확정 → 계약 → 시공 → 준공 흐름 다이어그램, 단계별 펼치기, 팀×단계 관여 그리드, “주의할 점”</p><span class="pp">“이 제안서를 읽고 전체 흐름 다이어그램이 있는 설명 페이지 하나로 만들어줘”</span></a>
+      <a class="step link" href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week1/week1-04-html-effectiveness.html#part4" target="_blank" rel="noopener"><span class="no">④</span><b class="ttl">커스텀 편집 도구: 역할 분담 보드</b><p class="prob">팀원 4명에게 작업 6개를 배분하는 전용 보드. 화살표로 작업을 사람들 사이에서 옮기고, 결과를 Markdown으로 복사</p><span class="pp">“팀원 4명과 작업 6개를 좌우로 옮길 수 있는 역할 분담 보드를 만들어줘”</span></a>
     </div>
+    <p class="muted">범용 도구 대신, 지금 우리 팀의 사람 수와 작업 목록에 딱 맞는 전용 도구를 그때그때 만들어 쓴다.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="4" data-title="맞춤 사이트와 도메인">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
-  <h2>한 걸음 더 — “우리만을 위한 사이트”, 그리고 나만의 도메인</h2>
+  <h2>한 걸음 더: “우리만을 위한 사이트”, 그리고 나만의 도메인</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:start">
       <div class="stack">
         <p>특정한 사람·상황만을 위한 맞춤 페이지를 만들어 링크 하나로 공유하면, 카톡·이메일·엑셀·캡처에 흩어져 있던 정보를 모두가 같은 화면에서 본다. 시중 협업 도구는 모두에게 맞추느라 내 상황엔 안 맞는 항목이 가득하지만, AI에게 부탁해 만드는 사이트는 딱 이 사건, 딱 이 회원에게만 맞춰져 있다. 만드는 데 몇 분이면 되니 필요 없어지면 버려도 아깝지 않다.</p>
         <div class="steps" style="grid-template-columns:repeat(3,1fr)">
-          <div class="step"><span class="no">⚖️</span><b class="ttl">소송 사건 대시보드</b><p class="prob">변호사 → 의뢰인. 쟁점별 우리 주장/상대 주장, 증거 목록, 재판 일정</p></div>
-          <div class="step"><span class="no">💪</span><b class="ttl">PT 회원 관리 페이지</b><p class="prob">트레이너 → 회원. 체중 변화 그래프, 운동 계획, 피드백</p></div>
-          <div class="step"><span class="no">🏖️</span><b class="ttl">가족 여행 플래너</b><p class="prob">2박 3일 일정·숙소·식사·준비물을 온 가족이 같은 링크로</p></div>
+          <a class="step link" href="examples/week03/litigation-dashboard.html" target="_blank" rel="noopener"><span class="no">⚖️</span><b class="ttl">소송 사건 대시보드</b><p class="prob">변호사 → 의뢰인. 쟁점별 우리 주장/상대 주장, 증거 목록, 재판 일정</p></a>
+          <a class="step link" href="examples/week03/pt-workout-tracker.html" target="_blank" rel="noopener"><span class="no">💪</span><b class="ttl">PT 회원 관리 페이지</b><p class="prob">트레이너 → 회원. 체중 변화 그래프, 운동 계획, 피드백</p></a>
+          <a class="step link" href="examples/week03/family-trip-planner.html" target="_blank" rel="noopener"><span class="no">🏖️</span><b class="ttl">가족 여행 플래너</b><p class="prob">2박 3일 일정·숙소·식사·준비물을 온 가족이 같은 링크로</p></a>
         </div>
       </div>
       <div class="stack">
-        <p style="font-weight:700;margin:0">선택 · 나만의 도메인 연결 — 방법을 미리 설명하지 않는다. 이 프롬프트로 물어보고 답을 따라 하는 것이 실습</p>
-        <pre class="prompt sm"><button class="copy" type="button">복사</button>내 GitHub Pages 사이트(https://[내아이디].github.io)에
-Cloudflare로 내 도메인을 연결하고 싶어. 초보자 기준으로 순서대로 알려줘.</pre>
+        <p style="font-weight:700;margin:0">선택 · 나만의 도메인 연결: 방법을 미리 설명하지 않는다. 이 프롬프트로 물어보고 답을 따라 하는 것이 실습</p>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>내 GitHub Pages 사이트(https://[내아이디].github.io)에 Cloudflare로 내 도메인을 연결하고 싶어. 초보자 기준으로 순서대로 알려줘.</pre>
         <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>도메인은 어디서 사는 게 좋아? 비용은?</span><span>네임서버가 뭐야?</span><span>이 화면에서 뭘 눌러야 해? [캡처 첨부]</span></div>
-        <p class="muted" style="font-size:13px">도메인은 유료(.com 연 1만 원 안팎), Cloudflare의 DNS 관리는 무료. DNS 변경은 반영까지 최대 24~48시간.</p>
+        <p class="muted" style="font-size:13px">도메인은 유료(.com 연 1만 원 안팎). DNS 변경은 반영까지 최대 24~48시간.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===================== 5. 크롤링 ===================== -->
-<section class="slide section" data-sec="5" data-title="크롤링 — 무엇을, 어디까지">
+<section class="slide section" data-sec="5" data-title="크롤링: 무엇을, 어디까지">
   <div class="kicker">Section 5</div>
-  <h2>크롤링 — 무엇을, 어디까지 모을 수 있나</h2>
+  <h2>크롤링: 무엇을, 어디까지 모을 수 있나</h2>
   <p class="section-lead">실습에 들어가기 전의 판단 기준. 웹에서 무엇을 모을 수 있는지, 어디까지 모아도 되는지, 사이트 구조에 따라 어떤 도구가 필요한지.</p>
   <div class="body">
     <ol class="roadmap" data-current="5"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="크롤링이란 — 무엇을 모을 수 있나">
+<section class="slide" data-sec="5" data-title="크롤링이란: 무엇을 모을 수 있나">
   <div class="kicker">크롤링</div>
-  <h2>크롤링이란 — 무엇을 모을 수 있나</h2>
+  <h2>크롤링이란: 무엇을 모을 수 있나</h2>
   <div class="body">
     <p>크롤링(crawling)·스크래핑(scraping)은 웹페이지에 이미 공개되어 있는 정보를 구조화된 데이터(표·CSV·JSON)로 모으는 일이다. 사람이 브라우저로 읽는 것을 프로그램이 대신 읽고, 흩어진 내용을 분석 가능한 형태로 정리한다.</p>
     <div class="steps" style="grid-template-columns:repeat(3,1fr)">
-      <div class="step"><span class="no">📰</span><b class="ttl">뉴스 기사·보도자료</b><p class="prob">특정 이슈가 언제, 얼마나, 어떤 논조로 다뤄졌는지 — 이슈 트렌드 분석</p></div>
-      <div class="step"><span class="no">🛒</span><b class="ttl">커머스 목록·상품 리뷰</b><p class="prob">베스트셀러 순위, 가격 변동, 소비자 불만 키워드 — 시장·소비자 분석</p></div>
-      <div class="step"><span class="no">⚖️</span><b class="ttl">판례·법령·특허</b><p class="prob">판결문에서 반복되는 인정 요건, 유사 선행 특허 — 요건 분석·선행 조사</p></div>
-      <div class="step"><span class="no">💼</span><b class="ttl">채용 공고</b><p class="prob">직무별 요구 스킬, 연봉 범위, 채용 수요의 변화 — 노동시장 분석</p></div>
+      <div class="step"><span class="no">📰</span><b class="ttl">뉴스 기사·보도자료</b><p class="prob">특정 이슈가 언제, 얼마나, 어떤 논조로 다뤄졌는지: 이슈 트렌드 분석</p></div>
+      <div class="step"><span class="no">🛒</span><b class="ttl">커머스 목록·상품 리뷰</b><p class="prob">베스트셀러 순위, 가격 변동, 소비자 불만 키워드: 시장·소비자 분석</p></div>
+      <div class="step"><span class="no">⚖️</span><b class="ttl">판례·법령·특허</b><p class="prob">판결문에서 반복되는 인정 요건, 유사 선행 특허: 요건 분석·선행 조사</p></div>
+      <div class="step"><span class="no">💼</span><b class="ttl">채용 공고</b><p class="prob">직무별 요구 스킬, 연봉 범위, 채용 수요의 변화: 노동시장 분석</p></div>
       <div class="step"><span class="no">🎓</span><b class="ttl">학술 초록·연구 동향</b><p class="prob">특정 주제의 연구가 언제부터 급증했는지, 핵심 저자는 누구인지</p></div>
-      <div class="step"><span class="no">💬</span><b class="ttl">커뮤니티·앱 리뷰</b><p class="prob">사용자 여론, 반복되는 불만, 경쟁 제품과의 비교 — 여론·VOC 분석</p></div>
+      <div class="step"><span class="no">💬</span><b class="ttl">커뮤니티·앱 리뷰</b><p class="prob">사용자 여론, 반복되는 불만, 경쟁 제품과의 비교: 여론·VOC 분석</p></div>
     </div>
-    <p class="muted">오늘 실제로 해 볼 것 — 온라인 서점의 경제·경영 베스트셀러를 성별×연령대 조합별로 소량(239권) 수집해 “세대·성별에 따라 어떤 책을 읽는가”에 데이터로 답하고, 같은 방법을 판결문 895건에 적용한 연구용 분석 사례를 본다.</p>
+    <p class="muted">오늘 실제로 해 볼 것: 온라인 서점의 경제·경영 베스트셀러를 성별×연령대 조합별로 소량(239권) 수집해 “세대·성별에 따라 어떤 책을 읽는가”에 데이터로 답하고, 같은 방법을 판결문 895건에 적용한다.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="5" data-title="법적·윤리적 경계 (1)">
   <div class="kicker">크롤링</div>
-  <h2>법적·윤리적 경계 — “긁을 수 있다”와 “긁어도 된다”는 다르다</h2>
+  <h2>법적·윤리적 경계: “긁을 수 있다”와 “긁어도 된다”는 다르다</h2>
   <div class="body">
     <div class="two eq" style="align-items:start">
-      <div class="callout bad"><b>① 페이월(paywall) 뒤의 콘텐츠 — 하지 마세요</b><br>구독·결제·로그인 장벽 뒤에 있는 콘텐츠(유료 기사, 구독형 DB, 전자책)의 자동 수집은 거의 예외 없이 약관에서 금지되어 있고, 접근 제한을 우회하는 행위 자체가 별도의 법적 문제(기술적 보호조치 침해, 부정 접근 등)를 일으킬 수 있다. 페이월이 보이면 대상에서 제외하는 것을 기본값으로.</div>
-      <div class="callout warn"><b>② 약관상 금지 = 항상 불법? — 그렇지는 않다</b><br>공개된 페이지라도 약관에 “자동화된 수집 금지” 조항이 있는 사이트가 많다. 다만 약관이 곧 최종 결론은 아니다. 공정이용(fair use)까지 금지하는 약관 조항은 무효로 판단될 수 있다. 핵심은 내 수집이 공정이용에 해당하는지 스스로 평가하는 것.</div>
+      <div class="callout bad"><b>① 페이월(paywall) 뒤의 콘텐츠: 하지 마세요</b><br>구독·결제·로그인 장벽 뒤에 있는 콘텐츠(유료 기사, 구독형 DB, 전자책)의 자동 수집은 거의 예외 없이 약관에서 금지되어 있고, 접근 제한을 우회하는 행위 자체가 별도의 법적 문제(기술적 보호조치 침해, 부정 접근 등)를 일으킬 수 있다. 페이월이 보이면 대상에서 제외하는 것을 기본값으로.</div>
+      <div class="callout warn"><b>② 약관상 금지 = 항상 불법? 그렇지는 않다</b><br>공개된 페이지라도 약관에 “자동화된 수집 금지” 조항이 있는 사이트가 많다. 다만 약관이 곧 최종 결론은 아니다. 공정이용(fair use)까지 금지하는 약관 조항은 무효로 판단될 수 있다. 핵심은 내 수집이 공정이용에 해당하는지 스스로 평가하는 것.</div>
     </div>
-    <div class="callout good"><b>공정이용 평가의 감각</b> — 수업 과제나 연구 목적으로 공개된 페이지를 소량 수집해 내부 분석에만 쓰는 경우라면 공정이용으로 인정될 가능성이 높다. 반대로 수집물을 상업적으로 재배포하거나, 원본 사이트를 대체하는 서비스를 만들거나, 대량 수집으로 서버에 부담을 주면 공정이용과 멀어진다. 오늘 실습(상업 서점의 공개 목록을 수업 목적으로 소량 수집·내부 분석)이 이 평가를 통과하는 전형적 사례다.</div>
+    <div class="callout good"><b>공정이용 평가의 감각</b>: 수업 과제나 연구 목적으로 공개된 페이지를 소량 수집해 내부 분석에만 쓰는 경우라면 공정이용으로 인정될 가능성이 높다. 반대로 수집물을 상업적으로 재배포하거나, 원본 사이트를 대체하는 서비스를 만들거나, 대량 수집으로 서버에 부담을 주면 공정이용과 멀어진다. 오늘 실습(상업 서점의 공개 목록을 수업 목적으로 소량 수집·내부 분석)이 이 평가를 통과하는 전형적 사례다.</div>
     <p class="muted">본 자료는 일반적인 교육 안내이며, 구체적 사안에 대한 법률 자문이 아니다.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="5" data-title="기본 수칙 4가지">
   <div class="kicker">크롤링</div>
-  <h2>③ 그 밖의 기본 수칙 — 비영리 · 소량 · 내부 분석</h2>
+  <h2>③ 그 밖의 기본 수칙: 비영리 · 소량 · 내부 분석</h2>
   <div class="body">
     <div class="steps" style="grid-template-columns:repeat(4,1fr)">
       <div class="step"><span class="no">1</span><b class="ttl">robots.txt 확인</b><p class="prob">사이트 주소 뒤에 /robots.txt를 붙이면 수집 허용/금지 경로가 나온다. Cowork에 “이 사이트 robots.txt 확인해줘”</p></div>
@@ -1065,21 +1065,21 @@ Cloudflare로 내 도메인을 연결하고 싶어. 초보자 기준으로 순�
 
 <section class="slide" data-sec="5" data-title="정적 vs 동적">
   <div class="kicker">크롤링</div>
-  <h2>정적 vs 동적 — 사이트 구조에 따라 도구가 다르다</h2>
+  <h2>정적 vs 동적: 사이트 구조에 따라 도구가 다르다</h2>
   <div class="body">
     <div class="two eq" style="align-items:start">
-      <div class="callout good"><b>정적(static) — URL만으로 수집 가능</b>
+      <div class="callout good"><b>정적(static): URL만으로 수집 가능</b>
         <ul class="bul compact" style="margin-top:6px">
           <li>주소만 바꿔도 원하는 목록이 그대로 열린다 (페이지 번호, 검색 조건이 URL에 드러남)</li>
           <li>정부·공공기관 게시판, 오래된 게시판형 사이트</li>
           <li>Cowork에 URL 규칙만 알려 주면 바로 수집</li>
         </ul>
       </div>
-      <div class="callout warn"><b>동적(dynamic) — 브라우저가 필요</b>
+      <div class="callout warn"><b>동적(dynamic): 브라우저가 필요</b>
         <ul class="bul compact" style="margin-top:6px">
           <li>스크롤·클릭해야 내용이 나타나고 URL은 그대로</li>
           <li>SNS 피드, 쇼핑몰 리뷰 더보기, 지도, 로그인 화면</li>
-          <li>브라우저 확장(Claude in Chrome)으로 — AI가 내 브라우저가 이미 그려낸 최종 화면을 읽고, 스크롤과 클릭도 대신한다</li>
+          <li>브라우저 확장(Claude in Chrome)으로. AI가 내 브라우저가 이미 그려낸 최종 화면을 읽고, 스크롤과 클릭도 대신한다</li>
         </ul>
       </div>
     </div>
@@ -1087,28 +1087,28 @@ Cloudflare로 내 도메인을 연결하고 싶어. 초보자 기준으로 순�
       <thead><tr><th></th><th>Cowork 단독 수집</th><th>크롬 확장 수집</th></tr></thead>
       <tbody>
         <tr><th>읽는 대상</th><td>서버가 보내주는 HTML</td><td>브라우저가 그려낸 최종 화면</td></tr>
-        <tr><th>맞는 사이트</th><td>정적 — URL 규칙이 있는 목록</td><td>동적 — 스크롤·클릭·로그인 화면</td></tr>
+        <tr><th>맞는 사이트</th><td>정적: URL 규칙이 있는 목록</td><td>동적: 스크롤·클릭·로그인 화면</td></tr>
         <tr><th>강점</th><td>대량·반복 수집, 백그라운드 실행</td><td>사람이 보는 것은 무엇이든 수집</td></tr>
-        <tr><th>유의점</th><td>동적 내용은 비어 있을 수 있음</td><td>내 계정·내 브라우저로 하는 일 — 책임도 내 계정에</td></tr>
+        <tr><th>유의점</th><td>동적 내용은 비어 있을 수 있음</td><td>내 계정·내 브라우저로 하는 일. 책임도 내 계정에</td></tr>
       </tbody>
     </table>
-    <p class="muted">확인 방법 — 주소창의 URL만 바꿔서(페이지 번호, 조건) 목록이 바로 열리면 정적. 스크롤하거나 버튼을 눌러야만 내용이 나타나고 URL은 그대로라면 동적.</p>
+    <p class="muted">확인 방법: 주소창의 URL만 바꿔서(페이지 번호, 조건) 목록이 바로 열리면 정적. 스크롤하거나 버튼을 눌러야만 내용이 나타나고 URL은 그대로라면 동적.</p>
   </div>
 </section>
 
 <!-- ===================== 6. Cowork 웹 스크래핑 ===================== -->
 <section class="slide section" data-sec="6" data-title="Cowork로 웹 스크래핑">
   <div class="kicker">Section 6</div>
-  <h2>Cowork로 웹 스크래핑 — 복사–붙여넣기 수백 번 대신, 문장 하나</h2>
-  <p class="section-lead">웹페이지를 일일이 복사해 엑셀에 붙여넣던 일을 “이 페이지에서 이런 정보를 뽑아 줘”로 끝낸다. 결과는 연동한 내 PC 폴더에 CSV와 본문 파일로 남는다.</p>
+  <h2>Cowork로 웹 스크래핑: 복사–붙여넣기 수백 번 대신, 문장 하나</h2>
+  <p class="section-lead">웹페이지를 일일이 복사해 엑셀에 붙여넣던 일을 “이 페이지에서 이런 정보를 뽑아 줘”로 끝낸다. 결과는 연동한 내 PC 폴더에 CSV로 남는다.</p>
   <div class="body">
     <ol class="roadmap" data-current="6"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="실습 대상 — YES24 베스트셀러">
+<section class="slide" data-sec="6" data-title="실습 대상: YES24 베스트셀러">
   <div class="kicker">Cowork로 웹 스크래핑</div>
-  <h2>실습 대상 — YES24 경제·경영 베스트셀러 (성별 × 연령대)</h2>
+  <h2>실습 대상: YES24 경제·경영 베스트셀러 (성별 × 연령대)</h2>
   <div class="body">
     <ul class="bul compact">
       <li>먼저 <code>C:\claude</code> 아래에 실습용 폴더 <code>C:\claude\bestseller</code>를 만들고, 데스크톱 앱에서 Cowork를 열어 이 폴더를 연동한다. 연동을 건너뛰면 수집은 성공해도 결과 파일이 클라우드에만 남아 내 PC에서 열 수 없다</li>
@@ -1116,10 +1116,9 @@ Cloudflare로 내 도메인을 연결하고 싶어. 초보자 기준으로 순�
     </ul>
     <pre class="code">…/bestseller?categoryNumber=001001025&amp;pageNumber=1&amp;pageSize=24&amp;<b>age=10</b>&amp;<b>sex=F</b></pre>
     <p class="muted">→ “경제·경영 분야, 10대 여성 독자의 베스트셀러 1페이지”. age(10~60)와 sex(F/M)만 바꾸면 12개 그룹의 목록이 나온다. 주소만 바꿔도 목록이 통째로 열린다 = 정적으로 접근 가능하다는 신호. 이 URL 규칙은 AI가 스스로 알아내기도 하지만, 알려 주면 빠르다.</p>
-    <pre class="prompt"><button class="copy" type="button">복사</button>이 페이지의 베스트셀러를 성별×연령대 조합별로 Top 20씩 수집해서
-연동 폴더에 bestseller.csv로 저장해줘.
+    <pre class="prompt"><button class="copy" type="button">복사</button>이 페이지의 베스트셀러를 성별×연령대 조합별로 Top 20씩 수집해서 연동 폴더에 bestseller.csv로 저장해줘.
 https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;pageNumber=1&amp;pageSize=24&amp;age=10&amp;sex=F</pre>
-    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>저자·출판사·출간월·판매가·평점도 넣어줘</span><span>엑셀에서 한글이 깨져 — UTF-8 BOM으로</span><span>요청 사이에 간격을 두고, 끝나면 그룹별 건수를 표로</span></div>
+    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>저자·출판사·출간월·판매가·평점도 넣어줘</span><span>엑셀에서 한글이 깨져. UTF-8 BOM으로</span><span>요청 사이에 간격을 두고, 끝나면 그룹별 건수를 표로</span></div>
   </div>
 </section>
 
@@ -1134,52 +1133,51 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
         <div class="step"><span class="no">3</span><b class="ttl">저장 형식</b><p class="prob">CSV / JSON. 엑셀용은 UTF-8 BOM</p></div>
         <div class="step"><span class="no">4</span><b class="ttl">저장 위치</b><p class="prob">연동 폴더 안의 경로. 빠뜨리면 결과가 클라우드에만 남는다</p></div>
       </div>
-      <figure><img src="assets/week03/yes24-table.png" alt="수집 결과 CSV를 성별·연령대로 필터해 보는 표. 20대 여성 Top 5" style="max-height:280px"><figcaption>실제 수집 결과 239권 (2026-08-04 기준) — 10대 여성은 목록 자체가 19권</figcaption></figure>
+      <figure><img src="assets/week03/yes24-table.png" alt="수집 결과 CSV를 성별·연령대로 필터해 보는 표. 20대 여성 Top 5" style="max-height:280px"><figcaption>실제 수집 결과 239권 (2026-08-04 기준). 10대 여성은 목록 자체가 19권</figcaption></figure>
     </div>
     <div class="callout"><b>표는 CSV, 긴 본문은 개별 파일.</b> CSV 한 칸에 판결문 전문 같은 긴 글을 밀어 넣으면 줄바꿈·쉼표 때문에 파일이 깨진다. 목록(메타데이터)은 CSV로, 본문은 사건번호처럼 알아볼 수 있는 이름을 붙인 개별 텍스트 파일로 나눠 저장한다.</div>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="수집 후 — 탐색적 분석(EDA)">
+<section class="slide" data-sec="6" data-title="수집 후: 탐색적 분석(EDA)">
   <div class="kicker">Cowork로 웹 스크래핑</div>
-  <h2>수집 후 — 탐색적 분석(EDA)도 프롬프트 하나로</h2>
+  <h2>수집 후: 탐색적 분석(EDA)도 프롬프트 하나로</h2>
   <div class="body">
     <p>수집은 절반이다. 나머지 절반은 “이 데이터가 무슨 이야기를 하는가”를 찾는 탐색적 분석(Exploratory Data Analysis)이다.</p>
-    <pre class="prompt"><button class="copy" type="button">복사</button>수집한 베스트셀러 데이터로, 지금 성별과 나이대별로 어떤 책을
-선호하는지 보여주는 분석자료를 만들어보자.</pre>
-    <p class="muted">지시는 이 정도면 충분하다 — 유사도 행렬, 공통 도서, 키워드 분류 같은 분석 방법은 AI가 알아서 고른다. 결과를 보고 “성별 차이와 세대 차이 중 뭐가 더 커?”, “유사도 행렬은 평균을 흰색으로 두고 이질적인 그룹이 드러나게 다시 그려줘”처럼 후속 지시로 다듬는 것이 실제 작업 흐름이다.</p>
-    <figure class="plain"><img src="assets/week03/eda-tiles.png" alt="분석 결과 요약 4개: 11/12 국민 재테크서, 0.00 10대 남녀 유사도, 0.67 40·50대 남성 유사도, .34 vs .29 세대가 성별보다 큰 경계" style="max-height:150px"><figcaption>분석 결과 요약 — 세대와 성별은 정말 다른 책을 읽을까?</figcaption></figure>
+    <pre class="prompt"><button class="copy" type="button">복사</button>수집한 베스트셀러 데이터로, 성별과 나이대별로 어떤 책을 선호하는지 보여주는 분석자료를 만들어보자.</pre>
+    <p class="muted">지시는 이 정도면 충분하다. 유사도 행렬, 공통 도서, 키워드 분류 같은 분석 방법은 AI가 알아서 고른다. 결과를 보고 “성별 차이와 세대 차이 중 뭐가 더 커?”, “유사도 행렬은 평균을 흰색으로 두고 이질적인 그룹이 드러나게 다시 그려줘”처럼 후속 지시로 다듬는 것이 실제 작업 흐름이다.</p>
+    <figure class="plain"><img src="assets/week03/eda-tiles.png" alt="분석 결과 요약 4개: 11/12 국민 재테크서, 0.00 10대 남녀 유사도, 0.67 40·50대 남성 유사도, .34 vs .29 세대가 성별보다 큰 경계" style="max-height:150px"><figcaption>분석 결과 요약: 세대와 성별은 정말 다른 책을 읽을까?</figcaption></figure>
   </div>
 </section>
 
 <section class="slide" data-sec="6" data-title="EDA 결과 (1)">
   <div class="kicker">Cowork로 웹 스크래핑</div>
-  <h2>EDA 결과 (1) — 모두가 읽는 책, 그리고 나이에 따른 주제 이동</h2>
+  <h2>EDA 결과 (1): 모두가 읽는 책, 그리고 나이에 따른 주제 이동</h2>
   <div class="body">
     <div class="two eq" style="align-items:start">
-      <figure><img src="assets/week03/canon.png" alt="12개 그룹 중 몇 개 목록에 등장했는가 상위 12권 막대 그래프. 나의 첫 번째 부동산 교과서와 돈, 뜨겁게 사랑하고 차갑게 다루어라가 11개 그룹" style="max-height:330px"><figcaption>모든 세대가 함께 읽는 책 — 12개 그룹 중 11개 목록에 등장한 “국민 재테크서”</figcaption></figure>
-      <figure><img src="assets/week03/topic.png" alt="제목에 ETF·배당·연금·포트폴리오가 들어간 책 수를 성별·연령대별로 나타낸 막대 그래프" style="max-height:330px"><figcaption>나이가 들수록 “배당·연금”으로 — 남성은 10대 1권 → 50대 5권, 60대엔 절세·자산 정리 주제로</figcaption></figure>
+      <figure><img src="assets/week03/canon.png" alt="12개 그룹 중 몇 개 목록에 등장했는가 상위 12권 막대 그래프" style="max-height:330px"><figcaption>모든 세대가 함께 읽는 책: 12개 그룹 중 11개 목록에 등장한 “국민 재테크서”</figcaption></figure>
+      <figure><img src="assets/week03/topic.png" alt="제목에 ETF·배당·연금·포트폴리오가 들어간 책 수를 성별·연령대별로 나타낸 막대 그래프" style="max-height:330px"><figcaption>나이가 들수록 “배당·연금”으로. 남성은 10대 1권 → 50대 5권, 60대엔 절세·자산 정리 주제로</figcaption></figure>
     </div>
   </div>
 </section>
 
 <section class="slide" data-sec="6" data-title="EDA 결과 (2)">
   <div class="kicker">Cowork로 웹 스크래핑</div>
-  <h2>EDA 결과 (2) — 성별 차이 vs 세대 차이</h2>
+  <h2>EDA 결과 (2): 성별 차이 vs 세대 차이</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:.9fr 1.1fr;align-items:start">
       <div class="stack">
-        <figure><img src="assets/week03/gap.png" alt="같은 성별에서 세대 간격이 벌어질 때의 평균 유사도 막대(.38, .31, .24, .16, .07)와 같은 세대 남녀 평균 .34 점선" style="max-height:230px"><figcaption>한 세대(10살) 차이(.38)는 성별 차이(.34)보다 작지만, 두 세대 이상 벌어지면 세대 차이가 성별 차이를 압도한다</figcaption></figure>
-        <figure><img src="assets/week03/unique.png" alt="다른 11개 그룹 어디에도 없는 고유 도서 수. 10대 여성 16권, 10대 남성 13권으로 압도적" style="max-height:200px"><figcaption>10대만 다른 세상 — 10대 여성 목록 19권 중 16권이 고유(진로·교양서)</figcaption></figure>
+        <figure><img src="assets/week03/gap.png" alt="같은 성별에서 세대 간격이 벌어질 때의 평균 유사도 막대와 같은 세대 남녀 평균 .34 점선" style="max-height:230px"><figcaption>한 세대(10살) 차이(.38)는 성별 차이(.34)보다 작지만, 두 세대 이상 벌어지면 세대 차이가 성별 차이를 압도한다</figcaption></figure>
+        <figure><img src="assets/week03/unique.png" alt="다른 11개 그룹 어디에도 없는 고유 도서 수. 10대 여성 16권, 10대 남성 13권" style="max-height:200px"><figcaption>10대만 다른 세상: 10대 여성 목록 19권 중 16권이 고유(진로·교양서)</figcaption></figure>
       </div>
-      <figure><img src="assets/week03/matrix.png" alt="여성 연령대(행) × 남성 연령대(열)의 자카드 유사도 행렬. 10대 여성 행이 전부 붉고, 40·50대끼리는 파랗다" style="max-height:440px"><figcaption>누구와 누가 같은 책을 읽나 — 자카드 유사도, 흰색 = 전체 평균(.28). 대각선이 “같은 세대의 남녀”</figcaption></figure>
+      <figure><img src="assets/week03/matrix.png" alt="여성 연령대(행) × 남성 연령대(열)의 자카드 유사도 행렬" style="max-height:440px"><figcaption>누구와 누가 같은 책을 읽나: 자카드 유사도, 흰색 = 전체 평균(.28). 대각선이 “같은 세대의 남녀”</figcaption></figure>
     </div>
   </div>
 </section>
 
 <section class="slide" data-sec="6" data-title="패턴 6가지">
   <div class="kicker">Cowork로 웹 스크래핑</div>
-  <h2>패턴 6가지 — 숫자가 말해 주는 것</h2>
+  <h2>패턴 6가지: 숫자가 말해 주는 것</h2>
   <div class="body">
     <ol class="recap">
       <li><b>세대를 관통하는 캐논이 있다</b>『나의 첫 번째 부동산 교과서』『돈, 뜨겁게 사랑하고 차갑게 다루어라』는 12개 그룹 중 11개 목록에 등장</li>
@@ -1187,30 +1185,38 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
       <li><b>성별 차이보다 세대 차이가 크다</b>같은 세대 남녀 .34 > 같은 성별 세대 간 .29. 단, 인접 세대(.38)는 성별 장벽보다 가깝다</li>
       <li><b>나이가 오를수록 “연금·배당”으로, 60대엔 “자산 정리”로</b>ETF·배당·연금 책은 남성 50대 5권까지 늘고 60대엔 절세·자산 정리가 들어온다</li>
       <li><b>AI 책은 오히려 중장년·고령 목록에 많다</b>AI 교양서는 60대 이상 남성·50대 여성이 최다. 10대 남성은 AI를 “주식 자동매매 도구”로 소비</li>
-      <li><b>같은 데이터에서 후속 질문이 나온다</b>“10대 목록은 누가(본인? 부모?) 구매한 것일까?” — EDA의 끝은 결론이 아니라 더 좋은 질문</li>
+      <li><b>같은 데이터에서 후속 질문이 나온다</b>“10대 목록은 누가(본인? 부모?) 구매한 것일까?” EDA의 끝은 결론이 아니라 더 좋은 질문</li>
     </ol>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="연구 적용 — 판결문 수집">
-  <div class="kicker">Cowork로 웹 스크래핑</div>
-  <h2>연구 적용 사례 — 판결문 895건 수집: 목록 먼저, 본문은 천천히</h2>
+<!-- ===================== 7. 연구 적용: 판결문 수집과 변환 ===================== -->
+<section class="slide section" data-sec="7" data-title="연구 적용: 판결문 수집과 변환">
+  <div class="kicker">Section 7</div>
+  <h2>연구 적용: 판결문 895건 수집과 변환</h2>
+  <p class="section-lead">같은 파이프라인(수집 → 분류 → 반복 패턴 추출)을 연구용 데이터에 적용한 사례. “직장 내 괴롭힘”이 언급된 지방법원 판결 895건을 수집해 유형별로 분류하고, 법원이 손해배상을 인정할 때 반복 적용하는 요건을 추출했다.</p>
   <div class="body">
-    <p>같은 파이프라인(수집 → 분류 → 반복 패턴 추출)을 연구용 데이터에 적용한 사례. “직장 내 괴롭힘”이 언급된 지방법원 판결 895건을 수집해 유형별로 분류하고, 법원이 손해배상을 인정할 때 반복 적용하는 요건을 추출했다. 판결문처럼 본문이 긴 자료를 수백 건 수집할 때는 한 번에 긁지 않는다.</p>
-    <div class="two eq" style="align-items:start">
-      <pre class="prompt"><button class="copy" type="button">복사</button>검색 결과 목록(사건번호·법원·선고일·링크)만 먼저 rulings.csv로 저장해줘.
-본문은 아직 받지 마.</pre>
-      <pre class="prompt"><button class="copy" type="button">복사</button>rulings.csv에서 아직 안 받은 사건 30건만 본문을 받아서
-rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시해줘.
-(시간을 두고 여러 번 반복)</pre>
-    </div>
-    <div class="callout">① 목록(메타데이터)만 먼저 CSV로, ② 본문은 그 목록을 보며 시간 간격을 두고 조금씩 — 서버에 부하를 주지 않기 위한 예의이자, 중간에 끊겨도 CSV에 진행 상황이 남아 이어서 할 수 있는 요령. 파일명에 법원을 넣는 이유 — 사건번호는 법원이 다르면 겹칠 수 있다(같은 2022가단12345가 여러 법원에).</div>
+    <ol class="roadmap" data-current="7"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="마크다운 변환과 요약">
-  <div class="kicker">Cowork로 웹 스크래핑</div>
-  <h2>3단계 — 본문을 마크다운(.md)으로 변환하며 요약도 함께</h2>
+<section class="slide" data-sec="7" data-title="목록 먼저, 본문은 천천히">
+  <div class="kicker">연구 적용: 판결문 수집과 변환</div>
+  <h2>목록 먼저, 본문은 천천히: 세 단계로 나눠 요청한다</h2>
+  <div class="body">
+    <p>판결문처럼 본문이 긴 자료를 수백 건 수집할 때는 한 번에 긁지 않는다. ① 목록(메타데이터)만 먼저 CSV로, ② 본문 10건 정도만 받아 결과를 확인하고, ③ 문제가 없으면 30건씩 배치로 간격을 두고 반복한다.</p>
+    <div class="stack" style="gap:14px">
+      <pre class="prompt"><button class="copy" type="button">복사</button>검색 결과 목록(사건번호·법원·선고일·링크)만 먼저 rulings.csv로 저장해줘. 본문은 아직 받지 마.</pre>
+      <pre class="prompt"><button class="copy" type="button">복사</button>rulings.csv에서 10건만 본문을 받아서 rulings/ 폴더에 법원_사건번호.txt로 저장해줘. 받은 행은 수집완료 표시해줘.</pre>
+      <pre class="prompt"><button class="copy" type="button">복사</button>나머지는 30건씩 배치로 받아줘. 매 건마다 3초 간격을 두고, 30건을 받은 다음에는 5분 쉬었다가 다음 배치를 실행해.</pre>
+    </div>
+    <div class="callout">10건을 먼저 받는 이유: 본문이 제대로 들어오는지, 파일명과 인코딩이 맞는지 눈으로 확인한 뒤에 본 배치를 돌린다. 간격을 두는 이유: 서버에 부하를 주지 않기 위한 예의(§5의 “서버 배려”)이자, 중간에 끊겨도 CSV의 수집완료 표시로 이어서 할 수 있는 요령. 파일명에 법원을 넣는 이유: 사건번호는 법원이 다르면 겹칠 수 있다(같은 2022가단12345가 여러 법원에).</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="마크다운 변환과 요약">
+  <div class="kicker">연구 적용: 판결문 수집과 변환</div>
+  <h2>본문을 마크다운(.md)으로 변환하며 요약도 함께</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:.8fr 1.2fr;align-items:start">
       <div class="stack">
@@ -1223,16 +1229,17 @@ rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시
 - 위자료 500만 원 인정</pre>
         <p class="muted" style="font-size:13px">마크다운 = 글의 구조를 기호 몇 개(#, ##, -)로 표시하는 텍스트 형식. 메모장으로도 열리고, 사람도 AI도 “어디에 무엇이 있는지”를 구조로 파악한다.</p>
       </div>
-      <pre class="prompt"><button class="copy" type="button">복사</button>rulings/의 txt 파일들을 md로 바꿔줘. 사실관계·주장·판단·결론이 나뉘는 곳마다
-## 제목을 붙이고, 맨 위에 2줄 요약을 넣어줘. 원문 문장은 바꾸지 말고.</pre>
-      <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>요약만 모아 rulings_summary.csv로도 저장해줘</span><span>맨 위에 사건번호·법원·선고일·소송결과도</span><span>판단 부분이 안 나뉘었어 — 다시</span></div>
+      <div class="stack">
+        <pre class="prompt"><button class="copy" type="button">복사</button>rulings/의 txt 파일들을 md로 바꿔줘. 사실관계·주장·판단·결론이 나뉘는 곳마다 ## 제목을 붙이고, 맨 위에 2줄 요약을 넣어줘. 원문 문장은 바꾸지 말고.</pre>
+        <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>요약만 모아 rulings_summary.csv로도 저장해줘</span><span>맨 위에 사건번호·법원·선고일·소송결과도</span><span>판단 부분이 안 나뉘었어. 다시</span></div>
+        <p class="muted">요약을 이때 만드는 이유: 나중에 따로 시키면 같은 전문을 한 번 더 읽어야 해서 시간도 비용도 두 배. 이 2줄 요약은 §10 스킬의 재료가 된다.</p>
+      </div>
     </div>
-    <p class="muted">요약을 이때 만드는 이유 — 나중에 따로 시키면 같은 전문을 한 번 더 읽어야 해서 시간도 비용도 두 배. 이 2줄 요약은 “요지를 훑고 고른 사건만 전문을 읽는” 질의응답 스킬(§8)의 재료가 된다.</p>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="수집에서 보고서까지">
-  <div class="kicker">Cowork로 웹 스크래핑</div>
+<section class="slide" data-sec="7" data-title="수집에서 보고서까지">
+  <div class="kicker">연구 적용: 판결문 수집과 변환</div>
   <h2>수집 → 변환 → 분석 → 보고서</h2>
   <div class="body">
     <div class="loop" style="grid-template-columns:repeat(7,auto);justify-content:center">
@@ -1241,73 +1248,221 @@ rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시
       <div class="lnode">🔍 탐색적 분석<small>유형 분류, 반복 요건</small></div><span class="lar">➜</span>
       <div class="lnode">📄 보고서<small>인정 요건 ①~⑥</small></div>
     </div>
-    <pre class="prompt"><button class="copy" type="button">복사</button>수집한 판결문에 대해 탐색적 분석을 하라.
-탐색적 분석의 목적은 민사 손해배상 소송(직장 내 괴롭힘을 근거로 한
-불법행위 손해배상) 사건에서 직장 내 괴롭힘으로 인정된 요건을
-파악하는 것임.</pre>
-    <p class="muted">이 지시 하나로 판결 895건 → 4개 사건유형 분류 → 인정 요건 ①~⑥ 도출 보고서가 나왔다. 분석의 목적만 지시했고, 요건 추출과 긍정/부정 사례 대비 같은 구성은 AI가 목적에 맞춰 스스로 발전시킨 것이다. 보고서 원문: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week2/week2-example-workplace-harassment-report.html" target="_blank" rel="noopener">직장 내 괴롭힘 민사 손해배상 인정 요건 분석</a></p>
-    <div class="callout good"><b>직접 해보기</b> — 관심 분야의 정적 사이트 하나를 골라 수집 프롬프트를 변형해 100건 이상 수집하고, EDA 프롬프트로 패턴 3가지를 찾아보자. 결과 CSV가 내 폴더에 실제로 저장됐는지 꼭 확인.</div>
+    <pre class="prompt"><button class="copy" type="button">복사</button>수집한 판결문에 대해 탐색적 분석을 하라. 목적은 직장 내 괴롭힘을 근거로 한 민사 손해배상 사건에서 괴롭힘으로 인정된 요건을 파악하는 것임.</pre>
+    <p class="muted">이 지시 하나로 판결 895건 → 4개 사건유형 분류 → 인정 요건 ①~⑥ 도출 보고서가 나왔다. 분석의 목적만 지시했고, 요건 추출과 긍정/부정 사례 대비 같은 구성은 AI가 목적에 맞춰 스스로 발전시킨 것이다. 보고서: <a href="examples/week03/workplace-harassment-report.html" target="_blank" rel="noopener">직장 내 괴롭힘 민사 손해배상 인정 요건 분석 ↗</a></p>
   </div>
 </section>
 
-<!-- ===================== 7. 데이터 분석 — 판결문 지도 ===================== -->
-<section class="slide section" data-sec="7" data-title="데이터 분석 — 판결문 지도">
-  <div class="kicker">Section 7</div>
-  <h2>데이터 분석 — 판결문 347건의 지도</h2>
-  <p class="section-lead">2강에서 본 임베딩(문서를 숫자 배열로)을 판결문에 적용하면, 비슷한 판결끼리 묶이고 한 장의 지도가 된다. 점 하나가 판결 한 건이다.</p>
+<!-- ===================== 8. OpenRouter와 임베딩 추출 ===================== -->
+<section class="slide section" data-sec="8" data-title="OpenRouter와 임베딩 추출">
+  <div class="kicker">Section 8</div>
+  <h2>OpenRouter와 임베딩 추출: 판결문 347건을 숫자로</h2>
+  <p class="section-lead">2강에서 본 임베딩(문서를 숫자 배열로)을 판결문에 실제로 적용한다. 여러 회사의 모델을 API 키 하나로 쓰게 해 주는 OpenRouter를 창구로 삼는다. 이번 시간에는 임베딩 모델만 쓴다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="7"></ol>
+    <ol class="roadmap" data-current="8"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="분석 요청과 처리 순서">
-  <div class="kicker">데이터 분석 — 판결문 지도</div>
-  <h2>분석 요청과 처리 순서 — 요청은 두 문장</h2>
+<section class="slide" data-sec="8" data-title="임베딩이란: 2강 복습">
+  <div class="kicker">OpenRouter와 임베딩 추출</div>
+  <h2>임베딩이란: 비정형 데이터를 숫자로 요약하기 (2강 복습)</h2>
   <div class="body">
-    <p>판결문 347건의 본문을 임베딩 모델에 넣어 얻은 4,096차원 벡터가 JSON 파일 347개로 연동 폴더에 있다(2강의 임베딩을 문서 단위로 적용한 것. 추출 방법은 부트캠프 2주차 ④ 자료). Cowork에 그 폴더의 파일을 쓰라고 지시하면 된다.</p>
-    <pre class="prompt"><button class="copy" type="button">복사</button>연동 폴더에 저장된 판결문 임베딩 JSON 파일들을 이용해서
-클러스터링 + 차원축소 + 시각화 작업을 수행하고, 이 과정을 html로 작성하라.</pre>
+    <ul class="bul compact">
+      <li>판결문 한 건은 평균 8,500자짜리 비정형 텍스트다. 통계도, 지도도, 유사도 계산도 텍스트 그대로는 불가능하다</li>
+      <li>2강의 인코더–디코더를 떠올리자. 인코더가 문장을 읽어 만든 “의미 요약 벡터”만 떼어 저장한 것이 임베딩이다. 오늘은 판결문 한 건이 4,096개의 숫자가 된다</li>
+      <li>비슷한 내용의 글은 비슷한 숫자가 되므로, 숫자 사이의 거리가 곧 의미의 거리가 된다. 모든 판결문에 좌표를 붙인다고 생각하면 된다. 쟁점이 비슷하면 이웃 동네</li>
+    </ul>
+    <div class="loop" style="grid-template-columns:repeat(7,auto);justify-content:center">
+      <div class="lnode">📄 입력<small>“판결문 텍스트…”</small></div><span class="lar">➜</span>
+      <div class="lnode">인코더<small>의미를 압축</small></div><span class="lar">➜</span>
+      <div class="lnode" style="border-color:var(--red)">의미 요약 벡터<small>[0.12, −0.98, …] 4,096개</small></div><span class="lar" style="opacity:.35">➜</span>
+      <div class="lnode" style="opacity:.4">디코더<small>번역·요약 생성 (오늘은 안 씀)</small></div>
+    </div>
+    <div class="callout">재료: 앞 섹션에서 수집한 895건 중 본문 전문을 확보하고 분석 대상(직장 내 괴롭힘 민사 손해배상)으로 확정한 <b>347건</b>. 수집한 전부를 쓰는 것이 아니라 분석 목적에 맞는 것만 추리는 단계가 수집과 분석 사이에 반드시 들어간다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="API와 API 키">
+  <div class="kicker">OpenRouter와 임베딩 추출</div>
+  <h2>잠깐, API가 뭔가요? 그럼 API 키는?</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <div class="stack">
+        <p>지금까지 우리는 화면을 보고 클릭해서 AI를 썼다. claude.ai도 Cowork도 사람이 쓰라고 만든 창구다. <b>API</b>는 같은 서비스에 프로그램이 직접 요청하는 창구다. 프로그램이 “이 문장의 임베딩을 줘”라고 보내면 숫자 배열이 답으로 돌아온다. 판결문 347건의 임베딩을 화면에서 하나씩 복사·붙여넣기 할 수는 없기 때문에 필요하다.</p>
+        <table class="tbl" style="width:100%">
+          <thead><tr><th></th><th>사람용 창구 (웹 화면)</th><th>프로그램용 창구 (API)</th></tr></thead>
+          <tbody>
+            <tr><th>누가 쓰나</th><td>사람이 클릭하고 타이핑</td><td>프로그램이 자동으로</td></tr>
+            <tr><th>한 번에</th><td>한 건씩</td><td>수백·수천 건</td></tr>
+            <tr><th>신원 확인</th><td>아이디·비밀번호 로그인</td><td>API 키</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn"><b>API 키</b>: API에는 로그인 화면이 없다. 프로그램이 요청할 때마다 “이건 내 요청이다”를 증명하는 증명서가 API 키다. <code>sk-or-v1-3f9a…</code> 같은 길고 무작위한 문자열 하나가 곧 신분증이자 결제수단이다. 누구의 요청인지 식별하고, 그 계정의 크레딧에서 사용료를 차감한다.<br><br>그래서 <b>키를 아는 사람은 누구나 내 돈으로 호출할 수 있다.</b> 비밀번호가 걸려 있지 않은 신용카드 번호에 가깝다. 화면이나 채팅에 붙여넣지 말고, 파일로 보관하고, 남에게 보내지 않는다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="OpenRouter의 역할">
+  <div class="kicker">OpenRouter와 임베딩 추출</div>
+  <h2>OpenRouter: 임베딩을 뽑는 가장 편한 창구</h2>
+  <div class="body">
+    <p>임베딩 모델을 내 PC에서 직접 돌릴 수도 있지만, 비개발자에게는 API로 불러 쓰는 것이 훨씬 편하다. 여러 회사의 모델을 한곳에서 쓰게 해 주는 중개소가 OpenRouter다.</p>
+    <div class="steps">
+      <div class="step"><span class="no">🔀</span><b class="ttl">하나의 키, 수백 개 모델</b><p class="prob">OpenAI·Google·Qwen 등 여러 회사 모델을 API 키 하나로 호출. 모델명 문자열만 바꾸면 모델이 바뀐다</p></div>
+      <div class="step"><span class="no">💳</span><b class="ttl">선불 크레딧</b><p class="prob">미리 충전해 둔 금액에서 쓴 만큼만 차감. 월 구독이 아니라서 안 쓰면 안 나간다</p></div>
+      <div class="step"><span class="no">🧾</span><b class="ttl">투명한 사용 내역</b><p class="prob">사이트의 Activity에서 호출 건수와 비용이 그대로 조회된다. 실습 중 “돈이 얼마나 나가나”를 확인하는 창구</p></div>
+    </div>
+    <div class="callout"><b>이번 시간에는 임베딩 모델만 쓴다.</b> 대화형 모델(Claude, GPT 등)은 Cowork 안에서 이미 쓰고 있으므로, OpenRouter에서는 문서를 숫자로 바꾸는 임베딩 모델 하나만 호출한다. 판결문 347건 전체를 임베딩하는 데 든 비용은 약 2센트였다. “API는 비쌀 것”이라는 걱정은 임베딩에서는 대체로 기우다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="가입, 충전, 키 발급, 한도">
+  <div class="kicker">OpenRouter와 임베딩 추출</div>
+  <h2>직접 해보기: 크레딧 충전과 API 키 발급</h2>
+  <div class="body">
+    <p><a href="https://openrouter.ai" target="_blank" rel="noopener">openrouter.ai</a>에 가입(구글 계정 등으로 로그인 가능)한 뒤 아래 순서대로. 충전을 먼저, 키 발급을 나중에 하는 편이 편하다. 키를 만들 때 한도를 함께 정하기 때문이다.</p>
+    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+      <div class="step"><span class="no">1</span><b class="ttl">크레딧 충전: $5</b><p class="prob">계정 메뉴의 Credits에서 카드로 충전. 최소 구매 금액이 $5이며, 오늘 실습에는 그 이상이 필요 없다. 347건 임베딩이 약 2센트</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">키 발급: Keys → Create Key</b><p class="prob">이름은 나중에 알아볼 수 있게 itm690-week3처럼 용도를 적어 둔다. 문제가 생긴 키만 골라 폐기할 수 있다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">한도 설정: 건너뛰지 말 것</b><p class="prob">사용 한도(credit limit)를 $1~2로 걸어 둔다. 코드가 잘못 돌거나 키가 유출돼도 피해가 이 금액 안에 묶인다</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">키 저장: 한 번만 보여준다</b><p class="prob">발급 직후 복사해서 연동 폴더의 <code>openrouterkey.txt</code>에 붙여 넣고 저장. 놓쳤다면 그 키는 지우고 새로 만든다</p></div>
+    </div>
+    <div class="callout bad"><b>키를 다루는 세 가지 습관</b>: ① 채팅·메일·과제 제출물에 키를 붙여넣지 않는다(스크린샷도 포함). ② 키 파일이 든 폴더를 공유하거나 GitHub에 올리기 전에 키 파일부터 빼낸다. ③ 실수로 노출했다면 그 키를 삭제(revoke)하고 새로 발급한다. 삭제된 키는 즉시 무효가 된다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="임베딩 모델 고르기">
+  <div class="kicker">OpenRouter와 임베딩 추출</div>
+  <h2>임베딩 모델 고르기: 컨텍스트 길이가 핵심</h2>
+  <div class="body">
+    <p>코퍼스 실측: 347건 평균 8,492자, 최대 41,374자. 8,000자를 넘는 판결문이 절반 가까이라, 컨텍스트가 8K 토큰인 모델은 절반이 잘린다(한국어는 글자당 토큰 소모가 커서 더 심함). OpenRouter에서 실제로 조회된 선택지:</p>
+    <table class="tbl" style="width:100%">
+      <thead><tr><th>모델 (OpenRouter 슬러그)</th><th>컨텍스트</th><th>단가</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td class="hl"><code>qwen/qwen3-embedding-8b</code></td><td class="hl">32K</td><td class="hl">$0.01/M</td><td class="hl"><b>선택</b>: 길이·가격 모두 유리</td></tr>
+        <tr><td><code>google/gemini-embedding-001</code></td><td>20K</td><td>$0.15/M</td><td></td></tr>
+        <tr><td><code>openai/text-embedding-3-large</code></td><td>8K</td><td>$0.13/M</td><td>장문 판결문 절반이 잘림</td></tr>
+        <tr><td><code>baai/bge-m3</code></td><td>8K</td><td>$0.01/M</td><td></td></tr>
+      </tbody>
+    </table>
+    <p class="muted">모델 선택은 AI에게 맡겨도 된다. 다만 “실제로 존재하는 모델인지, 컨텍스트가 우리 문서 길이를 감당하는지 확인해 달라”고 함께 지시한다. 데이터 길이를 실측한 뒤 모델을 고르는 것이 순서다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="Cowork 파이프라인: 폴더 연동과 키">
+  <div class="kicker">OpenRouter와 임베딩 추출</div>
+  <h2>Cowork 파이프라인: 코드 한 줄 없이 요청 하나로</h2>
+  <div class="body">
+    <div class="loop" style="grid-template-columns:repeat(9,auto);justify-content:center">
+      <div class="lnode">① 폴더 연동<small>판결문이 있는 폴더</small></div><span class="lar">➜</span>
+      <div class="lnode">② 키 파일<small>openrouterkey.txt</small></div><span class="lar">➜</span>
+      <div class="lnode">③ 프롬프트<small>“임베딩 뽑아 JSON으로”</small></div><span class="lar">➜</span>
+      <div class="lnode">④ 클라우드 실행<small>Cowork가 API 호출</small></div><span class="lar">➜</span>
+      <div class="lnode">⑤ 동기화<small>JSON 347개가 내 폴더로</small></div>
+    </div>
+    <pre class="prompt"><button class="copy" type="button">복사</button>rulings/ 판결문 본문의 임베딩을 OpenRouter API로 뽑아서 판결문별 JSON 파일로 저장해줘. 키는 openrouterkey.txt에 있어.</pre>
+    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>어떤 임베딩 모델을 쓸지 선택지를 줘. 문서 길이를 감당하는지 확인해서</span><span>JSON에 서지 정보와 2줄 요약도 같이 넣어줘</span><span>먼저 5건만 시험으로 돌려 보고 결과를 보여줘</span><span>키는 화면·로그에 출력하지 마</span></div>
+    <div class="callout warn"><b>키 보안, 반드시 확인할 것</b>: 키는 파일에서만 읽게 하고, 화면·로그·산출물 어디에도 출력하지 말 것을 명시한다. 작업이 끝나면 평문 키 파일이 폴더에 남아 있다는 사실을 잊지 말 것. 폴더를 공유·백업하기 전에 키 파일을 빼둔다. 구조 이해: 실제 HTTP 호출은 Cowork의 클라우드 컨테이너에서 일어나고 완성된 JSON이 PC 폴더로 돌아온다. “어디서 무엇이 실행되는가”는 민감 데이터를 다룰 때 꼭 확인해야 할 질문이다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="실전 기록: 요청 한 줄 뒤에서 일어난 일">
+  <div class="kicker">OpenRouter와 임베딩 추출</div>
+  <h2>실전 기록: 요청 한 줄 뒤에서 실제로 일어난 일들</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">1</span><b class="ttl">데이터를 실측한 뒤 모델을 골랐다</b><p class="prob">코퍼스 전체 길이를 실측(평균 8,492자, 8천자 초과 다수)해 컨텍스트 8K 모델을 배제하고 32K 모델을 권장. 최장 판결문(24,250토큰)을 실제로 보내 절단 없이 과금되는지까지 확인</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">시험 5건 → 검증 → 본 배치</b><p class="prob">전량을 바로 돌리지 않고 5건으로 시험 실행 후 무결성을 검증: 차원 4,096 동일, 벡터 정규화 확인, 본문 벡터가 자기 개요와 가장 가까운지(정합성). 통과 후 본 배치: 347건, 13.8분, 실패 0건, 비용 약 2센트</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">OpenRouter 사이트에서 직접 확인했다</b><p class="prob">AI의 보고를 그대로 믿는 대신 openrouter.ai의 Activity(사용 내역)를 열어 봤다. 호출이 실제로 나갔는지, 몇 건인지, 비용이 얼마나 빠져나갔는지가 그대로 보인다. AI의 보고는 외부 기록과 대조하면 가장 확실하다</p></div>
+    </div>
+    <p class="muted">덤: OpenRouter 홈페이지 아래쪽의 Rankings는 실제 API 호출량(토큰 기준)을 모델별로 집계한 순위표다. 벤치마크 점수가 아니라 사람들이 돈을 내고 실제로 쓴 양이라는 점이 다르다. 다만 순위 = 품질은 아니다. 가격이 싸면 호출량이 커진다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="산출물 JSON과 활용">
+  <div class="kicker">OpenRouter와 임베딩 추출</div>
+  <h2>산출물: 판결문 1건 = JSON 파일 1개, 그리고 활용</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:start">
+      <pre class="code">{
+  "id": "수원지방법원_2020가단8667",
+  "법원": "수원지방법원", "사건번호": "2020가단8667",
+  "선고일": "2021. 4. 21.", "심급": "1심", "소송결과": "원고일부승",
+  "body_chars": 2263, "body_tokens": 1607,
+  "embedding_model": "qwen/qwen3-embedding-8b",
+  "embedding_dim": 4096, "normalized": true,
+  "body_embedding": [-0.01119, -0.00574, 0.03813, …],  // 4,096개
+  "summary": "원고가 노동조합 조합장인 피고를 상대로 … 위자료
+   1,000만 원을 인정하였으나, 직장 내 괴롭힘 주장은 증거 부족으로 배척.",
+  "summary_embedding": [-0.03728, -0.00944, …]         // 4,096개
+}</pre>
+      <div class="stack">
+        <div class="callout"><b>메타데이터도 함께</b>: 벡터만 저장하지 않고 서지 정보·모델명·차원·정규화 여부를 같은 파일에 남긴다. 나중에 “이 벡터가 어떤 모델에서 나왔더라?”를 파일 하나로 답할 수 있어야 재현 가능한 연구가 된다.</div>
+        <div class="callout good"><b>활용 ① 의미 검색</b>: 질의문도 같은 모델로 임베딩해 거리가 가까운 판결을 찾으면, 단어가 아니라 판시 논리가 검색된다. “업무상 적정범위를 넘지 않았다고 보아 괴롭힘을 부정한 사례”로 질의 → 1·2위가 정확히 그 논리로 기각된 판결.</div>
+        <div class="callout good"><b>활용 ② 지도와 군집</b>: 4,096차원 좌표를 2차원으로 압축하면 코퍼스 전체가 한 장의 지도가 된다. 다음 섹션.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 9. 데이터 분석: 판결문 지도 ===================== -->
+<section class="slide section" data-sec="9" data-title="데이터 분석: 판결문 지도">
+  <div class="kicker">Section 9</div>
+  <h2>데이터 분석: 판결문 347건의 지도</h2>
+  <p class="section-lead">임베딩 JSON 347개를 실제로 분석한 기록. 클러스터링으로 다섯 개의 사건 유형을 찾고, 차원축소로 한 장의 지도를 그렸다. 점 하나가 판결 한 건이다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="9"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="분석 요청과 처리 순서">
+  <div class="kicker">데이터 분석: 판결문 지도</div>
+  <h2>분석 요청과 처리 순서: 요청은 두 문장</h2>
+  <div class="body">
+    <p>앞 섹션의 JSON 347개(서지 정보 + 4,096차원 본문 벡터 + 요약문)가 연동 폴더에 있다. 파일을 따로 올릴 필요 없이, Cowork에 그 폴더의 파일을 쓰라고 지시하면 된다.</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>연동 폴더의 판결문 임베딩 JSON 파일들로 클러스터링 + 차원축소 + 시각화를 하고, 이 과정을 html로 작성해줘.</pre>
     <div class="loop" style="grid-template-columns:repeat(7,auto);justify-content:center">
       <div class="lnode">① 벡터 적재<small>JSON 347개 → 347 × 4,096 행렬</small></div><span class="lar">➜</span>
       <div class="lnode">② 클러스터링<small>K-means로 비슷한 판결끼리 묶기</small></div><span class="lar">➜</span>
       <div class="lnode">③ 차원축소<small>UMAP으로 4,096차원 → 2차원</small></div><span class="lar">➜</span>
       <div class="lnode">④ 지도<small>산점도 + 클러스터 색 + 툴팁</small></div>
     </div>
-    <div class="callout warn"><b>순서에 주의</b> — 클러스터링은 원본 4,096차원 벡터에서 수행하고, 2차원 좌표는 보여 주기 위해서만 쓴다. 압축된 2차원에서 군집을 찾으면 압축 과정에서 생긴 왜곡까지 군집으로 오인할 수 있다.</div>
+    <div class="callout warn"><b>순서에 주의</b>: 클러스터링은 원본 4,096차원 벡터에서 수행하고, 2차원 좌표는 보여 주기 위해서만 쓴다. 압축된 2차원에서 군집을 찾으면 압축 과정에서 생긴 왜곡까지 군집으로 오인할 수 있다.</div>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="클러스터링 — k 고르기">
-  <div class="kicker">데이터 분석 — 판결문 지도</div>
-  <h2>클러스터링 — 비슷한 판결끼리 자동으로 묶기, 몇 개로?</h2>
+<section class="slide" data-sec="9" data-title="클러스터링: k 고르기">
+  <div class="kicker">데이터 분석: 판결문 지도</div>
+  <h2>클러스터링: 비슷한 판결끼리 자동으로 묶기, 몇 개로?</h2>
   <div class="body">
     <ul class="bul compact">
       <li>K-means는 “서로 가까운 벡터끼리 k개의 그룹으로 나누라”는 알고리즘. 사람이 정할 것은 하나, <b>몇 개의 그룹(k)</b>으로 나눌 것인가</li>
-      <li><b>실루엣 계수</b> — 군집이 얼마나 또렷하게 나뉘었는지를 재는 값(−1~1). 같은 군집 안의 점들과 가까울수록, 다른 군집과 멀수록 1에 가깝다. 계산은 AI가 하므로 값을 읽고 판단하는 것만 알면 된다</li>
+      <li><b>실루엣 계수</b>: 군집이 얼마나 또렷하게 나뉘었는지를 재는 값(−1~1). 같은 군집 안의 점들과 가까울수록, 다른 군집과 멀수록 1에 가깝다. 계산은 AI가 하므로 값을 읽고 판단하는 것만 알면 된다</li>
     </ul>
     <table class="tbl">
       <thead><tr><th>k</th><th>3</th><th>4</th><th>5 (선택)</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
       <tbody><tr><th>실루엣</th><td>.124</td><td>.123</td><td class="hl"><b>.100</b></td><td>.093</td><td>.102</td><td>.107</td><td>.103</td><td>.102</td></tr></tbody>
     </table>
-    <div class="callout"><b>지표가 아니라 해석이 결정했다.</b> 점수만 보면 k=3이 최선이지만, k=3의 군집은 크고 뭉뚱그려진 덩어리였다. k=5에서 비로소 법률가가 읽어도 말이 되는 다섯 유형(전형 폭언형 / 기각형 / 성희롱 결합형 / 인사분쟁 복합형 / 자살·유족소송형)이 나타났다. 군집 개수는 통계 지표를 참고하되, 최종 결정은 도메인 해석 가능성이 한다. 실루엣 0.1대라는 낮은 값도 기억해 두자 — 텍스트 임베딩의 군집 경계는 원래 흐릿하며, 라벨은 “칸막이”가 아니라 “경향”이다.</div>
+    <div class="callout"><b>지표가 아니라 해석이 결정했다.</b> 점수만 보면 k=3이 최선이지만, k=3의 군집은 크고 뭉뚱그려진 덩어리였다. k=5에서 비로소 법률가가 읽어도 말이 되는 다섯 유형(전형 폭언형 / 기각형 / 성희롱 결합형 / 인사분쟁 복합형 / 자살·유족소송형)이 나타났다. 군집 개수는 통계 지표를 참고하되, 최종 결정은 도메인 해석 가능성이 한다. 실루엣 0.1대라는 낮은 값도 기억해 두자. 텍스트 임베딩의 군집 경계는 원래 흐릿하며, 라벨은 “칸막이”가 아니라 “경향”이다.</div>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="차원축소 — 4,096차원을 2차원으로">
-  <div class="kicker">데이터 분석 — 판결문 지도</div>
-  <h2>차원축소 — 4,096차원을 2차원 지도로</h2>
+<section class="slide" data-sec="9" data-title="차원축소: 4,096차원을 2차원으로">
+  <div class="kicker">데이터 분석: 판결문 지도</div>
+  <h2>차원축소: 4,096차원을 2차원 지도로</h2>
   <div class="body">
     <p>4,096개의 숫자는 사람 눈으로 볼 수 없다. UMAP은 “고차원에서 이웃이던 점은 2차원에서도 이웃이 되도록” 좌표를 다시 배치하는 알고리즘이다.</p>
     <div class="steps">
-      <div class="step"><span class="no">🌍</span><b class="ttl">지구본 → 종이 지도</b><p class="prob">둥근 지구를 평평한 종이에 옮기면 어딘가는 반드시 일그러진다. 4,096차원 → 2차원도 같다 — 이웃 관계는 지키고, 먼 거리의 정확성은 포기한다</p></div>
+      <div class="step"><span class="no">🌍</span><b class="ttl">지구본 → 종이 지도</b><p class="prob">둥근 지구를 평평한 종이에 옮기면 어딘가는 반드시 일그러진다. 4,096차원 → 2차원도 같다. 이웃 관계는 지키고, 먼 거리의 정확성은 포기한다</p></div>
       <div class="step"><span class="no">📏</span><b class="ttl">믿을 것과 안 믿을 것</b><p class="prob">“가까이 붙은 점들은 정말 비슷하다”는 믿어도 된다. “두 섬 사이의 거리가 정확히 2배 멀다”는 믿으면 안 된다</p></div>
       <div class="step"><span class="no">🎲</span><b class="ttl">재현성</b><p class="prob">UMAP·K-means 모두 무작위 초기화가 있어 실행마다 모양이 조금씩 달라진다. 연구에서는 난수 시드를 고정(이번 작업은 42)해 같은 그림이 다시 나오게 한다</p></div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="판결문 지도">
-  <div class="kicker">데이터 분석 — 판결문 지도</div>
+<section class="slide" data-sec="9" data-title="판결문 지도">
+  <div class="kicker">데이터 분석: 판결문 지도</div>
   <h2>판결문 347건의 의미 지도</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:start">
@@ -1317,29 +1472,28 @@ rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="지도 읽기 — 유형이 승패를 예고한다">
-  <div class="kicker">데이터 분석 — 판결문 지도</div>
-  <h2>지도 읽기 — 사건 유형이 승패를 예고한다</h2>
+<section class="slide" data-sec="9" data-title="지도 읽기: 유형이 승패를 예고한다">
+  <div class="kicker">데이터 분석: 판결문 지도</div>
+  <h2>지도 읽기: 사건 유형이 승패를 예고한다</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:.9fr 1.1fr;align-items:start">
       <figure class="plain"><img src="assets/week03/cite-rate.png" alt="클러스터별 인용률: 전형 폭언·모욕형 96%, 성희롱 결합형 82%, 자살·유족소송형 69%, 인사분쟁 복합형 39%, 증거부족·기각형 20%" style="max-height:260px"><figcaption>클러스터별 인용률 (원고승 + 원고일부승 비율)</figcaption></figure>
       <ol class="recap" style="grid-template-columns:1fr">
         <li><b>클러스터가 소송 결과와 함께 나뉘었다</b>상급자의 폭언·모욕이라는 전형적 서사는 인용률 96%, 증거가 진술뿐이거나 동료 갈등에 머문 사건은 20%. 임베딩은 승패를 배운 적이 없는데도 사실관계의 유형만으로 결과가 갈리는 구조를 드러냈다</li>
-        <li><b>자살·유족소송은 외딴 섬이다</b>유족이 원고이고 일실수입·인과관계가 쟁점인, 구조가 다른 사건 — 임베딩이 이 차이를 정확히 분리했다</li>
+        <li><b>자살·유족소송은 외딴 섬이다</b>유족이 원고이고 일실수입·인과관계가 쟁점인, 구조가 다른 사건. 임베딩이 이 차이를 정확히 분리했다</li>
         <li><b>판결문 임베딩은 “사실 + 판단 논리”를 함께 담는다</b>기각형 클러스터는 “증거만으로는 인정하기 어렵다”는 기각 논리의 문장들이 닮았기 때문이기도 하다. 무엇을 임베딩했는지에 따라 지도의 의미가 달라진다</li>
-        <li><b>경계는 흐릿하다 — 지도는 가설이다</b>패턴을 확정하려면 지도가 가리킨 사건들의 판결문 원문으로 돌아가 직접 확인하는 것이 다음 순서</li>
+        <li><b>경계는 흐릿하다. 지도는 가설이다</b>패턴을 확정하려면 지도가 가리킨 사건들의 판결문 원문으로 돌아가 직접 확인하는 것이 다음 순서</li>
       </ol>
     </div>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="직접 해보기 — 재현용 프롬프트">
-  <div class="kicker">데이터 분석 — 판결문 지도</div>
-  <h2>직접 해보기 — 여러분의 데이터로 같은 지도를</h2>
+<section class="slide" data-sec="9" data-title="재현용 프롬프트">
+  <div class="kicker">데이터 분석: 판결문 지도</div>
+  <h2>여러분의 데이터로 같은 지도를: 재현용 프롬프트</h2>
   <div class="body">
     <p>리뷰·초록·기사 무엇이든, 임베딩 JSON만 있으면 같은 지도를 만들 수 있다. 데이터만 바뀔 뿐 절차는 동일하다.</p>
-    <pre class="prompt"><button class="copy" type="button">복사</button>연동 폴더의 임베딩 JSON으로 클러스터링하고 지도처럼 시각화해줘.
-바로 실행하지 말고 계획부터 보여줘.</pre>
+    <pre class="prompt"><button class="copy" type="button">복사</button>연동 폴더의 임베딩 JSON으로 클러스터링하고 지도처럼 시각화해줘. 바로 실행하지 말고 계획부터 보여줘.</pre>
     <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>k는 몇 개가 좋아? 선택지를 줘</span><span>k=5로 가자</span><span>각 클러스터의 대표 사건 3건씩 보여줘</span><span>인용률을 클러스터별로</span></div>
     <ol class="recap">
       <li><b>클러스터링은 원본 고차원 벡터에서</b>2D 좌표는 표시용으로만</li>
@@ -1347,54 +1501,271 @@ rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시
       <li><b>UMAP 지도에서 믿을 것은 “이웃”</b>믿지 말 것은 “먼 거리”</li>
       <li><b>난수 시드를 고정</b>같은 그림이 다시 나온다</li>
       <li><b>지도가 보여준 패턴은 가설</b>확인은 원문으로</li>
-      <li><b>“바로 실행하지 말고 계획부터”</b>선택지를 보고 내가 고른다 — 오늘 배운 요청 습관</li>
+      <li><b>“바로 실행하지 말고 계획부터”</b>선택지를 보고 내가 고른다. 오늘 배운 요청 습관</li>
     </ol>
   </div>
 </section>
 
-<!-- ===================== 8. 더 해보기와 정리 ===================== -->
-<section class="slide section" data-sec="8" data-title="더 해보기와 정리">
-  <div class="kicker">Section 8</div>
-  <h2>더 해보기와 정리</h2>
-  <p class="section-lead">오늘 쌓은 데이터와 절차를 다음에 어떻게 이어 갈 수 있는지, 그리고 3강 정리.</p>
+<!-- ===================== 10. 나만의 스킬 만들기 ===================== -->
+<section class="slide section" data-sec="10" data-title="나만의 스킬 만들기">
+  <div class="kicker">Section 10</div>
+  <h2>나만의 스킬 만들기: 반복 절차를 SKILL.md 한 장에</h2>
+  <p class="section-lead">직장 내 괴롭힘 사건을 담당하는 인사 담당자라고 해 보자. 수집한 판결문 347건이 폴더에 있고, 사건이 생길 때마다 “이런 경우도 회사 책임이 인정됐나”를 확인해야 한다. 그 반복을 파일 한 장으로 만든다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="8"></ol>
+    <ol class="roadmap" data-current="10"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="더 해보기 · 스킬과 계보도">
-  <div class="kicker">더 해보기와 정리</div>
-  <h2>더 해보기 — 반복 절차를 파일로, 인용 관계를 지도로</h2>
+<section class="slide" data-sec="10" data-title="스킬이란: AI에게 주는 업무 매뉴얼">
+  <div class="kicker">나만의 스킬 만들기</div>
+  <h2>스킬이란: AI에게 주는 업무 매뉴얼</h2>
   <div class="body">
-    <div class="two eq" style="align-items:start">
-      <div class="callout"><b>나만의 스킬 만들기</b> — 판결문 347건에 “이런 경우도 회사 책임이 인정됐나”를 반복해서 묻는다면, 그 절차(요지 목록 훑기 → 고른 사건만 전문 읽기 → 사건번호 인용)를 SKILL.md 파일 한 장에 적어 폴더에 두면 관련 질문마다 AI가 자동으로 같은 절차로 답한다. 가이드라인·사내 규정을 함께 넣으면 “찾기”에서 “판단하기”로 올라간다.
-        <pre class="prompt sm" style="margin-top:10px"><button class="copy" type="button">복사</button>직장 내 괴롭힘 판례 질문에 답하는 스킬을 만들어줘.
-요약 CSV를 먼저 훑고, 고른 사건은 전문을 읽고 사건번호를 인용해서 답하게.</pre>
-        <p class="muted" style="font-size:13px;margin:8px 0 0"><a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week2/week2-06-building-skills.html" target="_blank" rel="noopener">원문 자료: 나만의 스킬 만들기 ↗</a></p>
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <div class="stack">
+        <div class="callout warn"><b>347건을 한꺼번에 읽힐 수는 없다.</b> 판결문 한 건이 평균 8,500자, 347건이면 300만 자에 가깝다. 질문 한 번에 전부 담을 수 없고, 담을 수 있다 해도 질문할 때마다 전부 다시 읽히면 느리고 비싸다.</div>
+        <div class="callout good"><b>해법: 요지 목록만 주고, 나머지는 알아서 찾아 읽게 한다.</b> §7에서 만들어 둔 2줄 요약 목록 하나면 347건 전체가 한눈에 들어온다. 질문이 들어오면 AI는 이 목록을 훑어 관련 사건을 고르고, 고른 사건만 전문 파일을 열어 읽는다. 사람이 판례집 목차를 훑고 필요한 쪽만 펴 보는 것과 같은 순서다.</div>
       </div>
-      <div class="callout good"><b>논문 계보도 만들기</b> — 같은 파이프라인(수집 → 구조화 → 시각화)을 논문 인용 관계에 얹는다. 연구 질문 한 줄로 씨앗 논문 → 조상(참고문헌) → 후예(피인용)를 수집해 시간축 네트워크로 그리면, 읽기 순서와 열린 연구 질문이 프롬프트 한 번에 나온다.
-        <pre class="prompt sm" style="margin-top:10px"><button class="copy" type="button">복사</button>내 연구 질문은 "[한 줄]"이야. 주요 논문과 그 뿌리 논문을 모아
-인용 관계를 시간축 계보도로 그려줘.</pre>
-        <p class="muted" style="font-size:13px;margin:8px 0 0"><a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week2/week2-07-citation-genealogy-research.html" target="_blank" rel="noopener">원문 자료: 논문 계보도 만들기 ↗</a></p>
+      <div class="stack">
+        <div class="loop" style="grid-template-columns:1fr;gap:6px">
+          <div class="lnode">① 질문<small>“직원들이 따돌림 시키면 회사가 손해배상해야 하나”</small></div>
+          <div class="lnode">② 요지 목록 훑기<small>347건 2줄 요약을 읽고 관련 사건 선별</small></div>
+          <div class="lnode">③ 전문 읽기<small>고른 사건만 전문 파일을 열어 읽음</small></div>
+          <div class="lnode">④ 답변<small>사건번호와 판시 대목을 인용</small></div>
+        </div>
+        <p class="muted" style="font-size:13.5px">이 절차의 약점: 질문할 때마다 사람이 이 지시를 다시 써야 한다. 하루 지나 한 줄(“요지만 보고 답하지 마”)을 빼먹으면 답변 품질이 조용히 떨어진다. <b>스킬(Skill)</b>은 이 절차를 파일로 저장해 AI에게 넘겨주는 장치다. 한 번 설치하면 관련 질문이 올 때마다 자동으로 발동된다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="3강 정리">
-  <div class="kicker">더 해보기와 정리</div>
+<section class="slide" data-sec="10" data-title="SKILL.md 해부">
+  <div class="kicker">나만의 스킬 만들기</div>
+  <h2>SKILL.md 해부: 파일 하나의 구조, 그리고 언제 읽히나</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr;align-items:start">
+      <div class="stack">
+        <pre class="code">case-qa/            ← 스킬 폴더
+├── SKILL.md        ← 필수. 발동 조건 + 절차
+└── 답변예시.md      ← 선택. 절차가 참조하는 딸린 자료</pre>
+        <table class="tbl" style="width:100%">
+          <tbody>
+            <tr><th style="width:30%">name</th><td style="text-align:left">영문 소문자·숫자·하이픈만, 64자 이내. 예: case-qa</td></tr>
+            <tr><th>description</th><td style="text-align:left">무엇을 하는 스킬인지 + 언제 쓰는지를 함께. 자동 발동의 판단 기준이 되는 가장 중요한 한 문장</td></tr>
+          </tbody>
+        </table>
+        <div class="callout bad"><b>description이 절반이다.</b> 스킬이 발동되지 않는 원인의 대부분은 절차가 아니라 description이다. “판례 분석 스킬”처럼 무엇만 쓰면 AI가 언제 꺼낼지 판단하지 못한다. “직장 내 괴롭힘 판례에 대한 질문이 오면 사용한다”처럼 발동 상황을 명시한다.</div>
+      </div>
+      <div class="stack">
+        <p style="font-weight:700;margin:0">스킬은 언제 읽히나: 3단계 로딩</p>
+        <table class="tbl" style="width:100%">
+          <thead><tr><th>단계</th><th>언제 읽히나</th><th>무엇이 읽히나</th></tr></thead>
+          <tbody>
+            <tr><th>① 목록</th><td>항상</td><td style="text-align:left">스킬의 이름과 한 줄 설명만. “이런 매뉴얼이 있다”는 목차</td></tr>
+            <tr><th>② 본문</th><td>질문이 설명과 맞을 때</td><td style="text-align:left">SKILL.md 본문(절차 전체)</td></tr>
+            <tr><th>③ 딸린 파일</th><td>절차가 지시할 때</td><td style="text-align:left">스킬 폴더에 같이 넣어 둔 참고 문서·스크립트</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13.5px">스킬을 여러 개 설치해도 AI가 느려지지 않는 이유. “목차는 항상 보고, 본문은 골라 읽는다”는 방식은 우리가 세운 질의응답 절차(요지 훑기 → 고른 사건만 전문 읽기)와 같은 원리다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="10" data-title="실전: 판례 QA 스킬 만들기">
+  <div class="kicker">나만의 스킬 만들기</div>
+  <h2>실전: 판례 QA 스킬 만들기. SKILL.md도 손으로 쓸 필요가 없다</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.95fr 1.05fr;align-items:start">
+      <div class="stack">
+        <pre class="prompt"><button class="copy" type="button">복사</button>직장 내 괴롭힘 판례 질문에 답하는 스킬을 만들어줘. 요약 CSV를 먼저 훑고, 고른 사건은 전문을 읽고 사건번호를 인용해서 답하게.</pre>
+        <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>관련 사건이 없으면 없다고 답하게. 지어내지 말고</span><span>인정 사건과 기각 사건을 대비해서 설명하게</span><span>연동 폴더에 SKILL.md로 저장해줘</span></div>
+        <div class="callout">Cowork로 작업할 때는 연동한 폴더에 SKILL.md를 저장해 두기만 하면 된다. 설치 과정도, 설정 메뉴도 없다. 안 불러오는 것 같으면 “case-qa 스킬을 써서 답해줘”라고 한 줄 붙이면 된다. 그래도 어색하면 description을 손볼 차례.</div>
+      </div>
+      <pre class="code" style="font-size:12px">---
+name: case-qa
+description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 답할 때
+  사용한다. 판례, 판결문, 손해배상 인정 여부, 위자료, 사건 유형 등을
+  묻는 질문이 오면 이 절차대로 요지를 훑고 전문을 인용해 답한다.
+---
+# 판례 두 단계 질의응답
+## 절차
+1. 작업 폴더의 `rulings_summary.csv`(347건 2줄 요약)를 읽고,
+   질문과 관련된 사건을 고른다.
+2. 고른 사건은 **반드시** `rulings/` 폴더에서 판결문 전문 파일을
+   읽는다. 요지만 보고 답하지 않는다.
+3. 전문을 근거로 답한다. 인정 사건과 기각 사건이 함께 있으면
+   갈림길이 된 사정을 대비해서 설명한다.
+4. 관련 사건이 코퍼스에 없으면 "근거 사건 없음"이라고 답한다.
+## 답변 형식
+- 근거는 [법원명 사건번호] 형태로 표기한다.
+- 판시 대목은 짧게 직접 인용한다.
+- 마지막에 참고한 사건 목록을 정리한다.</pre>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="10" data-title="판단 기준까지 스킬에 담기">
+  <div class="kicker">나만의 스킬 만들기</div>
+  <h2>판단 기준까지 스킬에 담기: “찾기”에서 “판단하기”로</h2>
+  <div class="body">
+    <p>지금 만든 스킬에는 데이터밖에 없다. “요지를 훑고 전문을 읽어라”는 어디서 찾을지를 정한 절차이지, 무엇을 기준으로 판단할지는 정하지 않았다. 그 기준은 이미 문서로 나와 있다.</p>
+    <div class="steps">
+      <div class="step"><span class="no">📕</span><b class="ttl">정부 가이드라인</b><p class="prob">고용노동부의 직장 내 괴롭힘 판단·예방·대응 매뉴얼처럼, 행위 요건과 판단 절차를 정리한 공식 문서</p></div>
+      <div class="step"><span class="no">📊</span><b class="ttl">연구보고서·논문</b><p class="prob">노동연구원·학회 등에서 판례를 분석해 인정 요건과 쟁점을 체계화한 자료</p></div>
+      <div class="step"><span class="no">🏢</span><b class="ttl">사내 규정</b><p class="prob">취업규칙·징계 양정 기준·조사 절차 규정. 우리 조직에서 실제로 적용되는 기준</p></div>
+    </div>
+    <pre class="prompt"><button class="copy" type="button">복사</button>폴더에 넣어 둔 가이드라인과 연구보고서를 읽고 직장 내 괴롭힘 판단 요건과 검토 순서를 정리해서, case-qa 스킬이 그 기준에 따라 사건을 짚어보고 판례와 대조하도록 고쳐줘. 기준의 출처도 밝히게.</pre>
+    <div class="callout warn"><b>기준을 넣었다고 판단이 끝나는 것은 아니다.</b> 가이드라인은 법이 아니고, 사건은 늘 문서에 없는 사정을 포함한다. 스킬이 하는 일은 확인해야 할 항목을 빠뜨리지 않게 하고, 판단의 근거를 남기게 하는 것까지다. 최종 판단은 사람의 몫이며, 그래서 출처를 밝히게 한다. 기준이 길면 SKILL.md 본문 대신 스킬 폴더에 판단기준.md로 따로 두고 “판단이 필요하면 판단기준.md를 읽어라”라고 지시한다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="10" data-title="실전 사례: 7년 치 컬럼을 스킬로">
+  <div class="kicker">나만의 스킬 만들기</div>
+  <h2>실전 사례: 7년 치 컬럼 83편을 스킬 파일 한 장으로</h2>
+  <div class="body">
+    <div class="loop" style="grid-template-columns:repeat(7,auto);justify-content:center">
+      <div class="lnode">① 원문을 폴더에<small>컬럼 83편을 연동 폴더에</small></div><span class="lar">➜</span>
+      <div class="lnode">② 한 문장 지시<small>“이 컬럼을 작성하는 스킬 파일을 만들어 줘”</small></div><span class="lar">➜</span>
+      <div class="lnode">③ 전수 분석<small>83편의 문체·논증·구조를 통계로</small></div><span class="lar">➜</span>
+      <div class="lnode">④ 지침 한 장<small>9개 절의 집필 보조 지침</small></div>
+    </div>
+    <table class="tbl" style="width:100%;font-size:13px">
+      <tbody>
+        <tr><th style="width:18%">0. 지면 컨텍스트</th><td style="text-align:left">분량 제약을 절대 조건으로: 2,000자 이내, 40~43문장, 문장당 45~48자</td></tr>
+        <tr><th>1. 문체</th><td style="text-align:left">종결어미 실측 분포: “~있다/없다” 724회, “~것이다” 292회. 역접은 “하지만”(193회)이 “그러나”(25회)를 압도. 주어는 “우리” 300회 vs “필자” 14회</td></tr>
+        <tr><th>2. 논증 방식</th><td style="text-align:left">장점 먼저, 위험은 다음. 반론 처리 3단계(주장 → 물론/하지만으로 반론 인정 → 재확인)</td></tr>
+        <tr><th>3. 구조</th><td style="text-align:left">훅 → 현상 정의 → 사례 → 쟁점 → 대안 → 매듭의 6블록 표준 구조와 구간별 목표 자수. 제목 공식(10~22자)</td></tr>
+        <tr><th>4~9.</th><td style="text-align:left">사실엔 출처 병기, 불확실하면 “[확인 필요]” 표시. 제출 전 11항목 체크리스트, 도입·결말 문장 모음, 시스템 프롬프트 템플릿</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">재료는 중앙일보 연재 「김병필의 인공지능 개척시대」(2019.01~2026.03, 83회). 사람이 자기 문체를 이렇게 수치로 설명하기는 어렵다. 7년의 습관이 AI에게는 셀 수 있는 데이터였다. 반복해 온 글쓰기(보고서, 이메일, 리뷰)가 있다면 같은 방법이 통한다. 같은 지침 파일이라도 모델마다 재현도가 다르므로 작업 성격에 따라 모델을 골라 쓴다.</p>
+  </div>
+</section>
+
+<!-- ===================== 11. 논문 계보도 만들기 ===================== -->
+<section class="slide section" data-sec="11" data-title="논문 계보도 만들기">
+  <div class="kicker">Section 11</div>
+  <h2>논문 계보도 만들기: 인용 관계를 네트워크로</h2>
+  <p class="section-lead">판결문에서는 임베딩으로 문서 사이의 거리를 그렸다. 같은 파이프라인(수집 → 구조화 → 시각화)을 다른 관계, 논문의 인용 관계 위에 얹는다. 연구 질문 “AI는 인간 노동을 대체하는가?”를 둘러싼 노동경제학 대표 문헌 23편.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="11"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="방법: 네트워크와 수집 전략">
+  <div class="kicker">논문 계보도 만들기</div>
+  <h2>방법: 네트워크의 구성 요소와 수집 전략</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">⚪</span><b class="ttl">노드(점)</b><p class="prob">분석 단위 하나. 오늘은 논문 1편. 점의 크기에 인용 규모 같은 속성을 실을 수 있다</p></div>
+      <div class="step"><span class="no">↗️</span><b class="ttl">엣지(선)와 방향</b><p class="prob">두 노드의 관계. 오늘은 “A가 B를 인용한다”는 방향 있는 관계. 시간축과 결합하면 흐름이 보인다</p></div>
+      <div class="step"><span class="no">🎨</span><b class="ttl">색 = 범주</b><p class="prob">노드를 그룹(오늘은 연구 갈래)별로 색칠하면 네트워크의 구조가 한눈에 드러난다</p></div>
+    </div>
+    <div class="loop" style="grid-template-columns:repeat(7,auto);justify-content:center">
+      <div class="lnode">① 씨앗 찾기<small>가장 많이 인용된 논문 2~3편</small></div><span class="lar">➜</span>
+      <div class="lnode">② 조상 수집<small>씨앗의 참고문헌 중 뿌리 논문</small></div><span class="lar">➜</span>
+      <div class="lnode">③ 후예 수집<small>씨앗을 인용한 논문 중 많이 인용된 것</small></div><span class="lar">➜</span>
+      <div class="lnode">④ 계보도<small>시간축 네트워크 + 서지·초록</small></div>
+    </div>
+    <pre class="prompt"><button class="copy" type="button">복사</button>내 연구 질문은 "AI가 인간 노동력을 대체하는가"야. 주요 논문과 그 뿌리 논문을 모아 인용 관계를 시간축 계보도로 그려줘.</pre>
+    <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>OpenAlex나 Semantic Scholar에서 제목·저자·연도·인용 수·초록을 모아</span><span>연구 갈래(이론/실증/측정/실험)를 색으로 구분</span><span>논문을 클릭하면 서지와 초록이 보이게</span><span>수집 출처와 기준일도 기록해줘</span></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="계보도: 23편의 지도">
+  <div class="kicker">논문 계보도 만들기</div>
+  <h2>계보도: “AI는 노동을 대체하는가” 23편의 지도</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.85fr 1.15fr;align-items:start">
+      <figure><img src="assets/week03/genealogy.png" alt="2003년 과업 모형에서 2026년 실측 연구까지 5개 연구 갈래를 세로 시간축으로 배치한 논문 계보도의 윗부분" style="max-height:440px;object-fit:cover;object-position:top"><figcaption>시간은 위에서 아래로, 세로 다섯 줄이 연구 갈래. 원 크기 = 인용 규모, 선 = 인용 관계. <a href="examples/week03/citation-genealogy-ai-labor.html" target="_blank" rel="noopener">전체 계보도 열기 ↗</a> (논문을 클릭하면 서지·초록 표시)</figcaption></figure>
+      <ol class="recap" style="grid-template-columns:1fr">
+        <li><b>모든 길은 과업(task) 모형으로 통한다</b>Autor·Levy·Murnane(2003)의 “직업이 아니라 과업이 자동화된다”는 프레임이 20년 뒤 생성형 AI 연구까지 관통하는 공통 조상</li>
+        <li><b>2016년 전후: 예측의 시대</b>Frey &amp; Osborne의 “47% 자동화 위험”이 알파고 쇼크와 함께 논쟁을 점화했고, Autor(2015)가 보완성 반론을 제기. 대체 vs 보완 구도가 여기서 만들어진다</li>
+        <li><b>2018~2020: 이론과 로봇 실증</b>Acemoglu &amp; Restrepo가 대체효과 vs 신과업 창출을 모형화하고, 산업 로봇 데이터로 지역 노동시장 효과를 실증</li>
+        <li><b>측정의 정교화</b>“어떤 직업이 AI에 노출되는가”를 재는 방법이 전문가 판단 → 특허 텍스트 → LLM 자체 평가(“GPTs are GPTs”)로 진화</li>
+        <li><b>2023~2026: 실험에서 실측으로</b>무작위 실험이 “생산성은 오르고 격차는 줄어든다”를 보였고, 2025년 실제 고용 데이터에서 초기경력 고용 감소가 보고되며 논쟁은 관측의 단계로</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="후속 프롬프트: 읽기 순서와 열린 질문">
+  <div class="kicker">논문 계보도 만들기</div>
+  <h2>계보도는 도구다: 후속 프롬프트 한 번이면 계획이 나온다</h2>
+  <div class="body">
+    <pre class="prompt"><button class="copy" type="button">복사</button>위 계보도를 근거로, 비전공자인 내가 8주 안에 이 분야를 따라잡는 읽기 순서를 짜줘. 그리고 인용 화살표가 아직 닿지 않은 열린 연구 질문 3개를 제안해줘.</pre>
+    <div class="two eq" style="align-items:start">
+      <div class="callout"><b>(1) 8주 읽기 계획</b>
+        <ul class="bul compact" style="margin-top:6px">
+          <li>1~2주 지형 파악: Autor 2015 · A&amp;R 2019 (둘 다 리뷰 논문). “대체 vs 보완” 쟁점 지도</li>
+          <li>3~4주 뿌리: ALM 2003 · A&amp;R 2018. 과업 모형의 언어</li>
+          <li>5~6주 방법: Frey·Osborne → Webb → Eloundou, 그리고 A&amp;R 로봇 2020. 노출 측정의 진화와 인과 실증 설계</li>
+          <li>7~8주 최전선: 실험(생산성)과 실측(고용)의 결과가 어디서 갈리는지. 내 연구 질문이 설 자리</li>
+        </ul>
+      </div>
+      <div class="callout good"><b>(2) 열린 연구 질문 3개</b>
+        <ul class="bul compact" style="margin-top:6px">
+          <li>미국(초기경력 고용 감소)과 덴마크(효과 미미)의 증거가 상반된다. 한국 노동시장에서는 누가 맞는가? 필요한 데이터: 고용보험 등 행정 데이터 + 한국형 AI 노출 지수</li>
+          <li>실험은 “생산성”을, 실측은 “고용”을 본다. 그 사이 기업 안에서 과업이 어떻게 재편되는가는 비어 있다. 채용 공고 텍스트의 시계열(§6의 스크래핑으로 수집 가능)</li>
+          <li>초기경력 충격이 사실이라면 경력 사다리와 인적자본 축적의 장기 효과는? 청년 패널의 장기 추적</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">여기에 “한국 기관 문헌(한국은행, 노동연구원, KDI)은 이 계보의 어느 갈래를 인용했고 무엇이 아직 수입되지 않았나”를 물으면 국내 문헌 검토와 연구 포지셔닝이 이어진다. 문헌 리서치의 산출물이 목록이 아니라 계획이 되는 순간이다.</p>
+  </div>
+</section>
+
+<!-- ===================== 12. 과제 ===================== -->
+<section class="slide section" data-sec="12" data-title="정리와 과제">
+  <div class="kicker">Section 12</div>
+  <h2>정리와 과제</h2>
+  <p class="section-lead">오늘 배운 것을 한 장으로 정리하고, 다음 시간(10/1 수강생 발표 1)에 발표할 과제를 확인한다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="12"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="12" data-title="3강 정리">
+  <div class="kicker">정리와 과제</div>
   <h2>3강 정리</h2>
   <div class="body">
-    <ol class="recap">
+    <ol class="recap" style="font-size:13.5px;gap:8px 16px">
       <li><b>에이전틱 AI</b>모델은 텍스트만 만들고, 하네스가 도구를 실행한다. 결과는 컨텍스트에 쌓이고, 계획–실행–검토가 반복된다</li>
       <li><b>세 개의 작업대</b>Chat은 묻는 곳, Cowork는 맡기는 곳, Code는 내 컴퓨터에서 돌리는 곳. 작업은 전용 폴더 안에서만, 승인은 읽고 누른다</li>
       <li><b>GitHub 기초</b>저장소 = 프로젝트 폴더, 커밋 = 저장본, 푸시 = 올리기. [내아이디].github.io 저장소에 index.html을 올리면 사이트가 된다</li>
       <li><b>웹앱과 HTML</b>HTML(뼈대)·CSS(겉모습)·JavaScript(동작)가 파일 하나에. 보고서·계획서·맞춤 페이지도 HTML로</li>
       <li><b>크롤링의 경계</b>페이월 금지, 약관은 최종 결론이 아니며 공정이용으로 스스로 평가. 비영리·소량·내부 분석. 정적은 URL로, 동적은 브라우저 확장으로</li>
-      <li><b>웹 스크래핑</b>프롬프트의 4요소(URL 규칙·항목·형식·위치). 표는 CSV, 본문은 개별 파일. 목록 먼저, 본문은 천천히. 수집 직후 EDA</li>
+      <li><b>웹 스크래핑</b>프롬프트의 4요소(URL 규칙·항목·형식·위치). 표는 CSV, 본문은 개별 파일. 목록 먼저, 10건 확인, 30건씩 배치. 수집 직후 EDA</li>
+      <li><b>OpenRouter와 임베딩</b>API 키 하나로 여러 모델. 한도를 걸고 파일로 보관. 문서 길이를 실측해 모델을 고르고, 시험 5건 후 본 배치, 사이트에서 비용 확인</li>
       <li><b>판결문 지도</b>임베딩 → K-means(k는 해석 가능성으로) → UMAP(이웃만 믿기) → 지도는 가설, 확인은 원문으로</li>
+      <li><b>스킬</b>반복 절차를 SKILL.md 한 장에. description이 절반. 판단 기준 문서를 넣으면 “찾기”에서 “판단하기”로</li>
+      <li><b>논문 계보도</b>씨앗 → 조상 → 후예로 수집해 시간축 네트워크로. 후속 프롬프트 한 번이면 읽기 순서와 열린 질문이 나온다</li>
     </ol>
-    <div class="callout">과제(수강생 발표 1, 10/1) — 자기소개 페이지와 스크래핑 결과를 발표한다. 오늘 만든 사이트 주소와, 관심 분야에서 100건 이상 수집한 CSV·패턴 3가지를 준비해 오자.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="12" data-title="과제: 10/1 수강생 발표">
+  <div class="kicker">정리와 과제</div>
+  <h2>과제: 다음 시간(10/1 수강생 발표 1)에 발표한다</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:1fr 1fr">
+      <div class="step"><span class="no">1</span><b class="ttl">자기 소개 페이지 (혹은 다른 정적 페이지)</b>
+        <ul class="bul compact">
+          <li>§3의 방법으로 만들어 GitHub Pages에 공개한 주소를 제출한다</li>
+          <li>자기소개가 아니어도 된다. 사례집, 프로젝트 현황판, 행사 안내처럼 링크 하나로 공유하는 정적 페이지면 된다. 예: <a href="https://byoungpil-kim.github.io/kaist-itm-casebook/" target="_blank" rel="noopener">kaist-itm-casebook</a></li>
+          <li>발표 시 무엇을 요청했고 결과를 보고 무엇을 고쳐 달라고 했는지 프롬프트 흐름을 함께 보여 준다</li>
+        </ul>
+      </div>
+      <div class="step"><span class="no">2</span><b class="ttl">데이터 스크래핑 후 분석한 자료</b>
+        <ul class="bul compact">
+          <li>관심 분야의 공개 데이터를 §6의 방법으로 100건 이상 수집하고, EDA로 패턴 3가지를 찾아 HTML 자료로 정리한다</li>
+          <li>특별히 하고 싶은 주제가 없으면: <b>관심 있는 회사의 특허를 내려받아 특허 지도 그리기</b>. §8~9의 방법(임베딩 → 클러스터링 → 지도)을 그대로 적용한다</li>
+          <li>특허 지도 예시: <a href="https://www.jumpingkoala.com/atlas/domains/1/runs/9/" target="_blank" rel="noopener">jumpingkoala.com/atlas ↗</a></li>
+          <li>§5의 경계(페이월 금지, 비영리·소량·내부 분석, 서버 배려)를 지킨다. 수집 일시·URL·조건을 기록한다</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">발표는 한 사람당 5분 안팎. 결과물보다 <b>요청과 피드백의 과정</b>(어떤 지시로 시작해 어떻게 구체화했는지, 어디서 막혔고 어떻게 풀었는지)을 중심으로 이야기한다. 여력이 있으면 §10의 스킬이나 §11의 계보도까지 시도해 봐도 좋다.</div>
   </div>
 </section>
 
@@ -1407,19 +1778,22 @@ rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시
     </nav>
   </main>
 </div>
-
 <script>
 (function(){
   const SECTIONS = [
     {name:'들어가며', sub:'준비물과 원칙'},
-    {name:'에이전틱 AI 한눈에', sub:'엔진·하네스·루프'},
+    {name:'에이전틱 AI 한눈에', sub:'엔진·하네스·컨텍스트·루프'},
     {name:'세 개의 작업대와 설치', sub:'Chat · Cowork · Code'},
-    {name:'GitHub 기초', sub:'개인 사이트 배포'},
-    {name:'웹앱과 HTML 활용', sub:'금융 플래너, 보고서도 HTML로'},
-    {name:'크롤링 — 무엇을, 어디까지', sub:'법적 경계, 정적 vs 동적'},
-    {name:'Cowork로 웹 스크래핑', sub:'수집과 탐색적 분석'},
-    {name:'데이터 분석 — 판결문 지도', sub:'클러스터링 · 차원축소'},
-    {name:'더 해보기와 정리', sub:'스킬 · 계보도 · 정리'}
+    {name:'GitHub 기초', sub:'개인 사이트 만들고 배포'},
+    {name:'웹앱과 HTML 활용', sub:'금융 플래너 · HTML 예시'},
+    {name:'크롤링: 무엇을, 어디까지', sub:'법적 경계 · 정적 vs 동적'},
+    {name:'Cowork로 웹 스크래핑', sub:'YES24 베스트셀러 · EDA'},
+    {name:'연구 적용: 판결문 수집과 변환', sub:'895건 · 마크다운 · 보고서'},
+    {name:'OpenRouter와 임베딩 추출', sub:'API 키 · 모델 선택 · JSON'},
+    {name:'데이터 분석: 판결문 지도', sub:'K-means · UMAP · 지도 읽기'},
+    {name:'나만의 스킬 만들기', sub:'SKILL.md · 판례 QA'},
+    {name:'논문 계보도 만들기', sub:'인용 네트워크 · 23편'},
+    {name:'정리와 과제', sub:'10/1 수강생 발표'},
   ];
   const slides = Array.from(document.querySelectorAll('.slide'));
   const N = slides.length;
@@ -1496,7 +1870,7 @@ rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시
     const h = '#' + (i + 1);
     if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
     window.scrollTo({top:0, behavior:'auto'});
-    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} — 3강 실습 (1)`;
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} · 3강 실습 (1)`;
   }
   const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
   btnPrev.addEventListener('click', () => show(cur - 1));
@@ -1689,9 +2063,9 @@ rulings/ 폴더에 법원_사건번호.txt로 저장하고, 받은 행은 표시
       else s += `<line class="ar" x1="${x + bw / 2}" y1="${yH}" x2="${x + bw / 2 + 30}" y2="${yH}" marker-end="url(#${id})"/>`;
     });
     s += `<text class="tag" x="${xe[0] - bw / 2 - 10}" y="${yH + 5}" text-anchor="end">상태(기억)</text><text class="tag" x="${xe[0] - bw / 2 - 10}" y="${yIn + 5}" text-anchor="end">입력</text><text class="tag" x="${xe[0] - bw / 2 - 10}" y="${yOut + 5}" text-anchor="end">출력</text>`;
-    s += `<text class="big" x="${(xe[0] + xe[n - 1]) / 2}" y="${yLab + 34}" text-anchor="middle" style="fill:#b8792e">인코더 (Encoder) — 읽기</text>`;
+    s += `<text class="big" x="${(xe[0] + xe[n - 1]) / 2}" y="${yLab + 34}" text-anchor="middle" style="fill:#b8792e">인코더 (Encoder) · 읽기</text>`;
     s += `<text class="big" x="${xc}" y="${yLab + 34}" text-anchor="middle" style="fill:#b0483f">문맥 벡터 (context vector)</text>`;
-    s += `<text class="big" x="${(xd[0] + xd[m - 1]) / 2}" y="${yLab + 34}" text-anchor="middle" style="fill:#2f765b">디코더 (Decoder) — 쓰기</text>`;
+    s += `<text class="big" x="${(xd[0] + xd[m - 1]) / 2}" y="${yLab + 34}" text-anchor="middle" style="fill:#2f765b">디코더 (Decoder) · 쓰기</text>`;
     svg.setAttribute('viewBox', `0 0 ${W} ${H + 40}`); svg.innerHTML = s;
   }
   document.querySelectorAll('svg.s2sd').forEach(drawS2S);

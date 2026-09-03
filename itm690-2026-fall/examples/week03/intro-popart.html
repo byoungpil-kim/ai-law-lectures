@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DOCHON! — 이달의 인물</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@500;700;900&display=swap');
+
+:root{
+  --ink:#111;
+  --magenta:#ff2f92;
+  --yellow:#ffe000;
+  --cyan:#00c8ff;
+  --paper:#fff6e9;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:'Noto Sans KR', sans-serif;
+  background-image: radial-gradient(#00000012 1px, transparent 1px);
+  background-size:14px 14px;
+}
+.wrap{max-width:900px;margin:0 auto;padding:18px 16px 70px;}
+
+.masthead{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:6px solid var(--ink); padding-bottom:10px; margin-bottom:18px;
+}
+.masthead .logo{font-family:'Black Han Sans',sans-serif;font-size:22px;letter-spacing:1px;}
+.masthead .issue{font-weight:700;font-size:13px;background:var(--ink);color:#fff;padding:5px 10px;transform:rotate(-2deg);}
+
+.cover{
+  position:relative;
+  border:6px solid var(--ink);
+  background:var(--yellow);
+  padding:34px 26px 30px;
+  margin-bottom:30px;
+  box-shadow:12px 12px 0 var(--ink);
+}
+.tag{
+  position:absolute; top:-18px; left:24px;
+  background:var(--magenta); color:#fff;
+  font-family:'Black Han Sans',sans-serif; font-size:14px;
+  padding:8px 16px; transform:rotate(-4deg);
+  border:4px solid var(--ink);
+}
+.cover h1{
+  font-family:'Black Han Sans',sans-serif;
+  font-size:clamp(42px,10vw,84px);
+  line-height:.95; margin:14px 0 10px;
+  -webkit-text-stroke:2px var(--ink);
+  color:var(--cyan);
+}
+.cover .sub{
+  font-weight:900;font-size:clamp(16px,3vw,22px); max-width:520px; line-height:1.35;
+}
+.burst{
+  position:absolute; right:18px; top:18px; width:120px;height:120px;
+  background:var(--magenta); border-radius:50%; border:4px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-family:'Black Han Sans',sans-serif; color:#fff; font-size:13px; line-height:1.2;
+  transform:rotate(8deg);
+}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;margin-bottom:30px;}
+.panel{
+  border:5px solid var(--ink); background:#fff; padding:18px;
+  box-shadow:8px 8px 0 var(--ink); position:relative;
+}
+.panel .stamp{
+  position:absolute; top:-14px; right:14px;
+  background:var(--cyan); border:3px solid var(--ink);
+  font-family:'Black Han Sans',sans-serif; font-size:12px; padding:5px 10px;
+  transform:rotate(4deg);
+}
+.panel h3{font-family:'Black Han Sans',sans-serif;font-size:20px;margin:6px 0 8px;}
+.panel p{margin:0;font-size:14.5px;line-height:1.5;font-weight:500;}
+
+.speech{
+  position:relative; background:#fff; border:4px solid var(--ink);
+  border-radius:20px; padding:20px 22px; margin:0 0 30px; font-weight:700;
+  font-size:18px; box-shadow:8px 8px 0 var(--magenta);
+}
+.speech::after{
+  content:''; position:absolute; left:40px; bottom:-22px;
+  border-width:22px 14px 0; border-style:solid; border-color:var(--ink) transparent transparent;
+}
+.speech::before{
+  content:''; position:absolute; left:44px; bottom:-16px;
+  border-width:17px 10px 0; border-style:solid; border-color:#fff transparent transparent; z-index:1;
+}
+
+.sectionhead{
+  font-family:'Black Han Sans',sans-serif; font-size:26px;
+  display:inline-block; background:var(--ink); color:#fff;
+  padding:6px 16px; transform:rotate(-1deg); margin-bottom:18px;
+}
+
+.tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:34px;}
+.tags span{
+  font-family:'Black Han Sans',sans-serif; font-size:14px;
+  border:3px solid var(--ink); padding:8px 14px; background:#fff;
+}
+.tags span:nth-child(1){background:var(--yellow);}
+.tags span:nth-child(2){background:var(--cyan);}
+.tags span:nth-child(3){background:var(--magenta);color:#fff;}
+.tags span:nth-child(4){background:var(--yellow);}
+.tags span:nth-child(5){background:var(--cyan);}
+
+.contactbar{
+  display:flex;gap:16px;flex-wrap:wrap;justify-content:center;
+  border:5px solid var(--ink); background:var(--magenta); padding:22px;
+  box-shadow:8px 8px 0 var(--ink);
+}
+.contactbar a{
+  font-family:'Black Han Sans',sans-serif; font-size:16px;
+  background:#fff; color:var(--ink); border:4px solid var(--ink);
+  padding:12px 20px; text-decoration:none; display:inline-block;
+  transition:transform .12s ease;
+}
+.contactbar a:hover{transform:translate(-3px,-3px); box-shadow:4px 4px 0 var(--ink);}
+
+.foot{text-align:center;margin-top:26px;font-weight:700;font-size:12.5px;color:#666;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="logo">★ BUILDER ★ WEEKLY</div>
+    <div class="issue">이달의 인물 특집</div>
+  </div>
+
+  <div class="cover">
+    <div class="tag">COVER STORY</div>
+    <div class="burst">AI랑<br>같이<br>만듦!</div>
+    <h1>이도전!</h1>
+    <div class="sub">"코드 한 줄 몰랐는데, AI랑 같이 웹앱을 만들기 시작한 사람" — KAIST 기술경영전문대학원(I&amp;TM) 재학 중</div>
+  </div>
+
+  <div class="speech">"처음엔 저도 코딩 1도 몰랐어요. 근데 AI한테 정확히 요청하는 법만 배웠더니, 웹앱이 뚝딱 나오더라고요!"</div>
+
+  <div class="sectionhead">이 사람의 프로젝트</div>
+  <div class="grid">
+    <div class="panel">
+      <div class="stamp">짜잔!</div>
+      <h3>생애소득 시뮬레이터</h3>
+      <p>몬테카를로로 은퇴 자산을 1,000번 시뮬레이션 하는 웹앱을 만들었다!</p>
+    </div>
+    <div class="panel">
+      <div class="stamp">완성!</div>
+      <h3>카페 리뷰 대시보드</h3>
+      <p>동네 카페 리뷰를 감성분석해서 지도 위에 뿌려주는 대시보드!</p>
+    </div>
+    <div class="panel">
+      <div class="stamp">지금 이거!</div>
+      <h3>바로 이 사이트</h3>
+      <p>AI에게 요청 한 번으로 완성한 자기소개 페이지, 당신이 보고 있는 바로 이것!</p>
+    </div>
+  </div>
+
+  <div class="sectionhead">관심사 태그</div>
+  <div class="tags">
+    <span>#에이전틱AI</span>
+    <span>#개인브랜딩</span>
+    <span>#데이터로놀기</span>
+    <span>#러닝</span>
+    <span>#보드게임</span>
+  </div>
+
+  <div class="contactbar">
+    <a href="mailto:dochon@example.com">✉ 이메일 보내기</a>
+    <a href="https://github.com/dochon-lee" target="_blank" rel="noopener">★ GitHub 구경하기</a>
+  </div>
+
+  <div class="foot">BUILDER WEEKLY · NOT A REAL MAGAZINE · MADE WITH AI IN ONE PROMPT</div>
+</div>
+</body>
+</html>

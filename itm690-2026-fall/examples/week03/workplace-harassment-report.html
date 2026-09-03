@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>직장 내 괴롭힘 민사 손해배상 인정 요건 분석 — 판결문 895건 탐색적 분석 예시</title>
+<style>
+  :root{
+    --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --muted:#626a64; --line:#d5ddd3;
+    --brand:#2e9bdb; --brand-dark:#1b6fa6; --green:#2f765b; --amber:#b8792e; --red:#b0483f;
+    --blue:#375f8f; --sky-light:#e3f1fb;
+    --shadow:0 16px 45px rgba(54,42,31,.12); --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.75; font-size:15.5px;
+    padding:clamp(18px,4vw,48px) 16px;
+  }
+  .report{
+    max-width:880px;margin:0 auto;background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:clamp(28px,5vw,56px);
+  }
+  .report-kicker{
+    display:inline-block;font-size:11.5px;font-weight:900;letter-spacing:.08em;
+    color:var(--brand-dark);background:var(--sky-light);
+    padding:5px 12px;border-radius:999px;margin-bottom:14px;
+  }
+  h1{font-size:clamp(21px,3.4vw,28px);line-height:1.35;letter-spacing:-.01em;margin-bottom:10px;}
+  .report-meta{
+    color:var(--muted);font-size:13.5px;border-bottom:2px solid var(--ink);
+    padding-bottom:18px;margin-bottom:8px;
+  }
+  .report-meta b{color:var(--ink);}
+  h2{
+    font-size:19px;margin:40px 0 14px;padding-top:26px;border-top:1px solid var(--line);
+    letter-spacing:-.01em;
+  }
+  h2 .num{color:var(--brand-dark);margin-right:8px;}
+  h3{font-size:16px;margin:24px 0 8px;color:var(--brand-dark);}
+  p{margin:10px 0;}
+  strong{font-weight:800;}
+  table{
+    width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;
+  }
+  th{
+    background:#f2f6f0;text-align:left;padding:9px 12px;border:1px solid var(--line);
+    font-size:13px;letter-spacing:.02em;
+  }
+  td{padding:9px 12px;border:1px solid var(--line);}
+  td.r{text-align:right;font-variant-numeric:tabular-nums;}
+  .case{
+    border-left:4px solid var(--line);background:#fafcf9;
+    padding:10px 16px;margin:10px 0;border-radius:0 10px 10px 0;font-size:14.5px;
+  }
+  .case.pos{border-left-color:var(--green);}
+  .case.neg{border-left-color:var(--red);}
+  .case .tag{font-size:11.5px;font-weight:900;letter-spacing:.05em;margin-right:6px;}
+  .case.pos .tag{color:var(--green);}
+  .case.neg .tag{color:var(--red);}
+  ul,ol{margin:10px 0 10px 22px;}
+  li{margin:7px 0;}
+  .formula{
+    background:linear-gradient(180deg,var(--sky-light),#f4faff);
+    border:1px solid #bcdcf3;border-radius:12px;padding:20px 24px;margin:18px 0;
+    font-size:15.5px;
+  }
+  .formula b{color:var(--brand-dark);}
+  .footnote{
+    margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13px;font-style:italic;
+  }
+  .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;}
+  .badge{
+    font-size:12.5px;font-weight:700;color:var(--ink);
+    background:#f2f6f0;border:1px solid var(--line);border-radius:999px;padding:4px 12px;
+  }
+  @media print{ body{background:#fff;padding:0;} .report{box-shadow:none;border:none;} }
+</style>
+</head>
+<body>
+<article class="report">
+  <span class="report-kicker">탐색적 분석 예시 · 판결문 코퍼스</span>
+  <h1>직장 내 괴롭힘 민사 손해배상 인정 요건 분석 — 최종 보고</h1>
+  <div class="report-meta">
+    <b>대상 코퍼스</b> : 지방법원 "직장 내 괴롭힘" 언급 판결 <b>895건</b> (2021~2026 선고) &nbsp;·&nbsp;
+    <b>분석 목적</b> : 민사 손해배상(위자료) 소송에서 법원이 직장 내 괴롭힘을 인정하는 요건 규명
+  </div>
+
+  <h2><span class="num">1.</span>수집 코퍼스 개요</h2>
+  <p>전체 895건을 주된 청구(본소) 기준으로 4유형 분류하였다.</p>
+  <table>
+    <thead><tr><th>사건유형</th><th style="text-align:right">건수</th><th style="text-align:right">비중</th></tr></thead>
+    <tbody>
+      <tr><td>괴롭힘 손해배상 (피해자가 위자료 청구)</td><td class="r">388</td><td class="r">43.4%</td></tr>
+      <tr><td>해고·징계 무효 (괴롭힘이 징계사유·항변으로 등장)</td><td class="r">267</td><td class="r">29.8%</td></tr>
+      <tr><td>역소송 (가해지목자·사용자의 반격 소송)</td><td class="r">119</td><td class="r">13.3%</td></tr>
+      <tr><td>기타 (괴롭힘이 부수적으로만 언급)</td><td class="r">121</td><td class="r">13.5%</td></tr>
+    </tbody>
+  </table>
+  <div class="badge-row">
+    <span class="badge">선고연도 2021년 58 · 2022년 112 · 2023년 185 · 2024년 203 · 2025년 265 · 2026년 72</span>
+    <span class="badge">심급 1심 829 · 2심 55 · 기타 11</span>
+  </div>
+  <p><strong>핵심 분석 대상인 "괴롭힘 손해배상" 388건의 소송결과</strong>는 원고일부승 225건, 원고승 18건, 원고패 141건이다. 즉 피해자가 직접 위자료를 구한 사건의 약 63%에서 전부 또는 일부 인용이 이루어졌다. 다만 "일부승"이 압도적(225/243, 인용 사건의 93%)이라는 점은 아래 4항에서 보듯 <strong>책임 발생은 인정되나 위자료 액수는 상당히 절제되는</strong> 이 분야의 일관된 경향을 보여준다.</p>
+
+  <h2><span class="num">2.</span>법원이 적용하는 청구권 구성 (책임의 법적 근거)</h2>
+  <p>수집 판결에서 직장 내 괴롭힘에 대한 민사 손해배상책임은 다음 네 갈래 중 하나(또는 병합)로 구성된다.</p>
+  <ol>
+    <li><strong>가해자 개인에 대한 일반불법행위 (민법 제750조)</strong><br/>
+      상급자·동료 개인의 폭언·모욕·따돌림·부당지시가 인격권을 침해하는 위법행위로 평가되는 경우. (예: 서울중앙 2020가단5296423 — 발주처 차장의 언행을 인격권 침해 불법행위로 보아 700만 원 인용)</li>
+    <li><strong>사용자의 보호의무 위반 (근로계약상 부수의무, 대법원 95다39533)</strong><br/>
+      법원은 "사용자는 근로자의 인격을 존중·보호하고 쾌적한 근로환경을 제공할 보호의무를 부담하며, 이를 위반해 근로자가 손해를 입으면 배상하여야 한다"는 법리를 반복 인용한다. 이는 <strong>사용자가 직접 괴롭힌 경우뿐 아니라, 제3자(상급자·동료)의 괴롭힘을 예견·예방할 수 있었음에도 방지하지 못한 경우</strong>에도 성립한다. (예: 수원지법 안산지원 2020가단68472 — 임원의 상시적 폭언을 사용자가 예견 가능했다며 회사에 1,200만 원 배상책임)</li>
+    <li><strong>사용자책임 (민법 제756조)</strong><br/>
+      가해자가 피용자이고 그 가해행위가 사무집행 관련성을 가지는 경우 사용자가 함께 책임진다. 특히 성희롱형에서 "부하직원의 업무환경에 영향을 미칠 수 있는 상급자의 성적 언동은 그 자체로 사무집행 관련 불법행위"라는 법리(대법원 98다39930 계열)가 원용된다. (예: 서울중앙 2019가단5205834)</li>
+    <li><strong>국가배상 (국가배상법 제2조)</strong><br/>
+      공공부문에서 공무원인 상급자의 괴롭힘 또는 인사담당자의 분리조치·조사의무 해태가 문제되는 경우. (예: 대전 2020가단109868 — 방역지원본부의 사용자책임 및 보복성 전보의 불법행위 인정)</li>
+  </ol>
+
+  <h2><span class="num">3.</span>직장 내 괴롭힘의 실체적 인정 요건 (판결이 반복 채택하는 판단 틀)</h2>
+  <p>법원은 근로기준법 제76조의2의 정의("직장에서의 지위 또는 관계 등의 우위를 이용하여 업무상 적정범위를 넘어 다른 근로자에게 신체적·정신적 고통을 주거나 근무환경을 악화시키는 행위")를 민사 판단의 준거로 삼되, <strong>성희롱 판단기준(대법원 2017두74702)을 명시적으로 원용</strong>하여 다음 요건을 요구한다. 이는 광주 2020가합52585, 서울남부 2020가단239162, 대전 2020가합105450 등 다수 판결에서 거의 동일한 문언으로 반복된다.</p>
+
+  <h3>요건 ① — 지위 또는 관계 등의 우위 이용</h3>
+  <p>가해자가 피해자에 대하여 지위상(직급) 또는 관계상(수적·경력·집단) 우위에 있고 이를 이용하였을 것. 법원은 이 요건을 <strong>형식적 직급이 아니라 실질적 영향력</strong> 기준으로 본다.</p>
+  <div class="case neg"><span class="tag">부정 사례</span>광주 2020가합52585 — 부장(원고)이 다른 지사 소속 차장에게 발표 중 나이를 물은 행위에 대해, "같은 부서가 아니고 발표자–청중 관계에서 마침 가까이 앉은 사람에게 질문한 것"이라며 우위 이용을 부정, 견책 무효.</div>
+
+  <h3>요건 ② — 업무상 적정범위를 넘을 것</h3>
+  <p>행위가 업무관련성을 가지되 그 <strong>적정범위를 완전히 일탈</strong>하였을 것. 이 요건은 정당한 업무지시·질책과 괴롭힘을 가르는 핵심 관문이며, 법원은 다음 요소를 종합한다(대전 2020가합105450 등에서 상세): 지시의 방식·내용·시기와 기간·필요성의 정도·피해근로자의 대응방식·다른 근로자와의 차별 내용·업무지시나 업무배제의 사유·피해자 업무여건에 대한 배려 정도.</p>
+  <div class="case neg"><span class="tag">부정 사례</span>대전 2020가합105450 — 사내변호사에 대한 다수의 출장·대외활동 반려, 보고 요구 등이 "적정성은 별론으로 하되 적정범위를 완전히 일탈했다고 단정하기 어렵다"며 전부 기각.</div>
+  <div class="case pos"><span class="tag">긍정 사례</span>서울중앙 2020가단5296577 — 원고만 혼자 셀에 배치해 업무수행을 방해한 행위를 제76조의2 위반으로 인정.</div>
+
+  <h3>요건 ③ — 신체적·정신적 고통 또는 근무환경 악화 (객관적 결과요건)</h3>
+  <p>가장 결정적 관문. 법원은 <strong>"피해자와 비슷한 처지에 있는 보통의(일반적·평균적) 사람 입장에서 보아 고통이나 근무환경 악화가 발생할 수 있는 행위"가 있고, "그로 인해 실제로 그러한 결과가 발생"하였을 것</strong>을 요구한다. 즉 주관적 불쾌감만으로는 부족하며 객관적 상당성이 필요하다.</p>
+  <div class="case neg"><span class="tag">부정 사례</span>광주 2020가합52585 — 조사 참고인 19명 중 비하발언 인정 5명·부정 5명·유보 9명으로 갈려 "일반적·평균적 사람이 고통을 느낄 수 있다고 인정하기 어렵다"며 괴롭힘 부정.</div>
+  <div class="case pos"><span class="tag">긍정 사례</span>서울남부 2020가단239162 — 원장의 반복적·공개적 질책과 사과 강요로 보육교사가 실신에 이른 결과를 인정, 300만 원.</div>
+
+  <h3>(사용자책임의 추가 요건) — 예견가능성</h3>
+  <p>사용자 보호의무 위반을 묻는 경우 법원은 <strong>"피해사실이 업무 관련성을 가지고, 통상 발생할 수 있다고 예측되거나 예측할 수 있는 경우"</strong>일 것을 추가로 요구한다(대법원 99다56734 원용). 사용자가 괴롭힘을 알았거나 알 수 있었는지가 관건이 된다. (예: 인천 2020가단220569 — 사망 버스기사 사건에서 회사가 동료 갈등을 "알았거나 알 수 있었다고 볼 증거 부족"이라며 직장 내 괴롭힘 조치의무 위반 부정)</p>
+
+  <h2><span class="num">4.</span>인용을 좌우하는 실무적 변수 (승패 패턴)</h2>
+  <p>수집 판결 전반에서 관찰되는 인용/기각의 갈림 요소:</p>
+  <ul>
+    <li><strong>입증의 질</strong> : 카카오톡·이메일·녹취·형사 유죄판결(약식명령 포함)·노동청 시정지시·산재 승인 등 <strong>객관적 외부 증거가 있는 사건은 인용, 진술만으로는 기각</strong>되는 경향이 뚜렷하다. 형사 처벌 전력(대전 2020가단109868의 상사 유죄, 수원 2020가단8667의 특수협박 약식명령)은 강력한 인용 근거가 된다.</li>
+    <li><strong>인과관계</strong> : 괴롭힘 사실이 인정되어도 <strong>자살·질병 등 중대결과와의 상당인과관계는 별도로 엄격히 심사</strong>되어 자주 부정된다. (서울중앙 2019가합515274 — 상급자의 욕설·매뉴얼 수기작성 지시는 불법행위로 인정하되 승선원 자살과의 인과관계는 부정, 위자료만 2,000만 원)</li>
+    <li><strong>피해자의 관여·수용</strong> : 사적 관계에서 피해자가 묵인·수용한 경우 위법성이 부정된다. (서울중앙 2020가단5036126 — 상급자의 "보고 싶다" 등 언동을 원고가 장기간 수용한 사적 관계로 보아 성희롱·불법행위 부정)</li>
+    <li><strong>위자료의 절제</strong> : 인용되더라도 위자료는 대체로 <strong>300만~1,200만 원</strong> 선에 집중된다(예외적으로 2,000만 원대). 재산상 손해(일실수입·치료비)는 별도 입증과 인과관계가 요구되어 인정 폭이 좁다.</li>
+  </ul>
+
+  <h2><span class="num">5.</span>"역소송" 유형이 주는 시사점</h2>
+  <p>전체의 13.3%(119건)를 차지하는 <strong>역소송</strong>은 이 분야의 중요한 이면이다. 괴롭힘으로 지목된 상급자나 사용자가 (a) 신고자를 상대로 명예훼손·무고 손해배상을 구하거나(서울남부 2021가단221991, 서울동부 2020가단135878), (b) 신고·증거수집 과정(비밀녹음)을 음성권 침해로 다투거나(서울중앙 2020가단5115890·2020가단5087001), (c) 부당해고를 다투는 전 직원에게 서약서·합의 위반을 묻는(서울중앙 2020가단5160210) 유형이다.</p>
+  <p>법원의 태도는 대체로 <strong>신고자·피해주장자 보호 쪽</strong>이다. 특히 괴롭힘 증거 확보를 위한 비밀녹음은 "정당한 목적을 위해 필요·상당한 범위에서 이루어져 사회상규에 위배되지 않는다"며 위법성이 조각되어 역소송이 기각되는 것이 확립된 패턴이다. 다만 신고자가 조사 절차를 벗어나 지인들에게 험담·모욕을 유포한 부분은 별도 불법행위로 일부 인용되기도 한다(서울동부 2020가단135878, 300만 원).</p>
+
+  <h2><span class="num">6.</span>요약 — 민사 인정의 최소 공식</h2>
+  <p>수집 판결을 종합하면, 민사 손해배상에서 직장 내 괴롭힘이 인정되기 위한 실무적 공식은 다음과 같다.</p>
+  <div class="formula">
+    <b>① 우위 이용</b> + <b>② 업무상 적정범위의 완전한 일탈</b> + <b>③ 객관적·평균적 관점에서의 고통·근무환경 악화(실제 결과 포함)</b>를, <b>④ 진술을 넘어서는 객관적 증거</b>로 입증하고, 사용자책임을 묻는 경우 <b>⑤ 사용자의 예견가능성(알았거나 알 수 있었음)</b>까지 갖출 때 인용된다. 자살·질병 등 중대결과 배상은 <b>⑥ 상당인과관계</b>라는 추가·독립 관문을 통과해야 하며, 통과하지 못해도 괴롭힘 자체의 위자료(대체로 수백만 원대)는 인정될 수 있다.
+  </div>
+
+  <p class="footnote">본 보고는 895건 전건의 4유형 분류·개요와 정독한 60여 건(특히 2021년 괴롭힘 손해배상·해고무효 판결)의 반복 법리에 근거한 예비 분석이다. AI 에이전트(Cowork)로 판결문을 수집·분류·정독하여 작성한 탐색적 분석의 예시로, 세부 수치는 코퍼스 구성에 따라 달라질 수 있다.</p>
+</article>
+</body>
+</html>

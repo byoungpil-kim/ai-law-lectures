@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>정하윤 님 전용 PT 관리 페이지 | 강민석 트레이너</title>
+<style>
+  :root{
+    --ink:#1a1d21;
+    --ink-2:#4b5561;
+    --ink-3:#8b95a1;
+    --line:#e8ebef;
+    --bg:#f8f9fa;
+    --card:#ffffff;
+    --coral:#ff6b4a;
+    --coral-soft:#fff1ed;
+    --coral-deep:#e0492a;
+    --teal:#12b886;
+    --teal-soft:#e6f9f2;
+    --teal-deep:#0b8f68;
+    --shadow:0 1px 2px rgba(26,29,33,.04), 0 6px 18px rgba(26,29,33,.06);
+    --shadow-lg:0 2px 4px rgba(26,29,33,.05), 0 14px 38px rgba(26,29,33,.10);
+    --r:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:26px 18px 60px}
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--r);
+    box-shadow:var(--shadow);
+  }
+  section{margin-top:26px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+  .sec-head h2{font-size:19px;font-weight:800;letter-spacing:-.4px;margin:0}
+  .sec-head .sub{font-size:13px;color:var(--ink-3);font-weight:500}
+
+  /* ---------- HEADER ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#22262b 0%,#1a1d21 55%,#241d1a 100%);
+    border-radius:20px;color:#fff;padding:26px 26px 24px;
+    box-shadow:var(--shadow-lg);
+  }
+  .hero:before{
+    content:"";position:absolute;right:-70px;top:-90px;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, rgba(255,107,74,.55), rgba(255,107,74,0) 68%);
+  }
+  .hero:after{
+    content:"";position:absolute;left:-60px;bottom:-120px;width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle at 50% 50%, rgba(18,184,134,.35), rgba(18,184,134,0) 70%);
+  }
+  .hero-inner{position:relative;z-index:1}
+  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+    padding:5px 12px;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:-.2px;
+    backdrop-filter:blur(4px);
+  }
+  .pill.accent{background:rgba(255,107,74,.22);border-color:rgba(255,107,74,.45);color:#ffd9cf}
+  .hero h1{
+    margin:14px 0 4px;font-size:30px;line-height:1.28;font-weight:800;letter-spacing:-1px;
+  }
+  .hero h1 .nm{color:var(--coral)}
+  .hero .lead{margin:0;color:#c3cad3;font-size:14.5px}
+  .hero-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .hero-meta .chip{
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+    border-radius:11px;padding:8px 13px;font-size:13px;color:#e6eaef;
+  }
+  .hero-meta .chip b{color:#fff;font-weight:700}
+  .prog-block{margin-top:20px}
+  .prog-label{display:flex;justify-content:space-between;font-size:12.5px;color:#b9c1cb;margin-bottom:7px;font-weight:600}
+  .prog-label b{color:#fff}
+  .track{height:11px;border-radius:999px;background:rgba(255,255,255,.13);overflow:hidden;position:relative}
+  .track > i{
+    display:block;height:100%;border-radius:999px;
+    background:linear-gradient(90deg,#ff8a5c,#ff6b4a 60%,#ff5330);
+    box-shadow:0 0 14px rgba(255,107,74,.55);
+  }
+  .weeks{display:flex;justify-content:space-between;margin-top:7px;font-size:10.5px;color:#7f8996;font-weight:600}
+
+  /* ---------- STAT CARDS ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+  .stat{padding:17px 17px 15px;position:relative;overflow:hidden}
+  .stat .t{font-size:12.5px;color:var(--ink-3);font-weight:700;letter-spacing:-.2px}
+  .stat .v{display:flex;align-items:baseline;gap:3px;margin:7px 0 2px}
+  .stat .v .num{font-size:33px;font-weight:800;letter-spacing:-1.6px;line-height:1.05}
+  .stat .v .unit{font-size:14px;font-weight:700;color:var(--ink-2)}
+  .delta{display:inline-flex;align-items:center;gap:3px;font-size:12.5px;font-weight:800;padding:3px 8px;border-radius:999px}
+  .delta.down{background:var(--teal-soft);color:var(--teal-deep)}
+  .delta.up{background:var(--coral-soft);color:var(--coral-deep)}
+  .delta.flat{background:#eef1f4;color:var(--ink-2)}
+  .mini{margin-top:12px}
+  .mini .mt{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);font-weight:600;margin-bottom:5px}
+  .mini .mtrack{height:7px;border-radius:999px;background:#eef1f4;overflow:hidden}
+  .mini .mtrack > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#ff8a5c,#ff5330)}
+  .mini.g .mtrack > i{background:linear-gradient(90deg,#2ee0a5,var(--teal))}
+
+  /* ---------- CHART ---------- */
+  .chart-card{padding:20px 18px 16px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+  .legend i{width:15px;height:4px;border-radius:2px;display:inline-block}
+  .legend i.dash{background:none;border-top:2.5px dashed var(--ink-3);height:0}
+  .canvas-box{position:relative;width:100%}
+  canvas{display:block;width:100%;height:320px}
+
+  /* ---------- WEEK PLAN ---------- */
+  .days{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+  .day{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:13px 11px;text-align:center;cursor:pointer;
+    transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    box-shadow:var(--shadow);position:relative;user-select:none;
+  }
+  .day:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+  .day .dw{font-size:12px;font-weight:800;color:var(--ink-3);letter-spacing:.4px}
+  .day .dd{font-size:10.5px;color:#aeb6c0;font-weight:600;margin-top:1px}
+  .day .icon{font-size:21px;margin:9px 0 5px;line-height:1}
+  .day .nm{font-size:13px;font-weight:800;letter-spacing:-.3px;line-height:1.35;min-height:36px;display:flex;align-items:center;justify-content:center}
+  .day .tm{font-size:11.5px;color:var(--ink-3);font-weight:700;margin-top:2px}
+  .day .st{
+    margin-top:9px;font-size:11px;font-weight:800;border-radius:999px;padding:4px 0;
+    background:#f1f3f5;color:var(--ink-3);
+  }
+  .day.done{border-color:#c6f0e0;background:linear-gradient(180deg,#f4fdf9,#fff 45%)}
+  .day.done .st{background:var(--teal-soft);color:var(--teal-deep)}
+  .day.rest{background:#fafbfc}
+  .day.rest .nm,.day.rest .icon{opacity:.62}
+  .day.plan .nm,.day.plan .icon,.day.plan .tm{opacity:.55}
+  .day.today{border:2px solid var(--coral);box-shadow:0 0 0 4px rgba(255,107,74,.13), var(--shadow-lg)}
+  .day.today .st{background:var(--coral);color:#fff}
+  .day.today .nm,.day.today .icon,.day.today .tm{opacity:1}
+  .today-tag{
+    position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+    background:var(--coral);color:#fff;font-size:10px;font-weight:800;
+    padding:2px 9px;border-radius:999px;letter-spacing:-.2px;white-space:nowrap;
+  }
+  .day.open{border-color:var(--coral)}
+  .day .caret{font-size:10px;color:var(--ink-3);margin-top:6px;transition:transform .2s ease;display:block}
+  .day.open .caret{transform:rotate(180deg)}
+
+  .detail{
+    margin-top:12px;border-radius:14px;border:1px solid var(--line);background:#fff;
+    box-shadow:var(--shadow);overflow:hidden;display:none;
+  }
+  .detail.show{display:block;animation:slidein .22s ease}
+  @keyframes slidein{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .detail-head{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:14px 16px;border-bottom:1px solid var(--line);
+    background:linear-gradient(90deg,#fff7f4,#fff);
+  }
+  .detail-head h3{margin:0;font-size:15.5px;font-weight:800;letter-spacing:-.4px}
+  .detail-head .meta{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .badge{font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px}
+  .badge.done{background:var(--teal-soft);color:var(--teal-deep)}
+  .badge.plan{background:var(--coral-soft);color:var(--coral-deep)}
+  .badge.rest{background:#eef1f4;color:var(--ink-2)}
+  .tbl-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:430px}
+  th{
+    text-align:left;font-size:11.5px;color:var(--ink-3);font-weight:800;
+    padding:10px 16px;background:#fafbfc;border-bottom:1px solid var(--line);letter-spacing:.2px;
+  }
+  td{padding:11px 16px;border-bottom:1px solid #f2f4f6;color:var(--ink-2);font-weight:600}
+  tr:last-child td{border-bottom:none}
+  td.ex{color:var(--ink);font-weight:700}
+  td.w{color:var(--coral-deep);font-weight:800;white-space:nowrap}
+  .detail-note{padding:12px 16px;font-size:12.5px;color:var(--ink-2);background:#fafbfc;border-top:1px solid var(--line)}
+
+  /* ---------- LIFT BARS ---------- */
+  .lifts{padding:6px 18px 14px}
+  .lift{padding:15px 0;border-bottom:1px solid #f2f4f6}
+  .lift:last-child{border-bottom:none}
+  .lift-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;flex-wrap:wrap}
+  .lift-nm{font-size:14.5px;font-weight:800;letter-spacing:-.3px}
+  .lift-nums{font-size:13px;font-weight:700;color:var(--ink-3)}
+  .lift-nums b{color:var(--coral-deep);font-size:15px;font-weight:800}
+  .growth{background:var(--teal);color:#fff;font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .barset{display:grid;gap:6px}
+  .barrow{display:flex;align-items:center;gap:9px}
+  .barrow .lab{font-size:10.5px;font-weight:800;color:var(--ink-3);width:34px;flex:none}
+  .barrow .bt{flex:1;height:15px;background:#f1f3f5;border-radius:8px;overflow:hidden}
+  .barrow .bt > i{display:block;height:100%;border-radius:8px;transition:width .9s cubic-bezier(.2,.8,.25,1)}
+  .barrow.start .bt > i{background:#cfd6de}
+  .barrow.now .bt > i{background:linear-gradient(90deg,#ff8a5c,#ff5330)}
+  .barrow .val{font-size:11.5px;font-weight:800;color:var(--ink-2);width:52px;text-align:right;flex:none}
+
+  /* ---------- COMMENTS ---------- */
+  .cmt-list{padding:4px 18px 16px}
+  .cmt{display:flex;gap:13px;padding:15px 0;border-bottom:1px solid #f2f4f6}
+  .cmt:last-child{border-bottom:none}
+  .ava{
+    width:40px;height:40px;flex:none;border-radius:12px;
+    background:linear-gradient(135deg,#ff8a5c,#ff5330);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;
+    box-shadow:0 4px 12px rgba(255,107,74,.32);
+  }
+  .cmt-body{flex:1;min-width:0}
+  .cmt-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+  .cmt-meta .who{font-size:13.5px;font-weight:800}
+  .cmt-meta .when{font-size:11.5px;color:var(--ink-3);font-weight:600}
+  .tagw{font-size:10.5px;font-weight:800;background:#eef1f4;color:var(--ink-2);padding:2px 8px;border-radius:999px}
+  .cmt-text{font-size:13.5px;color:var(--ink-2);margin:0}
+
+  /* ---------- MEMBER INPUT ---------- */
+  .grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+  .pad{padding:18px}
+  .pad h3{margin:0 0 3px;font-size:16px;font-weight:800;letter-spacing:-.4px}
+  .pad .hint{margin:0 0 14px;font-size:12.5px;color:var(--ink-3)}
+  .moods{display:flex;gap:8px;flex-wrap:wrap}
+  .mood{
+    flex:1 1 auto;min-width:78px;border:1.5px solid var(--line);background:#fff;border-radius:13px;
+    padding:11px 6px;cursor:pointer;font-family:inherit;text-align:center;
+    transition:all .16s ease;
+  }
+  .mood .em{font-size:21px;display:block;line-height:1.15}
+  .mood .lb{font-size:12px;font-weight:800;color:var(--ink-2);margin-top:3px;display:block}
+  .mood:hover{border-color:#ffc2b1;transform:translateY(-2px)}
+  .mood.on{background:var(--coral);border-color:var(--coral);box-shadow:0 6px 16px rgba(255,107,74,.3)}
+  .mood.on .lb{color:#fff}
+  .mood-msg{
+    margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;font-weight:600;
+    background:#f6f8fa;color:var(--ink-3);border:1px dashed var(--line);
+  }
+  .mood-msg.on{background:var(--coral-soft);color:var(--coral-deep);border:1px solid #ffd6c9;font-weight:700}
+
+  textarea{
+    width:100%;min-height:92px;resize:vertical;font-family:inherit;font-size:13.5px;line-height:1.6;
+    padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;color:var(--ink);background:#fff;
+    outline:none;transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  textarea:focus{border-color:var(--coral);box-shadow:0 0 0 3px rgba(255,107,74,.13)}
+  .form-row{display:flex;gap:9px;align-items:center;margin-top:10px;flex-wrap:wrap}
+  select{
+    font-family:inherit;font-size:13px;font-weight:700;color:var(--ink-2);
+    padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#fff;outline:none;cursor:pointer;
+  }
+  .btn{
+    font-family:inherit;font-size:13.5px;font-weight:800;color:#fff;background:var(--coral);
+    border:none;border-radius:11px;padding:11px 20px;cursor:pointer;
+    box-shadow:0 6px 16px rgba(255,107,74,.3);transition:transform .14s ease, filter .14s ease;
+  }
+  .btn:hover{filter:brightness(1.05);transform:translateY(-1px)}
+  .btn:active{transform:translateY(0)}
+  .form-msg{font-size:12.5px;font-weight:700;color:var(--teal-deep)}
+  .logs{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+  .log{
+    border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px;background:#fdfdfe;
+  }
+  .log.fresh{animation:pop .3s ease;border-color:#ffd6c9;background:var(--coral-soft)}
+  @keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+  .log-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px}
+  .log-meta .d{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+  .log-meta .k{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal-deep)}
+  .log-meta .k.c{background:var(--coral-soft);color:var(--coral-deep)}
+  .log p{margin:0;font-size:13.5px;color:var(--ink-2);white-space:pre-wrap}
+
+  .book{
+    background:linear-gradient(135deg,#1f2429,#1a1d21);color:#fff;border-radius:var(--r);
+    padding:20px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+  }
+  .book:before{
+    content:"";position:absolute;right:-50px;top:-60px;width:190px;height:190px;border-radius:50%;
+    background:radial-gradient(circle at 40% 40%, rgba(18,184,134,.5), rgba(18,184,134,0) 70%);
+  }
+  .book-in{position:relative;z-index:1}
+  .book .k{font-size:11.5px;font-weight:800;color:#7be0bd;letter-spacing:.4px}
+  .book h3{margin:8px 0 12px;font-size:20px;font-weight:800;letter-spacing:-.6px;color:#fff}
+  .book .row{display:flex;gap:9px;font-size:13.5px;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.13)}
+  .book .row:last-of-type{border-bottom:none}
+  .book .row .l{color:#9aa4b0;width:52px;flex:none;font-weight:700}
+  .book .row .r{color:#fff;font-weight:700}
+  .book .note{margin-top:12px;font-size:12px;color:#9aa4b0;line-height:1.55}
+
+  .side-sum{margin-top:16px;padding:18px}
+  .side-sum h3{margin:0 0 12px;font-size:15.5px;font-weight:800;letter-spacing:-.4px}
+  .sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .sum-item{background:#fafbfc;border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+  .sum-item .k{font-size:11px;font-weight:700;color:var(--ink-3)}
+  .sum-item .v{font-size:19px;font-weight:800;letter-spacing:-.8px;margin-top:2px}
+  .sum-item .v small{font-size:11.5px;font-weight:700;color:var(--ink-2)}
+  .sum-item.hot{background:var(--coral-soft);border-color:#ffd6c9}
+  .sum-item.hot .v{color:var(--coral-deep)}
+  .sum-item.grn{background:var(--teal-soft);border-color:#c6f0e0}
+  .sum-item.grn .v{color:var(--teal-deep)}
+  .streak{
+    margin-top:11px;display:flex;align-items:center;gap:10px;
+    padding:12px 14px;border-radius:12px;
+    background:linear-gradient(90deg,#fff1ed,#fff7f4);border:1px solid #ffd6c9;
+  }
+  .streak .big{font-size:22px;line-height:1}
+  .streak .tx{font-size:12.5px;font-weight:700;color:var(--coral-deep);line-height:1.45}
+  .streak .tx b{font-size:14px}
+
+  footer{
+    margin-top:30px;text-align:center;font-size:12.5px;color:var(--ink-3);
+    padding:20px 14px;border-top:1px solid var(--line);
+  }
+  footer b{color:var(--ink-2);font-weight:700}
+  footer .small{display:block;margin-top:6px;font-size:11.5px;color:#a9b1bb}
+
+  @media (max-width:900px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .days{grid-template-columns:repeat(4,1fr)}
+    .grid2{grid-template-columns:1fr}
+  }
+  @media (max-width:620px){
+    .wrap{padding:16px 13px 44px}
+    .hero{padding:22px 18px}
+    .hero h1{font-size:24px}
+    .days{grid-template-columns:repeat(2,1fr)}
+    .stat .v .num{font-size:29px}
+    canvas{height:280px}
+  }
+  @media (max-width:400px){
+    .stats{grid-template-columns:1fr}
+    .days{grid-template-columns:repeat(2,1fr)}
+    .hero h1{font-size:21px}
+    canvas{height:260px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ 1. HEADER ============ -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <span class="pill accent">🔥 12주 체지방 감량 &amp; 근력 향상 프로그램</span>
+        <span class="pill">2026년 6월 19일 (금)</span>
+      </div>
+      <h1><span class="nm">정하윤</span> 님, 7주차입니다 💪</h1>
+      <p class="lead">지난 6주 동안 한 번도 빠지지 않았어요. 남은 5주, 지금 페이스 그대로 가면 목표는 확실합니다.</p>
+      <div class="hero-meta">
+        <span class="chip">담당 트레이너 · <b>강민석</b></span>
+        <span class="chip">회원 정보 · <b>32세 / 여성</b></span>
+        <span class="chip">시작일 · <b>2026. 05. 04</b></span>
+        <span class="chip">누적 출석 · <b>24회</b></span>
+      </div>
+      <div class="prog-block">
+        <div class="prog-label">
+          <span>12주 프로그램 진행률</span>
+          <span><b>7주차 / 12주</b> · 58%</span>
+        </div>
+        <div class="track"><i style="width:58.3%"></i></div>
+        <div class="weeks">
+          <span>1주</span><span>3주</span><span>5주</span><span>7주</span><span>9주</span><span>11주</span><span>12주</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ 2. STAT CARDS ============ -->
+  <div class="stats">
+    <div class="stat card">
+      <div class="t">현재 체중</div>
+      <div class="v"><span class="num">59.8</span><span class="unit">kg</span></div>
+      <span class="delta down">▼ 4.4kg 감량</span>
+      <div class="mini">
+        <div class="mt"><span>목표 57.0kg</span><span>61%</span></div>
+        <div class="mtrack"><i style="width:61%"></i></div>
+      </div>
+    </div>
+    <div class="stat card">
+      <div class="t">체지방률</div>
+      <div class="v"><span class="num">26.1</span><span class="unit">%</span></div>
+      <span class="delta down">▼ 5.3%p 감소</span>
+      <div class="mini">
+        <div class="mt"><span>목표 24.0%</span><span>72%</span></div>
+        <div class="mtrack"><i style="width:72%"></i></div>
+      </div>
+    </div>
+    <div class="stat card">
+      <div class="t">골격근량</div>
+      <div class="v"><span class="num">24.6</span><span class="unit">kg</span></div>
+      <span class="delta up">▲ 1.2kg 증가</span>
+      <div class="mini g">
+        <div class="mt"><span>목표 25.5kg</span><span>57%</span></div>
+        <div class="mtrack"><i style="width:57%"></i></div>
+      </div>
+    </div>
+    <div class="stat card">
+      <div class="t">이번 주 출석</div>
+      <div class="v"><span class="num">3</span><span class="unit">/ 4회</span></div>
+      <span class="delta flat">🔥 6주 연속 개근</span>
+      <div class="mini g">
+        <div class="mt"><span>남은 1회 · 금요일</span><span>75%</span></div>
+        <div class="mtrack"><i style="width:75%"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 3. CHART ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>체중 · 체지방 변화</h2>
+      <span class="sub">1주차 ~ 7주차 · 매주 월요일 인바디 측정</span>
+    </div>
+    <div class="card chart-card">
+      <div class="legend">
+        <span><i style="background:#ff6b4a"></i>체중 (kg)</span>
+        <span><i style="background:#12b886"></i>체지방률 (%)</span>
+        <span><i class="dash"></i>목표선</span>
+      </div>
+      <div class="canvas-box"><canvas id="chart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ============ 4. WEEK PLAN ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>이번 주 운동 계획</h2>
+      <span class="sub">6월 15일(월) ~ 6월 21일(일) · 요일을 눌러 상세 프로그램을 확인하세요</span>
+    </div>
+    <div class="days" id="days"></div>
+    <div class="detail" id="detail"></div>
+  </section>
+
+  <!-- ============ 5. LIFT GROWTH ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>주요 운동 기록 · 중량 성장</h2>
+      <span class="sub">1주차 시작 중량 대비 7주차 현재 중량</span>
+    </div>
+    <div class="card lifts" id="lifts"></div>
+  </section>
+
+  <!-- ============ 6. TRAINER COMMENTS ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>트레이너 코멘트</h2>
+      <span class="sub">강민석 트레이너가 매주 남기는 피드백입니다</span>
+    </div>
+    <div class="card cmt-list">
+      <div class="cmt">
+        <div class="ava">강</div>
+        <div class="cmt-body">
+          <div class="cmt-meta"><span class="who">강민석 트레이너</span><span class="tagw">7주차</span><span class="when">2026. 06. 18</span></div>
+          <p class="cmt-text">스쿼트 40kg 4세트를 폼 흐트러짐 없이 끝냈습니다. 7주 전 25kg에서 무릎이 안쪽으로 모이던 게 기억나시죠? 지금은 발끝 방향 그대로 잘 잡혀요. 다음 주부터 42.5kg 올려보겠습니다. 대신 하강 속도를 3초로 천천히 가져가는 게 조건입니다 🔥</p>
+        </div>
+      </div>
+      <div class="cmt">
+        <div class="ava">강</div>
+        <div class="cmt-body">
+          <div class="cmt-meta"><span class="who">강민석 트레이너</span><span class="tagw">6주차</span><span class="when">2026. 06. 12</span></div>
+          <p class="cmt-text">체중이 이틀째 그대로라고 걱정하셨는데, 인바디 보시면 근육량이 0.4kg 늘고 체지방만 0.9kg 빠졌습니다. 이게 가장 이상적인 그래프예요. 체중계 숫자보다 허리둘레와 컨디션을 기준으로 봐주세요. 저녁 단백질만 20g 정도 더 챙기시면 좋겠습니다.</p>
+        </div>
+      </div>
+      <div class="cmt">
+        <div class="ava">강</div>
+        <div class="cmt-body">
+          <div class="cmt-meta"><span class="who">강민석 트레이너</span><span class="tagw">4주차</span><span class="when">2026. 05. 29</span></div>
+          <p class="cmt-text">야근 주간인데도 목요일 유산소를 혼자 채우고 오셨네요. 솔직히 이 시기에 그만두시는 분이 제일 많습니다. 잘 버티셨습니다 👏 다음 주부터 데드리프트 들어갑니다. 허리보다 엉덩이로 미는 감각, 첫 2주는 중량 욕심 내지 말고 그 감각만 잡을게요.</p>
+        </div>
+      </div>
+      <div class="cmt">
+        <div class="ava">강</div>
+        <div class="cmt-body">
+          <div class="cmt-meta"><span class="who">강민석 트레이너</span><span class="tagw">2주차</span><span class="when">2026. 05. 11</span></div>
+          <p class="cmt-text">첫 2주는 무게보다 자세입니다. 지금처럼 거울 보면서 천천히 가는 게 맞아요. 그리고 근육통 때문에 걱정하셨는데 3주차쯤 되면 확실히 줄어듭니다. 물은 하루 2L, 수면은 최소 6시간 30분 — 이 두 개만 지켜주세요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. MEMBER INPUT ============ -->
+  <section>
+    <div class="sec-head">
+      <h2>내가 직접 기록하기</h2>
+      <span class="sub">회원님이 남긴 기록은 다음 수업 전에 트레이너가 확인합니다</span>
+    </div>
+    <div class="grid2">
+
+      <div>
+        <div class="card pad">
+          <h3>오늘의 컨디션 체크</h3>
+          <p class="hint">지금 몸 상태를 눌러주세요. 오늘 운동 강도를 조절하는 데 반영됩니다.</p>
+          <div class="moods" id="moods"></div>
+          <div class="mood-msg" id="moodMsg">아직 선택하지 않았어요. 위에서 오늘 컨디션을 골라주세요.</div>
+        </div>
+
+        <div class="card pad" style="margin-top:16px">
+          <h3>식단 · 컨디션 메모</h3>
+          <p class="hint">먹은 것, 잠, 통증, 어떤 것이든 편하게 적어주세요.</p>
+          <textarea id="memoText" placeholder="예) 아침 그릭요거트+블루베리, 점심 닭가슴살 샐러드. 어제 6시간 자서 오후에 좀 졸렸어요."></textarea>
+          <div class="form-row">
+            <select id="memoKind">
+              <option value="식단">식단</option>
+              <option value="컨디션">컨디션</option>
+              <option value="통증·불편">통증·불편</option>
+              <option value="질문">질문</option>
+            </select>
+            <button class="btn" id="memoBtn" type="button">기록 등록하기</button>
+            <span class="form-msg" id="memoMsg"></span>
+          </div>
+          <div class="logs" id="logs"></div>
+        </div>
+      </div>
+
+      <div>
+      <div class="book">
+        <div class="book-in">
+          <div class="k">NEXT SESSION · 다음 수업</div>
+          <h3>25회차 개인 레슨</h3>
+          <div class="row"><span class="l">날짜</span><span class="r">2026년 6월 20일 (토)</span></div>
+          <div class="row"><span class="l">시간</span><span class="r">오전 10:00 ~ 10:50</span></div>
+          <div class="row"><span class="l">장소</span><span class="r">역삼 바디랩 짐 2F · PT룸 A</span></div>
+          <div class="row"><span class="l">내용</span><span class="r">전신 서킷 50분</span></div>
+          <div class="row"><span class="l">트레이너</span><span class="r">강민석</span></div>
+          <p class="note">💡 수업 20분 전까지 가벼운 탄수화물(바나나 1개 정도)을 드시면 서킷 후반이 훨씬 수월합니다. 변경이 필요하면 전날 오후 6시 전까지 알려주세요.</p>
+        </div>
+      </div>
+
+      <div class="card side-sum">
+        <h3>이번 주 한눈에</h3>
+        <div class="sum-grid">
+          <div class="sum-item hot">
+            <div class="k">운동한 시간</div>
+            <div class="v">160<small> 분</small></div>
+          </div>
+          <div class="sum-item grn">
+            <div class="k">완료한 세션</div>
+            <div class="v">3<small> / 4회</small></div>
+          </div>
+          <div class="sum-item">
+            <div class="k">들어올린 총 중량</div>
+            <div class="v">12.4<small> 톤</small></div>
+          </div>
+          <div class="sum-item">
+            <div class="k">개인 기록 갱신</div>
+            <div class="v">2<small> 종목</small></div>
+          </div>
+        </div>
+        <div class="streak">
+          <span class="big">🔥</span>
+          <span class="tx"><b>6주 연속 개근 중!</b><br>오늘 금요일 수업까지 마치면 7주 연속입니다.</span>
+        </div>
+      </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 8. FOOTER ============ -->
+  <footer>
+    <b>이 페이지는 KAIST I&amp;TM AI 부트캠프 예시용으로 만든 가상의 사례입니다.</b>
+    <span class="small">등장하는 회원·트레이너·측정 기록은 모두 실제와 관계없는 가상의 데이터입니다. · 코드 한 줄 없이 AI에게 요청해 만든 단일 HTML 파일 예시</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =======================================================
+     3. 체중 · 체지방 변화 그래프 (canvas 2d 직접 드로잉)
+     ======================================================= */
+  var WEIGHT   = [64.2, 63.5, 62.8, 62.0, 61.3, 60.5, 59.8];
+  var BODYFAT  = [31.4, 30.6, 29.8, 28.9, 27.9, 27.0, 26.1];
+  var GOAL_W   = 57.0;
+  var GOAL_F   = 24.0;
+
+  var W_MIN = 56, W_MAX = 66;     // 좌축(체중) 범위
+  var F_MIN = 22, F_MAX = 32;     // 우축(체지방률) 범위
+  var TICKS = 5;                  // 눈금 구간 수
+
+  var canvas = document.getElementById('chart');
+  var ctx = canvas.getContext('2d');
+
+  function roundRect(c, x, y, w, h, r){
+    c.beginPath();
+    c.moveTo(x+r, y);
+    c.lineTo(x+w-r, y); c.quadraticCurveTo(x+w, y, x+w, y+r);
+    c.lineTo(x+w, y+h-r); c.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    c.lineTo(x+r, y+h); c.quadraticCurveTo(x, y+h, x, y+h-r);
+    c.lineTo(x, y+r); c.quadraticCurveTo(x, y, x+r, y);
+    c.closePath();
+  }
+
+  // Catmull-Rom -> bezier 로 부드러운 곡선
+  function smoothLine(c, pts){
+    c.beginPath();
+    c.moveTo(pts[0].x, pts[0].y);
+    for (var i=0; i<pts.length-1; i++){
+      var p0 = pts[i-1] || pts[i];
+      var p1 = pts[i];
+      var p2 = pts[i+1];
+      var p3 = pts[i+2] || p2;
+      var t = 0.18;
+      c.bezierCurveTo(
+        p1.x + (p2.x-p0.x)*t, p1.y + (p2.y-p0.y)*t,
+        p2.x - (p3.x-p1.x)*t, p2.y - (p3.y-p1.y)*t,
+        p2.x, p2.y
+      );
+    }
+    c.stroke();
+  }
+
+  function drawChart(){
+    var box = canvas.parentNode;
+    var cssW = Math.max(280, box.clientWidth);
+    var cssH = canvas.clientHeight || 320;
+    var dpr = window.devicePixelRatio || 1;
+
+    canvas.width  = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+
+    var narrow = cssW < 470;
+    var padL = narrow ? 36 : 46;
+    var padR = narrow ? 36 : 48;
+    var padT = 32;
+    var padB = 40;
+    var cw = cssW - padL - padR;
+    var ch = cssH - padT - padB;
+    if (cw <= 10 || ch <= 10) return;
+
+    var n = WEIGHT.length;
+    var stepX = n > 1 ? cw / (n - 1) : 0;
+    var xAt = function(i){ return padL + stepX * i; };
+    var yW  = function(v){ return padT + ch - (v - W_MIN) / (W_MAX - W_MIN) * ch; };
+    var yF  = function(v){ return padT + ch - (v - F_MIN) / (F_MAX - F_MIN) * ch; };
+
+    ctx.lineJoin = 'round';
+    ctx.lineCap  = 'round';
+    ctx.textBaseline = 'middle';
+    var FONT = '-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif';
+
+    /* --- 가로 그리드 + 좌/우 축 라벨 --- */
+    for (var t = 0; t <= TICKS; t++){
+      var ratio = t / TICKS;
+      var y = padT + ch - ratio * ch;
+
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(padL + cw, y);
+      ctx.strokeStyle = (t === 0) ? '#d7dce2' : '#eef1f4';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      var wv = W_MIN + (W_MAX - W_MIN) * ratio;
+      var fv = F_MIN + (F_MAX - F_MIN) * ratio;
+
+      ctx.font = '600 ' + (narrow ? 9.5 : 11) + 'px ' + FONT;
+      ctx.fillStyle = '#ff6b4a';
+      ctx.textAlign = 'right';
+      ctx.fillText(wv.toFixed(0), padL - 8, y);
+
+      ctx.fillStyle = '#12b886';
+      ctx.textAlign = 'left';
+      ctx.fillText(fv.toFixed(0), padL + cw + 8, y);
+    }
+
+    /* --- 축 단위 --- */
+    ctx.font = '800 ' + (narrow ? 9 : 10) + 'px ' + FONT;
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#ff6b4a';
+    ctx.fillText('kg', padL - 8, padT - 16);
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#12b886';
+    ctx.fillText('%', padL + cw + 8, padT - 16);
+
+    /* --- X축 라벨 --- */
+    ctx.font = '700 ' + (narrow ? 10 : 11.5) + 'px ' + FONT;
+    ctx.textAlign = 'center';
+    for (var i = 0; i < n; i++){
+      var isLast = (i === n - 1);
+      ctx.fillStyle = isLast ? '#1a1d21' : '#8b95a1';
+      ctx.fillText((i + 1) + '주', xAt(i), padT + ch + 17);
+    }
+
+    /* --- 목표선 (점선) --- */
+    ctx.save();
+    ctx.setLineDash([5, 5]);
+    ctx.lineWidth = 1.6;
+
+    var gy1 = yW(GOAL_W);
+    ctx.strokeStyle = 'rgba(255,107,74,.62)';
+    ctx.beginPath(); ctx.moveTo(padL, gy1); ctx.lineTo(padL + cw, gy1); ctx.stroke();
+
+    var gy2 = yF(GOAL_F);
+    ctx.strokeStyle = 'rgba(18,184,134,.62)';
+    ctx.beginPath(); ctx.moveTo(padL, gy2); ctx.lineTo(padL + cw, gy2); ctx.stroke();
+    ctx.restore();
+
+    // 목표선 라벨 (왼쪽 하단에 모아서 배치 — 데이터 라인/말풍선과 겹치지 않는 영역)
+    ctx.font = '800 ' + (narrow ? 9.5 : 10.5) + 'px ' + FONT;
+    ctx.textAlign = 'left';
+
+    var l2 = '목표 24.0%';
+    var w2 = ctx.measureText(l2).width;
+    ctx.fillStyle = 'rgba(230,249,242,.95)';
+    roundRect(ctx, padL + 6, gy2 - 9, w2 + 12, 18, 9); ctx.fill();
+    ctx.fillStyle = '#0b8f68';
+    ctx.fillText(l2, padL + 12, gy2);
+
+    var l1 = '목표 57.0kg';
+    var w1 = ctx.measureText(l1).width;
+    ctx.fillStyle = 'rgba(255,241,237,.95)';
+    roundRect(ctx, padL + 6, gy1 - 9, w1 + 12, 18, 9); ctx.fill();
+    ctx.fillStyle = '#e0492a';
+    ctx.fillText(l1, padL + 12, gy1);
+
+    /* --- 시리즈 그리기 --- */
+    function series(vals, yfn, color, fillTop, fillBot){
+      var pts = [];
+      for (var i = 0; i < vals.length; i++) pts.push({ x: xAt(i), y: yfn(vals[i]) });
+
+      // 면적 그라데이션
+      var g = ctx.createLinearGradient(0, padT, 0, padT + ch);
+      g.addColorStop(0, fillTop);
+      g.addColorStop(1, fillBot);
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, padT + ch);
+      ctx.lineTo(pts[0].x, pts[0].y);
+      for (var k = 0; k < pts.length - 1; k++){
+        var p0 = pts[k-1] || pts[k], p1 = pts[k], p2 = pts[k+1], p3 = pts[k+2] || p2, tt = 0.18;
+        ctx.bezierCurveTo(
+          p1.x + (p2.x-p0.x)*tt, p1.y + (p2.y-p0.y)*tt,
+          p2.x - (p3.x-p1.x)*tt, p2.y - (p3.y-p1.y)*tt,
+          p2.x, p2.y
+        );
+      }
+      ctx.lineTo(pts[pts.length-1].x, padT + ch);
+      ctx.closePath();
+      ctx.fillStyle = g;
+      ctx.fill();
+      ctx.restore();
+
+      // 라인
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.8;
+      smoothLine(ctx, pts);
+
+      // 포인트
+      for (var j = 0; j < pts.length; j++){
+        var last = (j === pts.length - 1);
+        ctx.beginPath();
+        ctx.arc(pts[j].x, pts[j].y, last ? 5.4 : 3.6, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        ctx.lineWidth = last ? 3.2 : 2.4;
+        ctx.strokeStyle = color;
+        ctx.stroke();
+      }
+      return pts;
+    }
+
+    var fPts = series(BODYFAT, yF, '#12b886', 'rgba(18,184,134,.11)', 'rgba(18,184,134,0)');
+    var wPts = series(WEIGHT,  yW, '#ff6b4a', 'rgba(255,107,74,.13)', 'rgba(255,107,74,0)');
+
+    /* --- 마지막 값 말풍선 --- */
+    function tag(pt, text, bg, dy){
+      ctx.font = '800 ' + (narrow ? 10 : 11.5) + 'px ' + FONT;
+      var tw = ctx.measureText(text).width;
+      var bw = tw + 16, bh = 21;
+      var bx = Math.min(pt.x - bw / 2, padL + cw - bw);
+      bx = Math.max(bx, padL);
+      var by = pt.y + dy;
+      by = Math.max(padT + 2, Math.min(by, padT + ch - bh - 2));
+      ctx.fillStyle = bg;
+      roundRect(ctx, bx, by, bw, bh, 10);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, bx + bw / 2, by + bh / 2 + .5);
+    }
+    tag(wPts[wPts.length-1], '59.8kg', '#ff6b4a', narrow ? -34 : -40);
+    tag(fPts[fPts.length-1], '26.1%',  '#12b886', narrow ? 13 : 18);
+  }
+
+  drawChart();
+  var rTimer = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(rTimer);
+    rTimer = setTimeout(drawChart, 120);
+  });
+
+  /* =======================================================
+     4. 이번 주 운동 계획 (아코디언)
+     ======================================================= */
+  var PLAN = [
+    {
+      w:'월', date:'6/15', icon:'🦵', name:'하체 + 코어', time:'60분', status:'done',
+      note:'스쿼트 40kg 첫 성공! 하강 3초 유지 잘 하셨습니다.',
+      items:[
+        ['바벨 스쿼트','4세트 × 12회','40 kg'],
+        ['레그프레스','4세트 × 12회','80 kg'],
+        ['루마니안 데드리프트','3세트 × 12회','35 kg'],
+        ['레그 익스텐션','3세트 × 15회','25 kg'],
+        ['플랭크','3세트 × 45초','맨몸']
+      ]
+    },
+    { w:'화', date:'6/16', icon:'😴', name:'휴식', time:'—', status:'rest',
+      note:'근육은 쉬는 동안 자랍니다. 가벼운 스트레칭만 권장합니다.',
+      items:[
+        ['전신 스트레칭','10 ~ 15분','자율'],
+        ['폼롤러 (허벅지·둔근)','부위별 60초','자율'],
+        ['가벼운 산책','20 ~ 30분','선택']
+      ]
+    },
+    {
+      w:'수', date:'6/17', icon:'💪', name:'상체 밀기', time:'60분', status:'done',
+      note:'벤치프레스 27.5kg 4세트 완료. 어깨가 말리지 않게 잡은 게 좋았어요.',
+      items:[
+        ['벤치프레스','4세트 × 10회','27.5 kg'],
+        ['인클라인 덤벨프레스','3세트 × 12회','10 kg × 2'],
+        ['숄더프레스 (머신)','4세트 × 12회','12.5 kg'],
+        ['케이블 푸시다운','3세트 × 15회','15 kg'],
+        ['사이드 레터럴 레이즈','3세트 × 15회','4 kg × 2']
+      ]
+    },
+    {
+      w:'목', date:'6/18', icon:'🏃', name:'유산소', time:'40분', status:'done',
+      note:'인터벌 7세트 완주. 평균 심박 142bpm으로 딱 목표 구간이었습니다.',
+      items:[
+        ['트레드밀 인터벌','1분 빠르게 / 2분 회복 × 7','경사 2%'],
+        ['사이클','15분 (심박 130~140)','저항 6'],
+        ['폼롤러 마무리','5분','—']
+      ]
+    },
+    {
+      w:'금', date:'6/19', icon:'🍑', name:'하체 + 둔근', time:'60분', status:'today',
+      note:'오늘 수업입니다. 힙 쓰러스트 55kg 도전! 허리 아닌 둔근으로 미는 감각 기억하세요.',
+      items:[
+        ['힙 쓰러스트','4세트 × 12회','55 kg'],
+        ['스모 데드리프트','4세트 × 10회','50 kg'],
+        ['불가리안 스플릿 스쿼트','3세트 × 12회','8 kg × 2'],
+        ['케이블 킥백','3세트 × 15회','12 kg'],
+        ['사이드 플랭크','3세트 × 30초','맨몸']
+      ]
+    },
+    {
+      w:'토', date:'6/20', icon:'🔥', name:'전신 서킷', time:'50분', status:'plan',
+      note:'25회차 수업. 세트 간 휴식 45초로 짧게 가져갑니다.',
+      items:[
+        ['케틀벨 스윙','4세트 × 15회','12 kg'],
+        ['버피','4세트 × 10회','맨몸'],
+        ['배틀로프','4세트 × 30초','—'],
+        ['로잉머신','4세트 × 250m','저항 5'],
+        ['마운틴 클라이머','4세트 × 30초','맨몸']
+      ]
+    },
+    { w:'일', date:'6/21', icon:'🌿', name:'휴식', time:'—', status:'rest',
+      note:'완전 휴식일입니다. 다음 주 월요일 아침 공복 인바디 측정 잊지 마세요!',
+      items:[
+        ['가벼운 산책','30분','선택'],
+        ['수면','7시간 이상 목표','중요'],
+        ['수분 섭취','2 L 이상','중요']
+      ]
+    }
+  ];
+
+  var STATUS_TXT = { done:'✅ 완료', today:'오늘 예정', plan:'예정', rest:'휴식' };
+  var BADGE_CLS  = { done:'done', today:'plan', plan:'plan', rest:'rest' };
+
+  var daysEl   = document.getElementById('days');
+  var detailEl = document.getElementById('detail');
+  var openIdx  = -1;
+
+  PLAN.forEach(function(d, i){
+    var el = document.createElement('div');
+    var cls = 'day ' + (d.status === 'today' ? 'today' : d.status);
+    el.className = cls;
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.innerHTML =
+      (d.status === 'today' ? '<span class="today-tag">TODAY</span>' : '') +
+      '<div class="dw">' + d.w + '</div>' +
+      '<div class="dd">' + d.date + '</div>' +
+      '<div class="icon">' + d.icon + '</div>' +
+      '<div class="nm">' + d.name + '</div>' +
+      '<div class="tm">' + d.time + '</div>' +
+      '<div class="st">' + STATUS_TXT[d.status] + '</div>' +
+      '<span class="caret">▾</span>';
+    el.addEventListener('click', function(){ toggle(i); });
+    el.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(i); }
+    });
+    daysEl.appendChild(el);
+  });
+
+  function toggle(i){
+    if (openIdx === i){
+      openIdx = -1;
+      detailEl.className = 'detail';
+      detailEl.innerHTML = '';
+    } else {
+      openIdx = i;
+      render(i);
+      detailEl.className = 'detail show';
+    }
+    var kids = daysEl.children;
+    for (var k = 0; k < kids.length; k++){
+      if (k === openIdx) kids[k].classList.add('open');
+      else kids[k].classList.remove('open');
+    }
+  }
+
+  function render(i){
+    var d = PLAN[i];
+    var rows = d.items.map(function(it){
+      return '<tr><td class="ex">' + it[0] + '</td><td>' + it[1] + '</td><td class="w">' + it[2] + '</td></tr>';
+    }).join('');
+    detailEl.innerHTML =
+      '<div class="detail-head">' +
+        '<h3>' + d.icon + ' ' + d.w + '요일 · ' + d.name + '</h3>' +
+        '<span class="badge ' + BADGE_CLS[d.status] + '">' + STATUS_TXT[d.status] + '</span>' +
+        '<span class="meta">' + d.date + ' · 소요시간 ' + d.time + '</span>' +
+      '</div>' +
+      '<div class="tbl-scroll"><table>' +
+        '<thead><tr><th>운동</th><th>세트 × 횟수</th><th>중량</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table></div>' +
+      '<div class="detail-note">📝 <b>트레이너 메모</b> · ' + d.note + '</div>';
+  }
+
+  toggle(4); // 오늘(금) 기본 펼침
+
+  /* =======================================================
+     5. 중량 성장 막대
+     ======================================================= */
+  var LIFTS = [
+    { nm:'바벨 스쿼트',   s:25,   c:40,   u:'kg' },
+    { nm:'데드리프트',    s:30,   c:50,   u:'kg' },
+    { nm:'벤치프레스',    s:15,   c:27.5, u:'kg' },
+    { nm:'레그프레스',    s:50,   c:80,   u:'kg' },
+    { nm:'힙 쓰러스트',   s:30,   c:55,   u:'kg' }
+  ];
+  var MAX = 0;
+  LIFTS.forEach(function(l){ if (l.c > MAX) MAX = l.c; });
+  MAX = MAX * 1.06;
+
+  var liftsEl = document.getElementById('lifts');
+  var liftHTML = LIFTS.map(function(l){
+    var pct = Math.round((l.c - l.s) / l.s * 100);
+    return '' +
+      '<div class="lift">' +
+        '<div class="lift-top">' +
+          '<span class="lift-nm">' + l.nm + '</span>' +
+          '<span class="lift-nums">' + l.s + l.u + ' &nbsp;→&nbsp; <b>' + l.c + l.u + '</b> &nbsp;<span class="growth">▲ ' + pct + '%</span></span>' +
+        '</div>' +
+        '<div class="barset">' +
+          '<div class="barrow start"><span class="lab">시작</span><span class="bt"><i data-w="' + (l.s / MAX * 100) + '" style="width:0%"></i></span><span class="val">' + l.s + l.u + '</span></div>' +
+          '<div class="barrow now"><span class="lab">현재</span><span class="bt"><i data-w="' + (l.c / MAX * 100) + '" style="width:0%"></i></span><span class="val">' + l.c + l.u + '</span></div>' +
+        '</div>' +
+      '</div>';
+  }).join('');
+  liftsEl.innerHTML = liftHTML;
+
+  setTimeout(function(){
+    var bars = liftsEl.querySelectorAll('.bt > i');
+    for (var i = 0; i < bars.length; i++){
+      bars[i].style.width = bars[i].getAttribute('data-w') + '%';
+    }
+  }, 120);
+
+  /* =======================================================
+     7-1. 오늘의 컨디션 체크
+     ======================================================= */
+  var MOODS = [
+    { k:'best', em:'🔥', lb:'최고',   msg:'좋습니다! 오늘은 힙 쓰러스트 55kg 도전해도 되겠어요. 워밍업만 충분히 하고 시작할게요 💪' },
+    { k:'good', em:'😄', lb:'좋음',   msg:'컨디션 좋으시네요. 계획대로 5종목 그대로 진행하겠습니다. 마지막 세트까지 힘내세요!' },
+    { k:'soso', em:'🙂', lb:'보통',   msg:'무난한 날이네요. 중량은 유지하고 세트 간 휴식을 15초만 더 가져가 볼게요.' },
+    { k:'tired',em:'😪', lb:'피곤',   msg:'무리하지 마세요. 오늘은 중량을 10% 낮추고 자세 위주로 갑니다. 대신 코어는 그대로 채울게요.' },
+    { k:'bad',  em:'🥵', lb:'매우피곤', msg:'회복이 먼저입니다. 웨이트는 생략하고 스트레칭 + 가벼운 사이클 20분으로 대체하겠습니다. 트레이너에게 바로 전달되었어요.' }
+  ];
+
+  var moodsEl = document.getElementById('moods');
+  var moodMsg = document.getElementById('moodMsg');
+  var moodSel = -1;
+
+  MOODS.forEach(function(m, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'mood';
+    b.innerHTML = '<span class="em">' + m.em + '</span><span class="lb">' + m.lb + '</span>';
+    b.addEventListener('click', function(){
+      moodSel = i;
+      var kids = moodsEl.children;
+      for (var k = 0; k < kids.length; k++) kids[k].classList.toggle('on', k === i);
+      moodMsg.className = 'mood-msg on';
+      moodMsg.textContent = m.em + ' 「' + m.lb + '」 선택됨 — ' + m.msg;
+    });
+    moodsEl.appendChild(b);
+  });
+
+  /* =======================================================
+     7-2. 식단 · 컨디션 메모 (메모리 상에서만 저장)
+     ======================================================= */
+  var logs = [
+    { d:'6월 18일 (목) 21:40', k:'컨디션', kc:'', t:'유산소 인터벌 7세트 다 채웠어요. 5세트째부터 진짜 힘들었는데 끝나고 나니 개운합니다. 종아리가 좀 뻐근해요.' },
+    { d:'6월 17일 (수) 12:20', k:'식단',   kc:'c', t:'아침: 그릭요거트 + 블루베리 / 점심: 현미밥 반공기, 닭가슴살 샐러드, 계란 2개\n간식으로 아몬드 한 줌 먹었습니다. 단백질 대략 95g 정도 될 것 같아요.' },
+    { d:'6월 15일 (월) 22:05', k:'질문',   kc:'', t:'스쿼트할 때 왼쪽 무릎에서 딱 소리가 나는데 통증은 없어요. 계속 해도 괜찮을까요?' }
+  ];
+
+  var logsEl  = document.getElementById('logs');
+  var memoText= document.getElementById('memoText');
+  var memoKind= document.getElementById('memoKind');
+  var memoBtn = document.getElementById('memoBtn');
+  var memoMsg = document.getElementById('memoMsg');
+
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function paintLogs(freshFirst){
+    logsEl.innerHTML = logs.map(function(l, i){
+      return '<div class="log' + (freshFirst && i === 0 ? ' fresh' : '') + '">' +
+        '<div class="log-meta"><span class="d">' + esc(l.d) + '</span>' +
+        '<span class="k' + (l.kc ? ' c' : '') + '">' + esc(l.k) + '</span></div>' +
+        '<p>' + esc(l.t) + '</p></div>';
+    }).join('');
+  }
+  paintLogs(false);
+
+  function nowLabel(){
+    var dt = new Date();
+    var wd = ['일','월','화','수','목','금','토'][dt.getDay()];
+    var hh = ('0' + dt.getHours()).slice(-2);
+    var mm = ('0' + dt.getMinutes()).slice(-2);
+    return (dt.getMonth() + 1) + '월 ' + dt.getDate() + '일 (' + wd + ') ' + hh + ':' + mm;
+  }
+
+  memoBtn.addEventListener('click', function(){
+    var v = memoText.value.trim();
+    if (!v){
+      memoMsg.style.color = '#e0492a';
+      memoMsg.textContent = '내용을 입력해 주세요.';
+      memoText.focus();
+      return;
+    }
+    var kind = memoKind.value;
+    logs.unshift({ d: nowLabel(), k: kind, kc: (kind === '식단' ? 'c' : ''), t: v });
+    paintLogs(true);
+    memoText.value = '';
+    memoMsg.style.color = '#0b8f68';
+    memoMsg.textContent = '✅ 등록되었습니다!';
+    setTimeout(function(){ memoMsg.textContent = ''; }, 2600);
+  });
+
+})();
+</script>
+</body>
+</html>

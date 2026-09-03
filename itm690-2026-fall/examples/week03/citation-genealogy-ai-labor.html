@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>논문 계보도 — AI는 인간 노동을 대체하는가 (2003–2026)</title>
+<style>
+  :root{--bg:#f3f6f2;--ink:#22201d;--muted:#626a64;--line:#d5ddd3;--brand:#2e9bdb;--brand-dark:#1b6fa6;--sky:#e3f1fb;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink);}
+  .wrap{display:flex;height:100vh;}
+  .left{flex:1 1 62%;min-width:0;overflow-y:auto;padding:18px 10px 30px 18px;}
+  .right{flex:0 0 38%;max-width:430px;border-left:1px solid var(--line);background:#fff;overflow-y:auto;padding:22px 22px 40px;}
+  h1{font-size:17px;margin:0 0 2px;}
+  .sub{font-size:12px;color:var(--muted);margin-bottom:10px;}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;color:#52514e;background:#fff;}
+  .chip .sw{width:10px;height:10px;border-radius:999px;}
+  svg{width:100%;height:auto;display:block;}
+  circle.node{cursor:pointer;}
+  circle.node.sel{stroke:#22201d;stroke-width:3;}
+  /* 상세 패널 */
+  .ph{color:var(--muted);font-size:13.5px;line-height:1.8;padding-top:30px;text-align:center;}
+  .p-lane{display:inline-block;font-size:11px;font-weight:900;color:#fff;border-radius:999px;padding:3px 11px;margin-bottom:10px;}
+  .p-title{font-size:16.5px;font-weight:800;line-height:1.45;margin-bottom:8px;}
+  .p-meta{font-size:13px;color:var(--muted);border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:12px;line-height:1.7;}
+  .p-meta b{color:var(--ink);}
+  .p-h{font-size:12px;font-weight:900;letter-spacing:.05em;color:var(--brand-dark);margin:14px 0 5px;}
+  .p-abs{font-size:13.5px;line-height:1.8;}
+  .p-cites{font-size:12.5px;line-height:1.7;color:var(--muted);}
+  .p-cites b{color:var(--ink);}
+  .p-note{margin-top:16px;font-size:11.5px;color:#898781;font-style:italic;border-top:1px solid var(--line);padding-top:10px;}
+  @media (max-width:820px){ .wrap{display:block;height:auto;} .right{max-width:none;border-left:none;border-top:1px solid var(--line);} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="left">
+    <h1>논문 계보도 — "AI는 인간 노동을 대체하는가" (2003 → 2026)</h1>
+    <div class="sub">시간은 위에서 아래로 흐릅니다 · 세로 줄 = 연구 갈래 · 원 크기 = 인용 규모(대략) · 선 = 인용 관계 · <b>논문(원)을 클릭하면 오른쪽에 서지와 초록이 표시됩니다</b></div>
+    <div class="legend" id="legend"></div>
+    <div id="chart"></div>
+  </div>
+  <div class="right" id="panel">
+    <div class="ph">← 왼쪽 계보도에서<br/><b>논문(원)을 클릭</b>하면<br/>전체 제목·서지 사항·초록이<br/>여기에 표시됩니다.</div>
+  </div>
+</div>
+<script>
+const LANES = [
+  {name:"기반 이론", color:"#2a78d6"},
+  {name:"자동화 이론", color:"#4a3aa7"},
+  {name:"로봇·고용 실증", color:"#1baf7a"},
+  {name:"AI 노출 측정", color:"#eda100"},
+  {name:"생성 AI 실험·실측", color:"#e34948"}
+];
+const P = [
+ {id:"alm03",y:2003,lane:0,t:3,lbl:"ALM 03",authors:"David H. Autor, Frank Levy, Richard J. Murnane",title:"The Skill Content of Recent Technological Change: An Empirical Exploration",venue:"Quarterly Journal of Economics, 118(4)",yr:"2003",
+  abs:"컴퓨터는 '직업'이 아니라 '과업(task)'을 대체한다는 프레임을 제시한다. 규칙으로 기술할 수 있는 정형(routine) 과업은 컴퓨터가 대체하고, 문제 해결·복잡한 소통 같은 비정형 과업은 오히려 보완된다는 것을 미국 직업 데이터로 보였다. 이후 자동화·AI 연구 전체가 이 과업 모형 위에서 전개된다."},
+ {id:"aa11",y:2011,lane:0,t:3,lbl:"Acemoglu·Autor 11",authors:"Daron Acemoglu, David H. Autor",title:"Skills, Tasks and Technologies: Implications for Employment and Earnings",venue:"Handbook of Labor Economics, Vol. 4B",yr:"2011",
+  abs:"과업 모형을 노동경제학의 표준 분석 틀로 종합한 핸드북 챕터. 기술이 숙련 수준별 고용과 임금에 미치는 효과를 과업 배분의 문제로 재정식화하고, 일자리 양극화(중간 숙련의 공동화) 현상을 설명한다."},
+ {id:"fo13",y:2013,lane:3,t:3,lbl:"Frey·Osborne 13",authors:"Carl Benedikt Frey, Michael A. Osborne",title:"The Future of Employment: How Susceptible Are Jobs to Computerisation?",venue:"옥스퍼드 WP 2013 → Technological Forecasting and Social Change 114 (2017)",yr:"2013/2017",
+  abs:"702개 직업별로 전산화(자동화) 확률을 기계학습으로 추정해, 미국 고용의 약 47%가 향후 10~20년 내 자동화 고위험군이라고 전망했다. '어떤 직업이 위험한가'라는 노출 측정 연구의 출발점이자, 알파고 쇼크와 맞물려 대중적 일자리 불안 논쟁을 점화한 논문."},
+ {id:"bm14",y:2014,lane:1,t:3,lbl:"제2의 기계시대 14",authors:"Erik Brynjolfsson, Andrew McAfee",title:"The Second Machine Age: Work, Progress, and Prosperity in a Time of Brilliant Technologies",venue:"W. W. Norton (단행본)",yr:"2014",
+  abs:"디지털 기술이 증기기관에 비견되는 범용 기술이며, 그 혜택과 노동시장 충격이 비대칭적으로 분배되는 '대분기(great decoupling)'를 대중적으로 정식화했다. 기술 낙관과 분배 비관을 동시에 담아 이후 정책 논쟁의 기본서가 되었다."},
+ {id:"autor15",y:2015,lane:0,t:3,lbl:"Autor 15",authors:"David H. Autor",title:"Why Are There Still So Many Jobs? The History and Future of Workplace Automation",venue:"Journal of Economic Perspectives, 29(3)",yr:"2015",
+  abs:"자동화 비관론에 대한 대표 반론. 자동화는 과업을 대체하는 동시에 남은 과업의 가치를 높이는 보완 효과를 낳으며, 역사적으로 총고용은 줄지 않았음을 보인다. '대체 vs 보완'이라는 이 분야의 논쟁 구도를 만든 리뷰 논문."},
+ {id:"bmit17",y:2017,lane:3,t:2,lbl:"Brynjolfsson·Mitchell 17",authors:"Erik Brynjolfsson, Tom Mitchell",title:"What Can Machine Learning Do? Workforce Implications",venue:"Science, 358(6370)",yr:"2017",
+  abs:"기계학습에 적합한 과업의 조건(명확한 입력-출력, 대량 데이터, 짧은 피드백 등)을 제시하고, 직업 전체가 아니라 직업 안의 과업 일부만 자동화 적합하다는 점을 강조했다. 이후 SML 루브릭(2018)으로 발전하며 노출 측정 갈래의 방법적 기초가 되었다."},
+ {id:"ar18",y:2018,lane:1,t:2,lbl:"A&R 18",authors:"Daron Acemoglu, Pascual Restrepo",title:"The Race between Man and Machine: Implications of Technology for Growth, Factor Shares, and Employment",venue:"American Economic Review, 108(6)",yr:"2018",
+  abs:"자동화가 기존 과업에서 노동을 밀어내는 대체효과와, 새로운 과업 창출이 노동 수요를 복원하는 효과를 하나의 성장 모형에 담았다. 일자리의 미래는 두 힘의 '경주'에 달려 있다는 이론적 기둥으로, 이후 실증·정책 연구의 준거가 되었다."},
+ {id:"gm18",y:2018,lane:2,t:2,lbl:"Graetz·Michaels 18",authors:"Georg Graetz, Guy Michaels",title:"Robots at Work",venue:"Review of Economics and Statistics, 100(5)",yr:"2018",
+  abs:"17개국 산업 패널 데이터로 산업용 로봇 도입의 효과를 추정한 첫 국제 실증 연구. 로봇은 노동생산성과 부가가치를 높였고 총고용 감소는 뚜렷하지 않았으나 저숙련 고용 비중은 줄었다."},
+ {id:"agh19",y:2019,lane:1,t:1,lbl:"Aghion 19",authors:"Philippe Aghion, Benjamin F. Jones, Charles I. Jones",title:"Artificial Intelligence and Economic Growth",venue:"The Economics of Artificial Intelligence (NBER/시카고대 출판)",yr:"2019",
+  abs:"AI가 아이디어 생산까지 자동화할 때의 성장 경로를 이론화했다. 성장의 병목은 자동화되기 쉬운 부분이 아니라 자동화하기 어려운 필수 과업에 있다는 보몰 병(Baumol) 논리로, AI 낙관론의 한계를 정식화한다."},
+ {id:"ar19",y:2019,lane:1,t:2,lbl:"A&R 19",authors:"Daron Acemoglu, Pascual Restrepo",title:"Automation and New Tasks: How Technology Displaces and Reinstates Labor",venue:"Journal of Economic Perspectives, 33(2)",yr:"2019",
+  abs:"기술 변화의 고용 효과를 대체(displacement)와 복원(reinstatement)의 대결로 정리한 리뷰형 이론 논문. 최근 수십 년은 대체가 복원을 앞질렀다는 진단과 함께, '어떤 기술을 만들 것인가'라는 방향 선택의 문제를 제기했다."},
+ {id:"webb20",y:2020,lane:3,t:1,lbl:"Webb 20",authors:"Michael Webb",title:"The Impact of Artificial Intelligence on the Labor Market",venue:"스탠퍼드 WP (SSRN)",yr:"2020",
+  abs:"AI 특허 문서와 직업별 직무 기술서의 텍스트를 매칭해 직업별 AI 노출도를 측정하는 방법을 제시했다. 소프트웨어·로봇과 달리 AI는 고학력·고임금 직업에 더 많이 노출된다는 결과로, 이후 각국 중앙은행·연구기관 노출 지수의 원형이 되었다."},
+ {id:"ar20",y:2020,lane:2,t:2,lbl:"A&R 로봇 20",authors:"Daron Acemoglu, Pascual Restrepo",title:"Robots and Jobs: Evidence from US Labor Markets",venue:"Journal of Political Economy, 128(6)",yr:"2020",
+  abs:"미국 지역 노동시장 데이터로 산업용 로봇 1대 추가가 고용과 임금에 미치는 인과 효과를 추정했다. 로봇 밀도가 높아진 지역에서 고용률과 임금이 유의하게 하락 — 자동화의 대체효과를 가장 설득력 있게 실증한 대표작."},
+ {id:"felten21",y:2021,lane:3,t:1,lbl:"Felten 21",authors:"Edward Felten, Manav Raj, Robert Seamans",title:"Occupational, Industry, and Geographic Exposure to Artificial Intelligence (AIOE)",venue:"Strategic Management Journal, 42(12)",yr:"2021",
+  abs:"AI 세부 역량(이미지 인식, 언어 이해 등)의 발전 속도를 직업별 요구 능력에 연결해 직업·산업·지역 AI 노출 지수(AIOE)를 구축했다. 이후 정책기관들이 가장 널리 차용하는 표준 노출 지수가 되었다."},
+ {id:"dauth21",y:2021,lane:2,t:1,lbl:"Dauth 21",authors:"Wolfgang Dauth, Sebastian Findeisen, Jens Südekum, Nicole Wößner",title:"The Adjustment of Labor Markets to Robots",venue:"Journal of the European Economic Association, 19(6)",yr:"2021",
+  abs:"독일 고용 전수 데이터로 로봇의 효과를 추정한 결과, 미국과 달리 총고용은 줄지 않았다. 대신 신규 진입자가 제조업 일자리를 얻지 못하고 서비스업으로 이동하는 구성 변화가 나타나, 제도·맥락에 따라 효과가 다름을 보였다."},
+ {id:"elou23",y:2023,lane:3,t:2,lbl:"GPTs are GPTs 23",authors:"Tyna Eloundou, Sam Manning, Pamela Mishkin, Daniel Rock",title:"GPTs are GPTs: An Early Look at the Labor Market Impact Potential of Large Language Models",venue:"WP 2023 → Science 384(6702) (2024)",yr:"2023/2024",
+  abs:"LLM(및 인간 평가자)을 이용해 직업별 과업이 LLM으로 얼마나 빨라질 수 있는지를 평가했다. 미국 노동자의 약 80%가 과업의 10% 이상에서, 약 19%는 과업의 절반 이상에서 영향권에 든다고 추정 — 생성형 AI 시대의 노출 측정 기준점."},
+ {id:"noy23",y:2023,lane:4,t:2,lbl:"Noy·Zhang 23",authors:"Shakked Noy, Whitney Zhang",title:"Experimental Evidence on the Productivity Effects of Generative Artificial Intelligence",venue:"Science, 381(6654)",yr:"2023",
+  abs:"전문직 글쓰기 과업의 무작위 실험에서 ChatGPT 사용 집단은 시간이 40% 줄고 품질이 18% 올랐다. 특히 실력이 낮았던 참가자의 향상이 가장 커, 생성형 AI가 격차를 좁히는 방향으로 작동함을 처음 실험으로 보였다."},
+ {id:"peng23",y:2023,lane:4,t:1,lbl:"Copilot 23",authors:"Sida Peng, Eirini Kalliamvakou, Peter Cihon, Mert Demirer",title:"The Impact of AI on Developer Productivity: Evidence from GitHub Copilot",venue:"WP (arXiv)",yr:"2023",
+  abs:"개발자 무작위 실험에서 GitHub Copilot을 쓴 집단이 같은 코딩 과업을 55.8% 더 빨리 완료했다. 코딩 직군에서 생성형 AI 보조의 효과를 잰 기준점 실험."},
+ {id:"dell23",y:2023,lane:4,t:2,lbl:"BCG 실험 23",authors:"Fabrizio Dell'Acqua, Edward McFowland III, Ethan Mollick 외",title:"Navigating the Jagged Technological Frontier: Field Experimental Evidence of the Effects of AI on Knowledge Worker Productivity and Quality",venue:"Harvard Business School WP 24-013",yr:"2023",
+  abs:"BCG 컨설턴트 758명의 현장 실험. AI 역량 경계 안쪽 과업에서는 품질이 40% 가까이 향상됐지만, 경계 바깥 과업에서는 AI를 쓴 쪽이 오히려 정답률이 낮아졌다. AI의 능력 경계가 '들쭉날쭉(jagged)'하며 과업별 판단이 필요함을 보였다."},
+ {id:"acem24",y:2024,lane:1,t:1,lbl:"Acemoglu 24",authors:"Daron Acemoglu",title:"The Simple Macroeconomics of AI",venue:"Economic Policy, 39(120)",yr:"2024",
+  abs:"과업 프레임과 노출 추정치(Eloundou 등)를 결합해 AI의 거시 효과를 계산하면, 향후 10년 미국 TFP 증가는 1% 미만 수준으로 온건하다고 추정했다. 신과업 창출과 새 나쁜 과업(조작·감시)의 가능성까지 포함한 절제된 전망으로 과열 논쟁을 식혔다."},
+ {id:"autor24",y:2024,lane:0,t:1,lbl:"Autor 24",authors:"David H. Autor",title:"Applying AI to Rebuild Middle Class Jobs",venue:"NBER WP 32140",yr:"2024",
+  abs:"AI가 전문 지식의 접근 문턱을 낮추면, 의료·법률 등에서 준전문 인력이 더 높은 가치의 과업을 수행하게 되어 중간층 일자리를 복원할 수 있다는 보완론의 최신형. 기술의 효과는 주어진 것이 아니라 활용 설계에 달려 있다고 주장한다."},
+ {id:"blr25",y:2025,lane:4,t:2,lbl:"GenAI at Work 25",authors:"Erik Brynjolfsson, Danielle Li, Lindsey Raymond",title:"Generative AI at Work",venue:"Quarterly Journal of Economics, 140(2) (WP 2023)",yr:"2023/2025",
+  abs:"콜센터 상담사 5천여 명에게 단계적으로 도입된 AI 어시스턴트의 효과를 실제 운영 데이터로 추정했다. 시간당 처리 건수가 평균 14~15% 증가했고, 신입·저숙련 상담사의 향상(30%대)이 가장 커 숙련 격차가 줄었다. 현장 도입 증거의 대표작."},
+ {id:"canary25",y:2025.5,lane:4,t:1,lbl:"Canaries 25",authors:"Erik Brynjolfsson, Bharat Chandar, Ruyu Chen",title:"Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence",venue:"Stanford Digital Economy Lab WP (ADP 급여 데이터)",yr:"2025",
+  abs:"미국 대규모 급여 데이터에서 생성형 AI 확산 이후의 고용 변화 6가지 사실을 보고했다. AI 노출이 높은 직군에서 22~25세 초기경력 고용이 뚜렷이 감소한 반면 경력자 고용은 유지 — 광부의 카나리아처럼 젊은 층에서 충격이 먼저 관측된다는 실측 증거."},
+ {id:"huml25",y:2025.8,lane:4,t:1,lbl:"덴마크 25",authors:"Anders Humlum, Emilie Vestergaard",title:"Large Language Models, Small Labor Market Effects",venue:"시카고대 BFI WP (덴마크 행정 데이터)",yr:"2025",
+  abs:"덴마크의 노동자-기업 연결 행정 데이터와 챗봇 사용 조사를 결합해 LLM 확산의 초기 효과를 추정했다. 널리 쓰이고 있음에도 임금·노동시간에 대한 효과는 아직 통계적으로 미미하다고 보고 — Canaries와 대조되는 반대편 증거로 논쟁을 현재진행형으로 만든다."}
+];
+const E = [
+ ["aa11","alm03"],["fo13","alm03"],["autor15","alm03"],["ar18","alm03"],["webb20","alm03"],
+ ["fo13","aa11"],["ar18","aa11"],["elou23","alm03"],
+ ["autor15","fo13"],["ar18","fo13"],["webb20","fo13"],["felten21","fo13"],["elou23","fo13"],["gm18","fo13"],
+ ["ar18","bm14"],["autor15","bm14"],
+ ["ar19","autor15"],["acem24","autor15"],["autor24","autor15"],
+ ["ar19","ar18"],["ar20","ar18"],["acem24","ar18"],["agh19","ar18"],
+ ["ar20","gm18"],["dauth21","gm18"],["dauth21","ar20"],
+ ["bmit17","alm03"],["webb20","bmit17"],["felten21","bmit17"],["elou23","bmit17"],
+ ["elou23","webb20"],["felten21","webb20"],["acem24","webb20"],
+ ["elou23","felten21"],["canary25","elou23"],["acem24","elou23"],["huml25","elou23"],
+ ["blr25","noy23"],["dell23","noy23"],["canary25","noy23"],["huml25","noy23"],["acem24","noy23"],
+ ["canary25","blr25"],["huml25","blr25"],["canary25","peng23"],["huml25","dell23"],
+ ["canary25","autor24"],["acem24","ar19"]
+];
+
+/* ===== 렌더 (세로 시간축) ===== */
+document.getElementById("legend").innerHTML =
+  LANES.map(l=>`<span class="chip"><i class="sw" style="background:${l.color}"></i>${l.name}</span>`).join("")
+  + `<span class="chip">● 크기 = 인용 규모(대략)</span>`;
+const W=780, H=1150, padT=64, padB=26, padL=64, padR=12;
+const y0=2002, y1=2027;
+const py = yr => padT + (yr-y0)/(y1-y0)*(H-padT-padB);
+const colW = (W-padL-padR)/LANES.length;
+const laneX = i => padL + (i+0.5)*colW;
+const R = {1:8, 2:11, 3:14.5};
+const ns="http://www.w3.org/2000/svg";
+const svg=document.createElementNS(ns,"svg");
+svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+const el=(t,a,txt)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e;};
+/* 레인 컬럼 */
+LANES.forEach((l,i)=>{
+  el("rect",{x:padL+i*colW,y:padT,width:colW,height:H-padT-padB,fill:i%2?"#fafcf9":"#ffffff"});
+  el("text",{x:laneX(i),y:30,"text-anchor":"middle","font-size":13,"font-weight":900,fill:l.color},l.name);
+  el("text",{x:laneX(i),y:47,"text-anchor":"middle","font-size":10,fill:"#898781"},["과업 모형","대체 vs 신과업","로봇·데이터 인과","누가 노출되나","실험과 실측"][i]);
+});
+/* 연도 눈금 (가로선) */
+[2005,2010,2015,2020,2025].forEach(yr=>{
+  el("line",{x1:padL,y1:py(yr),x2:W-padR,y2:py(yr),stroke:"#e1e0d9","stroke-width":1});
+  el("text",{x:padL-8,y:py(yr)+4,"text-anchor":"end","font-size":12,"font-weight":700,fill:"#898781"},yr);
+});
+/* 알파고 쇼크 */
+el("line",{x1:padL,y1:py(2016),x2:W-padR,y2:py(2016),stroke:"#b0483f","stroke-width":1.5,"stroke-dasharray":"6 4"});
+el("text",{x:W-padR-4,y:py(2016)-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:"#b0483f"},"알파고 쇼크 (2016)");
+/* 좌표 + 겹침 조정 (같은 레인 안에서 x를 좌우로) */
+const pos={};
+P.forEach(p=>{ pos[p.id]={x:laneX(p.lane), y:py(p.y)}; });
+const dx={alm03:0,aa11:0,autor15:-28,autor24:22,bm14:0,ar18:-26,ar19:26,agh19:-34,acem24:20,
+ gm18:-26,ar20:24,dauth21:-20,fo13:0,bmit17:26,webb20:-30,felten21:30,elou23:0,
+ noy23:-34,peng23:30,dell23:-30,blr25:28,canary25:-24,huml25:26};
+for(const id in dx){ if(pos[id]) pos[id].x += dx[id]; }
+pos["autor15"].y -= 4; pos["ar19"].y += 6; pos["felten21"].y += 4; pos["dell23"].y += 14; pos["peng23"].y += 12;
+/* 엣지 */
+const edgeEls=[];
+E.forEach(([to,from])=>{
+  const a=pos[from], b=pos[to];
+  if(!a||!b) return;
+  const my=(a.y+b.y)/2;
+  const path=el("path",{d:`M${a.x},${a.y} C${a.x},${my} ${b.x},${my} ${b.x},${b.y}`,fill:"none",stroke:"#b9c3bd","stroke-width":1.2,opacity:.45});
+  edgeEls.push({path,from,to});
+});
+/* 노드 + 라벨 */
+const panel=document.getElementById("panel");
+let selEl=null;
+function citesOf(id){ return E.filter(e=>e[0]===id).map(e=>e[1]); }
+function citedBy(id){ return E.filter(e=>e[1]===id).map(e=>e[0]); }
+const byId=Object.fromEntries(P.map(p=>[p.id,p]));
+function showPanel(p){
+  const l=LANES[p.lane];
+  const anc=citesOf(p.id).map(i=>byId[i].lbl).join(", ")||"—";
+  const desc=citedBy(p.id).map(i=>byId[i].lbl).join(", ")||"—";
+  panel.innerHTML=`
+    <span class="p-lane" style="background:${l.color}">${l.name}</span>
+    <div class="p-title">${p.title}</div>
+    <div class="p-meta"><b>${p.authors}</b><br/>${p.venue} · ${p.yr} · 인용 규모 ${"●".repeat(p.t)}${"○".repeat(3-p.t)}</div>
+    <div class="p-h">초록 (요약)</div>
+    <div class="p-abs">${p.abs}</div>
+    <div class="p-h">계보에서의 위치</div>
+    <div class="p-cites"><b>이 논문이 인용하는 논문</b> — ${anc}<br/><b>이 논문을 인용한 논문</b> — ${desc}</div>
+    <div class="p-note">초록은 원문을 한국어로 요약한 것이며, 인용 관계는 이 계보도에 포함된 23편 사이의 대표 경로만 표시합니다.</div>`;
+}
+P.forEach(p=>{
+  const {x,y}=pos[p.id];
+  const c=el("circle",{cx:x,cy:y,r:R[p.t],fill:LANES[p.lane].color,stroke:"#fff","stroke-width":1.8,opacity:.95,"class":"node"});
+  const t=el("text",{x:x,y:y-R[p.t]-5,"text-anchor":"middle","font-size":10,"font-weight":800,fill:"#52514e","paint-order":"stroke",stroke:"#ffffff","stroke-width":3,"pointer-events":"none"},p.lbl);
+  const hi=on=>{
+    edgeEls.forEach(o=>{
+      const hit=o.from===p.id||o.to===p.id;
+      o.path.setAttribute("stroke",on&&hit?"#375f8f":"#b9c3bd");
+      o.path.setAttribute("stroke-width",on&&hit?2.2:1.2);
+      o.path.setAttribute("opacity",on?(hit?.9:.1):.45);
+    });
+  };
+  c.addEventListener("mouseenter",()=>hi(true));
+  c.addEventListener("mouseleave",()=>{ if(selEl!==c) hi(false); });
+  c.addEventListener("click",()=>{
+    if(selEl) selEl.classList.remove("sel");
+    selEl=c; c.classList.add("sel");
+    hi(true);
+    showPanel(p);
+  });
+});
+document.getElementById("chart").appendChild(svg);
+</script>
+</body>
+</html>

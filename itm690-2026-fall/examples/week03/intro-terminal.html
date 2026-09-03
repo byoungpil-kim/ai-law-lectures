@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>dochon@portfolio:~$</title>
+<style>
+:root{
+  --bg:#0a0e0a;
+  --term:#0e130e;
+  --green:#39ff6a;
+  --dim:#1f7a3d;
+  --amber:#ffb000;
+  --line:#1c3320;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; min-height:100vh;
+  background:var(--bg);
+  color:var(--green);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"D2Coding",monospace;
+  font-size:15px;
+  padding:26px 14px 60px;
+}
+.crt{
+  max-width:760px;margin:0 auto;
+  background:var(--term);
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:0 0 40px rgba(57,255,106,.08), inset 0 0 60px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+.titlebar{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;background:#0a120a;border-bottom:1px solid var(--line);
+}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#ff5f57;} .dot.y{background:#febc2e;} .dot.g{background:#28c840;}
+.titlebar .name{margin-left:8px;color:#6ecb85;font-size:12.5px;}
+
+.term-body{padding:22px 22px 30px; line-height:1.65;}
+.line{margin-bottom:4px; white-space:pre-wrap; word-break:break-word;}
+.prompt{color:var(--amber);}
+.path{color:#7fd3ff;}
+.cmd{color:#fff;}
+.out{color:var(--green); margin:6px 0 16px;}
+.dim{color:#4f9a63;}
+.hidden{opacity:0;}
+
+.ascii{
+  color:var(--green); font-size:11px; line-height:1.15; white-space:pre;
+  margin:4px 0 18px; overflow-x:auto;
+}
+
+.badge{
+  display:inline-block; border:1px solid var(--dim); color:var(--green);
+  padding:3px 9px; border-radius:4px; margin:3px 6px 3px 0; font-size:13px;
+}
+
+.projrow{border-left:2px solid var(--dim); padding:4px 0 4px 14px; margin:10px 0;}
+.projrow .p-name{color:#fff;}
+.projrow .p-status{color:var(--amber);}
+.projrow .p-desc{color:#8fd39f;}
+
+a.link{color:#7fd3ff;text-decoration:underline;}
+a.link:hover{color:#fff;}
+
+.cursor{
+  display:inline-block;width:9px;height:16px;background:var(--green);
+  vertical-align:middle; animation:blink 1s step-end infinite; margin-left:2px;
+}
+@keyframes blink{50%{opacity:0;}}
+
+.section{margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="crt">
+  <div class="titlebar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <div class="name">dochon@portfolio — -zsh — 80×24</div>
+  </div>
+  <div class="term-body" id="termBody">
+
+<div class="ascii"> ____   ___   ____ _   _  ___  _   _
+|  _ \ / _ \ / ___| | | |/ _ \| \ | |
+| | | | | | | |   | |_| | | | |  \| |
+| |_| | |_| | |___|  _  | |_| | |\  |
+|____/ \___/ \____|_| |_|\___/|_| \_|
+</div>
+
+<div class="line"><span class="prompt">dochon@portfolio</span><span class="path"> ~ %</span> <span class="cmd">whoami</span></div>
+<div class="out">이도전 (Lee Dochon)<br>코드 한 줄 몰랐는데, AI랑 같이 웹앱을 만들기 시작한 사람.</div>
+
+<div class="line"><span class="prompt">dochon@portfolio</span><span class="path"> ~ %</span> <span class="cmd">cat about.txt</span></div>
+<div class="out">
+소속   : KAIST 기술경영전문대학원(I&amp;TM) 재학 중<br>
+관심사 : 에이전틱 AI · 개인 브랜딩 · 데이터로 노는 것<br>
+모토   : "일단 AI한테 만들어달라고 해보자"
+</div>
+
+<div class="line"><span class="prompt">dochon@portfolio</span><span class="path"> ~ %</span> <span class="cmd">ls skills/</span></div>
+<div class="out">
+<span class="badge">AI 프롬프팅</span><span class="badge">기획력</span><span class="badge">끈기</span><span class="badge">러닝 30km/주</span><span class="badge">보드게임 마스터</span>
+</div>
+
+<div class="line"><span class="prompt">dochon@portfolio</span><span class="path"> ~ %</span> <span class="cmd">ls -la projects/</span></div>
+<div class="out">
+  <div class="projrow">
+    <div class="p-name">📁 lifetime-income-simulator/</div>
+    <div class="p-status">[STATUS: DEPLOYED]</div>
+    <div class="p-desc">몬테카를로로 은퇴 자산을 1,000번 시뮬레이션하는 웹앱</div>
+  </div>
+  <div class="projrow">
+    <div class="p-name">📁 cafe-review-dashboard/</div>
+    <div class="p-status">[STATUS: DEPLOYED]</div>
+    <div class="p-desc">동네 카페 리뷰 감성분석 → 지도 시각화</div>
+  </div>
+  <div class="projrow">
+    <div class="p-name">📁 this-very-website/</div>
+    <div class="p-status">[STATUS: YOU ARE HERE]</div>
+    <div class="p-desc">AI에게 요청해서 만든 자기소개 사이트</div>
+  </div>
+</div>
+
+<div class="line"><span class="prompt">dochon@portfolio</span><span class="path"> ~ %</span> <span class="cmd">cat contact.txt</span></div>
+<div class="out">
+email  : <a class="link" href="mailto:dochon@example.com">dochon@example.com</a><br>
+github : <a class="link" href="https://github.com/dochon-lee" target="_blank" rel="noopener">github.com/dochon-lee</a>
+</div>
+
+<div class="line"><span class="prompt">dochon@portfolio</span><span class="path"> ~ %</span> <span class="cmd" id="typedCmd"></span><span class="cursor"></span></div>
+
+  </div>
+</div>
+
+<script>
+const cmds = ['echo "읽어주셔서 감사합니다"', 'say hi --to=dochon@example.com', 'sudo hire dochon'];
+let ci = 0, pos = 0;
+const el = document.getElementById('typedCmd');
+function typeLoop(){
+  const target = cmds[ci];
+  if (pos <= target.length){
+    el.textContent = target.slice(0, pos);
+    pos++;
+    setTimeout(typeLoop, 90);
+  } else {
+    setTimeout(() => { pos = 0; ci = (ci+1) % cmds.length; typeLoop(); }, 1600);
+  }
+}
+typeLoop();
+</script>
+</body>
+</html>
