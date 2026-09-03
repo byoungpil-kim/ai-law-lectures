@@ -119,6 +119,19 @@
   .contact{margin-top:72px;}
   .contact h2{margin:0 0 20px;font-size:clamp(1.75rem,3.5vw,2.25rem);font-weight:600;letter-spacing:-.01em;}
 
+  /* references */
+  .refs{margin-top:72px;}
+  .refs h2{margin:0 0 20px;font-size:clamp(1.75rem,3.5vw,2.25rem);font-weight:600;letter-spacing:-.01em;}
+  .ref-card{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:18px 22px;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--bg-elev);box-shadow:var(--shadow-sm);
+    color:inherit;text-decoration:none;transition:all .15s ease;
+  }
+  .ref-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent);}
+  .ref-card strong{display:block;font-size:1.05rem;color:var(--primary);margin-bottom:4px;}
+  .ref-card span{font-size:.92rem;color:var(--text-secondary);}
+  .ref-card .go{flex:0 0 auto;font-size:.85rem;font-weight:500;color:var(--primary);white-space:nowrap;}
+
   /* footer */
   footer{margin-top:72px;padding-top:24px;border-top:1px solid var(--border);color:var(--text-secondary);font-size:.85rem;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;}
   footer a{color:var(--text-secondary);}
@@ -285,6 +298,15 @@
       <div><dt>담당 교수</dt><dd>김병필 <a href="mailto:byoungpil.kim@kaist.ac.kr">byoungpil.kim@kaist.ac.kr</a></dd></div>
       <div><dt>조교</dt><dd>김나현 <a href="mailto:nhkimmm@kaist.ac.kr">nhkimmm@kaist.ac.kr</a></dd></div>
     </dl>
+  </section>
+
+  <section class="refs" id="refs">
+    <span class="section-label">References</span>
+    <h2>참고 자료</h2>
+    <a class="ref-card" href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/" target="_blank" rel="noopener">
+      <div><strong>2026 에이전틱 AI 부트캠프 (aibootcamp2026)</strong><span>실습 회차의 원본 자료. 웹앱 만들고 배포하기, 데이터 수집과 임베딩 분석, 스킬 만들기, 논문 계보도 등 주차별 실습 페이지</span></div>
+      <span class="go">열기 ↗</span>
+    </a>
   </section>
 
   <footer>
