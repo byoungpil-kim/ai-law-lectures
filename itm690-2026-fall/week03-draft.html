@@ -930,6 +930,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
         <li>교육용 예시이며 투자 조언이 아니다. 과거 수익률이 미래를 보장하지 않는다</li>
       </ul>
       <div class="stack">
+        <a class="step link" href="examples/week03/financial-planner.html" target="_blank" rel="noopener" style="flex-direction:row;align-items:center;gap:14px;padding:12px 16px"><span class="no">₩</span><span><b class="ttl">만들어진 금융 플래너 열어 보기</b><span class="prob" style="display:block">복리 그래프 + S&amp;P 500 몬테카를로 + 멘탈 관리기. HTML 파일 하나</span></span></a>
         <pre class="prompt"><button class="copy" type="button">복사</button>연간 저축액·수익률·기간을 슬라이더로 바꾸면 복리 그래프가 그려지는 금융 플래너를 HTML 한 파일로 만들어줘.</pre>
         <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>실제 S&amp;P 500 연간 수익률로 몬테카를로 시뮬레이션도 추가해줘</span><span>하위 10%·중앙값·상위 10%를 보여줘</span><span>“다시 뽑기” 버튼</span><span>은퇴 나이도 넣어줘</span><span>시장이 흔들릴 때 볼 투자 명언 카드도</span></div>
       </div>
@@ -1336,7 +1337,8 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>임베딩 모델 고르기: 컨텍스트 길이가 핵심</h2>
   <div class="body">
-    <p>코퍼스 실측: 347건 평균 8,492자, 최대 41,374자. 8,000자를 넘는 판결문이 절반 가까이라, 컨텍스트가 8K 토큰인 모델은 절반이 잘린다(한국어는 글자당 토큰 소모가 커서 더 심함). OpenRouter에서 실제로 조회된 선택지:</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>판결문 데이터로부터 임베딩을 뽑으려고 하는데, 적절한 모델을 비교해줘.</pre>
+    <p class="muted">위 지시에 대한 답변 결과. 먼저 코퍼스를 실측했다: 347건 평균 8,492자, 최대 41,374자. 8,000자를 넘는 판결문이 절반 가까이라, 컨텍스트가 8K 토큰인 모델은 절반이 잘린다(한국어는 글자당 토큰 소모가 커서 더 심함). OpenRouter에서 실제로 조회된 선택지:</p>
     <table class="tbl" style="width:100%">
       <thead><tr><th>모델 (OpenRouter 슬러그)</th><th>컨텍스트</th><th>단가</th><th>비고</th></tr></thead>
       <tbody>
