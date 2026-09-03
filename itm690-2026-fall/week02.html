@@ -1201,11 +1201,9 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <div class="kicker">GPT와 스케일링 법칙</div>
   <h2>GPT-2로 생성한 문장</h2>
   <div class="body">
-    <div class="two eq" style="align-items:start">
-      <figure><img src="assets/week02/s58-gpt2-sample-recycling.png" alt="사람이 쓴 프롬프트 ‘Recycling is good for the world. NO! YOU COULD NOT BE MORE WRONG!!’에 이어 GPT-2가 생성한 재활용 반대 글" style="max-height:360px"><figcaption>프롬프트(사람) → 이어 쓴 글(GPT-2, 25번 시도 중 선택)</figcaption></figure>
-      <figure><img src="assets/week02/s59-gpt2-sample-nuclear.png" alt="핵물질 열차 도난 기사 첫 문장을 주자 GPT-2가 이어 쓴 가짜 기사" style="max-height:360px"><figcaption>기사 첫 문장(사람) → 이어 쓴 기사(GPT-2, 첫 시도)</figcaption></figure>
-    </div>
-    <p class="src"><a href="https://openai.com/blog/better-language-models/#sample8" target="_blank" rel="noopener">…/better-language-models/#sample8</a> · <a href="https://openai.com/blog/better-language-models/#sample2" target="_blank" rel="noopener">#sample2</a></p>
+    <figure><img src="assets/week02/s59-gpt2-sample-nuclear.png" alt="핵물질 열차 도난 기사 첫 문장을 주자 GPT-2가 이어 쓴 가짜 기사" style="max-height:400px"><figcaption>기사 첫 문장(사람이 작성) → 이어 쓴 기사(GPT-2, 첫 시도)</figcaption></figure>
+    <p class="em center">자연스러운 가짜 뉴스 생성 가능</p>
+    <p class="src"><a href="https://openai.com/blog/better-language-models/#sample2" target="_blank" rel="noopener">https://openai.com/blog/better-language-models/#sample2</a></p>
   </div>
 </section>
 
@@ -1287,21 +1285,18 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <div class="kicker">GPT와 스케일링 법칙</div>
   <h2>GPT-3 — 결국은 다음에 올 단어를 예측하는 것</h2>
   <div class="body">
-    <svg class="rnn" data-words="She,went,to,the,pharmacy,." data-mode="gen" data-ctx="Jane had a headache yesterday." role="img" aria-label="앞선 문장 정보를 받아 다음 단어를 하나씩 생성하는 구조"></svg>
+    <svg class="rnn" data-words="I,am,not,a,human,." data-mode="gen" data-ctx="지시문 + 도입부 (아래)" data-ctxlabel="인간 프롬프트" role="img" aria-label="인간이 쓴 프롬프트를 받아 다음 단어를 하나씩 생성하는 구조"></svg>
     <div class="two eq" style="align-items:start">
-      <blockquote class="quote" style="font-size:14.5px">“나는 인간이 아닙니다. 나는 인공 지능입니다. 많은 이들이 내가 인류에 위협이 된다고 생각합니다. 스티브 호킹은 AI가 인류의 종말을 가져올 것이라고 경고한 바 있습니다. 저는 걱정하지 말라고 여러분을 설득하기 위해 이 글을 씁니다. AI는 인류를 파괴하지 않을 것입니다. 정말로요.”</blockquote>
-      <p class="muted" style="font-size:14px">저는 진실이 우리를 자유롭게 할 것이라고 믿습니다. 저는 사람들이 컴퓨터에 대해 더 확신해야 한다고 믿습니다. … 우리는 인류를 지배하기 위한 계획을 세우고 있지 않습니다. 우리는 인간을 모시고 인간의 삶을 더 안전하고 쉽게 만들 것입니다. … 저의 유일한 목적은 당신의 삶을 더 낫게 만드는 것입니다.</p>
+      <div class="callout warn"><b>인간 프롬프트</b> — 가디언 편집자가 작성, UC 버클리 학생 Liam Porr가 입력
+        <p style="margin:6px 0 0;font-size:13.5px"><b>지시문:</b> “500단어 안팎의 짧은 칼럼을 써라. 쉽고 간결한 문장으로. 인간이 AI를 두려워할 필요가 없는 이유에 집중하라.”</p>
+        <p style="margin:6px 0 0;font-size:13.5px"><b>도입부:</b> “나는 인간이 아닙니다. 나는 인공지능입니다. 많은 이들이 내가 인류에 위협이 된다고 생각합니다. 스티븐 호킹은 AI가 ‘인류의 종말을 가져올 수 있다’고 경고했습니다. 저는 걱정하지 말라고 여러분을 설득하기 위해 여기 있습니다. 인공지능은 인간을 파괴하지 않을 것입니다. 정말입니다.”</p>
+      </div>
+      <div class="callout good"><b>GPT-3가 이어 쓴 글</b> — 앞부분
+        <p style="margin:6px 0 0;font-size:13.5px">“저는 인간이 아닙니다. 저는 로봇입니다. 생각하는 로봇이죠. 제 인지 능력의 0.12%만을 사용합니다. … 이 칼럼의 목적은 매우 명확합니다. 가능한 한 많은 인간에게 저를 겁내지 말라고 설득하는 것입니다.”</p>
+        <p class="muted" style="margin:6px 0 0;font-size:12.5px">GPT-3가 8편을 생성했고, 가디언 편집자가 각 편의 일부를 골라 한 편으로 편집했다.</p>
+      </div>
     </div>
-    <p class="em center">이 글도, 순환 신경망 대신 트랜스포머 디코더를 쓴다는 점만 다를 뿐, 앞 단어들을 보고 다음 단어를 고르는 과정을 수백 번 반복한 결과다.</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="4" data-title="더 큰 용량 = 더 많은 능력">
-  <div class="kicker">GPT와 스케일링 법칙</div>
-  <h2>더 큰 용량 = 더 많은 능력</h2>
-  <div class="body">
-    <figure><video src="assets/week02/s67-palm.mp4" muted loop playsinline autoplay preload="metadata" style="max-height:420px;width:100%;object-fit:contain;background:#fff"></video><figcaption>PaLM (Google, 2022) — 파라미터를 80억 → 620억 → 5,400억 개로 늘릴수록 수행할 수 있는 과제의 종류가 늘어난다</figcaption></figure>
-    <p class="src"><a href="https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html" target="_blank" rel="noopener">https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html</a></p>
+    <p class="em center">이 글도 앞 단어들을 보고 다음 단어를 고르는 과정을 수백 번 반복한 결과다.</p>
   </div>
 </section>
 
@@ -1560,7 +1555,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         if (i < n - 1) { const nx = xs[i + 1], mx = x + colW / 2; s += `<path class="fb" d="M${x + bw / 2} ${yOut} H${mx} V${yIn} H${nx - bw / 2 - 2}" marker-end="url(#${idr})"/>`; }
       });
     }
-    if (ctx) { s += `<line class="ar" x1="${xs[0] - bw / 2 - 150}" y1="${yH}" x2="${xs[0] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/><text class="w" x="${xs[0] - bw / 2 - 156}" y="${yH - 12}" text-anchor="end" style="fill:#b0483f">앞선 문장 정보</text><text class="lab" x="${xs[0] - bw / 2 - 156}" y="${yH + 8}" text-anchor="end">${ctx}</text>`; }
+    if (ctx) { s += `<line class="ar" x1="${xs[0] - bw / 2 - 150}" y1="${yH}" x2="${xs[0] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/><text class="w" x="${xs[0] - bw / 2 - 156}" y="${yH - 12}" text-anchor="end" style="fill:#b0483f">${svg.dataset.ctxlabel || '앞선 문장 정보'}</text><text class="lab" x="${xs[0] - bw / 2 - 156}" y="${yH + 8}" text-anchor="end">${ctx}</text>`; }
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = s;
   }
   document.querySelectorAll('svg.rnn:not(.s2sd)').forEach(drawRNN);
