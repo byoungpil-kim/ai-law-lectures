@@ -46,6 +46,11 @@ button{font:inherit;}
 .week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
 .week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
 .week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.zoom-ctl{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;}
+.zoom-ctl button{border:0;background:transparent;padding:6px 10px;font-size:13px;font-weight:800;color:var(--brand-dark);cursor:pointer;line-height:1;}
+.zoom-ctl button:hover{background:var(--sky-light);}
+.zoom-ctl .zv{min-width:44px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);border-right:1px solid var(--line);padding:6px 4px;cursor:pointer;}
 .progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
 .progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
 .progress-label b{color:var(--ink);}
@@ -88,14 +93,13 @@ button{font:inherit;}
 .side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
 
 .stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
-.deck{flex:1 1 auto;}
+.deck{flex:1 1 auto;display:flex;flex-direction:column;}
 .slide{
   display:none;position:relative;flex-direction:column;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
   padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
-  min-height:calc(100vh - var(--topbar-h) - 20px - 26px - 64px);
 }
-.slide.active{display:flex;animation:fadein .22s ease;}
+.slide.active{display:flex;flex:1 1 auto;animation:fadein .22s ease;}
 @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 .kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
 .kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
@@ -355,12 +359,12 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
   .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
   .toc-link .cnt{display:none;}
-  .slide{min-height:auto;}
   .stage{min-height:auto;}
 }
 @media (max-width:640px){
   .topbar{gap:10px;}
   .week-title{display:none;}
+  .zoom-ctl{display:none;}
   .progress-wrap{width:110px;}
   .pbtn{padding:10px 12px;font-size:13px;}
   .pbtn span{display:none;}
@@ -397,9 +401,16 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
     </a>
     <div class="week-tag"><span class="week-num">1강</span><span class="week-title">인공지능의 기본 개념</span></div>
   </div>
-  <div class="progress-wrap" aria-label="진행률">
-    <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">87</span></span>
-    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="topbar-right">
+    <div class="zoom-ctl" role="group" aria-label="슬라이드 크기">
+      <button type="button" id="zoomOut" title="작게 (−)">A−</button>
+      <span class="zv" id="zoomVal" title="자동 크기로 되돌리기 (0)">100%</span>
+      <button type="button" id="zoomIn" title="크게 (+)">A+</button>
+    </div>
+    <div class="progress-wrap" aria-label="진행률">
+      <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">87</span></span>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
   </div>
 </header>
 
@@ -407,7 +418,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <aside class="sidebar" aria-label="목차">
     <div class="sidebar-title">목차</div>
     <ol class="toc" id="toc"></ol>
-    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · <kbd>+</kbd> <kbd>−</kbd> 크기 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
   </aside>
 
   <main class="stage" id="stage">
@@ -1965,7 +1976,30 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
     else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
     else if (e.key === 'Home') { e.preventDefault(); show(0); }
     else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+    else if (e.key === '+' || e.key === '=') { e.preventDefault(); setUserZoom(userZoom * 1.1); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); setUserZoom(userZoom / 1.1); }
+    else if (e.key === '0') { e.preventDefault(); setUserZoom(1); }
   });
+  /* ---------- 화면 크기에 맞춘 슬라이드 확대 ---------- */
+  const stage = document.getElementById('stage'), zoomVal = document.getElementById('zoomVal');
+  let userZoom = 1;
+  try { userZoom = parseFloat(localStorage.getItem('itm690-w01-zoom')) || 1; } catch (e) {}
+  function applyZoom(){
+    const mobile = window.innerWidth <= 900;
+    const side = mobile ? 0 : 264;
+    const auto = mobile ? 1 : Math.min(1.5, Math.max(1, (window.innerWidth - side) / 1100));
+    const z = Math.max(.6, Math.min(2.4, +(auto * userZoom).toFixed(3)));
+    stage.style.zoom = z;
+    stage.style.minHeight = mobile ? '' : ((window.innerHeight - 64) / z) + 'px';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  function setUserZoom(v){ userZoom = Math.max(.5, Math.min(2, +v.toFixed(3))); try { localStorage.setItem('itm690-w01-zoom', userZoom); } catch (e) {} applyZoom(); }
+  document.getElementById('zoomIn').addEventListener('click', () => setUserZoom(userZoom * 1.1));
+  document.getElementById('zoomOut').addEventListener('click', () => setUserZoom(userZoom / 1.1));
+  zoomVal.addEventListener('click', () => setUserZoom(1));
+  window.addEventListener('resize', applyZoom);
+  applyZoom();
+
   let tx = null;
   document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
   document.getElementById('deck').addEventListener('touchend', e => {
