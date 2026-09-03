@@ -782,7 +782,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
             <li>새로운 현상이 관측되면 기존 잠재 변수를 업데이트</li>
           </ul>
         </li>
-        <li class="arrow">이 숨은 상태(hidden variable)가 “지금까지 본 것”을 요약한다 — 뒤에서 볼 문맥(context) 벡터의 원형</li>
+        <li class="arrow">이 숨은 상태(hidden variable)가 “지금까지 본 것”을 요약한다</li>
       </ul>
       <svg class="lat" viewBox="0 0 560 330" role="img" aria-label="t−1과 t 두 시점에서 관측 변수가 잠재 변수를 갱신하고, 잠재 변수가 예측을 내며, 잠재 변수는 다음 시점으로 전달되는 도식">
         <defs><marker id="latArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker></defs>
@@ -814,7 +814,6 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <div class="body">
     <figure class="plain"><img src="assets/week02/s19-rnn-concept.png" alt="t−1, t, t+1 세 시점의 신경망. 아래 빨간 상자가 입력, 가운데 녹색 점선 상자가 은닉 상태, 위 파란 상자가 출력이며 은닉 상태가 다음 시점으로 전달된다" style="max-height:380px"></figure>
     <p class="em center">⟨t−1⟩ 단계 상태 정보(Hidden Variable)로 ⟨t⟩ 단계 상태 정보 업데이트</p>
-    <p class="muted center">1강의 신경망(입력층–은닉층–출력층)을 시점마다 하나씩 두고, 은닉층끼리 옆으로 연결한 것이 순환 신경망이다.</p>
   </div>
 </section>
 
@@ -877,7 +876,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         <li><b>중간 = 문맥 벡터(context vector)</b>: 인코더가 남긴 숫자 배열. 뒷부분에 넘겨주는 <u>유일한</u> 정보</li>
         <li><b>뒷부분 = 디코더</b>: 문맥 벡터에서 출발해, 작곡 예제처럼 단어를 하나씩 이어 쓴다</li>
       </ul>
-      <div class="callout warn"><b>질문 — 어떤 문장의 정보를 모두 담으려면 변수가 몇 개여야 할까?</b><br>실제 seq2seq 모델의 문맥 벡터는 보통 수백~수천 개: 초기 seq2seq(Sutskever et al. 2014)는 층당 1,000개, Google NMT(2016)는 층당 1,024개를 8층으로 쌓았다. 단어 하나를 담는 임베딩(300개)보다 훨씬 크다.</div>
+      <div class="callout warn"><b>질문 — 어떤 문장의 정보를 모두 담으려면 변수가 몇 개여야 할까?</b><br>실제 seq2seq 모델의 문맥 벡터는 보통 수천 개: 초기 seq2seq(Sutskever et al. 2014)는 층당 1,000개, Google NMT(2016)는 층당 1,024개를 8층으로 쌓았다. 단어 하나를 담는 임베딩(300개)보다 훨씬 크다.</div>
     </div>
   </div>
 </section>
