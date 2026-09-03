@@ -602,15 +602,64 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   <h2>오늘 준비물과 진행 순서</h2>
   <div class="body">
     <div class="steps" style="grid-template-columns:repeat(4,1fr)">
-      <div class="step"><span class="no">1</span><b class="ttl">Claude 계정 (Pro 이상)</b><p class="prob">claude.ai 로그인. 데스크톱 앱과 크롬 확장은 §2에서 설치함. ChatGPT Codex를 사용하여도 무방함</p></div>
-      <div class="step"><span class="no">2</span><b class="ttl">GitHub 계정</b><p class="prob">없으면 §3에서 만듦. 아이디가 곧 사이트 주소가 되므로 미리 생각해 둘 것</p></div>
+      <div class="step"><span class="no">1</span><b class="ttl">Claude 계정 (Pro 이상)</b><p class="prob">claude.ai 로그인. 데스크톱 앱과 크롬 확장은 뒤 페이지에서 설치함. ChatGPT Codex를 사용하여도 무방함</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">GitHub 계정</b><p class="prob">없으면 §2에서 만듦. 아이디가 곧 사이트 주소가 되므로 미리 생각해 둘 것</p></div>
       <div class="step"><span class="no">3</span><b class="ttl">작업 폴더</b><p class="prob">Windows는 <code>C:\claude</code>, macOS는 <code>~/claude</code>. 한글·공백 없는 짧은 경로로 만들 것</p></div>
-      <div class="step"><span class="no">4</span><b class="ttl">OpenRouter 계정</b><p class="prob">§8 임베딩 추출에 필요함. openrouter.ai 가입과 $5 충전까지 미리 해 두면 좋음</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">OpenRouter 계정</b><p class="prob">§7 임베딩 추출에 필요함. openrouter.ai 가입과 $5 충전까지 미리 해 두면 좋음</p></div>
     </div>
     <div class="callout">오늘의 원칙: 코드를 직접 쓰는 것이 목표가 아님. <b>원하는 결과를 짧게 말하고, 결과를 보고, 고쳐 달라고 다시 말하는 것</b>이 전부임. 처음부터 긴 지시문을 쓰지 않음. 한두 문장으로 시작해 피드백을 주고받으며 구체화함. 이 흐름은 개인 사이트 만들기에서도, 판결문 수백 건 수집에서도 같음.</div>
     <p class="muted">이 페이지의 프롬프트마다 “복사” 버튼이 있음. 원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프</a> 1주차(웹앱 만들고 배포하기)·2주차(데이터 수집과 임베딩 분석).</p>
   </div>
 </section>
+
+<section class="slide" data-sec="0" data-title="Chat · Cowork · Claude Code">
+  <div class="kicker">들어가며</div>
+  <h2>같은 Claude, 세 개의 작업대: Chat · Cowork · Claude Code</h2>
+  <div class="body">
+    <table class="tbl cmp">
+      <thead><tr><th></th><th>Claude Chat<small>브라우저 claude.ai</small></th><th>Cowork<small>데스크톱 앱 · 오늘의 주력</small></th><th>Claude Code<small>데스크톱 앱 · 내 PC에서 실행</small></th></tr></thead>
+      <tbody>
+        <tr><th>AI가 일하는 곳</th><td>대화창</td><td>클라우드 컨테이너 (자체 파일시스템·파이썬·인터넷)</td><td>내 PC</td></tr>
+        <tr><th>내 파일 접근</th><td>업로드한 파일만</td><td>연동 폴더 읽기/쓰기</td><td>폴더 직접 읽기/쓰기/실행</td></tr>
+        <tr><th>프로그램 실행</th><td>없음</td><td>클라우드에서 실행</td><td>내 PC에서 실행 (서버 가동)</td></tr>
+        <tr><th>어울리는 작업</th><td>질문·초안·요약, 분 단위 왕복</td><td>수집·분석·문서 파이프라인, 시간 단위 자율 작업</td><td>백엔드·자동화, 세션 단위 개발</td></tr>
+        <tr><th>한계</th><td>내 파일시스템·장시간 작업 접근 불가</td><td>내 PC에서 프로그램을 “실행”하지는 못함</td><td>내 PC를 직접 건드리는 만큼 사고의 대가도 내 쪽</td></tr>
+      </tbody>
+    </table>
+    <p class="em center">Chat은 묻는 곳, Cowork는 맡기는 곳, Code는 (내 컴퓨터에서) 돌리는 곳</p>
+    <p class="muted">ChatGPT 쪽도 대응물이 있다. Chat ↔ ChatGPT, Cowork/Code ↔ Codex. 어느 쪽을 써도 오늘 실습은 그대로 진행할 수 있다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="오늘은 무엇을 어디서">
+  <div class="kicker">들어가며</div>
+  <h2>오늘은 무엇을 어디서 하나</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">§2</span><b class="ttl">개인 사이트 만들기: Chat 또는 Cowork</b><p class="prob">index.html 파일 하나를 받아 GitHub에 직접 업로드한다</p></div>
+      <div class="step"><span class="no">§3</span><b class="ttl">웹앱 만들기: Chat 또는 Cowork</b><p class="prob">HTML 안에 프로그램(계산·그래프)을 넣은 금융 플래너. 파일 하나로 끝나므로 서버가 필요 없다</p></div>
+      <div class="step"><span class="no">§5~10</span><b class="ttl">웹 스크래핑과 분석: Cowork</b><p class="prob">수백 건을 수집해 파일로 쌓고, 시간 단위로 도는 자율 작업. 결과는 연동한 내 PC 폴더에 CSV·텍스트·JSON으로 남는다</p></div>
+    </div>
+    <div class="callout bad"><b>설치 전에 알아둘 것: 손발을 주는 일에는 위험이 따른다.</b> 지금부터 설치할 도구는 내 파일을 읽고, 쓰고, 지우고, 인터넷으로 보낼 수 있다. 파일 파괴, 데이터 유출, 프롬프트 인젝션(수집한 웹페이지 속에 숨은 지시문을 AI가 명령으로 착각하는 공격) 같은 위험이 따라온다. 두 가지 습관: ① 모든 작업은 <b>전용 폴더 하나 안에서만</b>. 사고가 나도 피해가 그 폴더를 넘지 않는다. ② 실행 승인 요청은 <b>반드시 읽고</b> 누른다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="설치: 데스크톱 앱과 폴더 연동">
+  <div class="kicker">들어가며</div>
+  <h2>설치: Claude 데스크톱 앱 + 작업 폴더 연동 + 크롬 확장</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+      <div class="step"><span class="no">1</span><b class="ttl">데스크톱 앱 설치</b><p class="prob"><a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a>에서 Windows / macOS 설치 파일을 받아 실행하고, 쓰던 계정으로 로그인</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">작업 폴더 만들기</b><p class="prob"><code>C:\claude</code> (macOS <code>~/claude</code>). 바탕화면처럼 경로가 길고 한글이 섞인 위치는 나중에 오류의 원인이 된다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">Cowork에 폴더 연동</b><p class="prob">앱에서 Cowork를 열고 이 폴더를 연동. Cowork가 클라우드에서 만든 파일이 이 폴더로 내려온다</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">Claude in Chrome 설치</b><p class="prob"><a href="https://claude.ai/chrome" target="_blank" rel="noopener">claude.ai/chrome</a>의 링크로 크롬 확장을 설치. 스크롤·클릭해야 내용이 나오는 동적 사이트 수집용 (§4)</p></div>
+    </div>
+    <p style="font-weight:700">연동 확인: 파일이 정말 내 PC에 떨어지는지</p>
+    <pre class="prompt"><button class="copy" type="button">복사</button>연동한 폴더에 test.csv 예시 파일 하나 만들어줘.</pre>
+    <p class="muted">탐색기(또는 Finder)에서 그 폴더를 열어 test.csv가 보이면 준비 완료. 폴더를 연동하면 수집한 CSV와 파일 수백 개가 알아서 이 폴더에 저장된다.</p>
+  </div>
+</section>
+
 
 <!-- ===================== 1. 에이전틱 AI 한눈에 ===================== -->
 <section class="slide section" data-sec="1" data-title="에이전틱 AI 한눈에">
@@ -688,94 +737,17 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<!-- ===================== 2. 세 개의 작업대와 설치 ===================== -->
-<section class="slide section" data-sec="2" data-title="세 개의 작업대와 설치">
+<!-- ===================== 2. GitHub 기초 ===================== -->
+<section class="slide section" data-sec="2" data-title="GitHub 기초: 개인 사이트 배포">
   <div class="kicker">Section 2</div>
-  <h2>세 개의 작업대와 설치</h2>
-  <p class="section-lead">같은 Claude지만 AI의 손발이 어디에 놓여 있는지가 다르다. Chat은 묻는 곳, Cowork는 맡기는 곳, Code는 내 컴퓨터에서 돌리는 곳.</p>
+  <h2>GitHub 기초: 개인 브랜딩 사이트 만들고 공개하기</h2>
+  <p class="section-lead">AI에게 요청해 자기소개 사이트(index.html)를 만들고, GitHub Pages로 https://[내아이디].github.io 라는 실제 주소에 배포한다. 약 20분.</p>
   <div class="body">
     <ol class="roadmap" data-current="2"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="2" data-title="Chat · Cowork · Claude Code">
-  <div class="kicker">세 개의 작업대와 설치</div>
-  <h2>같은 Claude, 세 개의 작업대: Chat · Cowork · Claude Code</h2>
-  <div class="body">
-    <table class="tbl cmp">
-      <thead><tr><th></th><th>Claude Chat<small>브라우저 claude.ai</small></th><th>Cowork<small>데스크톱 앱 · 오늘의 주력</small></th><th>Claude Code<small>데스크톱 앱 · 내 PC에서 실행</small></th></tr></thead>
-      <tbody>
-        <tr><th>AI가 일하는 곳</th><td>대화창</td><td>클라우드 컨테이너 (자체 파일시스템·파이썬·인터넷)</td><td>내 PC</td></tr>
-        <tr><th>내 파일 접근</th><td>업로드한 파일만</td><td>연동 폴더 읽기/쓰기</td><td>폴더 직접 읽기/쓰기/실행</td></tr>
-        <tr><th>프로그램 실행</th><td>없음</td><td>클라우드에서 실행</td><td>내 PC에서 실행 (서버 가동)</td></tr>
-        <tr><th>어울리는 작업</th><td>질문·초안·요약, 분 단위 왕복</td><td>수집·분석·문서 파이프라인, 시간 단위 자율 작업</td><td>백엔드·자동화, 세션 단위 개발</td></tr>
-        <tr><th>한계</th><td>내 파일시스템·장시간 작업 접근 불가</td><td>내 PC에서 프로그램을 “실행”하지는 못함</td><td>내 PC를 직접 건드리는 만큼 사고의 대가도 내 쪽</td></tr>
-      </tbody>
-    </table>
-    <p class="em center">Chat은 묻는 곳, Cowork는 맡기는 곳, Code는 (내 컴퓨터에서) 돌리는 곳</p>
-    <p class="muted">ChatGPT 쪽도 대응물이 있다. Chat ↔ ChatGPT, Cowork/Code ↔ Codex. 어느 쪽을 써도 오늘 실습은 그대로 진행할 수 있다.</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="오늘은 무엇을 어디서">
-  <div class="kicker">세 개의 작업대와 설치</div>
-  <h2>오늘은 무엇을 어디서 하나</h2>
-  <div class="body">
-    <div class="steps">
-      <div class="step"><span class="no">§3</span><b class="ttl">개인 사이트 만들기: Chat 또는 Cowork</b><p class="prob">index.html 파일 하나를 받아 GitHub에 직접 업로드한다</p></div>
-      <div class="step"><span class="no">§4</span><b class="ttl">웹앱 만들기: Chat 또는 Cowork</b><p class="prob">HTML 안에 프로그램(계산·그래프)을 넣은 금융 플래너. 파일 하나로 끝나므로 서버가 필요 없다</p></div>
-      <div class="step"><span class="no">§6~11</span><b class="ttl">웹 스크래핑과 분석: Cowork</b><p class="prob">수백 건을 수집해 파일로 쌓고, 시간 단위로 도는 자율 작업. 결과는 연동한 내 PC 폴더에 CSV·텍스트·JSON으로 남는다</p></div>
-    </div>
-    <div class="callout bad"><b>설치 전에 알아둘 것: 손발을 주는 일에는 위험이 따른다.</b> 지금부터 설치할 도구는 내 파일을 읽고, 쓰고, 지우고, 인터넷으로 보낼 수 있다. 파일 파괴, 데이터 유출, 프롬프트 인젝션(수집한 웹페이지 속에 숨은 지시문을 AI가 명령으로 착각하는 공격) 같은 위험이 따라온다. 두 가지 습관: ① 모든 작업은 <b>전용 폴더 하나 안에서만</b>. 사고가 나도 피해가 그 폴더를 넘지 않는다. ② 실행 승인 요청은 <b>반드시 읽고</b> 누른다.</div>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="설치 ① 데스크톱 앱과 폴더 연동">
-  <div class="kicker">세 개의 작업대와 설치</div>
-  <h2>설치 ①: Claude 데스크톱 앱 + 작업 폴더 연동 + 크롬 확장</h2>
-  <div class="body">
-    <div class="steps" style="grid-template-columns:repeat(4,1fr)">
-      <div class="step"><span class="no">1</span><b class="ttl">데스크톱 앱 설치</b><p class="prob"><a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a>에서 Windows / macOS 설치 파일을 받아 실행하고, 쓰던 계정으로 로그인</p></div>
-      <div class="step"><span class="no">2</span><b class="ttl">작업 폴더 만들기</b><p class="prob"><code>C:\claude</code> (macOS <code>~/claude</code>). 바탕화면처럼 경로가 길고 한글이 섞인 위치는 나중에 오류의 원인이 된다</p></div>
-      <div class="step"><span class="no">3</span><b class="ttl">Cowork에 폴더 연동</b><p class="prob">앱에서 Cowork를 열고 이 폴더를 연동. Cowork가 클라우드에서 만든 파일이 이 폴더로 내려온다</p></div>
-      <div class="step"><span class="no">4</span><b class="ttl">Claude in Chrome 설치</b><p class="prob"><a href="https://claude.ai/chrome" target="_blank" rel="noopener">claude.ai/chrome</a>의 링크로 크롬 확장을 설치. 스크롤·클릭해야 내용이 나오는 동적 사이트 수집용 (§5)</p></div>
-    </div>
-    <p style="font-weight:700">연동 확인: 파일이 정말 내 PC에 떨어지는지</p>
-    <pre class="prompt"><button class="copy" type="button">복사</button>연동한 폴더에 test.csv 예시 파일 하나 만들어줘.</pre>
-    <p class="muted">탐색기(또는 Finder)에서 그 폴더를 열어 test.csv가 보이면 준비 완료. 폴더를 연동하면 수집한 CSV와 파일 수백 개가 알아서 이 폴더에 저장된다.</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="설치 ② Claude Code">
-  <div class="kicker">세 개의 작업대와 설치</div>
-  <h2>설치 ②: Claude Code (데스크톱 앱 안에 이미 있다)</h2>
-  <div class="body">
-    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
-      <ul class="bul compact">
-        <li>따로 설치할 것이 없다. 데스크톱 앱에서 Cowork를 골랐던 자리에서 <b>Code</b>를 고르면 된다 (Pro 이상 구독이면 추가 비용 없음)</li>
-        <li>터미널을 쓰지 않는다. 원래 명령줄 도구(CLI)로 알려져 있지만, 이 수업에서는 앱 안의 Code만 쓴다. 하는 일은 같다: 내 PC의 폴더를 직접 읽고·쓰고·실행</li>
-        <li>작업 폴더는 설치 ①에서 만든 <code>C:\claude</code>를 그대로 연다. Cowork와 Code가 <b>같은 폴더</b>를 보게 하는 것이 핵심</li>
-      </ul>
-      <div class="stack">
-        <p style="font-weight:700;margin:0">첫 대화: 파이썬 확인</p>
-        <pre class="prompt"><button class="copy" type="button">복사</button>파이썬이 설치되어 있는지 버전을 확인해줘. 없다면 설치 방법을 안내해줘.</pre>
-        <div class="callout warn"><b>내 PC에서 실행된다 = 책임도 내 PC.</b> 파일을 지우거나 프로그램을 설치하는 것처럼 되돌리기 어려운 일 앞에서 Code는 확인을 요청한다. 내용을 읽고 승인하고, 작업은 전용 폴더 안에서만 한다. 중요한 폴더는 백업 후 실습.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== 3. GitHub 기초 ===================== -->
-<section class="slide section" data-sec="3" data-title="GitHub 기초: 개인 사이트 배포">
-  <div class="kicker">Section 3</div>
-  <h2>GitHub 기초: 개인 브랜딩 사이트 만들고 공개하기</h2>
-  <p class="section-lead">AI에게 요청해 자기소개 사이트(index.html)를 만들고, GitHub Pages로 https://[내아이디].github.io 라는 실제 주소에 배포한다. 약 20분.</p>
-  <div class="body">
-    <ol class="roadmap" data-current="3"></ol>
-  </div>
-</section>
-
-<section class="slide" data-sec="3" data-title="무엇을 만드나">
+<section class="slide" data-sec="2" data-title="무엇을 만드나">
   <div class="kicker">GitHub 기초</div>
   <h2>이 실습에서 무엇을 만드나</h2>
   <div class="body">
@@ -796,7 +768,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="브랜딩 설계 4가지">
+<section class="slide" data-sec="2" data-title="브랜딩 설계 4가지">
   <div class="kicker">GitHub 기초</div>
   <h2>Part 1 · 브랜딩 설계: 프롬프트 쓰기 전에 4가지만 정리하기</h2>
   <div class="body">
@@ -812,7 +784,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="index.html 만들기">
+<section class="slide" data-sec="2" data-title="index.html 만들기">
   <div class="kicker">GitHub 기초</div>
   <h2>Part 2 · index.html 만들기: 요청하고, 보고, 고쳐 달라고 하기</h2>
   <div class="body">
@@ -831,7 +803,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="다운로드와 GitHub 용어">
+<section class="slide" data-sec="2" data-title="다운로드와 GitHub 용어">
   <div class="kicker">GitHub 기초</div>
   <h2>Part 3·4 · 파일로 받기, 그리고 GitHub 용어 4가지</h2>
   <div class="body">
@@ -848,7 +820,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="가입과 저장소 만들기">
+<section class="slide" data-sec="2" data-title="가입과 저장소 만들기">
   <div class="kicker">GitHub 기초</div>
   <h2>Part 4·5 · GitHub 가입과 저장소 만들기</h2>
   <div class="body">
@@ -866,7 +838,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="업로드와 Pages 배포">
+<section class="slide" data-sec="2" data-title="업로드와 Pages 배포">
   <div class="kicker">GitHub 기초</div>
   <h2>Part 6·7 · index.html 업로드 → GitHub Pages로 배포</h2>
   <div class="body">
@@ -880,17 +852,17 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<!-- ===================== 4. 웹앱과 HTML 활용 ===================== -->
-<section class="slide section" data-sec="4" data-title="웹앱 만들기와 HTML 활용">
-  <div class="kicker">Section 4</div>
+<!-- ===================== 3. 웹앱과 HTML 활용 ===================== -->
+<section class="slide section" data-sec="3" data-title="웹앱 만들기와 HTML 활용">
+  <div class="kicker">Section 3</div>
   <h2>웹앱 만들기와 HTML 활용</h2>
   <p class="section-lead">정적인 소개 페이지 다음은 HTML 안에 실제 프로그램(계산·그래프)을 넣은 앱이다. 그리고 보고서·계획서·과제도 HTML로 만드는 이유.</p>
   <div class="body">
-    <ol class="roadmap" data-current="4"></ol>
+    <ol class="roadmap" data-current="3"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="HTML · CSS · JavaScript">
+<section class="slide" data-sec="3" data-title="HTML · CSS · JavaScript">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
   <h2>HTML 파일 하나는 세 가지 언어로 되어 있다</h2>
   <div class="body">
@@ -919,7 +891,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="금융 플래너 만들기">
+<section class="slide" data-sec="3" data-title="금융 플래너 만들기">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
   <h2>실습 · 금융 플래너: 복리 그래프에서 몬테카를로 시뮬레이션까지</h2>
   <div class="body">
@@ -938,7 +910,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="배포하고 내 사이트에 연결하기">
+<section class="slide" data-sec="3" data-title="배포하고 내 사이트에 연결하기">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
   <h2>배포하고 내 사이트에 연결하기: 두 번째 저장소</h2>
   <div class="body">
@@ -952,7 +924,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="HTML로 할 수 있는 것들">
+<section class="slide" data-sec="3" data-title="HTML로 할 수 있는 것들">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
   <h2>보고서도, 계획서도, 과제도 이제는 HTML로</h2>
   <div class="body">
@@ -973,7 +945,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="HTML 활용 예시 4가지">
+<section class="slide" data-sec="3" data-title="HTML 활용 예시 4가지">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
   <h2>실제로 만들어 본 예시 4가지: 클릭해서 열어 보자</h2>
   <div class="body">
@@ -987,7 +959,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="맞춤 사이트와 도메인">
+<section class="slide" data-sec="3" data-title="맞춤 사이트와 도메인">
   <div class="kicker">웹앱 만들기와 HTML 활용</div>
   <h2>한 걸음 더: “우리만을 위한 사이트”, 그리고 나만의 도메인</h2>
   <div class="body">
@@ -1010,17 +982,17 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<!-- ===================== 5. 크롤링 ===================== -->
-<section class="slide section" data-sec="5" data-title="크롤링: 무엇을, 어디까지">
-  <div class="kicker">Section 5</div>
+<!-- ===================== 4. 크롤링 ===================== -->
+<section class="slide section" data-sec="4" data-title="크롤링: 무엇을, 어디까지">
+  <div class="kicker">Section 4</div>
   <h2>크롤링: 무엇을, 어디까지 모을 수 있나</h2>
   <p class="section-lead">실습에 들어가기 전의 판단 기준. 웹에서 무엇을 모을 수 있는지, 어디까지 모아도 되는지, 사이트 구조에 따라 어떤 도구가 필요한지.</p>
   <div class="body">
-    <ol class="roadmap" data-current="5"></ol>
+    <ol class="roadmap" data-current="4"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="크롤링이란: 무엇을 모을 수 있나">
+<section class="slide" data-sec="4" data-title="크롤링이란: 무엇을 모을 수 있나">
   <div class="kicker">크롤링</div>
   <h2>크롤링이란: 무엇을 모을 수 있나</h2>
   <div class="body">
@@ -1037,7 +1009,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="법적·윤리적 경계 (1)">
+<section class="slide" data-sec="4" data-title="법적·윤리적 경계 (1)">
   <div class="kicker">크롤링</div>
   <h2>법적·윤리적 경계: “긁을 수 있다”와 “긁어도 된다”는 다르다</h2>
   <div class="body">
@@ -1050,7 +1022,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="기본 수칙 4가지">
+<section class="slide" data-sec="4" data-title="기본 수칙 4가지">
   <div class="kicker">크롤링</div>
   <h2>③ 그 밖의 기본 수칙: 비영리 · 소량 · 내부 분석</h2>
   <div class="body">
@@ -1064,7 +1036,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="정적 vs 동적">
+<section class="slide" data-sec="4" data-title="정적 vs 동적">
   <div class="kicker">크롤링</div>
   <h2>정적 vs 동적: 사이트 구조에 따라 도구가 다르다</h2>
   <div class="body">
@@ -1097,17 +1069,17 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
-<!-- ===================== 6. Cowork 웹 스크래핑 ===================== -->
-<section class="slide section" data-sec="6" data-title="Cowork로 웹 스크래핑">
-  <div class="kicker">Section 6</div>
+<!-- ===================== 5. Cowork 웹 스크래핑 ===================== -->
+<section class="slide section" data-sec="5" data-title="Cowork로 웹 스크래핑">
+  <div class="kicker">Section 5</div>
   <h2>Cowork로 웹 스크래핑: 복사–붙여넣기 수백 번 대신, 문장 하나</h2>
   <p class="section-lead">웹페이지를 일일이 복사해 엑셀에 붙여넣던 일을 “이 페이지에서 이런 정보를 뽑아 줘”로 끝낸다. 결과는 연동한 내 PC 폴더에 CSV로 남는다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="6"></ol>
+    <ol class="roadmap" data-current="5"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="실습 대상: YES24 베스트셀러">
+<section class="slide" data-sec="5" data-title="실습 대상: YES24 베스트셀러">
   <div class="kicker">Cowork로 웹 스크래핑</div>
   <h2>실습 대상: YES24 경제·경영 베스트셀러 (성별 × 연령대)</h2>
   <div class="body">
@@ -1123,7 +1095,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="프롬프트의 4요소와 결과 파일">
+<section class="slide" data-sec="5" data-title="프롬프트의 4요소와 결과 파일">
   <div class="kicker">Cowork로 웹 스크래핑</div>
   <h2>수집 프롬프트의 핵심 4요소, 그리고 결과는 파일로 남는다</h2>
   <div class="body">
@@ -1140,7 +1112,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="수집 후: 탐색적 분석(EDA)">
+<section class="slide" data-sec="5" data-title="수집 후: 탐색적 분석(EDA)">
   <div class="kicker">Cowork로 웹 스크래핑</div>
   <h2>수집 후: 탐색적 분석(EDA)도 프롬프트 하나로</h2>
   <div class="body">
@@ -1151,7 +1123,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="EDA 결과 (1)">
+<section class="slide" data-sec="5" data-title="EDA 결과 (1)">
   <div class="kicker">Cowork로 웹 스크래핑</div>
   <h2>EDA 결과 (1): 모두가 읽는 책, 그리고 나이에 따른 주제 이동</h2>
   <div class="body">
@@ -1162,7 +1134,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="EDA 결과 (2)">
+<section class="slide" data-sec="5" data-title="EDA 결과 (2)">
   <div class="kicker">Cowork로 웹 스크래핑</div>
   <h2>EDA 결과 (2): 성별 차이 vs 세대 차이</h2>
   <div class="body">
@@ -1176,7 +1148,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="패턴 6가지">
+<section class="slide" data-sec="5" data-title="패턴 6가지">
   <div class="kicker">Cowork로 웹 스크래핑</div>
   <h2>패턴 6가지: 숫자가 말해 주는 것</h2>
   <div class="body">
@@ -1191,17 +1163,17 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<!-- ===================== 7. 연구 적용: 판결문 수집과 변환 ===================== -->
-<section class="slide section" data-sec="7" data-title="연구 적용: 판결문 수집과 변환">
-  <div class="kicker">Section 7</div>
+<!-- ===================== 6. 연구 적용: 판결문 수집과 변환 ===================== -->
+<section class="slide section" data-sec="6" data-title="연구 적용: 판결문 수집과 변환">
+  <div class="kicker">Section 6</div>
   <h2>연구 적용: 판결문 895건 수집과 변환</h2>
   <p class="section-lead">같은 파이프라인(수집 → 분류 → 반복 패턴 추출)을 연구용 데이터에 적용한 사례. “직장 내 괴롭힘”이 언급된 지방법원 판결 895건을 수집해 유형별로 분류하고, 법원이 손해배상을 인정할 때 반복 적용하는 요건을 추출했다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="7"></ol>
+    <ol class="roadmap" data-current="6"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="목록 먼저, 본문은 천천히">
+<section class="slide" data-sec="6" data-title="목록 먼저, 본문은 천천히">
   <div class="kicker">연구 적용: 판결문 수집과 변환</div>
   <h2>목록 먼저, 본문은 천천히: 세 단계로 나눠 요청한다</h2>
   <div class="body">
@@ -1211,11 +1183,11 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
       <pre class="prompt"><button class="copy" type="button">복사</button>rulings.csv에서 10건만 본문을 받아서 rulings/ 폴더에 법원_사건번호.txt로 저장해줘. 받은 행은 수집완료 표시해줘.</pre>
       <pre class="prompt"><button class="copy" type="button">복사</button>나머지는 30건씩 배치로 받아줘. 매 건마다 3초 간격을 두고, 30건을 받은 다음에는 5분 쉬었다가 다음 배치를 실행해.</pre>
     </div>
-    <div class="callout">10건을 먼저 받는 이유: 본문이 제대로 들어오는지, 파일명과 인코딩이 맞는지 눈으로 확인한 뒤에 본 배치를 돌린다. 간격을 두는 이유: 서버에 부하를 주지 않기 위한 예의(§5의 “서버 배려”)이자, 중간에 끊겨도 CSV의 수집완료 표시로 이어서 할 수 있는 요령. 파일명에 법원을 넣는 이유: 사건번호는 법원이 다르면 겹칠 수 있다(같은 2022가단12345가 여러 법원에).</div>
+    <div class="callout">10건을 먼저 받는 이유: 본문이 제대로 들어오는지, 파일명과 인코딩이 맞는지 눈으로 확인한 뒤에 본 배치를 돌린다. 간격을 두는 이유: 서버에 부하를 주지 않기 위한 예의(§4의 “서버 배려”)이자, 중간에 끊겨도 CSV의 수집완료 표시로 이어서 할 수 있는 요령. 파일명에 법원을 넣는 이유: 사건번호는 법원이 다르면 겹칠 수 있다(같은 2022가단12345가 여러 법원에).</div>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="마크다운 변환과 요약">
+<section class="slide" data-sec="6" data-title="마크다운 변환과 요약">
   <div class="kicker">연구 적용: 판결문 수집과 변환</div>
   <h2>본문을 마크다운(.md)으로 변환하며 요약도 함께</h2>
   <div class="body">
@@ -1233,13 +1205,13 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
       <div class="stack">
         <pre class="prompt"><button class="copy" type="button">복사</button>rulings/의 txt 파일들을 md로 바꿔줘. 사실관계·주장·판단·결론이 나뉘는 곳마다 ## 제목을 붙이고, 맨 위에 2줄 요약을 넣어줘. 원문 문장은 바꾸지 말고.</pre>
         <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>요약만 모아 rulings_summary.csv로도 저장해줘</span><span>맨 위에 사건번호·법원·선고일·소송결과도</span><span>판단 부분이 안 나뉘었어. 다시</span></div>
-        <p class="muted">요약을 이때 만드는 이유: 나중에 따로 시키면 같은 전문을 한 번 더 읽어야 해서 시간도 비용도 두 배. 이 2줄 요약은 §10 스킬의 재료가 된다.</p>
+        <p class="muted">요약을 이때 만드는 이유: 나중에 따로 시키면 같은 전문을 한 번 더 읽어야 해서 시간도 비용도 두 배. 이 2줄 요약은 §9 스킬의 재료가 된다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="수집에서 보고서까지">
+<section class="slide" data-sec="6" data-title="수집에서 보고서까지">
   <div class="kicker">연구 적용: 판결문 수집과 변환</div>
   <h2>수집 → 변환 → 분석 → 보고서</h2>
   <div class="body">
@@ -1254,17 +1226,17 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<!-- ===================== 8. OpenRouter와 임베딩 추출 ===================== -->
-<section class="slide section" data-sec="8" data-title="OpenRouter와 임베딩 추출">
-  <div class="kicker">Section 8</div>
+<!-- ===================== 7. OpenRouter와 임베딩 추출 ===================== -->
+<section class="slide section" data-sec="7" data-title="OpenRouter와 임베딩 추출">
+  <div class="kicker">Section 7</div>
   <h2>OpenRouter와 임베딩 추출: 판결문 347건을 숫자로</h2>
   <p class="section-lead">2강에서 본 임베딩(문서를 숫자 배열로)을 판결문에 실제로 적용한다. 여러 회사의 모델을 API 키 하나로 쓰게 해 주는 OpenRouter를 창구로 삼는다. 이번 시간에는 임베딩 모델만 쓴다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="8"></ol>
+    <ol class="roadmap" data-current="7"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="임베딩이란: 2강 복습">
+<section class="slide" data-sec="7" data-title="임베딩이란: 2강 복습">
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>임베딩이란: 비정형 데이터를 숫자로 요약하기 (2강 복습)</h2>
   <div class="body">
@@ -1283,7 +1255,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="API와 API 키">
+<section class="slide" data-sec="7" data-title="API와 API 키">
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>잠깐, API가 뭔가요? 그럼 API 키는?</h2>
   <div class="body">
@@ -1304,7 +1276,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="OpenRouter의 역할">
+<section class="slide" data-sec="7" data-title="OpenRouter의 역할">
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>OpenRouter: 임베딩을 뽑는 가장 편한 창구</h2>
   <div class="body">
@@ -1318,7 +1290,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="가입, 충전, 키 발급, 한도">
+<section class="slide" data-sec="7" data-title="가입, 충전, 키 발급, 한도">
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>직접 해보기: 크레딧 충전과 API 키 발급</h2>
   <div class="body">
@@ -1333,7 +1305,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="임베딩 모델 고르기">
+<section class="slide" data-sec="7" data-title="임베딩 모델 고르기">
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>임베딩 모델 고르기: 컨텍스트 길이가 핵심</h2>
   <div class="body">
@@ -1352,7 +1324,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="Cowork 파이프라인: 폴더 연동과 키">
+<section class="slide" data-sec="7" data-title="Cowork 파이프라인: 폴더 연동과 키">
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>Cowork 파이프라인: 코드 한 줄 없이 요청 하나로</h2>
   <div class="body">
@@ -1369,7 +1341,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="실전 기록: 요청 한 줄 뒤에서 일어난 일">
+<section class="slide" data-sec="7" data-title="실전 기록: 요청 한 줄 뒤에서 일어난 일">
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>실전 기록: 요청 한 줄 뒤에서 실제로 일어난 일들</h2>
   <div class="body">
@@ -1382,7 +1354,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="8" data-title="산출물 JSON과 활용">
+<section class="slide" data-sec="7" data-title="산출물 JSON과 활용">
   <div class="kicker">OpenRouter와 임베딩 추출</div>
   <h2>산출물: 판결문 1건 = JSON 파일 1개, 그리고 활용</h2>
   <div class="body">
@@ -1408,17 +1380,17 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<!-- ===================== 9. 데이터 분석: 판결문 지도 ===================== -->
-<section class="slide section" data-sec="9" data-title="데이터 분석: 판결문 지도">
-  <div class="kicker">Section 9</div>
+<!-- ===================== 8. 데이터 분석: 판결문 지도 ===================== -->
+<section class="slide section" data-sec="8" data-title="데이터 분석: 판결문 지도">
+  <div class="kicker">Section 8</div>
   <h2>데이터 분석: 판결문 347건의 지도</h2>
   <p class="section-lead">임베딩 JSON 347개를 실제로 분석한 기록. 클러스터링으로 다섯 개의 사건 유형을 찾고, 차원축소로 한 장의 지도를 그렸다. 점 하나가 판결 한 건이다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="9"></ol>
+    <ol class="roadmap" data-current="8"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="분석 요청과 처리 순서">
+<section class="slide" data-sec="8" data-title="분석 요청과 처리 순서">
   <div class="kicker">데이터 분석: 판결문 지도</div>
   <h2>분석 요청과 처리 순서: 요청은 두 문장</h2>
   <div class="body">
@@ -1434,7 +1406,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="클러스터링: k 고르기">
+<section class="slide" data-sec="8" data-title="클러스터링: k 고르기">
   <div class="kicker">데이터 분석: 판결문 지도</div>
   <h2>클러스터링: 비슷한 판결끼리 자동으로 묶기, 몇 개로?</h2>
   <div class="body">
@@ -1450,7 +1422,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="차원축소: 4,096차원을 2차원으로">
+<section class="slide" data-sec="8" data-title="차원축소: 4,096차원을 2차원으로">
   <div class="kicker">데이터 분석: 판결문 지도</div>
   <h2>차원축소: 4,096차원을 2차원 지도로</h2>
   <div class="body">
@@ -1458,12 +1430,12 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
     <div class="steps">
       <div class="step"><span class="no">🌍</span><b class="ttl">지구본 → 종이 지도</b><p class="prob">둥근 지구를 평평한 종이에 옮기면 어딘가는 반드시 일그러진다. 4,096차원 → 2차원도 같다. 이웃 관계는 지키고, 먼 거리의 정확성은 포기한다</p></div>
       <div class="step"><span class="no">📏</span><b class="ttl">믿을 것과 안 믿을 것</b><p class="prob">“가까이 붙은 점들은 정말 비슷하다”는 믿어도 된다. “두 섬 사이의 거리가 정확히 2배 멀다”는 믿으면 안 된다</p></div>
-      <div class="step"><span class="no">🎲</span><b class="ttl">재현성</b><p class="prob">UMAP·K-means 모두 무작위 초기화가 있어 실행마다 모양이 조금씩 달라진다. 연구에서는 난수 시드를 고정(이번 작업은 42)해 같은 그림이 다시 나오게 한다</p></div>
+      <div class="step"><span class="no">🎲</span><b class="ttl">재현성</b><p class="prob">UMAP·K-means 모두 무작위 초기화가 있어 실행마다 모양이 조금씩 달라진다. 연구에서는 난수 시드를 고정해 같은 그림이 다시 나오게 한다</p></div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="판결문 지도">
+<section class="slide" data-sec="8" data-title="판결문 지도">
   <div class="kicker">데이터 분석: 판결문 지도</div>
   <h2>판결문 347건의 의미 지도</h2>
   <div class="body">
@@ -1474,7 +1446,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="지도 읽기: 유형이 승패를 예고한다">
+<section class="slide" data-sec="8" data-title="지도 읽기: 유형이 승패를 예고한다">
   <div class="kicker">데이터 분석: 판결문 지도</div>
   <h2>지도 읽기: 사건 유형이 승패를 예고한다</h2>
   <div class="body">
@@ -1490,7 +1462,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="재현용 프롬프트">
+<section class="slide" data-sec="8" data-title="재현용 프롬프트">
   <div class="kicker">데이터 분석: 판결문 지도</div>
   <h2>여러분의 데이터로 같은 지도를: 재현용 프롬프트</h2>
   <div class="body">
@@ -1501,31 +1473,30 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
       <li><b>클러스터링은 원본 고차원 벡터에서</b>2D 좌표는 표시용으로만</li>
       <li><b>k는 실루엣 계수 + 대표 문서 읽기</b>해석 가능성으로 결정</li>
       <li><b>UMAP 지도에서 믿을 것은 “이웃”</b>믿지 말 것은 “먼 거리”</li>
-      <li><b>난수 시드를 고정</b>같은 그림이 다시 나온다</li>
       <li><b>지도가 보여준 패턴은 가설</b>확인은 원문으로</li>
       <li><b>“바로 실행하지 말고 계획부터”</b>선택지를 보고 내가 고른다. 오늘 배운 요청 습관</li>
     </ol>
   </div>
 </section>
 
-<!-- ===================== 10. 나만의 스킬 만들기 ===================== -->
-<section class="slide section" data-sec="10" data-title="나만의 스킬 만들기">
-  <div class="kicker">Section 10</div>
+<!-- ===================== 9. 나만의 스킬 만들기 ===================== -->
+<section class="slide section" data-sec="9" data-title="나만의 스킬 만들기">
+  <div class="kicker">Section 9</div>
   <h2>나만의 스킬 만들기: 반복 절차를 SKILL.md 한 장에</h2>
   <p class="section-lead">직장 내 괴롭힘 사건을 담당하는 인사 담당자라고 해 보자. 수집한 판결문 347건이 폴더에 있고, 사건이 생길 때마다 “이런 경우도 회사 책임이 인정됐나”를 확인해야 한다. 그 반복을 파일 한 장으로 만든다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="10"></ol>
+    <ol class="roadmap" data-current="9"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="스킬이란: AI에게 주는 업무 매뉴얼">
+<section class="slide" data-sec="9" data-title="스킬이란: AI에게 주는 업무 매뉴얼">
   <div class="kicker">나만의 스킬 만들기</div>
   <h2>스킬이란: AI에게 주는 업무 매뉴얼</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
       <div class="stack">
         <div class="callout warn"><b>347건을 한꺼번에 읽힐 수는 없다.</b> 판결문 한 건이 평균 8,500자, 347건이면 300만 자에 가깝다. 질문 한 번에 전부 담을 수 없고, 담을 수 있다 해도 질문할 때마다 전부 다시 읽히면 느리고 비싸다.</div>
-        <div class="callout good"><b>해법: 요지 목록만 주고, 나머지는 알아서 찾아 읽게 한다.</b> §7에서 만들어 둔 2줄 요약 목록 하나면 347건 전체가 한눈에 들어온다. 질문이 들어오면 AI는 이 목록을 훑어 관련 사건을 고르고, 고른 사건만 전문 파일을 열어 읽는다. 사람이 판례집 목차를 훑고 필요한 쪽만 펴 보는 것과 같은 순서다.</div>
+        <div class="callout good"><b>해법: 요지 목록만 주고, 나머지는 알아서 찾아 읽게 한다.</b> §6에서 만들어 둔 2줄 요약 목록 하나면 347건 전체가 한눈에 들어온다. 질문이 들어오면 AI는 이 목록을 훑어 관련 사건을 고르고, 고른 사건만 전문 파일을 열어 읽는다. 사람이 판례집 목차를 훑고 필요한 쪽만 펴 보는 것과 같은 순서다.</div>
       </div>
       <div class="stack">
         <div class="loop" style="grid-template-columns:1fr;gap:6px">
@@ -1540,7 +1511,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="SKILL.md 해부">
+<section class="slide" data-sec="9" data-title="SKILL.md 해부">
   <div class="kicker">나만의 스킬 만들기</div>
   <h2>SKILL.md 해부: 파일 하나의 구조, 그리고 언제 읽히나</h2>
   <div class="body">
@@ -1573,7 +1544,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="실전: 판례 QA 스킬 만들기">
+<section class="slide" data-sec="9" data-title="실전: 판례 QA 스킬 만들기">
   <div class="kicker">나만의 스킬 만들기</div>
   <h2>실전: 판례 QA 스킬 만들기. SKILL.md도 손으로 쓸 필요가 없다</h2>
   <div class="body">
@@ -1606,7 +1577,7 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="판단 기준까지 스킬에 담기">
+<section class="slide" data-sec="9" data-title="판단 기준까지 스킬에 담기">
   <div class="kicker">나만의 스킬 만들기</div>
   <h2>판단 기준까지 스킬에 담기: “찾기”에서 “판단하기”로</h2>
   <div class="body">
@@ -1621,7 +1592,7 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="실전 사례: 7년 치 컬럼을 스킬로">
+<section class="slide" data-sec="9" data-title="실전 사례: 7년 치 컬럼을 스킬로">
   <div class="kicker">나만의 스킬 만들기</div>
   <h2>실전 사례: 7년 치 컬럼 83편을 스킬 파일 한 장으로</h2>
   <div class="body">
@@ -1644,17 +1615,17 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
   </div>
 </section>
 
-<!-- ===================== 11. 논문 계보도 만들기 ===================== -->
-<section class="slide section" data-sec="11" data-title="논문 계보도 만들기">
-  <div class="kicker">Section 11</div>
+<!-- ===================== 10. 논문 계보도 만들기 ===================== -->
+<section class="slide section" data-sec="10" data-title="논문 계보도 만들기">
+  <div class="kicker">Section 10</div>
   <h2>논문 계보도 만들기: 인용 관계를 네트워크로</h2>
   <p class="section-lead">판결문에서는 임베딩으로 문서 사이의 거리를 그렸다. 같은 파이프라인(수집 → 구조화 → 시각화)을 다른 관계, 논문의 인용 관계 위에 얹는다. 연구 질문 “AI는 인간 노동을 대체하는가?”를 둘러싼 노동경제학 대표 문헌 23편.</p>
   <div class="body">
-    <ol class="roadmap" data-current="11"></ol>
+    <ol class="roadmap" data-current="10"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="방법: 네트워크와 수집 전략">
+<section class="slide" data-sec="10" data-title="방법: 네트워크와 수집 전략">
   <div class="kicker">논문 계보도 만들기</div>
   <h2>방법: 네트워크의 구성 요소와 수집 전략</h2>
   <div class="body">
@@ -1674,7 +1645,7 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="계보도: 23편의 지도">
+<section class="slide" data-sec="10" data-title="계보도: 23편의 지도">
   <div class="kicker">논문 계보도 만들기</div>
   <h2>계보도: “AI는 노동을 대체하는가” 23편의 지도</h2>
   <div class="body">
@@ -1691,7 +1662,7 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="후속 프롬프트: 읽기 순서와 열린 질문">
+<section class="slide" data-sec="10" data-title="후속 프롬프트: 읽기 순서와 열린 질문">
   <div class="kicker">논문 계보도 만들기</div>
   <h2>계보도는 도구다: 후속 프롬프트 한 번이면 계획이 나온다</h2>
   <div class="body">
@@ -1708,7 +1679,7 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
       <div class="callout good"><b>(2) 열린 연구 질문 3개</b>
         <ul class="bul compact" style="margin-top:6px">
           <li>미국(초기경력 고용 감소)과 덴마크(효과 미미)의 증거가 상반된다. 한국 노동시장에서는 누가 맞는가? 필요한 데이터: 고용보험 등 행정 데이터 + 한국형 AI 노출 지수</li>
-          <li>실험은 “생산성”을, 실측은 “고용”을 본다. 그 사이 기업 안에서 과업이 어떻게 재편되는가는 비어 있다. 채용 공고 텍스트의 시계열(§6의 스크래핑으로 수집 가능)</li>
+          <li>실험은 “생산성”을, 실측은 “고용”을 본다. 그 사이 기업 안에서 과업이 어떻게 재편되는가는 비어 있다. 채용 공고 텍스트의 시계열(§5의 스크래핑으로 수집 가능)</li>
           <li>초기경력 충격이 사실이라면 경력 사다리와 인적자본 축적의 장기 효과는? 청년 패널의 장기 추적</li>
         </ul>
       </div>
@@ -1717,17 +1688,17 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
   </div>
 </section>
 
-<!-- ===================== 12. 과제 ===================== -->
-<section class="slide section" data-sec="12" data-title="정리와 과제">
-  <div class="kicker">Section 12</div>
+<!-- ===================== 11. 과제 ===================== -->
+<section class="slide section" data-sec="11" data-title="정리와 과제">
+  <div class="kicker">Section 11</div>
   <h2>정리와 과제</h2>
   <p class="section-lead">오늘 배운 것을 한 장으로 정리하고, 다음 시간(10/1 수강생 발표 1)에 발표할 과제를 확인한다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="12"></ol>
+    <ol class="roadmap" data-current="11"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="12" data-title="3강 정리">
+<section class="slide" data-sec="11" data-title="3강 정리">
   <div class="kicker">정리와 과제</div>
   <h2>3강 정리</h2>
   <div class="body">
@@ -1746,28 +1717,28 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
   </div>
 </section>
 
-<section class="slide" data-sec="12" data-title="과제: 10/1 수강생 발표">
+<section class="slide" data-sec="11" data-title="과제: 10/1 수강생 발표">
   <div class="kicker">정리와 과제</div>
   <h2>과제: 다음 시간(10/1 수강생 발표 1)에 발표한다</h2>
   <div class="body">
     <div class="steps" style="grid-template-columns:1fr 1fr">
       <div class="step"><span class="no">1</span><b class="ttl">자기 소개 페이지 (혹은 다른 정적 페이지)</b>
         <ul class="bul compact">
-          <li>§3의 방법으로 만들어 GitHub Pages에 공개한 주소를 제출한다</li>
+          <li>§2의 방법으로 만들어 GitHub Pages에 공개한 주소를 제출한다</li>
           <li>자기소개가 아니어도 된다. 사례집, 프로젝트 현황판, 행사 안내처럼 링크 하나로 공유하는 정적 페이지면 된다. 예: <a href="https://byoungpil-kim.github.io/kaist-itm-casebook/" target="_blank" rel="noopener">kaist-itm-casebook</a></li>
           <li>발표 시 무엇을 요청했고 결과를 보고 무엇을 고쳐 달라고 했는지 프롬프트 흐름을 함께 보여 준다</li>
         </ul>
       </div>
       <div class="step"><span class="no">2</span><b class="ttl">데이터 스크래핑 후 분석한 자료</b>
         <ul class="bul compact">
-          <li>관심 분야의 공개 데이터를 §6의 방법으로 수집하고, EDA로 패턴을 찾아 HTML 자료로 정리한다</li>
-          <li>특별히 하고 싶은 주제가 없으면: <b>관심 있는 회사의 특허를 내려받아 특허 지도 그리기</b>. §8~9의 방법(임베딩 → 클러스터링 → 지도)을 그대로 적용한다</li>
+          <li>관심 분야의 공개 데이터를 §5의 방법으로 수집하고, EDA로 패턴을 찾아 HTML 자료로 정리한다</li>
+          <li>특별히 하고 싶은 주제가 없으면: <b>관심 있는 회사의 특허를 내려받아 특허 지도 그리기</b>. §7~8의 방법(임베딩 → 클러스터링 → 지도)을 그대로 적용한다</li>
           <li>특허 지도 예시: <a href="https://www.jumpingkoala.com/atlas/domains/1/runs/9/" target="_blank" rel="noopener">jumpingkoala.com/atlas ↗</a>. 필요하면 이 예시 사이트를 참조하라고 AI에게 지시하면 된다</li>
-          <li>§5의 경계(페이월 금지, 비영리·소량·내부 분석, 서버 배려)를 지킨다</li>
+          <li>§4의 경계(페이월 금지, 비영리·소량·내부 분석, 서버 배려)를 지킨다</li>
         </ul>
       </div>
     </div>
-    <div class="callout">발표는 한 사람당 5분 안팎. 결과물보다 <b>요청과 피드백의 과정</b>(어떤 지시로 시작해 어떻게 구체화했는지, 어디서 막혔고 어떻게 풀었는지)을 중심으로 이야기한다. 여력이 있으면 §10의 스킬이나 §11의 계보도까지 시도해 봐도 좋다.</div>
+    <div class="callout">발표는 한 사람당 5분 안팎. 결과물보다 <b>요청과 피드백의 과정</b>(어떤 지시로 시작해 어떻게 구체화했는지, 어디서 막혔고 어떻게 풀었는지)을 중심으로 이야기한다. 여력이 있으면 §9의 스킬이나 §10의 계보도까지 시도해 봐도 좋다.</div>
   </div>
 </section>
 
@@ -1783,9 +1754,8 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
 <script>
 (function(){
   const SECTIONS = [
-    {name:'들어가며', sub:'준비물과 원칙'},
+    {name:'들어가며', sub:'준비물 · 작업대 · 설치'},
     {name:'에이전틱 AI 한눈에', sub:'엔진·하네스·컨텍스트·루프'},
-    {name:'세 개의 작업대와 설치', sub:'Chat · Cowork · Code'},
     {name:'GitHub 기초', sub:'개인 사이트 만들고 배포'},
     {name:'웹앱과 HTML 활용', sub:'금융 플래너 · HTML 예시'},
     {name:'크롤링: 무엇을, 어디까지', sub:'법적 경계 · 정적 vs 동적'},
