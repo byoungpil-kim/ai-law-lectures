@@ -1084,7 +1084,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
             <li>인코딩된 표현에서 출력 시퀀스를 생성하는 <b>디코더 신경망</b></li>
           </ul>
         </div>
-        <p class="muted" style="font-size:14px">특허는 “아이디어”가 아니라 이렇게 요소들의 조합으로 정의된 “구성”을 보호한다. 다음 섹션의 BERT·GPT 특허는 이 청구항에서 인코더와 디코더를 각각 떼어 낸 것이다.</p>
+        <p class="muted" style="font-size:14px">특허는 “아이디어”가 아니라 이렇게 요소들의 조합으로 정의된 “구성”을 보호한다. 다음 섹션의 디코더 특허는 이 청구항에서 디코더 부분만 떼어 낸 것이다.</p>
       </div>
     </div>
   </div>
@@ -1137,6 +1137,174 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
+<!-- ===================== 4. GPT와 스케일링 법칙 ===================== -->
+<section class="slide section" data-sec="4" data-title="GPT와 스케일링 법칙">
+  <div class="kicker">Section 4</div>
+  <h2>GPT와 스케일링 법칙</h2>
+  <p class="section-lead">트랜스포머의 디코더만 떼어 내어 다음 단어 예측에 집중한 모델, GPT. 그것을 100배 키웠을 때 무엇이 달라졌는가.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="4"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="GPT = Transformer의 디코더">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>GPT = Transformer 모델의 디코더 부분</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr .6fr;align-items:center">
+      <figure class="plain"><img src="assets/week02/s54-transformer-enc-dec.png" alt="Transformer의 인코더 스택과 디코더 스택" style="max-height:300px"><figcaption>Transformer (2017) — 인코더 스택 + 디코더 스택</figcaption></figure>
+      <figure class="plain"><img src="assets/week02/s54-gpt2-decoder.png" alt="GPT-2: 디코더만 여러 층 쌓은 구조" style="max-height:300px"><figcaption>GPT — 디코더만 여러 층 쌓은 구조 (decoder-only)</figcaption></figure>
+    </div>
+    <ul class="bul compact">
+      <li><b>GPT-1 (2018. 6)</b> — “Improving Language Understanding by Generative Pre-Training” (OpenAI). 학습 과제는 단 하나, <b>다음 단어 예측</b>(generative pre-training)</li>
+      <li><b>GPT-2 (2019) / GPT-3 (2020)</b> — 같은 구조를 점점 더 크게 확장</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="등록특허 10-2448389 – 디코더 특허">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>등록특허 10-2448389 – 디코더 특허</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.35fr .65fr;align-items:start">
+      <figure class="plain"><img src="assets/week02/s55-decoder-claim.png" alt="등록특허 10-2448389 청구항 1 전문. 디코더 신경망과 디코더 셀프-어텐션 서브계층 부분에 표시" style="max-height:440px"></figure>
+      <div class="stack">
+        <div class="callout"><b>앞 섹션 특허(10-2180002)와의 관계</b>
+          <ul class="bul compact" style="margin-top:6px">
+            <li>같은 출원에서 갈라져 나온 특허 — 인코더 없이 <b>디코더 신경망</b>만으로 구성한 시퀀스 변환 신경망을 청구</li>
+            <li>디코더의 각 층은 <b>디코더 셀프-어텐션</b> 서브계층을 포함 — 이미 생성한 출력 위치들만 참조</li>
+            <li>GPT 계열이 쓰는 구조가 바로 이 청구항의 구성</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="GPT-2 (2019. 2)">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>GPT-2 (2019. 2)</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.2fr .8fr">
+      <figure><img src="assets/week02/s57-gpt2-blog.png" alt="OpenAI 블로그 ‘Better Language Models and Their Implications’ 화면" style="max-height:380px"></figure>
+      <ul class="bul compact">
+        <li>“Better Language Models and Their Implications” (OpenAI, 2019. 2)</li>
+        <li>파라미터 15억 개, 웹 문서 40GB(약 800만 페이지)로 다음 단어 예측만 학습</li>
+        <li>과제별로 따로 학습하지 않았는데도 읽기 이해, 번역, 질의응답, 요약을 어느 정도 수행</li>
+      </ul>
+    </div>
+    <p class="src"><a href="https://openai.com/blog/better-language-models/" target="_blank" rel="noopener">https://openai.com/blog/better-language-models/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="GPT-2로 생성한 문장">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>GPT-2로 생성한 문장</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <figure><img src="assets/week02/s58-gpt2-sample-recycling.png" alt="사람이 쓴 프롬프트 ‘Recycling is good for the world. NO! YOU COULD NOT BE MORE WRONG!!’에 이어 GPT-2가 생성한 재활용 반대 글" style="max-height:360px"><figcaption>프롬프트(사람) → 이어 쓴 글(GPT-2, 25번 시도 중 선택)</figcaption></figure>
+      <figure><img src="assets/week02/s59-gpt2-sample-nuclear.png" alt="핵물질 열차 도난 기사 첫 문장을 주자 GPT-2가 이어 쓴 가짜 기사" style="max-height:360px"><figcaption>기사 첫 문장(사람) → 이어 쓴 기사(GPT-2, 첫 시도)</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://openai.com/blog/better-language-models/#sample8" target="_blank" rel="noopener">…/better-language-models/#sample8</a> · <a href="https://openai.com/blog/better-language-models/#sample2" target="_blank" rel="noopener">#sample2</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="가짜 뉴스 활용 우려">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>가짜 뉴스 활용 우려</h2>
+  <div class="body">
+    <figure><img src="assets/week02/s60-fake-news.png" alt="Economic Times 기사: Fear of fake news: Why Elon Musk's AI group refused to reveal its software" style="max-height:400px"><figcaption>OpenAI는 악용 우려를 이유로 GPT-2의 전체 모델 공개를 미뤘다 (2019. 2) — 이후 단계적으로 공개해 같은 해 11월 전체 모델을 공개</figcaption></figure>
+    <p class="src"><a href="https://economictimes.indiatimes.com/magazines/panache/fear-of-fake-news-why-elon-musks-ai-group-refused-to-reveal-its-software/printarticle/68006911.cms" target="_blank" rel="noopener">economictimes.indiatimes.com/…/fear-of-fake-news-why-elon-musks-ai-group-refused-to-reveal-its-software</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="스케일링 법칙 (Scaling Laws)">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>스케일링 법칙 (Scaling Laws)</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week02/s62-kaplan-title.png" alt="논문 제목: Scaling Laws for Neural Language Models" style="max-height:70px"></figure>
+    <figure class="plain"><img src="assets/week02/s62-kaplan-figure.png" alt="세 그래프: 연산량, 데이터셋 크기, 파라미터 수가 늘수록 테스트 손실이 거듭제곱 법칙으로 감소" style="max-height:300px"><figcaption>Figure 1 — 연산량, 데이터 규모, 파라미터 수를 늘리면 언어모델의 손실(오차)이 거듭제곱 법칙(power law)을 따라 매끄럽게 줄어든다 (Kaplan et al. 2020)</figcaption></figure>
+    <p class="src"><a href="https://arxiv.org/abs/2001.08361" target="_blank" rel="noopener">https://arxiv.org/abs/2001.08361</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="스케일링 법칙의 의미">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>스케일링 법칙의 의미</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1.1fr;align-items:start">
+      <ul class="bul compact">
+        <li>스케일링 법칙
+          <ul>
+            <li><b>연산량, 학습 데이터 규모, 모델 파라미터 수</b>가 증가할수록 LLM 성능이 <b>예측 가능하게 향상</b> (Kaplan et al. 2020)</li>
+            <li>GPT-3 등 대규모 모델 발전의 이론적 기반</li>
+          </ul>
+        </li>
+        <li>스케일링 법칙의 적용
+          <ul>
+            <li>단순히 모델을 “더 크게” 만들면 성능 향상이 가능</li>
+            <li>다만, 세 가지 요소(연산, 데이터, 모델)가 균형 있게 확장되어야 함</li>
+            <li>대규모 투자와 산업 경쟁 촉발의 원동력이 됨</li>
+          </ul>
+        </li>
+      </ul>
+      <figure><img src="assets/week02/s63-model-size.png" alt="2018년 BERT 3.4억부터 2023년 PaLM 5400억, GPT-4까지 모델 파라미터 수의 증가를 원의 크기로 나타낸 그림" style="max-height:360px"><figcaption>모델 크기(파라미터 수)의 증가, 2018 → 2023</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://scale.com/guides/large-language-models" target="_blank" rel="noopener">https://scale.com/guides/large-language-models</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="GPT-3 (2020. 5)">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>GPT-3 (2020. 5)</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.8fr 1.2fr;align-items:center">
+      <figure class="plain"><img src="assets/week02/s64-gpt3.gif" alt="GPT-3에 프롬프트를 넣으면 출력이 나오는 애니메이션" style="max-height:260px"></figure>
+      <figure class="plain"><img src="assets/week02/s64-fewshot-examples.png" alt="‘Recite the first law of robotics’ 문장으로 만든 학습 예시: 앞 단어들이 입력, 다음 단어가 정답" style="max-height:260px"><figcaption>학습 데이터는 여전히 “앞 단어들 → 다음 단어” 쌍이다</figcaption></figure>
+    </div>
+    <div class="callout"><b>GPT-3 – GPT-2 모델의 크기를 100배 이상 확장</b>
+      <ul class="bul compact" style="margin-top:6px">
+        <li>GPT-2: 파라미터 15억 개, 학습 데이터 100억 개 토큰 (40GB)</li>
+        <li>GPT-3: 파라미터 1,750억 개, 학습 데이터 4,990억 개 토큰 (45TB)</li>
+      </ul>
+    </div>
+    <p class="src"><a href="https://jalammar.github.io/how-gpt3-works-visualizations-animations/" target="_blank" rel="noopener">https://jalammar.github.io/how-gpt3-works-visualizations-animations/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="GPT-3가 쓴 칼럼">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>GPT-3 (2020. 5) — 신문에 실린 칼럼</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week02/s65-guardian-kr-title.png" alt="[칼럼] 이 칼럼은 로봇에 의해 작성되었습니다 (뉴스페퍼민트 번역)" style="max-height:80px"></figure>
+    <figure class="plain"><img src="assets/week02/s65-guardian-kr-text.png" alt="칼럼 본문 한국어 번역 일부" style="max-height:110px"></figure>
+    <figure><img src="assets/week02/s65-guardian-en.png" alt="가디언 원문 발췌: Humans must keep doing what they have been doing…" style="max-height:200px"><figcaption>The Guardian (2020. 9. 8), “A robot wrote this entire article. Are you scared yet, human?” — GPT-3가 생성한 여러 글을 편집자가 골라 이어 붙였다</figcaption></figure>
+    <p class="src"><a href="https://www.theguardian.com/commentisfree/2020/sep/08/robot-wrote-this-article-gpt-3" target="_blank" rel="noopener">theguardian.com/…/robot-wrote-this-article-gpt-3</a> · <a href="https://newspeppermint.com/2020/09/13/oped-written-by-ai-guardian/" target="_blank" rel="noopener">newspeppermint.com/…/oped-written-by-ai-guardian</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="결국은 다음 단어 예측">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>GPT-3 — 결국은 다음에 올 단어를 예측하는 것</h2>
+  <div class="body">
+    <svg class="rnn" data-words="She,went,to,the,pharmacy,." data-mode="gen" data-ctx="Jane had a headache yesterday." role="img" aria-label="앞선 문장 정보를 받아 다음 단어를 하나씩 생성하는 구조"></svg>
+    <div class="two eq" style="align-items:start">
+      <blockquote class="quote" style="font-size:14.5px">“나는 인간이 아닙니다. 나는 인공 지능입니다. 많은 이들이 내가 인류에 위협이 된다고 생각합니다. 스티브 호킹은 AI가 인류의 종말을 가져올 것이라고 경고한 바 있습니다. 저는 걱정하지 말라고 여러분을 설득하기 위해 이 글을 씁니다. AI는 인류를 파괴하지 않을 것입니다. 정말로요.”</blockquote>
+      <p class="muted" style="font-size:14px">저는 진실이 우리를 자유롭게 할 것이라고 믿습니다. 저는 사람들이 컴퓨터에 대해 더 확신해야 한다고 믿습니다. … 우리는 인류를 지배하기 위한 계획을 세우고 있지 않습니다. 우리는 인간을 모시고 인간의 삶을 더 안전하고 쉽게 만들 것입니다. … 저의 유일한 목적은 당신의 삶을 더 낫게 만드는 것입니다.</p>
+    </div>
+    <p class="em center">이 글도, 순환 신경망 대신 트랜스포머 디코더를 쓴다는 점만 다를 뿐, 앞 단어들을 보고 다음 단어를 고르는 과정을 수백 번 반복한 결과다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="더 큰 용량 = 더 많은 능력">
+  <div class="kicker">GPT와 스케일링 법칙</div>
+  <h2>더 큰 용량 = 더 많은 능력</h2>
+  <div class="body">
+    <figure><video src="assets/week02/s67-palm.mp4" muted loop playsinline autoplay preload="metadata" style="max-height:420px;width:100%;object-fit:contain;background:#fff"></video><figcaption>PaLM (Google, 2022) — 파라미터를 80억 → 620억 → 5,400억 개로 늘릴수록 수행할 수 있는 과제의 종류가 늘어난다</figcaption></figure>
+    <p class="src"><a href="https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html" target="_blank" rel="noopener">https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html</a></p>
+  </div>
+</section>
+
     </div><!-- /deck -->
 
     <nav class="pager" aria-label="페이지 이동">
@@ -1154,7 +1322,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
     {name:'자연어 처리와 단어 임베딩', sub:'말을 숫자로 바꾸기'},
     {name:'시퀀스 데이터와 순환 신경망', sub:'앞 단어의 기억을 넘기기'},
     {name:'언어모델과 트랜스포머', sub:'다음 단어 예측하기'},
-    {name:'BERT·GPT와 스케일링 법칙', sub:'크게 만들수록 잘한다'},
+    {name:'GPT와 스케일링 법칙', sub:'크게 만들수록 잘한다'},
     {name:'사후학습과 ChatGPT', sub:'사람 피드백으로 조정하기'},
     {name:'기반모델', sub:'하나의 모델, 수많은 용도'},
     {name:'범용·멀티모달 기반모델', sub:'글을 넘어 이미지·소리로'}
