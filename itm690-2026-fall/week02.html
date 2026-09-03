@@ -1384,8 +1384,195 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="2023년 3월 GPT-4 충격">
+<section class="slide" data-sec="5" data-title="ChatGPT ≈ 복잡한 “자동 완성” 기능?">
   <div class="kicker">사후학습과 ChatGPT</div>
+  <h2>ChatGPT ≈ 복잡한 “자동 완성” 기능?</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.2fr .8fr;align-items:center">
+      <div class="hl-img" style="max-width:640px"><img src="assets/week02/s74-hinton.png" alt="뉴요커 제프리 힌턴 인터뷰 기사 발췌"><span class="hl-box" style="left:1%;top:28%;width:51%;height:8%"></span><span class="hl-box" style="left:1%;top:49%;width:97%;height:15%"></span></div>
+      <blockquote class="quote" style="font-size:15px">“사람들은 그저 화려한 자동완성일 뿐이라고 말한다. … 다음 단어를 정말로 잘 예측하고 싶다고 해 보자. 정말로 잘하려면, 무슨 말이 오가는지를 이해해야만 한다. 그것이 유일한 방법이다.”
+        <cite>– Geoffrey Hinton, The New Yorker (2023. 11)</cite>
+      </blockquote>
+    </div>
+    <p class="src"><a href="https://www.newyorker.com/magazine/2023/11/20/geoffrey-hinton-profile-ai" target="_blank" rel="noopener">https://www.newyorker.com/magazine/2023/11/20/geoffrey-hinton-profile-ai</a></p>
+  </div>
+</section>
+
+<!-- ===================== 6. 기반모델 ===================== -->
+<section class="slide section" data-sec="6" data-title="기반모델">
+  <div class="kicker">Section 6</div>
+  <h2>기반모델 (Foundation Models)</h2>
+  <p class="section-lead">하나의 큰 모델을 미리 학습해 두고, 수많은 용도에 맞춰 쓰는 방식. 2021년 스탠퍼드 보고서가 붙인 이름.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="6"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="기반모델(Foundation Model)">
+  <div class="kicker">기반모델</div>
+  <h2>기반모델 (Foundation Model)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>기반모델 (Bommasani et al. 2021, “On the Opportunities and Risks of Foundation Models”, Stanford HAI)
+        <ul>
+          <li>방대한 데이터에 의해 학습되어, 광범위한 하위 과제에 적용될 수 있는 모델 — 예: BERT(text), GPT-3(text), CLIP(text-to-image), GPT-4(multimodal)</li>
+          <li>기술 – 트랜스포머 모델(2017) &nbsp;·&nbsp; 학습 방식 – 자기지도학습(self-supervised learning)</li>
+        </ul>
+      </li>
+      <li>핵심 특징
+        <ul>
+          <li><b>창발성(emergence)</b> – 명시적으로 학습되지 않은 행동을 보이는 현상</li>
+          <li><b>균질화(homogenization)</b> – 다양한 활용 사례의 머신러닝 시스템 구축에 하나의 모델이 쓰이는 현상</li>
+        </ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week02/s76-fm-diagram.png" alt="머신러닝(학습 알고리즘의 균질화) → 딥러닝(모델 구조의 균질화) → 기반모델(모델 자체의 균질화)로 갈수록 창발성과 균질화가 커진다는 도식" style="max-height:200px"><figcaption>Bommasani et al. (2021), Fig. 1 — 머신러닝 → 딥러닝 → 기반모델로 갈수록 창발성과 균질화가 커진다</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="기반모델의 발전 배경">
+  <div class="kicker">기반모델</div>
+  <h2>기반모델의 발전 배경</h2>
+  <div class="body">
+    <p style="font-weight:700">2018년 자연어 처리(NLP) 분야의 혁신에서 비롯</p>
+    <div class="steps" style="grid-template-columns:1fr 1fr">
+      <div class="step"><span class="no">1</span><b class="ttl">전이 학습 (transfer learning)</b>
+        <ul class="bul compact">
+          <li>하나의 과제로부터 학습한 지식을 다른 작업에 적용</li>
+          <li>사전학습(pretraining) 단계에서는 대리 과제(예: 다음 단어 예측)를 수행</li>
+          <li>관심 있는 다운스트림 작업에는 미세조정(fine-tuning)을 통해 사용</li>
+        </ul>
+      </div>
+      <div class="step"><span class="no">2</span><b class="ttl">규모의 확장 (scale)</b>
+        <ul class="bul compact">
+          <li>컴퓨터 하드웨어의 발전 – 4년 동안 GPU 처리량과 메모리가 10배 증가</li>
+          <li>Transformer 아키텍처 – 병렬 처리 활용</li>
+          <li>훨씬 더 많은 데이터 가용성 – 자기지도학습 방식의 활용</li>
+        </ul>
+      </div>
+    </div>
+    <blockquote class="quote">“전이 학습”을 통해 기반모델이 가능해지고, “규모 확장”을 통해 기반모델이 강력해졌다.<cite lang="en">Transfer learning is what makes foundation models possible, but scale is what makes them powerful. — Bommasani et al. (2021)</cite></blockquote>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="기반모델의 학습 – 자기지도 학습">
+  <div class="kicker">기반모델</div>
+  <h2>기반모델의 학습 – 자기지도 학습</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>자기지도 학습 (Self-Supervised Learning)
+        <ul>
+          <li>데이터 자체로부터 지도학습을 위한 문제와 정답을 생성하는 방식</li>
+          <li>대체로 데이터의 일부를 숨긴 다음 해당 부분을 예측하는 문제를 해결하도록 함</li>
+        </ul>
+      </li>
+      <li>예시 – GPT-3의 사전학습
+        <ul>
+          <li>인터넷 문서의 문장을 잘라, <b>앞 단어들을 입력</b>으로, <b>바로 다음 단어를 정답</b>으로 삼는다</li>
+          <li>문장 하나에서 학습 예시가 단어 수만큼 나온다 — 사람이 정답을 달 필요가 없다</li>
+        </ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week02/s64-fewshot-examples.png" alt="‘Recite the first law of robotics’ 문장으로 만든 학습 예시: 앞 단어들이 입력(features), 다음 단어가 정답(labels)" style="max-height:230px"><figcaption>문장 하나 → (입력, 정답) 쌍 여러 개. 4,990억 개 토큰이 곧 4,990억 개의 학습 예시가 된다</figcaption></figure>
+    <p class="src"><a href="https://jalammar.github.io/how-gpt3-works-visualizations-animations/" target="_blank" rel="noopener">https://jalammar.github.io/how-gpt3-works-visualizations-animations/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="자기지도학습 방식의 장점">
+  <div class="kicker">기반모델</div>
+  <h2>자기지도학습 방식의 장점</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:start">
+      <ul class="bul compact">
+        <li>학습 데이터 확보가 쉽다 → 규모(scale) 증대가 가능
+          <ul>
+            <li>방대한 학습 데이터(글, 이미지, 영상)를 손쉽게 확보</li>
+            <li>데이터 라벨링을 위한 인간 수작업이 최소화</li>
+          </ul>
+        </li>
+        <li>세상에 관한 일반화된 지식을 습득
+          <ul>
+            <li>기존 지도학습 방식 – 학습된 특정 과제(= 정답 라벨의 예측)만 수행</li>
+            <li>자기지도 학습의 발전 방향 – 세상에 대한 일반화된 지식(인간의 ‘상식’)을 습득</li>
+            <li>(예) 영상의 일부를 가리고 다음 장면을 예측하는 인공지능 → 손에서 공을 놓으면 바닥으로 떨어진다는 점(물리법칙)을 스스로 학습할 것으로 기대</li>
+          </ul>
+        </li>
+      </ul>
+      <figure><img src="assets/week02/s80-ijepa.png" alt="I-JEPA: 이미지의 가려진 부분을 예측한 결과 예시 (새, 자동차, 건물 등)" style="max-height:300px"><figcaption>Meta AI, I-JEPA (2023) — 가려진 부분을 예측하도록 학습한 모델이 채워 넣은 결과</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://ai.facebook.com/blog/self-supervised-learning-the-dark-matter-of-intelligence/" target="_blank" rel="noopener">ai.facebook.com/blog/self-supervised-learning-the-dark-matter-of-intelligence</a> · <a href="https://ai.facebook.com/blog/yann-lecun-ai-model-i-jepa/" target="_blank" rel="noopener">ai.facebook.com/blog/yann-lecun-ai-model-i-jepa</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="특징 (1) 균질화">
+  <div class="kicker">기반모델</div>
+  <h2>특징 (1) 기반모델에 의한 균질화</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.85fr 1.15fr;align-items:center">
+      <ul class="bul compact">
+        <li>NLP 분야
+          <ul>
+            <li>NLP 과제에 대해 BERT, RoBERTa, T5 등 기반모델이 급속히 채택</li>
+            <li>장점: 기반모델이 개선되면 모든 NLP 과제에서 즉각적인 성능 개선</li>
+            <li>단점: 기반모델의 결함이 승계 (예: 편향성이 그대로 존속)</li>
+          </ul>
+        </li>
+        <li>텍스트 이외의 다양한 모달리티로 확장 — 음성, 표 형식 데이터, 단백질 서열, 유기 분자, 강화 학습 등
+          <ul><li><b>기반모델은 다양한 모달리티에 걸친 통합된 도구 세트로 기능</b></li></ul>
+        </li>
+      </ul>
+      <figure class="plain"><img src="assets/week02/s82-homogenization.png" alt="텍스트, 이미지, 음성, 구조화 데이터, 3D 신호를 하나의 기반모델로 학습하고, 질의응답·감성 분석·정보 추출·이미지 캡션·사물 인식·지시 따르기 등 여러 과제에 적응시키는 그림" style="max-height:360px"><figcaption>Bommasani et al. (2021), Fig. 2 — 데이터 → 하나의 기반모델 → 여러 과제로 적응(adaptation)</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="특징 (2) 창발성">
+  <div class="kicker">기반모델</div>
+  <h2>특징 (2) 기반모델의 창발성</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>창발성(emergence)의 의미 — 특별히 훈련되지 않았거나 발생할 것으로 예상되지 않았던 속성이 발생하는 현상</li>
+      <li>예시 – 더 큰 용량 = 더 많은 능력: 모델을 키우기만 했는데 산수, 농담 해석, 번역 같은 과제가 새로 가능해진다</li>
+    </ul>
+    <figure><video src="assets/week02/s67-palm.mp4" muted loop playsinline autoplay preload="metadata" style="max-height:330px;width:100%;object-fit:contain;background:#fff"></video><figcaption>PaLM (Google, 2022) — 파라미터를 80억 → 620억 → 5,400억 개로 늘릴수록 수행할 수 있는 과제의 종류가 늘어난다</figcaption></figure>
+    <p class="src"><a href="https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html" target="_blank" rel="noopener">https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="창발성의 도전 – 예측 어려움">
+  <div class="kicker">기반모델</div>
+  <h2>창발성의 도전 – 예측 어려움</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>창발성의 결과 — 새로운 일반화된 능력이 발전
+        <ul>
+          <li>2017년 트랜스포머 모델 공개(기계 번역 목적) – 숫자 연산을 수행할 것이라고 기대한 이는 아무도 없었음</li>
+          <li>2023년 GPT-4는 변호사시험, 의사시험, 대학 과목 시험 등을 상위권 성적으로 통과 (다음 장)</li>
+        </ul>
+      </li>
+      <li><b>“2030년에는 무엇이 가능해질까?” 누구도 쉽사리 답하기 어려움</b></li>
+    </ul>
+    <div class="callout warn"><b>경영·법의 관점</b> — 어떤 능력이 언제 나타날지 개발자도 미리 알지 못한다면, 그 위험을 누가 어떻게 평가하고 책임질 것인가가 문제가 된다. 이후 강의(안전, 규제)에서 다룬다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="[참고] 창발성 주장에 대한 반론">
+  <div class="kicker">기반모델</div>
+  <h2>[참고] 창발성 주장에 대한 반론</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:center">
+      <div class="stack">
+        <p style="font-weight:700">Schaeffer, Miranda, and Koyejo (2023) “Are Emergent Abilities of Large Language Models a Mirage?”</p>
+        <blockquote class="quote" lang="en" style="font-size:14px">“Recent work claims that large language models display emergent abilities, abilities not present in smaller-scale models that are present in larger-scale models. … Here, we present an alternative explanation for emergent abilities: that for a particular task and model family, when analyzing fixed model outputs, emergent abilities appear due to the researcher’s choice of metric rather than due to fundamental changes in model behavior with scale.”</blockquote>
+        <p class="muted" style="font-size:14px">“정답/오답”처럼 딱 떨어지는 지표로 재면 갑자기 나타나는 것처럼 보이지만, 연속적인 지표로 재면 규모에 따라 매끄럽게 좋아진다는 주장</p>
+      </div>
+      <figure class="plain"><img src="assets/week02/s90-mirage.png" alt="같은 모델 출력을 정확도(위)로 재면 급격한 도약이 보이고, 토큰 편집 거리(아래)로 재면 매끄럽게 개선되는 그래프" style="max-height:360px"><figcaption>Figure 3 — 위: 정확도(불연속 지표), 아래: 토큰 편집 거리(연속 지표)</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="2023년 3월 GPT-4 충격">
+  <div class="kicker">기반모델</div>
   <h2>2023년 3월 GPT-4 충격</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1.25fr .75fr;align-items:center">
@@ -1400,17 +1587,23 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="ChatGPT ≈ 복잡한 “자동 완성” 기능?">
-  <div class="kicker">사후학습과 ChatGPT</div>
-  <h2>ChatGPT ≈ 복잡한 “자동 완성” 기능?</h2>
+
+<section class="slide" data-sec="6" data-title="인공일반지능(AGI)의 불씨?">
+  <div class="kicker">기반모델</div>
+  <h2>인공일반지능(AGI)의 불씨(sparks)?</h2>
   <div class="body">
-    <div class="two" style="grid-template-columns:1.2fr .8fr;align-items:center">
-      <div class="hl-img" style="max-width:640px"><img src="assets/week02/s74-hinton.png" alt="뉴요커 제프리 힌턴 인터뷰 기사 발췌"><span class="hl-box" style="left:1%;top:28%;width:51%;height:8%"></span><span class="hl-box" style="left:1%;top:49%;width:97%;height:15%"></span></div>
-      <blockquote class="quote" style="font-size:15px">“사람들은 그저 화려한 자동완성일 뿐이라고 말한다. … 다음 단어를 정말로 잘 예측하고 싶다고 해 보자. 정말로 잘하려면, 무슨 말이 오가는지를 이해해야만 한다. 그것이 유일한 방법이다.”
-        <cite>– Geoffrey Hinton, The New Yorker (2023. 11)</cite>
-      </blockquote>
-    </div>
-    <p class="src"><a href="https://www.newyorker.com/magazine/2023/11/20/geoffrey-hinton-profile-ai" target="_blank" rel="noopener">https://www.newyorker.com/magazine/2023/11/20/geoffrey-hinton-profile-ai</a></p>
+    <figure class="plain"><img src="assets/week02/s91-sparks-text.png" alt="텍스트로만 방을 탐색하는 대화: 사람이 방향을 알려 주고 GPT-4가 이동 명령을 내린 뒤, 방들의 위치를 말로 설명" style="max-height:420px"><figcaption>Bubeck et al. (Microsoft, 2023), “Sparks of Artificial General Intelligence: Early experiments with GPT-4” — 텍스트로만 집 안을 탐색한 뒤 방 배치를 설명</figcaption></figure>
+    <p class="src"><a href="https://arxiv.org/pdf/2303.12712.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/2303.12712.pdf</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="AGI의 불씨? – 지도 그리기">
+  <div class="kicker">기반모델</div>
+  <h2>인공일반지능(AGI)의 불씨(sparks)?</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week02/s92-sparks-map.png" alt="왼쪽: 실제 방 배치와 탐색 경로, 오른쪽: GPT-4가 그린 지도. 두 지도가 일치한다" style="max-height:340px"><figcaption>왼쪽: 실제 지도와 GPT-4의 탐색 경로 · 오른쪽: GPT-4가 그린 지도 — 탐색만으로 모든 방의 위치를 정확히 추적해 시각화했다</figcaption></figure>
+    <p class="muted center">“다음 단어 예측”만으로 학습한 모델이 공간 구조를 내부적으로 표현하고 있는 것인가? 이 논쟁은 아직 진행 중이다.</p>
+    <p class="src"><a href="https://arxiv.org/pdf/2303.12712.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/2303.12712.pdf</a></p>
   </div>
 </section>
 
