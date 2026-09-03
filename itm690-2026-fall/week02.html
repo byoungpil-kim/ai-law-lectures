@@ -476,6 +476,11 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 .guess .up{border-color:#cfe3d8;} .guess .up span{color:var(--green);}
 .guess .down{border-color:var(--red);background:var(--red-light);} .guess .down span{color:var(--red);}
 
+/* ---------- 섹션 5: 그림 위 강조 상자 ---------- */
+.hl-img{position:relative;display:block;margin:0 auto;width:100%;}
+.hl-img img{display:block;width:100%;height:auto;border-radius:8px;}
+.hl-img .hl-box{position:absolute;border:3px solid var(--red);border-radius:8px;box-shadow:0 0 0 2px rgba(255,255,255,.6);pointer-events:none;}
+
 /* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
 @page{size:320mm 180mm;margin:0;}
 @media print{
@@ -1286,6 +1291,126 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
       </div>
     </div>
     <p class="em center">이 글도 앞 단어들을 보고 다음 단어를 고르는 과정을 수백 번 반복한 결과다.</p>
+  </div>
+</section>
+
+<!-- ===================== 5. 사후학습과 ChatGPT ===================== -->
+<section class="slide section" data-sec="5" data-title="사후학습과 ChatGPT">
+  <div class="kicker">Section 5</div>
+  <h2>사후학습과 ChatGPT</h2>
+  <p class="section-lead">다음 단어를 잘 맞히는 모델을, 사람이 원하는 대답을 하는 모델로 바꾸는 단계.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="5"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="대규모 언어모델의 사후학습">
+  <div class="kicker">사후학습과 ChatGPT</div>
+  <h2>대규모 언어모델의 사후학습</h2>
+  <div class="body">
+    <div class="steps" style="grid-template-columns:1fr 1fr">
+      <div class="step"><span class="no">1</span><b class="ttl">사전학습 (pre-train) 단계</b><p class="prob">인터넷의 방대한 텍스트로 다음 단어 예측을 학습. 잠재적으로 <u>개인정보, 편향, 유해한 데이터</u>를 모두 포함하여 학습</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">사후학습 (post-train) 단계</b><p class="prob">위법·부적절한 표현이 생성되지 않도록, 그리고 <u>사람의 지시에 맞게 답하도록</u> 추가로 학습</p></div>
+    </div>
+    <ul class="bul">
+      <li>사후학습 단계의 중요성
+        <ul>
+          <li>GPT-3는 2020년 6월 발표 → GPT-3.5(ChatGPT)는 2022년 11월 공개</li>
+          <li><b>GPT-3.5는 GPT-3와 동일한 구조와 규모</b>를 갖추고 있으나, 추가적인 조정을 거쳐 성능 및 안전성을 개선</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="① 기반모델의 미세조정">
+  <div class="kicker">사후학습과 ChatGPT</div>
+  <h2>① 기반모델의 미세조정</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>미세조정 방식</b>
+        <ul>
+          <li>학습 데이터: 인간이 직접 작성한 (입력, 출력) 쌍</li>
+          <li>지도 학습 방식의 적용 – 주어진 정답에 가까운 출력을 생성하도록 수정</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="hl-img" style="max-width:640px"><img src="assets/week02/s69-rlhf.png" alt="ChatGPT 학습 3단계 그림: 1단계 시연 데이터 수집과 지도 학습, 2단계 비교 데이터 수집과 보상 모델 학습, 3단계 강화학습"><span class="hl-box" style="left:0;top:2%;width:31.5%;height:96%"></span></div>
+    <p class="src"><a href="https://openai.com/blog/chatgpt" target="_blank" rel="noopener">https://openai.com/blog/chatgpt</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="② 기반모델에 대한 인간 피드백">
+  <div class="kicker">사후학습과 ChatGPT</div>
+  <h2>② 기반모델에 대한 인간 피드백</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>인간 피드백의 반영 – 보상 모델(reward model)의 학습</b>
+        <ul>
+          <li>학습 데이터: 여러 출력 중 어느 것이 가장 좋은지 인간이 순위를 매김</li>
+          <li>별도의 보상모델을 학습 (언어모델과는 별개의 인공지능) — 입력: 언어모델의 출력 / 출력: 점수</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="hl-img" style="max-width:640px"><img src="assets/week02/s69-rlhf.png" alt="ChatGPT 학습 3단계 그림. 2단계 비교 데이터 수집과 보상 모델 학습 부분 강조"><span class="hl-box" style="left:33%;top:0;width:31.5%;height:100%"></span></div>
+    <p class="src"><a href="https://openai.com/blog/chatgpt" target="_blank" rel="noopener">https://openai.com/blog/chatgpt</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="③ 인간 피드백을 이용한 강화학습(RLHF)">
+  <div class="kicker">사후학습과 ChatGPT</div>
+  <h2>③ 인간 피드백을 이용한 강화학습 (RLHF)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>3단계 – 보상모델을 이용한 강화학습</b>
+        <ul>
+          <li>언어모델은 보상모델로부터 높은 점수를 받도록 내부 파라미터를 업데이트</li>
+          <li>사람이 일일이 정답을 쓰지 않아도, “사람이 더 좋아하는 답” 쪽으로 모델이 조정된다</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="hl-img" style="max-width:640px"><img src="assets/week02/s69-rlhf.png" alt="ChatGPT 학습 3단계 그림. 3단계 강화학습 부분 강조"><span class="hl-box" style="left:64.5%;top:0;width:35%;height:100%"></span></div>
+    <p class="src"><a href="https://openai.com/blog/chatgpt" target="_blank" rel="noopener">https://openai.com/blog/chatgpt</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="2022년 11월 ChatGPT 등장">
+  <div class="kicker">사후학습과 ChatGPT</div>
+  <h2>2022년 11월 ChatGPT (GPT-3.5) 등장</h2>
+  <div class="body">
+    <ul class="bul"><li>1억 명 이용자 달성에 걸린 시간</li></ul>
+    <figure><img src="assets/week02/s72-100m-users.jpg" alt="서비스별 1억 명 이용자 달성 기간: ChatGPT 2개월, TikTok 9개월, YouTube 1.5년, Instagram 2.5년, Facebook 4.5년, Twitter 5년, Spotify 11년, Netflix 18년" style="max-height:400px"><figcaption>ChatGPT 2개월 — TikTok 9개월, Instagram 2.5년, Netflix 18년</figcaption></figure>
+    <p class="src"><a href="https://www.chatsimple.ai/blog/industry-report-of-chatgpt-application-market-share-tables-chatgpt-application" target="_blank" rel="noopener">chatsimple.ai/blog/industry-report-of-chatgpt-application-market-share-tables-chatgpt-application</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="2023년 3월 GPT-4 충격">
+  <div class="kicker">사후학습과 ChatGPT</div>
+  <h2>2023년 3월 GPT-4 충격</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.25fr .75fr;align-items:center">
+      <div class="hl-img" style="max-width:520px"><img src="assets/week02/s73-gpt4-exams.png" alt="각종 시험에서 GPT-3.5와 GPT-4의 응시자 대비 백분위 성적 비교. GPT-4가 대부분 시험에서 크게 앞섬"><span class="hl-box" style="left:23%;top:15%;width:8%;height:79%"></span></div>
+      <ul class="bul compact">
+        <li>GPT-4 기술 보고서(2023. 3)의 시험 성적 비교 — 초록: GPT-3.5, 연두: GPT-4</li>
+        <li>표시한 막대는 <b>미국 변호사시험(Uniform Bar Exam)</b>: GPT-3.5는 하위 10%, GPT-4는 <b>상위 10%</b> 수준</li>
+        <li>같은 “다음 단어 예측” 구조인데도 규모와 사후학습에 따라 결과가 크게 달라진다</li>
+      </ul>
+    </div>
+    <p class="src"><a href="https://openai.com/research/gpt-4" target="_blank" rel="noopener">https://openai.com/research/gpt-4</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="ChatGPT ≈ 복잡한 “자동 완성” 기능?">
+  <div class="kicker">사후학습과 ChatGPT</div>
+  <h2>ChatGPT ≈ 복잡한 “자동 완성” 기능?</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.2fr .8fr;align-items:center">
+      <div class="hl-img" style="max-width:640px"><img src="assets/week02/s74-hinton.png" alt="뉴요커 제프리 힌턴 인터뷰 기사 발췌"><span class="hl-box" style="left:1%;top:28%;width:51%;height:8%"></span><span class="hl-box" style="left:1%;top:49%;width:97%;height:15%"></span></div>
+      <blockquote class="quote" style="font-size:15px">“사람들은 그저 화려한 자동완성일 뿐이라고 말한다. … 다음 단어를 정말로 잘 예측하고 싶다고 해 보자. 정말로 잘하려면, 무슨 말이 오가는지를 이해해야만 한다. 그것이 유일한 방법이다.”
+        <cite>– Geoffrey Hinton, The New Yorker (2023. 11)</cite>
+      </blockquote>
+    </div>
+    <p class="src"><a href="https://www.newyorker.com/magazine/2023/11/20/geoffrey-hinton-profile-ai" target="_blank" rel="noopener">https://www.newyorker.com/magazine/2023/11/20/geoffrey-hinton-profile-ai</a></p>
   </div>
 </section>
 
