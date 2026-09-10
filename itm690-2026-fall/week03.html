@@ -316,7 +316,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 .stackpile img{position:absolute;width:120px;height:auto;border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-sm);background:#fff;}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 .step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
-.step .no{width:30px;height:30px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .no{min-width:30px;height:30px;padding:0 8px;align-self:flex-start;white-space:nowrap;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
 .step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
 .step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
 .step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
@@ -602,13 +602,13 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   <h2>오늘 준비물과 진행 순서</h2>
   <div class="body">
     <div class="steps" style="grid-template-columns:repeat(4,1fr)">
-      <div class="step"><span class="no">1</span><b class="ttl">Claude 계정 (Pro 이상)</b><p class="prob">claude.ai 로그인. 데스크톱 앱과 크롬 확장은 뒤 페이지에서 설치함. ChatGPT Codex를 사용하여도 무방함</p></div>
+      <div class="step"><span class="no">1</span><b class="ttl">Claude 또는 ChatGPT 계정. Pro 이상</b><p class="prob">claude.ai 로그인. 데스크톱 앱과 크롬 확장은 뒤 페이지에서 설치함. ChatGPT Codex를 사용하여도 무방함</p></div>
       <div class="step"><span class="no">2</span><b class="ttl">GitHub 계정</b><p class="prob">없으면 §2에서 만듦. 아이디가 곧 사이트 주소가 되므로 미리 생각해 둘 것</p></div>
       <div class="step"><span class="no">3</span><b class="ttl">작업 폴더</b><p class="prob">Windows는 <code>C:\claude</code>, macOS는 <code>~/claude</code>. 한글·공백 없는 짧은 경로로 만들 것</p></div>
       <div class="step"><span class="no">4</span><b class="ttl">OpenRouter 계정</b><p class="prob">§7 임베딩 추출에 필요함. openrouter.ai 가입과 $5 충전까지 미리 해 두면 좋음</p></div>
     </div>
     <div class="callout">오늘의 원칙: 코드를 직접 쓰는 것이 목표가 아님. <b>원하는 결과를 짧게 말하고, 결과를 보고, 고쳐 달라고 다시 말하는 것</b>이 전부임. 처음부터 긴 지시문을 쓰지 않음. 한두 문장으로 시작해 피드백을 주고받으며 구체화함. 이 흐름은 개인 사이트 만들기에서도, 판결문 수백 건 수집에서도 같음.</div>
-    <p class="muted">이 페이지의 프롬프트마다 “복사” 버튼이 있음. 원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프</a> 1주차(웹앱 만들고 배포하기)·2주차(데이터 수집과 임베딩 분석).</p>
+    <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프</a> 1주차(웹앱 만들고 배포하기)·2주차(데이터 수집과 임베딩 분석).</p>
   </div>
 </section>
 
@@ -973,7 +973,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
         </div>
       </div>
       <div class="stack">
-        <p style="font-weight:700;margin:0">선택 · 나만의 도메인 연결: 방법을 미리 설명하지 않는다. 이 프롬프트로 물어보고 답을 따라 하는 것이 실습</p>
+        <p style="font-weight:700;margin:0">선택 · 나만의 도메인 연결: 이 프롬프트로 물어보고 답을 따라 하는 것이 실습</p>
         <pre class="prompt sm"><button class="copy" type="button">복사</button>내 GitHub Pages 사이트(https://[내아이디].github.io)에 Cloudflare로 내 도메인을 연결하고 싶어. 초보자 기준으로 순서대로 알려줘.</pre>
         <div class="follow"><b>결과를 보고 후속 지시로 구체화</b><span>도메인은 어디서 사는 게 좋아? 비용은?</span><span>네임서버가 뭐야?</span><span>이 화면에서 뭘 눌러야 해? [캡처 첨부]</span></div>
         <p class="muted" style="font-size:13px">도메인은 유료(.com 연 1만 원 안팎). DNS 변경은 반영까지 최대 24~48시간.</p>
@@ -1539,6 +1539,7 @@ https://www.yes24.com/product/category/bestseller?categoryNumber=001001025&amp;p
           </tbody>
         </table>
         <p class="muted" style="font-size:13.5px">스킬을 여러 개 설치해도 AI가 느려지지 않는 이유. “목차는 항상 보고, 본문은 골라 읽는다”는 방식은 우리가 세운 질의응답 절차(요지 훑기 → 고른 사건만 전문 읽기)와 같은 원리다.</p>
+        <div class="callout good"><b>스킬은 생각보다 훨씬 강력할 수 있다.</b> 절차를 글로 적는 데 그치지 않고, 스킬 폴더에 JavaScript나 파이썬 프로그램을 넣어 두면 AI가 절차 중에 그 프로그램을 실행한다. 예: 출장 영수증을 업로드하면 금액을 정리하고 출장 보고서 PDF 파일까지 만들어 주는 스킬도 가능하다.</div>
       </div>
     </div>
   </div>
@@ -1726,7 +1727,6 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
         <ul class="bul compact">
           <li>§2의 방법으로 만들어 GitHub Pages에 공개한 주소를 제출한다</li>
           <li>자기소개가 아니어도 된다. 사례집, 프로젝트 현황판, 행사 안내처럼 링크 하나로 공유하는 정적 페이지면 된다. 예: <a href="https://byoungpil-kim.github.io/kaist-itm-casebook/" target="_blank" rel="noopener">kaist-itm-casebook</a></li>
-          <li>발표 시 무엇을 요청했고 결과를 보고 무엇을 고쳐 달라고 했는지 프롬프트 흐름을 함께 보여 준다</li>
         </ul>
       </div>
       <div class="step"><span class="no">2</span><b class="ttl">데이터 스크래핑 후 분석한 자료</b>
@@ -1738,7 +1738,7 @@ description: 직장 내 괴롭힘 판례 코퍼스(347건)에 대한 질문에 �
         </ul>
       </div>
     </div>
-    <div class="callout">발표는 한 사람당 5분 안팎. 결과물보다 <b>요청과 피드백의 과정</b>(어떤 지시로 시작해 어떻게 구체화했는지, 어디서 막혔고 어떻게 풀었는지)을 중심으로 이야기한다. 여력이 있으면 §9의 스킬이나 §10의 계보도까지 시도해 봐도 좋다.</div>
+    <div class="callout">발표는 한 사람당 5분 안팎. 결과물보다 <b>요청과 피드백의 과정</b>(어떤 지시로 시작해 어떻게 구체화했는지, 어디서 막혔고 어떻게 풀었는지)을 중심으로 이야기한다.</div>
   </div>
 </section>
 
