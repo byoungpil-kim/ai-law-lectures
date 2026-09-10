@@ -440,6 +440,10 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 .rnn .lab{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:13px;fill:var(--ink-soft);}
 .rnn .tag{font-family:"Inter","Noto Sans KR",sans-serif;font-size:11.5px;font-weight:700;fill:var(--muted);}
 .rnn .big{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--brand-dark);}
+.rnn .halo{stroke:none;opacity:.22;}
+.rnn .hl{stroke-width:3.2;}
+.rnn .note{font-family:"Inter","Noto Sans KR",sans-serif;font-size:12px;font-weight:800;}
+.rnn .dots{font-family:"Inter",sans-serif;font-size:20px;font-weight:800;fill:var(--muted);}
 .onehot{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
 .oh{display:flex;flex-direction:column;align-items:center;gap:6px;}
 .oh b{font-family:"Cambria","Times New Roman",serif;font-size:15px;font-weight:700;}
@@ -901,7 +905,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         <li><b>중간 = 문맥 벡터(context vector)</b>: 인코더가 남긴 숫자 배열. 뒷부분에 넘겨주는 <u>유일한</u> 정보</li>
         <li><b>뒷부분 = 디코더</b>: 문맥 벡터에서 출발해, 작곡 예제처럼 단어를 하나씩 이어 쓴다</li>
       </ul>
-      <div class="callout warn"><b>질문 — 어떤 문장의 정보를 모두 담으려면 변수가 몇 개여야 할까?</b><br>실제 seq2seq 모델의 문맥 벡터는 보통 수천 개: 초기 seq2seq(Sutskever et al. 2014)는 층당 1,000개, Google NMT(2016)는 층당 1,024개를 8층으로 쌓았다. 단어 하나를 담는 임베딩(300개)보다 훨씬 크다.</div>
+      <div class="callout warn"><b>질문 — 어떤 문장의 정보를 모두 담으려면 변수가 몇 개여야 할까?</b><br>실제 seq2seq 모델에서는 숫자 수천 개다. 초기 seq2seq(Sutskever et al. 2014)는 문장 하나를 8,000개의 숫자로 표현했다. 단어 하나를 담는 임베딩(300개)보다 훨씬 크다.</div>
     </div>
   </div>
 </section>
@@ -1009,11 +1013,11 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <div class="body">
     <div class="two eq" style="align-items:start">
       <div class="stack">
-        <figure class="plain"><img src="assets/week02/s35-short-dep.png" alt="가까운 입력 x0, x1이 출력 h3에 영향을 주는 짧은 순환 신경망 그림" style="max-height:170px"></figure>
+        <svg class="rnn dep" data-words="in,France,.,I,speak,fluent" data-subs="1,2,3,4,5,6" data-hlin="1" data-hlout="5" data-tone="good" role="img" aria-label="France를 읽은 직후 몇 단계 만에 다음 단어를 예측하는 순환 신경망. 필요한 정보가 가까이 있다"></svg>
         <div class="callout good"><b>문제 – 다음에 올 단어는?</b><br>I grew up in France. I speak fluent ______.<br><span class="muted">→ 바로 앞에 “France”가 있으니 쉽다</span></div>
       </div>
       <div class="stack">
-        <figure class="plain"><img src="assets/week02/s36-long-dep.png" alt="멀리 떨어진 입력 x0, x1과 출력 h(t+1) 사이가 긴 순환 신경망 그림" style="max-height:170px"></figure>
+        <svg class="rnn dep" data-words="in,France,…,I,speak,fluent" data-subs="1,2,,t−2,t−1,t" data-hlin="1" data-hlout="5" data-tone="bad" role="img" aria-label="France를 읽은 뒤 수십 문장이 지나고 나서 다음 단어를 예측하는 순환 신경망. 필요한 정보가 멀리 있다"></svg>
         <div class="callout bad"><b>문제 – 다음에 올 단어는?</b><br>I grew up in France … <span class="muted">(수십 문장)</span> … I speak fluent ______.<br><span class="muted">→ “France”가 너무 멀리 있다</span></div>
       </div>
     </div>
@@ -1316,8 +1320,8 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <h2>대규모 언어모델의 사후학습</h2>
   <div class="body">
     <div class="steps" style="grid-template-columns:1fr 1fr">
-      <div class="step"><span class="no">1</span><b class="ttl">사전학습 (pre-train) 단계</b><p class="prob">인터넷의 방대한 텍스트로 다음 단어 예측을 학습. 잠재적으로 <u>개인정보, 편향, 유해한 데이터</u>를 모두 포함하여 학습</p></div>
-      <div class="step"><span class="no">2</span><b class="ttl">사후학습 (post-train) 단계</b><p class="prob">위법·부적절한 표현이 생성되지 않도록, 그리고 <u>사람의 지시에 맞게 답하도록</u> 추가로 학습</p></div>
+      <div class="step"><span class="no">1</span><b class="ttl">사전학습 (pre-train) 단계</b><p class="prob">인터넷의 방대한 텍스트로 다음 단어 예측을 학습. <u>이용자의 선호에 부합하도록 답변하는 능력</u>이 부족</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">사후학습 (post-train) 단계</b><p class="prob"><u>사람의 지시에 맞게 답하도록</u>, 그리고 <u>이용자가 어떠한 답변을 선호하는지</u> 추가로 학습</p></div>
     </div>
     <ul class="bul">
       <li>사후학습 단계의 중요성
@@ -1941,14 +1945,16 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   document.querySelectorAll('svg.neuron').forEach(drawNeuron);
 
   /* ---------- 순환 신경망 도식 ---------- */
-  const sub = k => String(k).split('').map(c => '₀₁₂₃₄₅₆₇₈₉'[+c]).join('');
+  const sub = k => String(k).split('').map(c => /\d/.test(c) ? '₀₁₂₃₄₅₆₇₈₉'[+c] : ({t:'ₜ','−':'₋','+':'₊'}[c] || c)).join('');
   function drawRNN(svg, idx){
     const words = svg.dataset.words.split(','), mode = svg.dataset.mode || 'concept', out = svg.dataset.out || '';
-    const n = words.length, colW = 104, W = Math.max(760, (n - 1) * colW + 260) + (svg.dataset.ctx ? 180 : 0), bw = 46, bh = 42;
+    const n = words.length, colW = 104, W = Math.max(760, (n - 1) * colW + 260) + (svg.dataset.ctx ? 300 : 0), bw = 46, bh = 42;
     const H = mode === 'concept' ? 250 : 320;
     const yH = mode === 'concept' ? 96 : 160, yIn = mode === 'concept' ? 186 : 250, yOut = 56, yLab = yIn + bh / 2 + 22;
     const ctx = svg.dataset.ctx || '';
-    const x0 = (W - (n - 1) * colW) / 2 + (ctx ? 90 : 0), xs = words.map((_, i) => x0 + i * colW);
+    const x0 = (W - (n - 1) * colW) / 2 + (ctx ? 130 : 0), xs = words.map((_, i) => x0 + i * colW);
+    /* 문맥 화살표가 왼쪽에 오면 행 라벨은 오른쪽 끝으로 옮긴다 */
+    const tagX = ctx ? xs[n - 1] + bw / 2 + 10 : xs[0] - bw / 2 - 10, tagA = ctx ? 'start' : 'end';
     const id = 'rnnArr' + idx, idr = 'rnnArrR' + idx;
     let s = `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker><marker id="${idr}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b0483f"/></marker></defs>`;
     const box = (cls, x, y) => `<rect class="${cls}" x="${x - bw / 2}" y="${y - bh / 2}" width="${bw}" height="${bh}" rx="7"/>`;
@@ -1965,22 +1971,54 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         s += `<text class="lab" x="${x}" y="${yIn + 5}" text-anchor="middle">x${sub(i + 1)}</text><text class="w" x="${x}" y="${yLab}" text-anchor="middle">${words[i]}</text>`;
       }
     });
-    s += `<text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yH + 5}" text-anchor="end">상태(기억)</text><text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yIn + 5}" text-anchor="end">입력</text>`;
+    s += `<text class="tag" x="${tagX}" y="${yH + 5}" text-anchor="${tagA}">상태(기억)</text><text class="tag" x="${tagX}" y="${yIn + 5}" text-anchor="${tagA}">입력</text>`;
     if (mode === 'm2o') {
       const x = xs[n - 1];
       s += box('out', x, yOut) + `<line class="ar" x1="${x}" y1="${yH - bh / 2}" x2="${x}" y2="${yOut + bh / 2 + 2}" marker-end="url(#${id})"/><text class="lab" x="${x}" y="${yOut + 5}" text-anchor="middle">ŷ</text><text class="big" x="${x + bw / 2 + 10}" y="${yOut + 6}">${out}</text>`;
-      s += `<text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yOut + 5}" text-anchor="end">출력</text>`;
+      s += `<text class="tag" x="${tagX}" y="${yOut + 5}" text-anchor="${tagA}">출력</text>`;
     } else if (mode === 'gen') {
-      s += `<text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yOut + 5}" text-anchor="end">출력</text>`;
+      s += `<text class="tag" x="${tagX}" y="${yOut + 5}" text-anchor="${tagA}">출력</text>`;
       xs.forEach((x, i) => {
         s += box('out', x, yOut) + `<line class="ar" x1="${x}" y1="${yH - bh / 2}" x2="${x}" y2="${yOut + bh / 2 + 2}" marker-end="url(#${id})"/><text class="lab" x="${x}" y="${yOut + 5}" text-anchor="middle">ŷ${sub(i + 1)}</text><text class="w" x="${x}" y="${yOut - bh / 2 - 10}" text-anchor="middle">${words[i]}</text>`;
         if (i < n - 1) { const nx = xs[i + 1], mx = x + colW / 2; s += `<path class="fb" d="M${x + bw / 2} ${yOut} H${mx} V${yIn} H${nx - bw / 2 - 2}" marker-end="url(#${idr})"/>`; }
       });
     }
-    if (ctx) { s += `<line class="ar" x1="${xs[0] - bw / 2 - 150}" y1="${yH}" x2="${xs[0] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/><text class="w" x="${xs[0] - bw / 2 - 156}" y="${yH - 12}" text-anchor="end" style="fill:#b0483f">${svg.dataset.ctxlabel || '앞선 문장 정보'}</text><text class="lab" x="${xs[0] - bw / 2 - 156}" y="${yH + 8}" text-anchor="end">${ctx}</text>`; }
+    if (ctx) { s += `<line class="ar" x1="${xs[0] - bw / 2 - 110}" y1="${yH}" x2="${xs[0] - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/><text class="w" x="${xs[0] - bw / 2 - 116}" y="${yH - 12}" text-anchor="end" style="fill:#b0483f">${svg.dataset.ctxlabel || '앞선 문장 정보'}</text><text class="lab" x="${xs[0] - bw / 2 - 116}" y="${yH + 8}" text-anchor="end">${ctx}</text>`; }
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = s;
   }
-  document.querySelectorAll('svg.rnn:not(.s2sd)').forEach(drawRNN);
+  document.querySelectorAll('svg.rnn:not(.s2sd):not(.dep)').forEach(drawRNN);
+
+  /* ---------- Long-Term Dependency 도식 (가까운 정보 / 먼 정보) ---------- */
+  function drawDep(svg, idx){
+    const words = svg.dataset.words.split(','), subs = (svg.dataset.subs || '').split(',');
+    const hlIn = (svg.dataset.hlin || '').split(',').filter(Boolean).map(Number);
+    const hlOut = (svg.dataset.hlout || '').split(',').filter(Boolean).map(Number);
+    const tone = svg.dataset.tone === 'bad' ? '#b0483f' : '#2f765b';
+    const n = words.length, colW = 92, bw = 46, bh = 42;
+    const W = (n - 1) * colW + 150, H = 236, yH = 78, yIn = 160, yLab = yIn + bh / 2 + 20;
+    const x0 = (W - (n - 1) * colW) / 2, xs = words.map((_, i) => x0 + i * colW);
+    const id = 'depArr' + idx;
+    let s = `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker></defs>`;
+    const box = (cls, x, y, hl) => (hl ? `<rect class="halo" x="${x - bw / 2 - 7}" y="${y - bh / 2 - 7}" width="${bw + 14}" height="${bh + 14}" rx="12" fill="${tone}"/>` : '') +
+      `<rect class="${cls}${hl ? ' hl' : ''}" x="${x - bw / 2}" y="${y - bh / 2}" width="${bw}" height="${bh}" rx="7"${hl ? ` stroke="${tone}"` : ''}/>`;
+    const gap = i => words[i] === '…';
+    xs.forEach((x, i) => {
+      if (gap(i)) { s += `<text class="dots" x="${x}" y="${yH + 7}" text-anchor="middle">…</text><text class="dots" x="${x}" y="${yIn + 7}" text-anchor="middle">…</text>`; return; }
+      s += box('hid', x, yH, hlOut.includes(i)) + `<text class="lab" x="${x}" y="${yH + 5}" text-anchor="middle">h${subs[i] ? sub(subs[i]) : ''}</text>`;
+      s += box('in', x, yIn, hlIn.includes(i)) + `<line class="ar" x1="${x}" y1="${yIn - bh / 2}" x2="${x}" y2="${yH + bh / 2 + 2}" marker-end="url(#${id})"/>`;
+      s += `<text class="w" x="${x}" y="${yLab}" text-anchor="middle">${words[i]}</text>`;
+      if (i < n - 1) {
+        const x2 = gap(i + 1) ? xs[i + 1] - 16 : xs[i + 1] - bw / 2 - 2;
+        s += `<line class="ar" x1="${x + bw / 2}" y1="${yH}" x2="${x2}" y2="${yH}" marker-end="url(#${id})"/>`;
+      }
+      if (gap(i) === false && i > 0 && gap(i - 1)) s += `<line class="ar" x1="${xs[i - 1] + 16}" y1="${yH}" x2="${x - bw / 2 - 2}" y2="${yH}" marker-end="url(#${id})"/>`;
+    });
+    hlOut.forEach(i => { s += `<text class="note" x="${xs[i]}" y="${yH - bh / 2 - 16}" text-anchor="middle" fill="${tone}">다음 단어 예측</text>`; });
+    hlIn.forEach(i => { s += `<text class="note" x="${xs[i]}" y="${yLab + 20}" text-anchor="middle" fill="${tone}">필요한 정보</text>`; });
+    s += `<text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yH + 5}" text-anchor="end">상태</text><text class="tag" x="${xs[0] - bw / 2 - 10}" y="${yIn + 5}" text-anchor="end">입력</text>`;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = s;
+  }
+  document.querySelectorAll('svg.rnn.dep').forEach(drawDep);
 
   /* ---------- 인코더–문맥 벡터–디코더 도식 ---------- */
   function drawS2S(svg, idx){
