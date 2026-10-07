@@ -1,0 +1,2838 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>6강 인공지능의 법적 쟁점 (1): 에이전틱 AI 시대의 개인정보 보호와 보안 · 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 6강: 개인정보 보호법 개관(개인정보의 개념, 수집·이용, 제3자 제공과 처리위탁, 민감정보)과 AI 에이전트의 데이터 흐름과 법적 쟁점" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6fa6" />
+<style>
+/* 2026 에이전틱 AI 부트캠프(aibootcamp2026) 디자인 토큰을 따른다 */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --ink-soft:#3a3f3b; --muted:#626a64; --line:#d5ddd3; --line-soft:#e9ede6;
+  --brand:#2e9bdb; --brand-dark:#1b6fa6; --brand-deep:#124d78; --sky-light:#e3f1fb;
+  --green:#2f765b; --green-light:#e6f2ec; --amber:#b8792e; --amber-light:#fbf1de; --red:#b0483f; --red-light:#fbe9e7; --navy:#132436;
+  --shadow:0 16px 45px rgba(54,42,31,.12); --shadow-sm:0 2px 10px rgba(21,29,23,.05);
+  --radius:14px; --sidebar-width:264px; --topbar-h:64px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-dark);}
+img,video,svg{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;} }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 clamp(16px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topbar-left{display:flex;align-items:center;gap:18px;min-width:0;}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:0 0 auto;}
+.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:9px;color:#fff;background:var(--brand);font-size:15px;font-weight:800;}
+.brand-text{display:block;line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;}
+.brand-text small{display:block;margin-top:1px;color:var(--muted);font-size:11.5px;font-weight:600;}
+.week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
+.week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.zoom-ctl{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;}
+.zoom-ctl button{border:0;background:transparent;padding:6px 10px;font-size:13px;font-weight:800;color:var(--brand-dark);cursor:pointer;line-height:1;}
+.zoom-ctl button:hover{background:var(--sky-light);}
+.zoom-ctl .zv{min-width:44px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);border-right:1px solid var(--line);padding:6px 4px;cursor:pointer;}
+.progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
+.progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
+.progress-label b{color:var(--ink);}
+.progress-track{overflow:hidden;height:7px;border-radius:999px;background:#e1e8df;}
+.progress-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-dark),var(--brand));transition:width 220ms ease;}
+
+/* ---------- layout ---------- */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{
+  position:sticky;top:var(--topbar-h);width:var(--sidebar-width);flex:0 0 auto;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:22px 14px 28px;
+  border-right:1px solid var(--line);background:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sidebar-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 8px;}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.toc-link{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:9px;border:0;background:transparent;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.toc-link .no{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;color:var(--muted);font-size:11px;font-weight:900;flex:0 0 auto;}
+.toc-link .nm{flex:1 1 auto;min-width:0;}
+.toc-link .cnt{font-size:11px;font-weight:600;color:var(--muted);opacity:.8;}
+.toc-link:hover{background:var(--sky-light);color:var(--brand-dark);}
+.toc-link.active{background:var(--brand);color:#fff;}
+.toc-link.active .no{background:rgba(255,255,255,.22);color:#fff;}
+.toc-link.active .cnt{color:#fff;opacity:.85;}
+.toc-link.done .no{background:var(--green-light);color:var(--green);}
+.sub{list-style:none;margin:2px 0 6px 22px;padding:0 0 0 12px;display:none;border-left:2px solid var(--line-soft);}
+.toc li.open .sub{display:block;}
+.sub button{
+  display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 10px;border-radius:6px;
+  color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sub button:hover{background:var(--sky-light);color:var(--brand-dark);}
+.sub button.active{color:var(--brand-dark);font-weight:800;}
+.side-hint{margin-top:auto;padding:14px 12px 0;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line-soft);}
+.side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
+
+.stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
+.deck{flex:1 1 auto;display:flex;flex-direction:column;}
+.slide{
+  display:none;position:relative;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
+}
+.slide.active{display:flex;flex:1 1 auto;animation:fadein .22s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
+.slide h2{margin:0 0 20px;font-size:clamp(22px,2.5vw,30px);line-height:1.3;letter-spacing:-.01em;font-weight:800;}
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0;}
+.slide.top .body{justify-content:flex-start;}
+.body p{margin:0;}
+
+/* ---------- pager ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.pbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brand-dark);font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;max-width:44%;
+}
+.pbtn span{overflow:hidden;text-overflow:ellipsis;}
+.pbtn svg{width:16px;height:16px;flex:0 0 auto;}
+.pbtn:hover{border-color:var(--brand);background:var(--sky-light);transform:translateY(-1px);}
+.pbtn.next{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.pbtn.next:hover{background:var(--brand);border-color:var(--brand);}
+.pbtn:disabled{opacity:.35;cursor:default;transform:none;}
+.pinfo{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;text-align:center;}
+.pinfo .sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-dark);}
+.pinfo .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:360px;}
+.pinfo .dots i{width:8px;height:8px;border-radius:999px;background:#d9e1d6;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.pinfo .dots i:hover{background:var(--brand);}
+.pinfo .dots i.on{background:var(--brand-dark);transform:scale(1.25);}
+.pinfo .cnt{font-size:12px;color:var(--muted);}
+
+/* ---------- cover / section slides ---------- */
+.slide.cover{
+  color:#eef3f7;border-color:transparent;
+  background:radial-gradient(1000px 460px at 85% -10%,rgba(46,155,219,.18),transparent 60%),linear-gradient(180deg,#101f30 0%,var(--navy) 55%,#17293b 100%);
+}
+.slide.cover .kicker{color:#7cc4ee;}
+.slide.cover .kicker .n{color:#9fb4c4;}
+.cover-body{display:flex;flex-direction:column;justify-content:center;gap:18px;flex:1;}
+.cover-kicker{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9d7ec;background:rgba(46,155,219,.15);border:1px solid rgba(46,155,219,.35);padding:7px 14px;border-radius:999px;}
+.cover h1{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.22;letter-spacing:-.02em;color:#fff;}
+.cover h1 em{color:#7cc4ee;font-style:normal;}
+.cover .lead{color:#c9d6e0;font-size:clamp(15px,1.4vw,18px);max-width:640px;}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#dbe7ef;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;}
+.cover .outline{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.cover .outline button{
+  display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:13.5px;
+}
+.cover .outline button:hover{background:rgba(255,255,255,.1);}
+.cover .outline .num{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(124,196,238,.16);color:#7cc4ee;font-size:12px;font-weight:900;display:grid;place-items:center;}
+.cover .outline small{display:block;font-weight:600;color:#a9bdcb;font-size:11.5px;}
+
+.slide.section .body{align-items:center;}
+.slide.section h2{text-align:center;}
+.section-lead{text-align:center;color:var(--muted);max-width:640px;margin:-8px auto 0;}
+
+/* 인공지능 ⊃ 머신러닝 ⊃ 인공신경망 ⊃ 딥 러닝 포함 관계 도식 */
+.nest{position:relative;width:min(100%,720px);aspect-ratio:16/10;margin:0 auto;}
+.nest .lv{position:absolute;border-radius:26px;transition:box-shadow .2s ease;}
+.nest .lv>span{position:absolute;top:16px;left:22px;font-weight:800;font-size:clamp(14px,1.7vw,19px);}
+.nest .l1{inset:0;background:#dbeefb;color:var(--brand-deep);}
+.nest .l2{left:26%;top:19%;right:4%;bottom:4%;background:#a9d5f1;color:var(--brand-deep);}
+.nest .l3{left:44%;top:37%;right:7%;bottom:8%;background:#3f9fd8;color:#fff;}
+.nest .l4{left:58%;top:54%;right:11%;bottom:14%;background:var(--brand-deep);color:#fff;display:grid;place-items:center;}
+.nest .l4>span{position:static;}
+.nest .lv.hi{box-shadow:0 0 0 4px var(--red),0 10px 30px rgba(176,72,63,.25);}
+
+/* ---------- content components ---------- */
+.bul{margin:0;padding-left:1.25em;font-size:clamp(15px,1.25vw,17px);line-height:1.72;}
+.bul>li{margin:0 0 9px;}
+.bul>li:last-child{margin-bottom:0;}
+.bul li::marker{color:var(--brand-dark);}
+.bul ul{list-style:none;margin:5px 0 0;padding-left:1.15em;}
+.bul ul li{position:relative;margin:0 0 4px;color:var(--ink-soft);}
+.bul ul li::before{content:"–";position:absolute;left:-1.1em;color:var(--muted);}
+.bul ul ul li::before{content:"·";}
+.bul ul ul li{font-size:.94em;}
+.bul b{font-weight:800;}
+.bul .arrow{color:var(--red);font-weight:800;}
+.bul .arrow::before{content:"➜ ";}
+.compact{font-size:clamp(14px,1.15vw,16px);}
+.compact>li{margin-bottom:5px;}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+.two.eq{grid-template-columns:1fr 1fr;}
+.two.wide-r{grid-template-columns:.85fr 1.15fr;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.figrow{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+figure{margin:0;text-align:center;min-width:0;}
+figure img,figure video{display:block;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);}
+figure.plain img{border:0;border-radius:0;}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
+.src{font-size:11.5px;color:var(--muted);word-break:break-all;margin-top:auto;padding-top:14px;line-height:1.6;}
+.src a{color:var(--brand-dark);text-decoration:none;}
+.src a:hover{text-decoration:underline;}
+.em{color:var(--red);font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.5;}
+.em.center{text-align:center;}
+.em .arrow::before{content:"➜ ";}
+.callout{border-left:4px solid var(--brand);background:var(--sky-light);padding:12px 16px;border-radius:8px;font-size:15px;}
+.callout.warn{border-color:var(--amber);background:var(--amber-light);}
+.callout.bad{border-color:var(--red);background:var(--red-light);}
+.callout.good{border-color:var(--green);background:var(--green-light);}
+.callout b{font-weight:800;}
+.quote{font-size:clamp(16px,1.45vw,19px);line-height:1.75;border-left:4px solid var(--brand);padding:8px 20px;margin:0;color:var(--ink);}
+.quote cite{display:block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;color:var(--ink-soft);}
+.center{text-align:center;}
+.muted{color:var(--muted);}
+.tbl{border-collapse:collapse;margin:0 auto;font-size:clamp(13px,1.15vw,15.5px);background:#fff;}
+.tbl th,.tbl td{border:1px solid #9aa39b;padding:8px 16px;text-align:center;line-height:1.35;}
+.tbl th{background:var(--sky-light);font-weight:800;}
+.tbl .hl{background:var(--amber-light);}
+.tbl .dim{color:var(--muted);}
+/* 기타 */
+.media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;}
+.media-grid img,.media-grid video{width:100%;aspect-ratio:16/9;max-height:250px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;background:#000;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
+.step .no{width:30px;height:30px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
+.step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
+.step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
+.step .sol::before{content:"➜ ";}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);}
+@media (max-width:1100px){ .two,.two.eq,.two.wide-r{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;} }
+@media (max-width:900px){
+  .layout{display:block;}
+  .sidebar{position:sticky;top:var(--topbar-h);width:auto;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:10px 12px;background:rgba(243,246,242,.96);backdrop-filter:blur(8px);z-index:20;flex-direction:row;}
+  .sidebar-title,.sub,.side-hint{display:none!important;}
+  .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
+  .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
+  .toc-link .cnt{display:none;}
+  .stage{min-height:auto;}
+}
+@media (max-width:640px){
+  .topbar{gap:10px;}
+  .week-title{display:none;}
+  .zoom-ctl{display:none;}
+  .progress-wrap{width:110px;}
+  .pbtn{padding:10px 12px;font-size:13px;}
+  .pbtn span{display:none;}
+  .pbtn svg{width:18px;height:18px;}
+  .slide{overflow-x:auto;}
+  .tbl th,.tbl td{padding:6px 8px;font-size:12.5px;}
+}
+/* ---------- 강의 공통 컴포넌트 ---------- */
+.roadmap{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px;}
+.roadmap li{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:700;color:var(--muted);}
+.roadmap li .n{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;font-size:11px;font-weight:900;}
+.roadmap li.cur{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;transform:scale(1.06);box-shadow:0 8px 20px rgba(27,111,166,.25);}
+.roadmap li.cur .n{background:rgba(255,255,255,.22);color:#fff;}
+.roadmap li.done{background:var(--green-light);border-color:#cfe3d8;color:var(--green);}
+.roadmap li.done .n{background:#fff;color:var(--green);}
+.step .ttl{display:block;font-size:16px;font-weight:800;color:var(--ink);}
+.step .bul{padding-left:1.1em;}
+.tbl.mini{font-size:12px;margin:0;}
+.tbl.mini th{padding:3px 10px;font-size:11px;}
+.tbl.mini tr.dim td{padding:0 10px;line-height:1;}
+.tbl.mini td{padding:3px 10px;text-align:left;}
+.tbl.mini td:last-child{text-align:center;font-weight:700;}
+.toc-link:disabled{opacity:.5;cursor:default;}
+.toc-link:disabled:hover{background:transparent;color:var(--muted);}
+.cover .outline button:disabled{opacity:.45;cursor:default;}
+.cover .outline button:disabled:hover{background:rgba(255,255,255,.045);}
+/* ---------- 섹션 5: 그림 위 강조 상자 ---------- */
+.hl-img{position:relative;display:block;margin:0 auto;width:100%;}
+.hl-img img{display:block;width:100%;height:auto;border-radius:8px;}
+.hl-img .hl-box{position:absolute;border:3px solid var(--red);border-radius:8px;box-shadow:0 0 0 2px rgba(255,255,255,.6);pointer-events:none;}
+
+/* ---------- 섹션 7: 정리 목록 ---------- */
+.recap{margin:0;padding:0;list-style:none;counter-reset:rc;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;}
+.recap li{counter-increment:rc;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:14.5px;line-height:1.55;}
+.recap li::before{content:counter(rc);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:7px;background:var(--brand-dark);color:#fff;font-weight:900;font-size:12px;display:grid;place-items:center;}
+.recap li b{display:block;color:var(--brand-dark);}
+@media (max-width:760px){.recap{grid-template-columns:1fr;}}
+/* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
+@page{size:320mm 180mm;margin:0;}
+@media print{
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .topbar,.sidebar,.pager{display:none!important;}
+  .layout{display:block;}
+  .stage{zoom:1!important;min-height:0!important;padding:0!important;display:block;}
+  .deck{display:block;}
+  .slide{display:flex!important;flex-direction:column;zoom:.85;width:calc(320mm / .85);height:calc(180mm / .85);overflow:hidden;box-sizing:border-box;
+    margin:0;border:0;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;animation:none!important;
+    padding:14mm 18mm 12mm;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .two{grid-template-columns:1.1fr .9fr;} .two.eq{grid-template-columns:1fr 1fr;} .two.wide-r{grid-template-columns:.85fr 1.15fr;}
+  .steps{grid-template-columns:repeat(3,1fr);}
+  .slide.cover{border-radius:0;}
+  .cover-img{border-radius:0;}
+  video{background:#000;}
+  a{text-decoration:none;color:inherit;}
+}
+/* ---------- 6강 추가 컴포넌트 ---------- */
+.slide h2 small{font-size:.62em;font-weight:700;color:var(--muted);margin-left:6px;}
+.part-chip{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.06em;color:#fff;background:var(--brand-deep);padding:3px 10px;border-radius:999px;margin-right:6px;}
+.part-chip.p2{background:var(--green);}
+/* 조문 상자 */
+.law{border:1px solid var(--line);border-left:4px solid var(--brand-dark);background:#fbfcfa;padding:14px 18px;border-radius:8px;font-size:clamp(13px,1.05vw,14.5px);line-height:1.7;color:var(--ink);}
+.law h4{margin:0 0 6px;font-size:1.02em;font-weight:800;color:var(--brand-deep);}
+.law p{margin:0 0 4px;}
+.law .it{padding-left:1.4em;text-indent:-1.4em;margin:0 0 2px;}
+.law .it2{padding-left:2.6em;text-indent:-1.4em;margin:0 0 2px;}
+.law mark,.hlt{background:linear-gradient(transparent 52%,#fde68a 52%);color:inherit;font-weight:700;}
+.law.sm{font-size:clamp(12px,.95vw,13.5px);line-height:1.6;}
+.law+.law{margin-top:10px;}
+/* 정보 ⊃ 개인정보 ⊃ 개인식별정보 */
+.sets{border-radius:28px;background:#dbeefb;padding:16px 18px 18px;width:min(100%,420px);margin:0 auto;}
+.sets>b,.sets div>b{display:block;font-weight:800;font-size:15px;color:var(--brand-deep);margin-bottom:10px;}
+.sets .s2{border-radius:22px;background:#a9d5f1;padding:14px 16px 16px;}
+.sets .s3{border-radius:16px;background:#3f9fd8;padding:22px 14px;text-align:center;}
+.sets .s3>b{color:#fff;margin:0;}
+.sets .hi{box-shadow:0 0 0 3px var(--red);}
+/* 큰 질문 */
+.ask{font-size:clamp(22px,2.6vw,32px);font-weight:900;color:var(--red);text-align:center;}
+/* 숫자 카드 */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.stat{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 16px;text-align:center;}
+.stat b{display:block;font-size:clamp(24px,2.8vw,36px);font-weight:900;color:var(--brand-dark);line-height:1.2;}
+.stat span{font-size:13.5px;color:var(--ink-soft);font-weight:600;}
+.stat.red b{color:var(--red);}
+/* 표 왼쪽 정렬 변형 */
+.tbl.left td{text-align:left;}
+.tbl.cmp{width:100%;}
+.tbl.cmp th:first-child{width:18%;}
+.tbl.cmp td{vertical-align:top;}
+.tbl.cmp .k{background:var(--bg);font-weight:800;text-align:center;vertical-align:middle;}
+/* 기사·문서 캡처 */
+figure.doc img{box-shadow:var(--shadow-sm);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid2>*{min-width:0;}
+/* 2단 카드 */
+.cards{display:grid;grid-template-columns:repeat(var(--n,2),1fr);gap:14px;}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0;}
+.card h3{margin:0;font-size:16px;font-weight:800;color:var(--brand-dark);}
+.card.red h3{color:var(--red);} .card.green h3{color:var(--green);} .card.amber h3{color:var(--amber);}
+.card .bul{font-size:14.5px;}
+.card .tag{font-size:12px;font-weight:800;color:var(--muted);}
+/* 오늘의 구성 */
+.halves{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.half{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--bg);}
+.half h3{margin:0 0 4px;font-size:18px;font-weight:800;}
+.half .time{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:10px;display:block;}
+.half ol{margin:0;padding-left:1.3em;font-size:14.5px;line-height:1.75;}
+.half.p1 h3{color:var(--brand-deep);} .half.p2 h3{color:var(--green);}
+/* 시대 구분 */
+.eras{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end;}
+.era{border-radius:12px;padding:14px 12px;text-align:center;border:1px solid var(--line);background:var(--bg);}
+.era b{display:block;font-size:15px;font-weight:800;}
+.era span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;}
+.era p{margin:6px 0 0;font-size:13px;color:var(--ink-soft);}
+.era.e1{min-height:90px;} .era.e2{min-height:120px;} .era.e3{min-height:150px;background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;} .era.e3 span,.era.e3 p{color:#dbe9f3;} .era.e4{min-height:180px;border-style:dashed;}
+/* 컨텍스트 윈도우 도식 */
+.ctxw{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;}
+.ctxw .case{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.ctxw .case>b{font-size:13.5px;font-weight:800;text-align:center;line-height:1.4;}
+.ctxw .win{position:relative;width:200px;height:200px;border:2px dashed var(--red);border-radius:6px;}
+.ctxw .win::after{content:"컨텍스트 윈도우";position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:800;color:var(--red);white-space:nowrap;}
+.ctxw .doc{position:absolute;left:14px;right:14px;border:1.5px solid var(--ink);border-radius:6px;background:#fff;display:flex;flex-direction:column;gap:7px;padding:22px 12px 10px;}
+.ctxw .doc::before{content:attr(data-l);position:absolute;top:4px;left:0;right:0;text-align:center;font-size:11px;font-weight:700;color:var(--muted);}
+.ctxw .doc i{display:block;height:6px;border-radius:2px;background:var(--ink);}
+.ctxw .doc i.o{background:var(--brand-dark);}
+.ctxw .doc i.cut{opacity:.25;}
+.ctxw .doc .ol{font-size:11px;font-weight:800;color:var(--brand-dark);}
+/* 데이터 흐름 도식 */
+.flow{width:100%;max-width:820px;height:auto;display:block;margin:0 auto;}
+.flow text{font-family:"Inter","Noto Sans KR",sans-serif;fill:var(--ink);}
+.flow .lb{font-size:14px;font-weight:700;}
+.flow .lbs{font-size:12.5px;font-weight:700;fill:var(--ink-soft);}
+.flow .box{fill:#fff;stroke:var(--ink);stroke-width:2;}
+.flow .box.soft{fill:var(--sky-light);stroke:var(--brand-dark);}
+.flow .bt{font-size:16px;font-weight:800;}
+.flow .ln{fill:none;stroke:var(--ink);stroke-width:1.8;}
+.flow .frame{fill:none;stroke:var(--ink);stroke-width:1.6;}
+.flow .r{color:var(--red);} .flow .r .ln,.flow .ln.r{stroke:var(--red);} .flow text.r,.flow .r text{fill:var(--red);}
+.flow .r .box{stroke:var(--red);}
+.flow .g text,.flow text.g{fill:var(--green);} .flow .ln.g{stroke:var(--green);stroke-dasharray:6 4;}
+.flow .ic{color:var(--ink);}
+.flow .note{font-size:12px;font-weight:800;}
+/* 정리 목록 3열 변형 */
+.recap.r3{grid-template-columns:repeat(3,1fr);}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;}
+.vs .ar{font-size:34px;color:var(--red);font-weight:900;}
+@media (max-width:1100px){ .halves,.grid2{grid-template-columns:1fr;} .cards{grid-template-columns:1fr;} .recap.r3{grid-template-columns:1fr 1fr;} }
+@media (max-width:640px){ .stats{grid-template-columns:1fr;} .eras{grid-template-columns:1fr 1fr;} .vs{grid-template-columns:1fr;} .vs .ar{transform:rotate(90deg);justify-self:center;} .recap.r3{grid-template-columns:1fr;} }
+@media print{
+  .halves,.grid2{grid-template-columns:1fr 1fr;} .cards{grid-template-columns:repeat(var(--n,2),1fr);}
+  .recap.r3{grid-template-columns:repeat(3,1fr);} .stats{grid-template-columns:repeat(3,1fr);} .eras{grid-template-columns:repeat(4,1fr);} .vs{grid-template-columns:1fr auto 1fr;}
+}
+/* 표지 목차: 섹션이 12개라 한 줄에 6개씩, 부제는 생략 */
+.cover .outline{grid-template-columns:repeat(6,1fr);gap:8px;margin-top:14px;}
+.cover .outline button{padding:9px 10px;font-size:12.5px;gap:8px;}
+.cover .outline button small{display:none;}
+.cover .outline .num{width:24px;height:24px;font-size:11px;}
+.ctxw .case{gap:30px;}
+@media (max-width:1100px){ .cover .outline{grid-template-columns:repeat(3,1fr);} }
+@media (max-width:640px){ .cover .outline{grid-template-columns:1fr 1fr;} }
+@media print{ .cover .outline{grid-template-columns:repeat(6,1fr);} }
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-web" viewBox="0 0 80 64"><rect x="10" y="4" width="60" height="40" rx="4" fill="#fff" stroke="currentColor" stroke-width="3"/><path d="M2 52h76l-6 8H8z" fill="#fff" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="40" cy="24" r="12" fill="none" stroke="currentColor" stroke-width="2.4"/><ellipse cx="40" cy="24" rx="5" ry="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 24h24M30 17h20M30 31h20" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-db" viewBox="0 0 48 60"><path d="M4 10v40c0 4.4 9 8 20 8s20-3.6 20-8V10" fill="#fff" stroke="currentColor" stroke-width="3"/><ellipse cx="24" cy="10" rx="20" ry="8" fill="#fff" stroke="currentColor" stroke-width="3"/><path d="M4 23c0 4.4 9 8 20 8s20-3.6 20-8M4 36c0 4.4 9 8 20 8s20-3.6 20-8" fill="none" stroke="currentColor" stroke-width="3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 48 56"><circle cx="24" cy="15" r="11" fill="#fff" stroke="currentColor" stroke-width="3.4"/><path d="M5 53c0-12 8.5-20 19-20s19 8 19 20" fill="#fff" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></symbol>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#22201d"/></marker>
+    <marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0483f"/></marker>
+    <marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2f765b"/></marker>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="brand" title="강의 일정으로">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
+    </a>
+    <div class="week-tag"><span class="week-num">6강</span><span class="week-title">에이전틱 AI 시대의 개인정보 보호와 보안</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="zoom-ctl" role="group" aria-label="슬라이드 크기">
+      <button type="button" id="zoomOut" title="작게 (−)">A−</button>
+      <span class="zv" id="zoomVal" title="자동 크기로 되돌리기 (0)">100%</span>
+      <button type="button" id="zoomIn" title="크게 (+)">A+</button>
+    </div>
+    <div class="progress-wrap" aria-label="진행률">
+      <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">0</span></span>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="목차">
+    <div class="sidebar-title">목차</div>
+    <ol class="toc" id="toc"></ol>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · <kbd>+</kbd> <kbd>−</kbd> 크기 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="deck" id="deck">
+
+<!-- ===================== 0. 들어가며 ===================== -->
+<section class="slide cover" data-sec="0" data-title="표지">
+  <div class="cover-body">
+    <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 6강</span>
+    <h1>인공지능의 법적 쟁점 (1)<br><em>에이전틱 AI 시대의 개인정보 보호와 보안</em></h1>
+    <p class="lead">전반부에서는 개인정보 보호법의 기본 제도를 빠르게 훑어본다. 후반부에서는 AI 에이전트가 도구·기억·계획 능력을 쓰면서 데이터가 어디로 흘러가는지, 그 흐름에서 어떤 법적 쟁점이 생기는지 살펴본다.</p>
+    <div class="meta">
+      <span class="meta-chip">2026. 10. 8.</span>
+      <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
+    </div>
+    <div class="outline" id="coverOutline"></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="오늘의 구성">
+  <div class="kicker">들어가며</div>
+  <h2>오늘의 구성</h2>
+  <div class="body">
+    <div class="halves">
+      <div class="half p1">
+        <h3><span class="part-chip">전반부</span>개인정보 보호법 개관</h3>
+        <span class="time">약 80분</span>
+        <ol>
+          <li>재식별 사례: “익명” 데이터는 안전한가</li>
+          <li>개인정보의 개념: 식별정보와 식별가능정보</li>
+          <li>수집·이용의 적법 근거 (제15조)</li>
+          <li>제3자 제공과 처리위탁 (제17조·제18조·제26조)</li>
+          <li>민감정보와 생체인식정보 (제23조, EU AI Act)</li>
+          <li>사례: 출입국 심사 AI 연구개발</li>
+        </ol>
+      </div>
+      <div class="half p2">
+        <h3><span class="part-chip p2">후반부</span>에이전틱 AI의 데이터 흐름과 쟁점</h3>
+        <span class="time">약 60분</span>
+        <ol start="7">
+          <li>AI 에이전트의 개념</li>
+          <li>도구 활용: 검색, MCP, 프롬프트 인젝션</li>
+          <li>기억: 대화 이력과 개인 컨텍스트</li>
+          <li>추론과 계획</li>
+          <li>다중 에이전트: 에이전트 간 데이터 전달</li>
+          <li>정리: “학습”에서 “활용”으로</li>
+        </ol>
+      </div>
+    </div>
+    <p class="muted center">후반부는 앞선 강의에서 다룬 기술 내용(스케일링 법칙, 컨텍스트 윈도우 등)을 포함하므로 빠르게 넘어가고, 데이터 흐름 도식과 법적 쟁점에 시간을 쓴다.</p>
+  </div>
+</section>
+
+<!-- ===================== 1. 재식별 사례 ===================== -->
+<section class="slide section" data-sec="1" data-title="재식별 사례">
+  <div class="kicker"><span class="part-chip">전반부</span>Section 1</div>
+  <h2>재식별 사례: “익명” 데이터는 안전한가</h2>
+  <p class="section-lead">이름을 지운 데이터도 다른 데이터와 연결하면 특정인을 알아볼 수 있다. 개인정보의 범위를 정하는 문제가 여기서 출발한다.</p>
+  <div class="body"><ol class="roadmap" data-current="1"></ol></div>
+</section>
+
+<section class="slide" data-sec="1" data-title="매사추세츠 주지사 사건: 질문">
+  <div class="kicker">재식별 사례</div>
+  <h2>사례 (1) 매사추세츠 주지사 사건</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.2fr .8fr">
+      <figure><img src="assets/week06/a02-1.png" alt="공개 의료데이터 예시 표: 구분, 지역코드, 연령, 성별, 질병 열만 있고 이름은 없음" style="max-height:330px"><figcaption>공개 의료데이터 (예시): 이름 없이 지역코드·연령·성별·질병만 담겨 있다</figcaption></figure>
+      <div class="stack">
+        <p class="ask">이 표는 개인정보인가?</p>
+        <ul class="bul compact">
+          <li>미국 매사추세츠 주 공무원 단체보험위원회(GIC)는 주 공무원의 병원 이용 기록을 연구 목적으로 공개</li>
+          <li>이름·주소·사회보장번호는 삭제하고 우편번호·생년월일·성별·진단명 등은 남김</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="연결 공격(linkage attack)">
+  <div class="kicker">재식별 사례</div>
+  <h2>연결 공격 (linkage attack)</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.15fr .85fr">
+      <div class="stack">
+        <figure><img src="assets/week06/a02-1.png" alt="공개 의료데이터 예시 표" style="max-height:200px"></figure>
+        <figure><img src="assets/week06/a03-2.png" alt="선거인명부 예시 표: 이름, 지역코드, 연령, 성별" style="max-height:200px"><figcaption>위: 공개 의료데이터 · 아래: 선거인명부. 지역코드·연령·성별이 두 표에 함께 들어 있다</figcaption></figure>
+      </div>
+      <div class="stack">
+        <figure class="plain"><img src="assets/week06/a03-3.png" alt="두 원이 겹친 벤 다이어그램: 의료데이터(진단, 처방 등)와 선거인명부(이름, 주소 등)가 ZIP, 생년월일, 성별을 공유" style="max-height:220px"><figcaption>Sweeney (2002), Figure 1. Linking to re-identify data</figcaption></figure>
+        <div class="callout bad"><b>공개 의료데이터 + 선거인명부</b><br>우편번호·생년월일·성별을 기준으로 두 데이터를 연결하자 환자의 신원이 드러났다. 당시 매사추세츠 주지사의 진료 기록도 특정되었다.</div>
+      </div>
+    </div>
+    <p class="src">Latanya Sweeney (2002), “k-anonymity: A Model for Protecting Privacy”</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="Netflix Prize 데이터">
+  <div class="kicker">재식별 사례</div>
+  <h2>사례 (2) Netflix Prize Dataset</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>2006년 Netflix의 추천(collaborative filtering) 알고리즘 경진대회</li>
+      <li>Netflix 알고리즘의 성능을 10% 개선하면 상금 100만 달러</li>
+      <li>&lt;영화, 이용자, 평가 일자, 평점(1~5)&gt; 1억여 건을 공개. 이용자 ID는 가명으로 바꿈</li>
+    </ul>
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <figure><img src="assets/week06/a04-2.png" alt="Kaggle의 Netflix Prize 데이터 파일 목록과 combined_data 파일 미리보기: 영화 ID 아래에 이용자 ID, 평점, 일자가 나열됨" style="max-height:260px"><figcaption>combined_data: 영화 ID, 이용자 ID(가명), 평점, 일자</figcaption></figure>
+      <div class="stack">
+        <figure><img src="assets/week06/a04-1.png" alt="movie_titles.csv: 영화 ID, 개봉 연도, 제목" style="max-height:120px"><figcaption>movie_titles.csv: 영화 ID와 제목</figcaption></figure>
+        <p class="ask">개인정보인가?</p>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.kaggle.com/netflix-inc/netflix-prize-data" target="_blank" rel="noopener">https://www.kaggle.com/netflix-inc/netflix-prize-data</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="Netflix Prize 데이터 재식별">
+  <div class="kicker">재식별 사례</div>
+  <h2>Netflix Prize Dataset 재식별</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>Narayanan &amp; Shmatikov (2008), “Robust De-anonymization of Large Sparse Datasets”
+        <ul>
+          <li>IMDb(영화 데이터베이스)에 실명으로 남긴 평점·후기와 연결하여 이용자 식별에 성공</li>
+          <li>식별된 이용자가 본 영화 목록에서 정치적 성향 등 민감정보를 추론할 수 있음</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="figrow" style="align-items:flex-start">
+      <figure style="flex:1 1 380px"><img src="assets/week06/a05-1.jpg" alt="논문 첫 페이지: Robust De-anonymization of Large Datasets (How to Break Anonymity of the Netflix Prize Dataset)" style="max-height:250px"></figure>
+      <div class="stack" style="flex:1 1 300px">
+        <figure><img src="assets/week06/a05-2.png" alt="IMDb의 Blue Juice (1995) 검색 결과" style="max-height:90px"></figure>
+        <figure><img src="assets/week06/a05-3.png" alt="IMDb 이용자 리뷰 화면" style="max-height:170px"><figcaption>공개된 IMDb 리뷰 = 공격자의 배경지식(background knowledge)</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="AOL 검색 데이터">
+  <div class="kicker">재식별 사례</div>
+  <h2>사례 (3) AOL Search Data</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>2006년 8월 AOL Research는 약 65만 명의 검색어 2천만 건을 공개</li>
+      <li>공개 데이터: {AnonID, Query, QueryTime, ItemRank, ClickURL}
+        <ul>
+          <li><b>AnonID</b>: 익명 이용자 번호 · <b>Query</b>: 검색어</li>
+          <li><b>QueryTime</b>: 검색 시각 · <b>ItemRank</b>: 클릭한 검색 결과의 순위 · <b>ClickURL</b>: 클릭한 결과의 도메인</li>
+        </ul>
+      </li>
+    </ul>
+    <figure><img src="assets/week06/a06-1.png" alt="AnonID 2178 이용자의 검색 기록: once upon a child, foods to avoid when pregnant, hepatitis b vaccine safety infants 등" style="max-height:230px"><figcaption>한 이용자(AnonID 2178)의 검색 기록. 이름은 없지만 생활의 상당 부분이 드러난다</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="AOL 검색 데이터 재식별">
+  <div class="kicker">재식별 사례</div>
+  <h2>AOL Search Data 재식별</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.2fr .8fr">
+      <ul class="bul compact">
+        <li><b>#4417749</b>
+          <ul>
+            <li>“numb fingers”, “60 single men”, “dog that urinates on everything” 등 검색</li>
+            <li>“landscapers in Lilburn, Ga”, “homes sold in shadow lake subdivision gwinnett county georgia”</li>
+            <li>Arnold가 성(姓)인 사람을 여러 차례 검색</li>
+            <li>New York Times는 이 검색어로 그가 조지아주 Lilburn에 사는 Thelma Arnold임을 확인. 본인 동의를 얻어 얼굴을 공개</li>
+          </ul>
+        </li>
+        <li><b>민감한 검색어의 문제</b>
+          <ul>
+            <li>“child porno”, “how to kill oneself by natural gas”</li>
+            <li>범죄를 저질렀을 가능성을 드러내는 검색어 등</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week06/a07-2.png" alt="New York Times 기사 제목: A Face Is Exposed for AOL Searcher No. 4417749" style="max-height:130px"></figure>
+        <figure><img src="assets/week06/a07-1.jpg" alt="개를 안고 있는 Thelma Arnold" style="max-height:200px"></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="AOL 비식별 조치의 평가">
+  <div class="kicker">재식별 사례</div>
+  <h2>AOL Search Data 비식별 조치의 평가</h2>
+  <div class="body">
+    <div class="stats">
+      <div class="stat"><b>650,000명</b><span>공개된 이용자 수</span></div>
+      <div class="stat red"><b>5명 미만</b><span>현재까지 재식별된 사람 수</span></div>
+      <div class="stat"><b>&gt; 99.999%</b><span>비식별 조치 “성공률”</span></div>
+    </div>
+    <p class="em center"><span class="arrow"></span>일부 데이터라도 개인을 식별할 수 있다면 거센 비판에 직면할 수 있다</p>
+    <p class="muted center">AOL은 데이터를 공개한 지 며칠 만에 삭제했지만 사본은 이미 퍼진 뒤였다. 재식별 위험은 “평균”이 아니라 “가장 취약한 사례”로 평가받는다.</p>
+  </div>
+</section>
+
+<!-- ===================== 2. 개인정보의 개념 ===================== -->
+<section class="slide section" data-sec="2" data-title="개인정보의 개념">
+  <div class="kicker"><span class="part-chip">전반부</span>Section 2</div>
+  <h2>개인정보의 개념</h2>
+  <p class="section-lead">개인정보 보호법 제2조 제1호. 이름처럼 그 자체로 개인을 알아볼 수 있는 정보와, 다른 정보와 결합하면 알아볼 수 있는 정보로 나뉜다.</p>
+  <div class="body"><ol class="roadmap" data-current="2"></ol></div>
+</section>
+
+<section class="slide" data-sec="2" data-title="(1) 개인식별정보">
+  <div class="kicker">개인정보의 개념</div>
+  <h2>개인정보의 개념 (1) 개인식별정보</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="sets"><b>정보</b><div class="s2"><b>개인정보</b><div class="s3 hi"><b>개인식별정보</b></div></div></div>
+      <div class="law">
+        <h4>제2조(정의)</h4>
+        <p>이 법에서 사용하는 용어의 뜻은 다음과 같다.</p>
+        <p class="it">1. “개인정보”란 <mark>살아 있는 개인에 관한 정보</mark>로서 다음 각 목의 어느 하나에 해당하는 정보를 말한다.</p>
+        <p class="it2" style="color:var(--red);font-weight:700">가. 성명, 주민등록번호 및 영상 등을 통하여 개인을 알아볼 수 있는 정보</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="개인식별정보의 예">
+  <div class="kicker">개인정보의 개념</div>
+  <h2>개인식별정보 <small>직접 식별자(direct identifier): 개인에게 고유하게 부여된 값</small></h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.7fr 1.3fr">
+      <div class="sets"><b>정보</b><div class="s2"><b>개인정보</b><div class="s3 hi"><b>개인식별정보</b></div></div></div>
+      <div class="grid2">
+        <ul class="bul compact">
+          <li>고유식별정보(주민등록번호, 여권번호, 외국인등록번호, 운전면허번호)</li>
+          <li>성명(한자·영문 성명, 필명 등 포함)</li>
+          <li>상세 주소(구 단위 미만까지 포함된 주소)</li>
+          <li>날짜정보: 생일(양/음력), 기념일(결혼, 돌, 환갑 등), 자격증 취득일 등</li>
+          <li>전화번호(휴대전화, 집전화, 회사전화, 팩스)</li>
+          <li>의료기록번호, 건강보험번호, 복지 수급자 번호</li>
+          <li>통장계좌번호, 신용카드번호</li>
+        </ul>
+        <ul class="bul compact">
+          <li>각종 자격증 및 면허 번호</li>
+          <li>자동차 번호, 각종 기기의 등록번호·일련번호</li>
+          <li>사진(정지사진, 동영상, CCTV 영상 등)</li>
+          <li>신체 식별정보(지문, 음성, 홍채 등)</li>
+          <li>이메일 주소, IP 주소, MAC 주소, 홈페이지 URL 등</li>
+          <li>식별코드(아이디, 사원번호, 고객번호 등)</li>
+          <li>…</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="다음 사람은 누구일까요?">
+  <div class="kicker">개인정보의 개념</div>
+  <h2>다음 사람은 누구일까요?</h2>
+  <div class="body">
+    <div class="figrow" style="gap:40px">
+      <table class="tbl left" aria-label="인물 정보">
+        <tbody>
+          <tr><th>출생연도</th><td>1974년</td></tr>
+          <tr><th>고향</th><td>서울 강남구</td></tr>
+          <tr><th>신장</th><td>205cm</td></tr>
+          <tr><th>몸무게</th><td>110kg</td></tr>
+          <tr><th>병역</th><td>면제</td></tr>
+          <tr><th>학력</th><td>사회체육학 학사</td></tr>
+          <tr><th>대학</th><td>연세대</td></tr>
+        </tbody>
+      </table>
+      <span class="s2s-ar" style="font-size:30px;color:var(--red)">➜</span>
+      <figure><img src="assets/week06/a12-1.jpg" alt="농구 경기 중 손을 들고 있는 장신의 농구 선수" style="max-height:300px"></figure>
+    </div>
+    <p class="em center"><span class="arrow"></span>직접 식별자가 없더라도 개인을 식별할 수 있다</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="(2) 식별가능정보">
+  <div class="kicker">개인정보의 개념</div>
+  <h2>개인정보의 개념 (2) 식별가능정보</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="sets"><b>정보</b><div class="s2 hi"><b>개인정보</b><div class="s3"><b>개인식별정보</b></div></div></div>
+      <div class="law">
+        <h4>제2조(정의)</h4>
+        <p class="it">1. “개인정보”란 살아 있는 개인에 관한 정보로서 다음 각 목의 어느 하나에 해당하는 정보를 말한다.</p>
+        <p class="it2">가. 성명, 주민등록번호 및 영상 등을 통하여 개인을 알아볼 수 있는 정보</p>
+        <p class="it2" style="color:var(--red);font-weight:700">나. 해당 정보만으로는 특정 개인을 알아볼 수 없더라도 다른 정보와 쉽게 결합하여 알아볼 수 있는 정보. 이 경우 쉽게 결합할 수 있는지 여부는 다른 정보의 입수 가능성 등 개인을 알아보는 데 소요되는 시간, 비용, 기술 등을 합리적으로 고려하여야 한다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="식별가능정보의 예">
+  <div class="kicker">개인정보의 개념</div>
+  <h2>식별가능정보 <small>간접·준 식별자(quasi-identifier): 다른 정보와 결합하여 개인 식별 가능</small></h2>
+  <div class="body">
+    <div class="cards" style="--n:3">
+      <div class="card"><h3>개인 특성</h3><ul class="bul compact"><li>성별, 연령, 국적, 고향, 시·군·구명, 우편번호</li><li>병역·결혼 여부, 종교, 취미, 동호회</li><li>흡연·음주·채식 여부, 관심사항</li></ul></div>
+      <div class="card"><h3>신체 특성</h3><ul class="bul compact"><li>혈액형, 신장, 몸무게, 허리둘레, 혈압, 눈동자 색깔</li><li>신체검사 결과, 장애유형·등급</li><li>병명, 상병코드, 투약코드, 진료내역</li></ul></div>
+      <div class="card"><h3>신용 특성</h3><ul class="bul compact"><li>세금 납부액, 신용등급, 기부금</li><li>건강보험료 납부액, 소득분위, 의료 급여자</li></ul></div>
+      <div class="card"><h3>경력 특성</h3><ul class="bul compact"><li>학교명, 학과명, 학년, 성적, 학력</li><li>경력, 직업, 직종, 직장명, 부서명, 직급, 전 직장명</li></ul></div>
+      <div class="card"><h3>전자적 특성</h3><ul class="bul compact"><li>쿠키, 접속·방문 일시, 서비스 이용 기록, 접속로그</li><li>인터넷 접속기록, 휴대전화 사용기록, GPS 데이터</li></ul></div>
+      <div class="card"><h3>가족 특성</h3><ul class="bul compact"><li>배우자·자녀·부모·형제 등 가족 정보</li><li>법정대리인 정보</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3. 수집·이용 ===================== -->
+<section class="slide section" data-sec="3" data-title="수집·이용">
+  <div class="kicker"><span class="part-chip">전반부</span>Section 3</div>
+  <h2>개인정보의 수집·이용</h2>
+  <p class="section-lead">개인정보는 제15조 제1항의 근거 가운데 하나가 있어야 수집할 수 있고, 수집 목적의 범위에서만 이용할 수 있다. 동의는 그 근거 가운데 하나다.</p>
+  <div class="body"><ol class="roadmap" data-current="3"></ol></div>
+</section>
+
+<section class="slide" data-sec="3" data-title="제15조 조문">
+  <div class="kicker">수집·이용</div>
+  <h2>개인정보의 수집·이용</h2>
+  <div class="body">
+    <div class="law sm">
+      <h4>제15조(개인정보의 수집·이용)</h4>
+      <p>① 개인정보처리자는 다음 각 호의 어느 하나에 해당하는 경우에는 개인정보를 수집할 수 있으며 그 수집 목적의 범위에서 이용할 수 있다.</p>
+      <p class="it2"><mark>1. 정보주체의 동의를 받은 경우</mark></p>
+      <p class="it2">2. 법률에 특별한 규정이 있거나 법령상 의무를 준수하기 위하여 불가피한 경우</p>
+      <p class="it2">3. 공공기관이 법령 등에서 정하는 소관 업무의 수행을 위하여 불가피한 경우</p>
+      <p class="it2"><mark>4. 정보주체와 체결한 계약을 이행하거나 계약을 체결하는 과정에서 정보주체의 요청에 따른 조치를 이행하기 위하여 필요한 경우</mark></p>
+      <p class="it2">5. 명백히 정보주체 또는 제3자의 급박한 생명, 신체, 재산의 이익을 위하여 필요하다고 인정되는 경우</p>
+      <p class="it2"><mark>6. 개인정보처리자의 정당한 이익을 달성하기 위하여 필요한 경우로서 명백하게 정보주체의 권리보다 우선하는 경우.</mark> 이 경우 개인정보처리자의 정당한 이익과 상당한 관련이 있고 합리적인 범위를 초과하지 아니하는 경우에 한한다.</p>
+      <p class="it2">7. 공중위생 등 공공의 안전과 안녕을 위하여 긴급히 필요한 경우</p>
+      <p>② 개인정보처리자는 제1항제1호에 따른 동의를 받을 때에는 다음 각 호의 사항을 정보주체에게 알려야 한다. 다음 각 호의 어느 하나의 사항을 변경하는 경우에도 이를 알리고 동의를 받아야 한다.</p>
+      <p class="it2">1. 개인정보의 수집·이용 목적 &nbsp; 2. 수집하려는 개인정보의 항목 &nbsp; 3. 개인정보의 보유 및 이용 기간 &nbsp; 4. 동의를 거부할 권리가 있다는 사실 및 동의 거부에 따른 불이익이 있는 경우에는 그 불이익의 내용</p>
+      <p>③ 개인정보처리자는 당초 수집 목적과 합리적으로 관련된 범위에서 정보주체에게 불이익이 발생하는지 여부, 암호화 등 안전성 확보에 필요한 조치를 하였는지 여부 등을 고려하여 대통령령으로 정하는 바에 따라 정보주체의 동의 없이 개인정보를 이용할 수 있다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(1) 동의를 받은 경우">
+  <div class="kicker">수집·이용</div>
+  <h2>(1) 동의를 받은 경우 <small>제15조 제1항 제1호</small></h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>동의의 방식에는 제한이 없음</b> (예: 서명, 기명날인, ‘동의’ 버튼 클릭, 구두)</li>
+      <li><b>동의를 받을 때 알릴 사항</b> (변경할 때에도 다시 알리고 동의를 받아야 함)
+        <ul>
+          <li>개인정보의 수집·이용 목적</li>
+          <li>수집하려는 개인정보의 항목</li>
+          <li>개인정보의 보유 및 이용 기간</li>
+          <li>동의를 거부할 권리가 있다는 사실 및 동의 거부에 따른 불이익이 있는 경우에는 그 불이익의 내용</li>
+        </ul>
+      </li>
+      <li><b>동의 취득의 방식</b>
+        <ul>
+          <li>Opt-in: 개인정보 처리 목적을 알리고 명시적 동의를 얻어야 처리 가능</li>
+          <li>Opt-out: 처리 목적을 통지하고, 정보주체가 이의를 제기하지 않으면 처리 가능</li>
+        </ul>
+      </li>
+    </ul>
+    <p class="em"><span class="arrow"></span>개인정보 보호법은 Opt-in 방식을 취하고 있다</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="수집·이용 동의서 예시">
+  <div class="kicker">수집·이용</div>
+  <h2>개인정보 수집·이용 동의서 (예시)</h2>
+  <div class="body">
+    <figure><img src="assets/week06/a18-1.png" alt="여행사 멤버십 회원제 운영을 위한 개인정보 수집·이용 동의서 예시: 항목은 성명(국문/영문)과 연락처, 목적은 여행상품 및 항공권 예약과 멤버십 마일리지 관리, 보유기간 2년, 동의 거부 권리 안내와 동의·미동의 체크란" style="max-height:420px"></figure>
+    <p class="muted center">항목·목적·보유기간·거부권을 표로 알리고, 동의 여부를 따로 표시하게 한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="[사례] 홈플러스: 사실관계">
+  <div class="kicker">수집·이용</div>
+  <h2>[사례] 홈플러스 경품행사 사건</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>사실관계</b>
+        <ul>
+          <li>홈플러스는 보험회사와 경품행사로 얻는 개인정보를 1건당 1,980원에 판매한다는 업무제휴약정을 체결</li>
+          <li>경품 당첨을 기대하고 응모하는 고객의 개인정보를 수집하여 보험회사에 대가를 받고 판매할 목적으로 경품행사를 기획·시행 (기존 회원정보만으로는 판매할 개인정보가 부족했음)</li>
+          <li>응모권 용지에 개인정보 수집 및 제3자 제공에 관한 내용을 약 1㎜ 크기로 인쇄</li>
+          <li>경품행사에 필요한 범위를 넘어 개인정보를 수집하고, 동의하지 않으면 경품 추첨에서 배제</li>
+        </ul>
+      </li>
+    </ul>
+    <p class="em"><span class="arrow"></span>개인정보 보호법 위반으로 기소</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="[사례] 홈플러스: 응모권">
+  <div class="kicker">수집·이용</div>
+  <h2>[사례] 홈플러스 경품행사 응모권</h2>
+  <div class="body">
+    <div class="two eq">
+      <figure><img src="assets/week06/a20-1.jpg" alt="2014 브라질 월드컵 승리기원 홈플러스가 드립니다 경품행사 응모권 전체: 자동차 등 경품 사진과 이름·생년월일·연락처 기입란, 작은 글씨의 동의 문구" style="max-height:400px"></figure>
+      <figure><img src="assets/week06/a20-2.jpg" alt="응모권 하단 확대: 작은 글씨로 인쇄된 개인정보 수집·이용 및 제3자 제공 동의 문구" style="max-height:400px"><figcaption>응모권 하단의 동의 문구 (확대)</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="[사례] 홈플러스: 1·2심 무죄">
+  <div class="kicker">수집·이용</div>
+  <h2>[사례] 홈플러스: 1심·2심 법원의 판단 (무죄)</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>개인정보 수집과 처리에 관한 동의를 받을 때 정보주체에게 알려야 하는 사항을 <b>응모권에 모두 기재</b>하였음</li>
+      <li>개인정보를 <b>‘유상으로’</b> 제3자에게 제공한다는 사실까지 알려야 할 의무는 없음. 그 사실이 응모자의 동의 여부 결정에 영향을 미치는 핵심 사항으로 보이지도 않음</li>
+      <li>약 1㎜ 크기의 글씨는 복권, 의약품 사용설명서 등에서 통용되는 크기로 응모자도 읽을 수 있었던 것으로 보임</li>
+      <li>응모함 옆에 응모권 확대 사진을 붙인 점 등에 비추어, 의도적으로 글씨를 작게 하여 읽지 못하게 방해했다고 보기 어려움</li>
+      <li>응모자들은 개인정보가 보험회사에 마케팅 목적으로 제공된다는 사실을 충분히 인식할 수 있는 상태에서 동의하였다고 봄이 상당함</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="[사례] 홈플러스: 1㎜ 글씨">
+  <div class="kicker">수집·이용</div>
+  <h2>1㎜ 크기의 글씨</h2>
+  <div class="body">
+    <figure><img src="assets/week06/a22-1.jpg" alt="1mm 크기로 인쇄된 문장을 확대해 보여 주는 사진: 판사님은 이 글씨가 정말 보이십니까?" style="max-height:440px"><figcaption>약 1㎜ 크기로 인쇄한 문구 (보도 사진)</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="[사례] 홈플러스: 대법원">
+  <div class="kicker">수집·이용</div>
+  <h2>형사 처벌: 대법원 2017. 4. 7. 선고 2016도13263 판결</h2>
+  <div class="body">
+    <blockquote class="quote" style="font-size:clamp(14px,1.2vw,16px);line-height:1.75">
+      피고인들이 이 사건 광고 및 경품행사의 <mark class="hlt">주된 목적을 숨긴 채 사은행사를 하는 것처럼 소비자들을 오인하게 한 다음</mark> 경품행사와는 무관한 고객들의 개인정보까지 수집하여 이를 제3자에게 제공한 점, 피고인들이 이와 같은 행위를 하면서 개인정보 보호법상의 개인정보 보호 원칙 및 제반 의무를 위반한 점, 피고인들이 수집한 개인정보에는 사생활의 비밀에 관한 정보나 심지어는 고유식별정보 등도 포함되어 있는 점 및 피고인들이 수집한 개인정보의 규모 및 이를 제3자에게 판매함으로써 얻은 이익 등을 종합적으로 고려하여 보면, 피고인들은 개인정보 보호법 제72조 제2호에 규정된 <mark class="hlt">‘거짓이나 그 밖의 부정한 수단이나 방법으로 개인정보를 취득하거나 개인정보 처리에 관한 동의를 받는 행위를 한 자’에 해당</mark>한다고 보는 것이 옳다.
+    </blockquote>
+    <p class="em"><span class="arrow"></span>형식적 고지 요건을 갖추었더라도, 동의를 받는 과정 전체가 부정한 방법이면 처벌 대상이 된다</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(2) 법률의 규정·법령상 의무">
+  <div class="kicker">수집·이용</div>
+  <h2>(2) 법률의 규정·법령상 의무 준수 <small>제2호</small></h2>
+  <div class="body">
+    <div class="cards">
+      <div class="card"><h3>법률에 특별한 규정이 있는 경우 (전단)</h3>
+        <ul class="bul compact">
+          <li>신용정보법상 채권추심업 허가를 받은 신용정보회사가 그 업무를 위해 특정인의 소재 등을 알아내는 경우</li>
+          <li>보험업법상 보험회사가 보험금 지급업무에 필요한 경우 음주운전 등 교통법규 위반이나 운전면허 효력에 관한 정보를 보유 기관에서 제공받는 경우</li>
+          <li>의료법상 의료인이 환자가 의식이 없거나 응급환자인 경우 등 동의를 받을 수 없을 때 진료기록 내용 등을 다른 의료인에게 송부하는 경우</li>
+        </ul>
+      </div>
+      <div class="card"><h3>법령상 의무 준수에 불가피한 경우 (후단)</h3>
+        <ul class="bul compact">
+          <li>소비자기본법상 결함상품 리콜의무를 이행하기 위하여 개인정보를 수집·이용하는 경우</li>
+          <li>각종 법령에 따른 본인확인 또는 연령확인 의무를 이행하기 위하여 개인정보를 수집·이용하는 경우 (금융실명법, 청소년보호법 등)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(3) 공공기관의 소관 업무">
+  <div class="kicker">수집·이용</div>
+  <h2>(3) 공공기관의 소관 업무 수행 <small>제3호</small></h2>
+  <div class="body">
+    <ul class="bul">
+      <li>법령 등에서 소관 업무를 정하고 있고, 그 업무 수행을 위해 불가피하게 개인정보를 수집해야 하는 경우 정보주체의 동의 없이 수집 가능</li>
+      <li>제2호의 ‘법령상 의무 준수’에 포함된다고 볼 수도 있으나, 의무 준수와 소관 업무 수행의 차이를 분명히 하려고 따로 규정</li>
+      <li>예시
+        <ul>
+          <li>인사혁신처가 정부조직법에 따라 공무원의 인사·윤리·복무·연금 관리를 위해 인사 관련 파일을 수집·이용하거나 국가인재데이터베이스를 구축·운영하는 경우</li>
+          <li>국민건강보험공단이 국민건강보험법에 따라 보험급여 관리를 위하여 진료내역 등을 수집·이용하는 경우</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(4) 계약 체결·이행">
+  <div class="kicker">수집·이용</div>
+  <h2>(4) 정보주체와의 계약 체결·이행 <small>제4호</small></h2>
+  <div class="body">
+    <p>정보주체와 체결한 계약을 이행하거나, 계약을 체결하는 과정에서 정보주체의 요청에 따른 조치를 이행하기 위하여 필요한 경우</p>
+    <div class="cards">
+      <div class="card"><h3>계약 체결(준비)</h3>
+        <ul class="bul compact">
+          <li>보험회사가 계약 체결을 위해 청약자의 자동차사고 이력, 다른 유사보험 가입 여부를 수집</li>
+          <li>거래 체결 전에 상대방의 신용도 평가를 위해 정보를 수집·이용</li>
+          <li>회사가 근로계약 체결 전에 지원자의 이력서, 졸업·성적증명서를 수집·이용</li>
+        </ul>
+      </div>
+      <div class="card"><h3>계약 이행</h3>
+        <ul class="bul compact">
+          <li>주문한 상품을 배송하기 위해 주소, 연락처를 수집</li>
+          <li>경품 당첨자에게 경품을 보내기 위해 주소와 연락처를 요구. 단, 광고에 대한 동의를 받지 않았다면 이 정보로 신상품 안내 이메일 등 광고를 보낼 수 없음</li>
+          <li>쇼핑몰이 주문 시 포인트를 지급하기로 약정하고 주문 정보를 수집</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="필수동의 관행의 개선">
+  <div class="kicker">수집·이용</div>
+  <h2>2023년 개정: “필수동의” 관행의 개선</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <figure class="doc"><img src="assets/week06/a27-1.png" alt="연합뉴스 기사 제목: 개인정보 필수동의 없어지고 동의 선택 가능 표시 의무화 (2023. 5. 18.)" style="max-height:170px"></figure>
+      <figure class="doc"><img src="assets/week06/a27-2.png" alt="기사 본문: 서비스 제공에 꼭 필요한 부분은 동의 없이 수집·이용할 수 있도록 하고, 선택 동의 항목은 정보주체가 자유로운 의사로 동의 여부를 선택할 수 있다는 사실을 구분하여 표시해야 한다는 내용" style="max-height:330px"></figure>
+    </div>
+    <p class="muted center">계약 이행에 필요한 정보는 제15조 제1항 제4호로 동의 없이 수집할 수 있다. 그런데도 서비스 이용 전에 “필수동의”를 받는 관행이 형식적이라는 지적에 따라 법과 시행령을 정비했다.</p>
+    <p class="src"><a href="https://www.yna.co.kr/view/AKR20230518079100530" target="_blank" rel="noopener">https://www.yna.co.kr/view/AKR20230518079100530</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(5) 급박한 생명·신체·재산상 이익">
+  <div class="kicker">수집·이용</div>
+  <h2>(5) 급박한 생명·신체·재산상 이익 <small>제5호</small></h2>
+  <div class="body">
+    <ul class="bul">
+      <li>수집·이용 목적이 <b>명백하게</b> 정보주체 또는 제3자의 <b>급박한</b> 생명·신체·재산상 이익을 위한 것이어야 함</li>
+      <li>2023년 개정 전에는 “정보주체 또는 법정대리인이 의사표시를 할 수 없는 상태에 있거나 주소불명 등으로 사전 동의를 받을 수 없는 경우”라는 요건이 더 있었으나 삭제됨
+        <ul><li>정신미약, 교통사고, 수술, 재난으로 인한 고립, 납치·감금 등은 여전히 대표적인 적용 상황</li></ul>
+      </li>
+      <li>예시
+        <ul>
+          <li>조난·홍수 등으로 실종되거나 고립된 사람을 구조하기 위하여 연락처, 주소, 위치정보 등을 수집</li>
+          <li>아파트 화재 시 집 안에 있는 자녀를 구하기 위해 자녀 또는 부모의 휴대전화 번호를 수집</li>
+          <li>의식불명이나 중태에 빠진 환자의 수술 등 의료조치를 위하여 개인정보를 수집</li>
+          <li>고객이 보이스피싱 피해를 입은 것으로 보여 은행이 임시로 이체를 중단하고 사실 확인을 하려는 경우</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(6) 개인정보처리자의 정당한 이익">
+  <div class="kicker">수집·이용</div>
+  <h2>(6) 개인정보처리자의 정당한 이익 <small>제6호</small></h2>
+  <div class="body">
+    <ul class="bul">
+      <li>개인정보처리자의 정당한 이익을 달성하기 위하여 필요한 경우로서 <b>명백하게 정보주체의 권리보다 우선</b>하는 경우 동의 없이 수집 가능</li>
+      <li>예시
+        <ul>
+          <li>사업자가 요금정산·채권추심 등을 위하여 고객의 서비스 이용내역, 과금내역 등을 생성·관리</li>
+          <li>사업자가 고객과의 소송·분쟁에 대비하여 요금 정산자료, 민원 내용과 대응자료 등을 수집·관리</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="callout">
+      <b>사례</b> 임차인이 전세자금대출을 위해 은행에 전세계약서를 제출했다. 전세계약서에는 임대인의 개인정보도 들어 있다. 은행은 임대인의 동의를 받아야 하는가?<br>
+      <span class="muted">➜ 전세계약서로 임대인의 정보를 확인하는 것은 은행의 정당한 이익에 해당하고, 임대인의 권리가 침해될 소지가 적다. 은행은 동의 없이 임대인의 개인정보를 수집·이용할 수 있다.</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="공개된 개인정보: 로앤비 사건 (1)">
+  <div class="kicker">수집·이용</div>
+  <h2>크롤링: 공개된 개인정보의 수집 <small>로앤비 사건</small></h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>사실관계</b>
+        <ul>
+          <li>법률정보 사이트 로앤비는 법조인 데이터베이스와 자체 수집한 법학 교수들의 개인정보를 ‘법조인’ 항목에서 유료로 제공</li>
+          <li>A 교수의 사진, 성명, 성별, 출생연도, 직업, 직장, 학력, 경력 등을 수집하여 유료로 제3자에게 제공하다가 소장 부본을 송달받고 삭제</li>
+          <li>출생연도를 제외한 정보는 대학 법학과 홈페이지에 이미 공개되어 있었고, 출생연도는 교원명부와 교수요람에 게재되어 있었음</li>
+          <li>쟁점: 영리 목적으로 공개된 개인정보를 수집하여 이용자에게 제공한 행위가 개인정보 보호법 위반인가?</li>
+        </ul>
+      </li>
+      <li><b>서울중앙지방법원 2013나49885 판결</b>
+        <ul>
+          <li>“언론 고유의 목적을 달성하기 위한 것이 아니라 단순히 영리 목적으로 (…) 공개된 개인정보를 수집하여 이를 제3자에게 제공하는 행위를 정보주체의 동의 없이 한 경우에는, 설령 정보주체가 공적인 존재라 하더라도 다른 특별한 사정이 없는 한 위법”</li>
+          <li class="arrow" style="list-style:none">위자료 50만 원 배상</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="공개된 개인정보: 로앤비 사건 (2)">
+  <div class="kicker">수집·이용</div>
+  <h2>크롤링: 공개된 개인정보의 수집 <small>대법원 2016. 8. 17. 선고 2014다235080 판결</small></h2>
+  <div class="body">
+    <blockquote class="quote" style="font-size:clamp(14px,1.2vw,16px);line-height:1.75">
+      정보주체가 공적인 존재인지, 개인정보의 공공성과 공익성, 원래 공개한 대상 범위, 개인정보 처리의 목적·절차·이용형태의 상당성과 필요성, 개인정보 처리로 침해될 수 있는 이익의 성질과 내용 등 여러 사정을 종합적으로 고려하여, 개인정보에 관한 인격권 보호에 의하여 얻을 수 있는 이익과 정보처리 행위로 얻을 수 있는 이익 즉 정보처리자의 ‘알 권리’와 이를 기반으로 한 정보수용자의 ‘알 권리’ 및 표현의 자유, 정보처리자의 영업의 자유, 사회 전체의 경제적 효율성 등의 가치를 <mark class="hlt">구체적으로 비교 형량</mark>하여 어느 쪽 이익이 더 우월한 것으로 평가할 수 있는지에 따라 정보처리 행위의 최종적인 위법성 여부를 판단하여야 하고, <mark class="hlt">단지 정보처리자에게 영리 목적이 있었다는 사정만으로 곧바로 정보처리 행위를 위법하다고 할 수는 없다.</mark>
+    </blockquote>
+    <p class="em"><span class="arrow"></span>로앤비의 행위는 개인정보자기결정권을 침해하는 위법한 행위가 아니고, 제15조나 제17조 위반도 아니다</p>
+    <p class="muted">공개된 개인정보를 수집해 쓸 수 있는지의 기준이다. 웹 크롤링으로 AI 학습 데이터를 모으는 문제와 바로 이어진다.</p>
+  </div>
+</section>
+
+<!-- ===================== 4. 제3자 제공과 처리위탁 ===================== -->
+<section class="slide section" data-sec="4" data-title="제3자 제공과 처리위탁">
+  <div class="kicker"><span class="part-chip">전반부</span>Section 4</div>
+  <h2>제3자 제공과 처리위탁</h2>
+  <p class="section-lead">개인정보가 다른 사업자에게 넘어가는 두 가지 경로. 누구의 업무와 이익을 위해 넘어가는지에 따라 제3자 제공(동의 필요)과 처리위탁(공개·감독 의무)으로 나뉜다.</p>
+  <div class="body"><ol class="roadmap" data-current="4"></ol></div>
+</section>
+
+<section class="slide" data-sec="4" data-title="제17조 조문">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>개인정보의 제3자 제공</h2>
+  <div class="body">
+    <div class="law">
+      <h4>제17조(개인정보의 제공)</h4>
+      <p>① 개인정보처리자는 다음 각 호의 어느 하나에 해당되는 경우에는 정보주체의 개인정보를 제3자에게 제공(공유를 포함한다. 이하 같다)할 수 있다.</p>
+      <p class="it2"><mark>1. 정보주체의 동의를 받은 경우</mark></p>
+      <p class="it2">2. 제15조제1항제2호, 제3호 및 제5호부터 제7호까지에 따라 개인정보를 수집한 목적 범위에서 개인정보를 제공하는 경우</p>
+      <p>② 개인정보처리자는 제1항제1호에 따른 동의를 받을 때에는 다음 각 호의 사항을 정보주체에게 알려야 한다. 다음 각 호의 어느 하나의 사항을 변경하는 경우에도 이를 알리고 동의를 받아야 한다.</p>
+      <p class="it2"><mark>1. 개인정보를 제공받는 자</mark></p>
+      <p class="it2">2. 개인정보를 제공받는 자의 개인정보 이용 목적</p>
+      <p class="it2">3. 제공하는 개인정보의 항목</p>
+      <p class="it2">4. 개인정보를 제공받는 자의 개인정보 보유 및 이용 기간</p>
+      <p class="it2">5. 동의를 거부할 권리가 있다는 사실 및 동의 거부에 따른 불이익이 있는 경우에는 그 불이익의 내용</p>
+      <p>④ 개인정보처리자는 당초 수집 목적과 합리적으로 관련된 범위에서 (…) 대통령령으로 정하는 바에 따라 정보주체의 동의 없이 개인정보를 제공할 수 있다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="제3자 제공의 의미">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>제3자 제공</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>개인정보의 제3자 제공</b>
+        <ul>
+          <li>제3자에게 개인정보의 <b>지배·관리권이 이전</b>되는 것</li>
+          <li>DB 시스템 접속 권한을 열어 주는 등 개인정보를 공유하는 경우도 포함</li>
+        </ul>
+      </li>
+      <li><b>제3자 제공이 가능한 경우</b>
+        <ul>
+          <li>정보주체의 동의를 받은 경우: <b style="color:var(--red)">제공받는 자</b>, 제공받는 자의 이용 목적, 제공 항목, 제공받는 자의 보유·이용 기간, 동의 거부권과 불이익을 미리 알려야 함</li>
+          <li>그 밖에: 제15조 제1항 제2호·제3호·제5호~제7호에 따라 수집한 목적 범위에서 제공하는 경우</li>
+        </ul>
+      </li>
+      <li><b>벌칙</b>
+        <ul><li>정보주체의 동의 없이 개인정보를 제3자에게 제공한 자, 그 사정을 알면서 제공받은 자: 5년 이하의 징역 또는 5천만 원 이하의 벌금</li></ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="제3자 제공 동의서 예시">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>개인정보 제3자 제공 동의 (예시)</h2>
+  <div class="body">
+    <figure><img src="assets/week06/a35-1.png" alt="개인정보 제3자 제공 내역 표: 제공받는 자 ○○호텔, 제공목적 홍보 및 마케팅, 제공 항목 성명·연락처 등, 보유기간 1년, 동의 거부권 안내와 동의·미동의 체크란" style="max-height:330px"></figure>
+    <p class="muted center">“제공받는 자”는 이름이나 상호로 특정해야 한다. “제휴사”, “금융기관”처럼 포괄적으로 적을 수 없다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="[판결] CCTV 영상 열람">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>[판결] CCTV 영상을 보여 준 행위도 “제공”</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <figure class="doc"><img src="assets/week06/a36-1.png" alt="기사 제목: [판결] CCTV 돌려 보며 휴대폰 촬영… 개인정보 제공받은 행위 해당" style="max-height:80px"></figure>
+        <ul class="bul compact">
+          <li>장례식장 관리실 직원이 CCTV 영상을 다른 사람에게 보여 주고, 그 사람이 휴대전화로 촬영</li>
+          <li>대법원: 영상 파일을 넘겨주지 않았더라도, 영상을 보여 주어 다른 사람이 그 정보를 알게 한 것은 개인정보 “제공”에 해당 (2020도18397)</li>
+          <li class="arrow" style="list-style:none">“제공”은 매체를 넘겨주는 행위로 한정되지 않는다. 정보를 알 수 있는 상태에 두는 것이 핵심</li>
+        </ul>
+      </div>
+      <figure class="doc"><img src="assets/week06/a36-2.png" alt="기사 본문: 타인의 모습과 위치정보 등 개인정보가 담긴 폐쇄회로 영상을 시청하는 것도 개인정보를 제공받은 행위에 해당한다는 대법원 판단" style="max-height:380px"></figure>
+    </div>
+    <p class="src"><a href="https://www.lawtimes.co.kr/news/201342" target="_blank" rel="noopener">https://www.lawtimes.co.kr/news/201342</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="제18조 조문">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>목적 외 이용·제공 제한</h2>
+  <div class="body">
+    <div class="law sm">
+      <h4>제18조(개인정보의 목적 외 이용·제공 제한)</h4>
+      <p>① 개인정보처리자는 <mark>개인정보를 제15조제1항에 따른 범위를 초과하여 이용하거나 제17조제1항 및 제28조의8제1항에 따른 범위를 초과하여 제3자에게 제공하여서는 아니 된다.</mark></p>
+      <p>② 제1항에도 불구하고 개인정보처리자는 다음 각 호의 어느 하나에 해당하는 경우에는 정보주체 또는 제3자의 이익을 부당하게 침해할 우려가 있을 때를 제외하고는 개인정보를 목적 외의 용도로 이용하거나 이를 제3자에게 제공할 수 있다. 다만, 제5호부터 제9호까지에 따른 경우는 공공기관의 경우로 한정한다.</p>
+      <p class="it2"><mark>1. 정보주체로부터 별도의 동의를 받은 경우</mark></p>
+      <p class="it2">2. 다른 법률에 특별한 규정이 있는 경우</p>
+      <p class="it2">3. 명백히 정보주체 또는 제3자의 급박한 생명, 신체, 재산의 이익을 위하여 필요하다고 인정되는 경우</p>
+      <p class="it2">4. 삭제 (2020년 가명정보 제도 도입)</p>
+      <p class="it2">5. 개인정보를 목적 외의 용도로 이용하거나 이를 제3자에게 제공하지 아니하면 다른 법률에서 정하는 소관 업무를 수행할 수 없는 경우로서 보호위원회의 심의·의결을 거친 경우</p>
+      <p class="it2">6. 조약, 그 밖의 국제협정의 이행을 위하여 외국정부 또는 국제기구에 제공하기 위하여 필요한 경우</p>
+      <p class="it2">7. 범죄의 수사와 공소의 제기 및 유지를 위하여 필요한 경우</p>
+      <p class="it2">8. 법원의 재판업무 수행을 위하여 필요한 경우</p>
+      <p class="it2">9. 형(刑) 및 감호, 보호처분의 집행을 위하여 필요한 경우</p>
+      <p class="it2">10. 공중위생 등 공공의 안전과 안녕을 위하여 긴급히 필요한 경우</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="목적 외 이용의 사례">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>개인정보의 목적 외 이용·제공 금지</h2>
+  <div class="body">
+    <p>개인정보처리자는 원칙적으로 정보주체에게 알리고 동의를 받은 범위나 법령상 허용된 범위를 벗어나 개인정보를 이용·제공할 수 없다.</p>
+    <ul class="bul">
+      <li><b>목적 외 이용 사례</b>
+        <ul>
+          <li>공무원에게 업무용으로 발급한 이메일 주소로 사전 동의 없이 마케팅 홍보자료를 발송</li>
+          <li>조세 담당 공무원이 자신과 채권채무 소송 중인 사람의 납세 정보를 조회하여 소송에 이용</li>
+          <li>상품 배송을 위해 수집한 개인정보를 동의 받지 않은 자사의 별도 상품·서비스 홍보에 이용</li>
+          <li>고객 만족도 조사, 판촉·경품행사 응모를 위해 입력한 개인정보를 동의 없이 할인판매 광고물 발송에 이용</li>
+          <li>A/S센터에서 고객 불만을 처리하려고 수집한 개인정보를 자사 신상품 광고에 이용</li>
+          <li>공개된 개인정보의 성격과 공개 취지에 비추어 그 공개 목적을 넘어 DB 마케팅에 이용</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="데이터베이스 마케팅 사업">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>데이터베이스 마케팅 사업</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>데이터베이스 마케팅 사업의 예</b>
+        <ul>
+          <li>정보주체의 동의를 받아 대량의 개인정보를 수집·저장해 두고 판매·대여하는 사업</li>
+          <li>개인정보 데이터베이스를 최신 상태로 갱신해 주는 사업</li>
+          <li>수집한 개인정보로 상품 광고를 대행하는 서비스</li>
+        </ul>
+      </li>
+      <li><b>국내에서의 허용 가능성</b>
+        <ul>
+          <li>제3자 제공에는 정보주체의 동의가 필요하고, 동의를 받을 때 “개인정보를 제공받는 자”를 알려야 함</li>
+          <li>제공받는 자의 이름 또는 상호를 알려야 하며 “금융기관” 등으로 포괄적으로 알릴 수 없음</li>
+          <li class="arrow" style="list-style:none">새로운 제3자에게 제공할 때마다 동의를 다시 받아야 하므로 사업 수행이 현실적으로 어려움</li>
+          <li class="arrow" style="list-style:none">다만 비식별화된 정보(통계 정보 등)는 개인정보가 아니므로 제3자에게 (유상으로) 제공할 수 있음</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="제26조 조문">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>개인정보의 처리위탁</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="law sm">
+        <h4>제26조(업무위탁에 따른 개인정보의 처리 제한)</h4>
+        <p>① 개인정보처리자가 제3자에게 개인정보의 처리 업무를 위탁하는 경우에는 다음 각 호의 내용이 포함된 <mark>문서</mark>로 하여야 한다.</p>
+        <p class="it2">1. 위탁업무 수행 목적 외 개인정보의 처리 금지에 관한 사항</p>
+        <p class="it2">2. 개인정보의 기술적·관리적 보호조치에 관한 사항</p>
+        <p class="it2">3. 그 밖에 개인정보의 안전한 관리를 위하여 대통령령으로 정한 사항</p>
+        <p>② 제1항에 따라 개인정보의 처리 업무를 위탁하는 개인정보처리자(이하 “위탁자”라 한다)는 위탁하는 업무의 내용과 개인정보 처리 업무를 위탁받아 처리하는 자(개인정보 처리 업무를 위탁받아 처리하는 자로부터 위탁받은 업무를 다시 위탁받은 제3자를 포함하며, 이하 “수탁자”라 한다)를 <mark>정보주체가 언제든지 쉽게 확인할 수 있도록</mark> 대통령령으로 정하는 방법에 따라 공개하여야 한다.</p>
+      </div>
+      <div class="law sm">
+        <h4>시행령 제28조(개인정보의 처리 업무 위탁 시 조치)</h4>
+        <p>① 법 제26조제1항제3호에서 “대통령령으로 정한 사항”이란 다음 각 호의 사항을 말한다.</p>
+        <p class="it2">1. 위탁업무의 목적 및 범위</p>
+        <p class="it2">2. 재위탁 제한에 관한 사항</p>
+        <p class="it2">3. 개인정보에 대한 접근 제한 등 안전성 확보 조치에 관한 사항</p>
+        <p class="it2">4. 위탁업무와 관련하여 보유하고 있는 개인정보의 관리 현황 점검 등 감독에 관한 사항</p>
+        <p class="it2">5. 수탁자가 준수하여야 할 의무를 위반한 경우의 손해배상 등 책임에 관한 사항</p>
+        <p>② 법 제26조제2항에서 “대통령령으로 정하는 방법”이란 (…) <mark>위탁자의 인터넷 홈페이지에 위탁하는 업무의 내용과 수탁자를 지속적으로 게재하는 방법</mark>을 말한다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="제3자 제공과 처리위탁의 구별">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>제3자 제공과 처리위탁의 구별</h2>
+  <div class="body">
+    <table class="tbl cmp left">
+      <thead><tr><th>구분</th><th>처리위탁 (제26조)</th><th>제3자 제공 (제17조)</th></tr></thead>
+      <tbody>
+        <tr><td class="k">누구의 업무인가</td><td><b>위탁자</b>의 업무를 처리하기 위해 개인정보가 넘어감</td><td><b>제공받는 자</b>의 업무를 처리하기 위해 개인정보가 넘어감</td></tr>
+        <tr><td class="k">누구의 이익인가</td><td>위탁자의 이익. 수탁자는 위탁 대가 외에 독자적 이익이 없음</td><td>제공받는 자의 이익</td></tr>
+        <tr><td class="k">관리·감독</td><td>위탁자의 관리·감독 아래, 위탁받은 범위에서만 처리</td><td>제공받는 자가 자신의 책임으로 처리 (지배·관리권 이전)</td></tr>
+        <tr><td class="k">정보주체 동의</td><td>원칙적으로 불필요. 위탁 내용과 수탁자를 공개 (홍보·판매 권유 업무는 통지)</td><td>원칙적으로 필요 (제공받는 자, 목적, 항목, 기간, 거부권 고지)</td></tr>
+        <tr><td class="k">손해배상 책임</td><td>수탁자의 법 위반으로 생긴 손해에 대해 수탁자를 위탁자의 <b>소속 직원</b>으로 봄 (위탁자 책임)</td><td>제공받는 자가 스스로 책임</td></tr>
+        <tr><td class="k">예시</td><td>상품 배송, 콜센터·고객상담 운영, 회원관리 시스템 운영·유지보수, 클라우드 보관, 결제대행</td><td>제휴사 마케팅을 위한 회원정보 제공, 보험회사에 고객 명단 판매, 다른 사업자와의 정보 공유</td></tr>
+      </tbody>
+    </table>
+    <p class="src">개인정보보호위원회, 「개인정보 보호 법령 및 지침·고시 해설」 제26조 해설을 바탕으로 정리</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="구별의 판단 기준 (판례)">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>구별의 판단 기준 <small>대법원 2017. 4. 7. 선고 2016도13263 판결</small></h2>
+  <div class="body">
+    <blockquote class="quote" style="font-size:clamp(14px,1.2vw,16px);line-height:1.75">
+      개인정보 보호법 제17조에서 말하는 개인정보의 ‘제3자 제공’은 본래의 개인정보 수집·이용 목적의 범위를 넘어 <mark class="hlt">정보를 제공받는 자의 업무처리와 이익을 위하여</mark> 개인정보가 이전되는 경우인 반면, 제26조에서 말하는 개인정보의 ‘처리위탁’은 본래의 개인정보 수집·이용 목적과 관련된 <mark class="hlt">위탁자 본인의 업무 처리와 이익을 위하여</mark> 개인정보가 이전되는 경우를 의미한다. 개인정보 처리위탁에 있어 수탁자는 위탁자로부터 위탁사무 처리에 따른 대가를 지급받는 것 외에는 개인정보 처리에 관하여 독자적인 이익을 가지지 않고, 정보제공자의 관리·감독 아래 위탁받은 범위 내에서만 개인정보를 처리하게 되므로, 제17조에 정한 ‘제3자’에 해당하지 않는다.
+    </blockquote>
+    <div class="callout warn"><b>종합 판단 요소</b>: ① 개인정보의 취득 목적과 방법 ② 대가 수수 여부 ③ 수탁자에 대한 실질적인 관리·감독 여부 ④ 정보주체 또는 이용자의 개인정보 보호 필요성에 미치는 영향 ⑤ 그 개인정보를 이용할 필요가 있는 자가 실질적으로 누구인지</div>
+    <p class="muted">앞의 홈플러스 사건에서 회원정보를 보험회사에 넘겨 보험회사가 영업 대상 고객을 미리 걸러내게 한 행위가 문제 되었다. 홈플러스는 처리위탁이라고 주장했으나, 대법원은 보험회사의 영업을 위한 제3자 제공으로 보았다. 계약서의 명칭보다 실질을 본다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="위탁자·수탁자의 의무">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>위탁자와 수탁자의 의무 <small>제26조, 2023년 개정 반영</small></h2>
+  <div class="body">
+    <table class="tbl cmp left">
+      <thead><tr><th>조항</th><th>내용</th><th>의무 주체</th></tr></thead>
+      <tbody>
+        <tr><td class="k">①</td><td><b>문서로 위탁</b>: 목적 외 처리 금지, 기술적·관리적 보호조치, 위탁 목적·범위, 재위탁 제한, 안전성 확보조치, 관리 현황 점검 등 감독, 손해배상 책임</td><td>위탁자</td></tr>
+        <tr><td class="k">②</td><td><b>위탁 사실 공개</b>: 위탁 업무 내용과 수탁자(재수탁자 포함)를 홈페이지에 지속적으로 게재. 홈페이지가 없으면 사업장 게시, 관보·신문 게재 등</td><td>위탁자</td></tr>
+        <tr><td class="k">③</td><td><b>홍보·판매 권유 업무</b>를 위탁하는 경우: 위탁 업무 내용과 수탁자를 정보주체에게 서면·전자우편·문자 등으로 <b>개별 통지</b></td><td>위탁자</td></tr>
+        <tr><td class="k">④</td><td><b>교육과 감독</b>: 분실·도난·유출·위조·변조·훼손을 막도록 수탁자를 교육하고, 처리 현황 점검 등으로 안전한 처리를 감독</td><td>위탁자</td></tr>
+        <tr><td class="k">⑤</td><td>위탁받은 업무 범위를 넘어 개인정보를 이용하거나 제3자에게 제공 금지</td><td>수탁자</td></tr>
+        <tr><td class="k">⑥</td><td><b>재위탁</b>하려면 위탁자의 동의를 받아야 함 (2023년 신설)</td><td>수탁자</td></tr>
+        <tr><td class="k">⑦</td><td>수탁자가 이 법을 위반하여 발생한 손해배상책임에 대해서는 수탁자를 개인정보처리자의 <b>소속 직원</b>으로 봄</td><td>위탁자</td></tr>
+        <tr><td class="k">⑧</td><td>수탁자에게도 개인정보처리자의 의무 규정을 준용. 2023년 개정으로 준용 범위가 넓어져 수탁자도 안전조치 위반 등으로 직접 제재를 받을 수 있음</td><td>수탁자</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="국외 이전과 처리위탁">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>국외로 위탁하는 경우 <small>제28조의8 (2023년 신설)</small></h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>국외 이전의 범위</b>: 국외 제3자 제공뿐 아니라 국외에서의 <b>처리위탁·보관</b>도 포함</li>
+      <li><b>국외 이전이 가능한 경우</b> (제1항)
+        <ul>
+          <li>정보주체로부터 국외 이전에 관한 <b>별도의 동의</b>를 받은 경우</li>
+          <li>법률, 조약 등에 특별한 규정이 있는 경우</li>
+          <li><b>정보주체와의 계약 체결·이행을 위해 처리위탁·보관이 필요한 경우</b>로서 이전 항목, 이전 국가·시기·방법, 이전받는 자, 이용 목적과 보유 기간 등을 개인정보 처리방침에 공개하거나 전자우편 등으로 알린 경우</li>
+          <li>이전받는 자가 보호위원회가 정한 개인정보 보호 인증을 받은 경우, 이전 대상 국가의 보호 수준이 이 법과 실질적으로 동등하다고 인정되는 경우</li>
+        </ul>
+      </li>
+      <li class="arrow" style="list-style:none">처리위탁이면 동의 없이 공개·고지로 국외 이전할 수 있지만, 제3자 제공이면 별도 동의가 필요하다. 그래서 위탁인지 제공인지가 국외 이전 사건의 핵심 쟁점이 된다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="[사례] 카카오페이: 사실관계">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>[사례] 개인정보 해외 위탁처리: 카카오페이 사건</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:center">
+      <ul class="bul compact">
+        <li>카카오페이는 애플 앱스토어의 결제수단으로 들어가려 함. 애플은 이용자별 <b>NSF(Non-Sufficient Funds) 점수</b>, 곧 잔액 부족 위험 점수를 요구</li>
+        <li>애플은 NSF 점수 산출 업무를 <b>알리페이(싱가포르 법인)</b>에 맡김</li>
+        <li>카카오페이는 2018년 4~7월 NSF 모델 구축용으로 이용자 정보를 알리페이에 전송. 2019. 6. ~ 2024. 5. 에는 애플 결제 이용 여부와 관계없이 <b>전체 이용자 약 4,000만 명</b>의 정보를 매일 전송 (누적 약 542억 건)</li>
+        <li>전송 항목: 휴대전화번호, 이메일 주소, 잔액 부족 관련 정보 등 <b>24개 항목</b> (암호화하여 전송)</li>
+        <li>이용자에게 국외 이전 동의를 받지 않음. 카카오페이는 <b>처리위탁</b>이라고 주장</li>
+      </ul>
+      <svg class="flow" viewBox="0 0 480 360" role="img" aria-label="카카오페이에서 알리페이로 이용자 정보 24개 항목이 매일 전송되고, 알리페이가 NSF 점수를 산출해 애플에 제공하는 구조. 애플과 알리페이는 위탁 관계">
+        <use href="#i-user" x="20" y="34" width="44" height="52" class="ic"/>
+        <text class="lbs" x="42" y="104" text-anchor="middle">이용자 약 4천만 명</text>
+        <rect class="box soft" x="150" y="36" width="140" height="52" rx="10"/><text class="bt" x="220" y="68" text-anchor="middle">카카오페이</text>
+        <line class="ln" x1="68" y1="62" x2="146" y2="62" marker-end="url(#ah)"/>
+        <g class="r">
+          <line class="ln" x1="220" y1="92" x2="220" y2="226" marker-end="url(#ahr)"/>
+          <text class="note" x="230" y="146">24개 항목, 매일 전송</text>
+          <text class="note" x="230" y="164">(국외 이전, 동의 없음)</text>
+        </g>
+        <rect class="box" x="140" y="230" width="160" height="62" rx="10"/><text class="bt" x="220" y="258" text-anchor="middle">알리페이</text><text class="lbs" x="220" y="280" text-anchor="middle">싱가포르 · NSF 점수 산출</text>
+        <rect class="box" x="370" y="230" width="96" height="62" rx="10"/><text class="bt" x="418" y="266" text-anchor="middle">애플</text>
+        <line class="ln" x1="304" y1="250" x2="366" y2="250" marker-end="url(#ah)"/>
+        <text class="lbs" x="335" y="240" text-anchor="middle">NSF 점수</text>
+        <line class="ln g" x1="366" y1="278" x2="304" y2="278" marker-end="url(#ahg)"/>
+        <text class="note g" x="335" y="308" text-anchor="middle">업무 위탁</text>
+        <text class="note r" x="220" y="340" text-anchor="middle">카카오페이와 알리페이 사이도 위탁인가?</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="[사례] 카카오페이: 처분과 판결">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>[사례] 카카오페이 사건: 개인정보위 처분과 법원 판결</h2>
+  <div class="body">
+    <div class="cards">
+      <div class="card"><h3>개인정보보호위원회 처분 (2025. 1.)</h3>
+        <ul class="bul compact">
+          <li>카카오페이가 이용자 동의 없이 개인정보를 국외(알리페이)로 이전: 국외 이전 규정 위반</li>
+          <li>카카오페이: 과징금 59억 6,800만 원</li>
+          <li>애플: 과징금 24억 500만 원, 과태료 220만 원</li>
+          <li>알리페이: NSF 점수 산출 모델 파기 등 시정명령</li>
+          <li>“알리페이는 수탁자이므로 관리·감독 소홀에 불과하다”는 카카오페이의 주장을 받아들이지 않음</li>
+        </ul>
+      </div>
+      <div class="card"><h3>서울행정법원 판결 (2026. 6. 11., 원고 청구 기각)</h3>
+        <ul class="bul compact">
+          <li>애플과 알리페이 사이에는 NSF 점수 산출에 관한 <b>위탁 관계가 인정</b>됨</li>
+          <li>그러나 카카오페이와 알리페이 사이에는 NSF 관련 업무의 <b>위탁 관계를 인정하기 어려움</b></li>
+          <li>카카오페이의 전송은 애플의 수탁자(알리페이)를 거쳐 <b>제3자인 애플 측에 개인정보를 제공</b>한 것으로, 동의 없는 국외 이전에 해당</li>
+          <li>암호화한 24개 항목과 NSF 점수는 개념상 별개 정보이지만, 이전과 점수 산출의 전체 과정을 보면 실질적으로 동일한 정보</li>
+          <li>카카오페이 항소 (2026. 6.)</li>
+        </ul>
+      </div>
+    </div>
+    <p class="em center"><span class="arrow"></span>NSF 점수는 누구의 업무와 이익을 위한 것이었나? 카카오페이가 아니라 애플이었다</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="생각해 볼 문제: 외부 AI API">
+  <div class="kicker">제3자 제공과 처리위탁</div>
+  <h2>생각해 볼 문제: 외부 AI 서비스에 고객 정보를 넣으면?</h2>
+  <div class="body">
+    <div class="callout"><b>상황</b> 우리 회사가 고객 상담 내용을 요약하려고, 상담 기록(고객 이름·연락처 포함)을 해외 AI 기업의 LLM API로 보낸다. 이것은 처리위탁인가, 제3자 제공인가?</div>
+    <div class="cards">
+      <div class="card green"><h3>처리위탁 쪽으로 기우는 사정</h3>
+        <ul class="bul compact">
+          <li>요약은 우리 회사의 상담 업무를 위한 것</li>
+          <li>AI 기업은 이용료 외에 독자적 이익이 없음: 입력 데이터를 자기 모델 학습에 쓰지 않음</li>
+          <li>계약으로 보관 기간, 목적 외 이용 금지, 재위탁(하위 처리자) 등을 통제하고 점검</li>
+        </ul>
+      </div>
+      <div class="card red"><h3>제3자 제공 쪽으로 기우는 사정</h3>
+        <ul class="bul compact">
+          <li>AI 기업이 입력 데이터를 자기 모델 개선·학습에 사용</li>
+          <li>우리 회사가 그 처리를 실질적으로 관리·감독할 수 없음</li>
+          <li>입력 데이터를 AI 기업이 다른 목적으로 보관·분석</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted center">위탁이라 하더라도 해외 서버라면 제28조의8의 국외 이전 요건(처리방침 공개 등)을 갖춰야 한다. 후반부에서 볼 AI 에이전트는 이런 데이터 이전을 사람이 하나하나 지시하지 않아도 스스로 수행한다.</p>
+  </div>
+</section>
+
+<!-- ===================== 5. 민감정보와 생체인식정보 ===================== -->
+<section class="slide section" data-sec="5" data-title="민감정보와 생체인식정보">
+  <div class="kicker"><span class="part-chip">전반부</span>Section 5</div>
+  <h2>민감정보와 생체인식정보</h2>
+  <p class="section-lead">민감정보는 원칙적으로 처리가 금지된다. 얼굴·지문 같은 생체정보는 특정 개인을 알아볼 목적으로 기술적으로 처리될 때 민감정보가 된다.</p>
+  <div class="body"><ol class="roadmap" data-current="5"></ol></div>
+</section>
+
+<section class="slide" data-sec="5" data-title="제23조 조문">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>민감정보의 개념</h2>
+  <div class="body">
+    <div class="law sm">
+      <h4>제23조(민감정보의 처리 제한)</h4>
+      <p>① 개인정보처리자는 <mark>사상·신념, 노동조합·정당의 가입·탈퇴, 정치적 견해, 건강, 성생활 등에 관한 정보, 그 밖에 정보주체의 사생활을 현저히 침해할 우려가 있는 개인정보로서 대통령령으로 정하는 정보</mark>(이하 “민감정보”라 한다)를 처리하여서는 아니 된다. 다만, 다음 각 호의 어느 하나에 해당하는 경우에는 그러하지 아니하다.</p>
+      <p class="it2">1. 정보주체에게 제15조제2항 각 호 또는 제17조제2항 각 호의 사항을 알리고 다른 개인정보의 처리에 대한 동의와 별도로 동의를 받은 경우</p>
+      <p class="it2">2. 법령에서 민감정보의 처리를 요구하거나 허용하는 경우</p>
+      <p>② 개인정보처리자가 제1항 각 호에 따라 민감정보를 처리하는 경우에는 그 민감정보가 분실·도난·유출·위조·변조 또는 훼손되지 아니하도록 제29조에 따른 안전성 확보에 필요한 조치를 하여야 한다.</p>
+    </div>
+    <div class="law sm">
+      <h4>시행령 제18조(민감정보의 범위)</h4>
+      <p>법 제23조제1항 각 호 외의 부분 본문에서 “대통령령으로 정하는 정보”란 다음 각 호의 어느 하나에 해당하는 정보를 말한다. (공공기관이 법 제18조제2항제5호부터 제9호까지에 따라 처리하는 경우는 제외)</p>
+      <p class="it2">1. 유전자검사 등의 결과로 얻어진 유전정보 &nbsp; 2. 「형의 실효 등에 관한 법률」 제2조제5호에 따른 범죄경력자료에 해당하는 정보</p>
+      <p class="it2"><mark>3. 개인의 신체적, 생리적, 행동적 특징에 관한 정보로서 특정 개인을 알아볼 목적으로 일정한 기술적 수단을 통해 생성한 정보</mark> &nbsp; 4. 인종이나 민족에 관한 정보</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="민감정보의 처리 제한">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>민감정보의 처리 제한</h2>
+  <div class="body">
+    <div class="cards">
+      <div class="card"><h3>민감정보의 범위</h3>
+        <ul class="bul compact">
+          <li>사상·신념, 노동조합·정당의 가입·탈퇴, 정치적 견해</li>
+          <li>건강, 성생활 등에 관한 정보</li>
+          <li>유전정보</li>
+          <li>범죄경력자료 정보</li>
+          <li>생체인식 특징정보</li>
+          <li>인종·민족 정보</li>
+        </ul>
+      </div>
+      <div class="card red"><h3>원칙적 처리 금지</h3>
+        <ul class="bul compact">
+          <li>민감정보는 원칙적으로 처리(수집, 보관 등)가 금지됨</li>
+          <li>예외: ① 정보주체의 <b>별도 동의</b>를 받은 경우 ② 법령에서 처리를 요구하거나 허용하는 경우</li>
+          <li>동의를 받을 때에는 다른 개인정보 처리에 대한 동의와 <b>분리하여</b> 민감정보 처리에 대한 동의를 받아야 함</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="생체정보·생체인식정보의 개념">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>생체정보와 생체인식정보</h2>
+  <div class="body">
+    <figure><img src="assets/week06/a46-1.png" alt="개인정보 안에 생체정보, 그 안에 생체인식정보가 있고, 생체인식정보는 원본정보에서 일정한 기술적 수단을 거쳐 생체인식 특징정보(민감정보)로 바뀐다는 도식과 용어 정의 표" style="max-height:430px"></figure>
+    <p class="src">개인정보보호위원회, 생체정보 보호 가이드라인 (2021. 9.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="생체인식 원본정보 vs 특징정보">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>생체인식 원본정보 vs 생체인식 특징정보</h2>
+  <div class="body">
+    <figure><img src="assets/week06/a47-1.jpg" alt="지문, 얼굴, 홍채, 정맥 각각에 대해 원본 이미지와 그로부터 추출한 특징점 정보를 나란히 보여 주는 예시" style="max-height:420px"></figure>
+    <p class="src">개인정보보호위원회, 생체정보 보호 가이드라인 (2021. 9.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="일반 개인정보와 특징정보의 구별">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>얼굴 사진은 언제 민감정보가 되는가</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr">
+      <figure><img src="assets/week06/a48-1.jpg" alt="인사관리 시스템에 등록된 얼굴 사진은 일반 개인정보이지만, 이를 안면인식 출입통제 시스템에 쓰려고 특징정보를 추출하면 생체인식정보가 된다는 예시 도식" style="max-height:420px"></figure>
+      <ul class="bul compact">
+        <li>인사관리 시스템에 등록한 직원의 얼굴 사진: <b>일반 개인정보</b></li>
+        <li>같은 사진으로 안면인식 출입 시스템을 만들려고 특징정보를 추출하면: <b>생체인식 특징정보</b> (민감정보)</li>
+        <li class="arrow" style="list-style:none">당초 수집 목적과 다른 목적의 처리이므로 별도 동의 등 처리 근거가 필요</li>
+      </ul>
+    </div>
+    <p class="src">개인정보보호위원회, 생체정보 보호 가이드라인 (2021. 9.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="생체인식정보 보호 조치">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>생체인식정보 보호 조치 (총괄표)</h2>
+  <div class="body">
+    <figure><img src="assets/week06/a49-1.png" alt="생체인식정보 보호 조치 총괄표: 1 기획·설계, 2 수집, 3 이용·제공, 4 보관·파기, 5 상시 점검 단계별 조치" style="max-height:440px"></figure>
+    <p class="src">개인정보보호위원회, 생체정보 보호 가이드라인 (2021. 9.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="EU AI Act: 개관">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>EU AI Act의 생체인식정보 규율: 개관</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>생체인식 정보(biometric data)의 처리 유형 구분
+        <ul>
+          <li>생체인식 인증(biometric verification): 1:1 비교</li>
+          <li>생체인식 식별(biometric identification): 1:N 비교</li>
+          <li>생체인식 분류(biometric categorization)</li>
+          <li>감정 인식(emotion recognition)</li>
+        </ul>
+      </li>
+    </ul>
+    <figure><img src="assets/week06/a50-1.png" alt="AI Act는 생체인식정보의 처리 유형을 4가지로 구분하고 위험성에 따라 금지, 고위험, 제한된 위험, 최소 위험으로 차등 규율한다는 표" style="max-height:290px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="EU AI Act: 금지">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>EU AI Act의 생체인식정보 규율: 금지 <small>제5조</small></h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>생체인식 인증: 해당 없음</li>
+      <li>생체인식 식별: <b>공개된 공간</b>에서 <b>법 집행 목적</b>의 <b>실시간 원격</b> 생체인식 / 인터넷·CCTV 영상에서 얼굴 이미지를 <b>불특정 다수로 수집</b>하여 안면인식 DB를 구축·확장하는 시스템</li>
+      <li>생체인식 분류: 자연인을 개별적으로 분류하여 인종, 정치적 견해, 노조 가입, 종교적·철학적 신념, 성생활, 성적 지향을 추론</li>
+      <li>감정 인식: <b>직장 및 교육 기관</b>에서 근로자·학생의 감정 추론 (의료·안전 목적 제외)</li>
+    </ul>
+    <figure><img src="assets/week06/a51-1.png" alt="생체인식정보 처리유형별 금지 AI 표" style="max-height:250px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="EU AI Act: 고위험">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>EU AI Act의 생체인식정보 규율: 고위험 <small>부속서 III</small></h2>
+  <div class="body">
+    <ul class="bul">
+      <li>생체인식 인증: 해당 없음</li>
+      <li>생체인식 식별: 원격 생체인식 식별 시스템 (생체인식 인증은 제외)</li>
+      <li>생체인식 분류: 민감하거나 보호되는 속성·특징을 추론하여 분류하는 AI 시스템</li>
+      <li>감정 인식: 감정 인식에 사용되는 AI 시스템</li>
+    </ul>
+    <p class="em"><span class="arrow"></span>고위험 AI 시스템은 등록 및 적합성 평가(conformity assessment)가 필요</p>
+    <figure><img src="assets/week06/a52-1.png" alt="생체인식정보 처리유형별 고위험 AI 표: 원격 생체인식 시스템, 민감정보를 추론하여 분류하는 AI, 감정인식 AI" style="max-height:170px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="EU AI Act: 제한적 위험">
+  <div class="kicker">민감정보와 생체인식정보</div>
+  <h2>EU AI Act의 생체인식정보 규율: 제한적 위험 <small>제50조</small></h2>
+  <div class="body">
+    <div class="cards">
+      <div class="card"><h3>생체인식 관련</h3>
+        <ul class="bul compact">
+          <li>생체인식 인증·식별: 해당 없음</li>
+          <li>생체인식 분류: 그 밖의 생체인식 분류 시스템은 노출된 자연인에게 <b>시스템 작동 사실을 고지</b> (형사 사법절차 사용 시 제외)</li>
+          <li>감정 인식: 그 밖의 감정 인식 시스템도 노출된 자연인에게 <b>작동 사실을 고지</b> (형사 사법절차 사용 시 제외)</li>
+        </ul>
+      </div>
+      <div class="card"><h3>그 밖의 제한적 위험 AI</h3>
+        <ul class="bul compact">
+          <li>자연인과 직접 상호작용하는 AI: <b>AI와 상호작용한다는 사실 고지</b> (형사 사법절차 사용 시 제외)</li>
+          <li>합성 음성·이미지·영상·텍스트, 딥페이크를 생성하는 AI: <b>합성 사실 표시</b> (보조적 편집 기능, 형사 사법절차 사용 등 제외)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. 사례: 출입국 심사 AI ===================== -->
+<section class="slide section" data-sec="6" data-title="사례: 출입국 심사 AI">
+  <div class="kicker"><span class="part-chip">전반부</span>Section 6</div>
+  <h2>사례: 출입국 심사 AI 연구개발</h2>
+  <p class="section-lead">앞에서 본 수집 목적, 민감정보, 처리위탁 규정이 하나의 AI 개발 사업에서 함께 문제 된 사례. 개인정보보호위원회 2022. 4. 27. 제2022-007-046호 심의·의결.</p>
+  <div class="body"><ol class="roadmap" data-current="6"></ol></div>
+</section>
+
+<section class="slide" data-sec="6" data-title="보도: 출입국 얼굴사진 1억 7천만 건">
+  <div class="kicker">사례: 출입국 심사 AI</div>
+  <h2>정부, 출입국 얼굴사진 1억 7천만 건을 AI 업체에</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <figure class="doc"><img src="assets/week06/a54-1.png" alt="한겨레 기사 제목: [단독] 정부, 출입국 얼굴사진 1억7천만건 AI업체에 넘겼다 (2021. 10. 21.)" style="max-height:220px"></figure>
+      <figure class="doc"><img src="assets/week06/a54-2.png" alt="기사 본문: 정부가 출입국 심사에 쓸 AI 개발 명분으로 약 1억7천만건의 내외국인 얼굴 사진을 민간 업체에 넘긴 것으로 확인. 생체정보는 민감정보로 분류되지만 당사자 동의 없이 제공" style="max-height:220px"></figure>
+    </div>
+    <p class="src"><a href="https://www.hani.co.kr/arti/economy/it/1016022.html" target="_blank" rel="noopener">https://www.hani.co.kr/arti/economy/it/1016022.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="출입국 심사 AI 연구개발 개요">
+  <div class="kicker">사례: 출입국 심사 AI</div>
+  <h2>출입국 심사 AI 연구개발 개요</h2>
+  <div class="body">
+    <div class="two eq">
+      <figure><img src="assets/week06/a55-1.png" alt="제2터미널 인공지능 학습 통제구역 구성도: 출입국 업무 DB의 내국인·외국인 정보를 학습용 DB로 옮겨 참여기업이 AI를 학습시키는 구조" style="max-height:300px"><figcaption>(출입국청 내 통제구역) AI 개발 DB 구축 → (상암동 실증랩) 법무부·인천공항 출입국·외국인청의 위탁을 받은 컨소시엄이 각각 독립된 공간에서 연구 수행</figcaption></figure>
+      <figure><img src="assets/week06/a55-2.jpg" alt="개인정보보호위원회 사실조사 결과: 반출 여부, 파기 여부, 활용 여부에 관한 확인사항" style="max-height:300px"></figure>
+    </div>
+    <p class="src">개인정보보호위원회 2022. 4. 27.자 제2022-007-046호 심의·의결</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="쟁점 (1) 안면 인식">
+  <div class="kicker">사례: 출입국 심사 AI</div>
+  <h2>쟁점 (1) 출입국 심사 고도화를 위한 안면 인식</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>출입국관리법은 내·외국인 출입국 심사에서 생체정보의 활용을 허용 (제3조, 제6조, 제12조의2 등)</li>
+      <li>개인정보보호위원회의 판단</li>
+    </ul>
+    <figure><img src="assets/week06/a56-1.png" alt="위원회 판단: 인공지능 식별추적시스템 개발 사업에 활용한 안면 정보는 출입국관리법에 따라 수집한 것으로, 특정 개인을 알아볼 목적으로 기술적 수단을 통해 처리하는 민감정보에 해당하므로 제23조 요건을 충족해야 하고, 출입국관리법이 생체정보 활용을 규정하는 것은 법령에서 민감정보의 처리를 요구하거나 허용하는 경우에 해당" style="max-height:230px"></figure>
+    <figure><img src="assets/week06/a56-2.png" alt="위원회 판단: 안면 데이터를 출입국 관리시스템 고도화(AI 개발)를 위해 활용하는 것은 효율적 출입국 관리라는 본래 개인정보 수집 목적 범위 내에 포함" style="max-height:70px"></figure>
+    <p class="em center"><span class="arrow"></span>민감정보이지만 법령상 처리 근거가 있고, 수집 목적 범위 안의 이용으로 판단</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="쟁점 (2) CCTV 이상행동 추적">
+  <div class="kicker">사례: 출입국 심사 AI</div>
+  <h2>쟁점 (2) CCTV를 활용한 출입국 심사장 이상행동 추적</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>쟁점: CCTV 영상정보를 출입국 심사장 이상행동 추적을 위한 AI 개발에 이용하는 것이 적법한가
+        <ul><li>출입국관리법상 “출입국 심사” 외의 목적으로 AI 기술개발에 사용할 수 있는 명시적 근거가 없음</li></ul>
+      </li>
+    </ul>
+    <figure><img src="assets/week06/a57-1.png" alt="위원회 판단: CCTV 영상에서 이상행동을 추적하려고 특징점을 추출하는 것은 민감정보 처리이므로 제23조 요건을 갖춰야 한다. 실제 개발은 실행되지 않아 위법성 판단은 하지 않으나, 향후 추진하려면 정보주체 동의, 법령 근거 마련, 비식별화가 필요" style="max-height:330px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="쟁점 (3) 처리위탁인지">
+  <div class="kicker">사례: 출입국 심사 AI</div>
+  <h2>쟁점 (3) 개인정보 처리위탁인지</h2>
+  <div class="body">
+    <figure><img src="assets/week06/a58-1.png" alt="위원회 판단: 출입국 심사 고도화를 목적으로 인공지능 식별 추적시스템 개발 관련 개인정보 처리위탁 계약을 참여기업과 체결한 것은 제26조의 개인정보 처리위탁에 해당" style="max-height:80px"></figure>
+    <figure><img src="assets/week06/a58-2.png" alt="개인정보보호위원회와 법무부의 질의 및 회신: 기술결과물의 의미, 기술결과물에 대한 지식재산권의 공동 소유 의미, 기술결과물 지식재산권의 이용 제한 방법" style="max-height:330px"></figure>
+    <p class="muted center">참여기업이 기술결과물의 지식재산권을 공동 소유한다면 “독자적 이익”이 있는 것 아닌가? 법무부는 참여기업이 법무부의 동의 없이 알고리즘을 판매하거나 지식재산권을 양도할 수 없다고 회신했고, 위원회는 처리위탁으로 판단했다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="결론: 위탁 사실 미공개">
+  <div class="kicker">사례: 출입국 심사 AI</div>
+  <h2>출입국 심사 AI 연구개발 사건: 결론</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>관련 규정</b>
+        <ul>
+          <li>제26조 제2항: 위탁자는 위탁하는 업무의 내용과 수탁자를 정보주체가 언제든지 쉽게 확인할 수 있도록 공개하여야 함</li>
+          <li>시행령 제28조 제2항: 위탁자의 인터넷 홈페이지에 위탁 업무의 내용과 수탁자를 지속적으로 게재</li>
+        </ul>
+      </li>
+      <li><b>위법성 판단</b>
+        <ul><li>법무부가 공모사업 참여기업과 처리위탁 계약을 맺으면서 위탁 사실을 공개하지 않은 것은 제26조 제2항 위반</li></ul>
+      </li>
+    </ul>
+    <div class="grid2">
+      <figure><img src="assets/week06/a59-1.png" alt="피심인의 위반사항 표: 개인정보 처리위탁 미공개, 개인정보 보호법 제26조 제2항, 시행령 제28조 제2항, 개인정보 처리업무 위탁사실을 공개하지 않은 행위" style="max-height:110px"></figure>
+      <figure><img src="assets/week06/a59-2.png" alt="과태료 산출내역: 개인정보 처리위탁 사실 미공개, 기준금액 200만원, 감경 100만원, 최종 과태료 100만원" style="max-height:110px"></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="보도: 법무부 과태료 처분">
+  <div class="kicker">사례: 출입국 심사 AI</div>
+  <h2>법무부, 개인정보보호법 위반으로 ‘과태료 처분’</h2>
+  <div class="body">
+    <figure class="doc"><img src="assets/week06/a60-3.png" alt="기사 제목: 법무부, 개인정보보호법 위반으로 과태료 처분 받았다 (보안뉴스, 2022. 4. 27.)" style="max-height:80px"></figure>
+    <div class="grid2" style="align-items:start">
+      <figure class="doc"><img src="assets/week06/a60-1.png" alt="기사 부제와 첫 문단: 개인정보위, 출입국관리 AI 식별추적시스템 구축사업 개인정보보호법 위반여부 조사결과 발표" style="max-height:200px"></figure>
+      <figure class="doc"><img src="assets/week06/a60-2.png" alt="기사 본문: 법무부는 출입국관리법에 따라 수집한 내국인 5,760만 건, 외국인 1억 2,000만 건의 개인정보를 인공지능 학습에 활용. 실증랩 외부로 반출되지 않도록 조치, 사업 종료 후 학습 활용 개인정보는 모두 삭제" style="max-height:280px"></figure>
+    </div>
+    <p class="src"><a href="https://www.boannews.com/media/view.asp?idx=106388" target="_blank" rel="noopener">https://www.boannews.com/media/view.asp?idx=106388</a></p>
+  </div>
+</section>
+
+<!-- ===================== 7. AI 에이전트의 개념 ===================== -->
+<section class="slide section" data-sec="7" data-title="AI 에이전트의 개념">
+  <div class="kicker"><span class="part-chip p2">후반부</span>Section 7</div>
+  <h2>AI 에이전트의 개념</h2>
+  <p class="section-lead">대규모 언어모델이 도구·기억·계획 기능과 결합하여 스스로 작업을 수행하는 시스템. 기술 배경은 2강에서 다룬 내용이므로 빠르게 확인한다.</p>
+  <div class="body"><ol class="roadmap" data-current="7"></ol></div>
+</section>
+
+<section class="slide" data-sec="7" data-title="AI 에이전트 시대의 도래">
+  <div class="kicker">AI 에이전트의 개념</div>
+  <h2>“AI 에이전트” 시대의 도래</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>“AI 에이전트”: AI 활용의 새로운 패러다임
+        <ul>
+          <li>인지형 AI (2012년~2019년): 텍스트, 이미지 인식</li>
+          <li>생성형 AI (2019년~2024년): 새로운 콘텐츠의 생성</li>
+          <li><b>AI 에이전트 (2024년~현재)</b>: 목표를 받아 스스로 계획하고 도구를 써서 작업 수행</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="eras" aria-label="AI 발전 단계">
+      <div class="era e1"><b>인지형 AI</b><span>Perception AI</span><p>인식·분류</p></div>
+      <div class="era e2"><b>생성형 AI</b><span>Generative AI</span><p>텍스트·이미지 생성</p></div>
+      <div class="era e3"><b>AI 에이전트</b><span>Agentic AI</span><p>계획·도구 사용·실행</p></div>
+      <div class="era e4"><b>물리 AI</b><span>Physical AI</span><p>로봇·자율주행</p></div>
+    </div>
+    <p class="muted center">NVIDIA 젠슨 황 CEO가 제시한 AI 발전 방향 (자료: 삼일PwC경영연구원)</p>
+    <p class="src"><a href="https://www.pwc.com/kr/ko/insights/issue-brief/ai-agent-in-action.html" target="_blank" rel="noopener">https://www.pwc.com/kr/ko/insights/issue-brief/ai-agent-in-action.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="LLM 역량의 확장">
+  <div class="kicker">AI 에이전트의 개념</div>
+  <h2>대규모 언어모델(LLM)의 역량 확장</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr">
+      <ul class="bul compact">
+        <li>LLM 역량의 급격한 발전
+          <ul>
+            <li>언어 이해·답변을 넘어 광범위한 과제 수행 능력을 보임</li>
+            <li>다수 영역에서 인간의 능력을 넘어서기 시작함</li>
+            <li>2023년 GPT-4: 미국 변호사 시험 상위 10% 성적</li>
+            <li>2025년 GPT-5, Gemini 2.5: 세계 대학생 프로그래밍 경시대회 금메달 성적</li>
+          </ul>
+        </li>
+      </ul>
+      <figure><img src="assets/week06/b04-1.jpg" alt="AI 벤치마크 포화 그래프: MNIST, ImageNet, SQuAD, GLUE, MMLU, GPQA 등 벤치마크에서 AI 성능이 인간 수준(0%)에 빠르게 도달" style="max-height:340px"><figcaption>AI benchmarks have rapidly saturated over time (Epoch AI)</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://epoch.ai/gradient-updates/the-real-reason-ai-benchmarks-havent-reflected-economic-impacts" target="_blank" rel="noopener">https://epoch.ai/gradient-updates/the-real-reason-ai-benchmarks-havent-reflected-economic-impacts</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="스케일링 법칙">
+  <div class="kicker">AI 에이전트의 개념</div>
+  <h2>스케일링 법칙 (Scaling Laws)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>연산량, 학습 데이터 규모, 모델 파라미터 수가 증가할수록 LLM 성능이 <b>예측 가능하게</b> 향상 (Kaplan et al. 2020). GPT-3 등 대규모 모델 발전의 이론적 기반</li>
+      <li>모델을 “더 크게” 만들면 성능을 높일 수 있으나 세 요소(연산, 데이터, 모델)가 균형 있게 커져야 함. 대규모 투자와 산업 경쟁을 촉발</li>
+    </ul>
+    <div class="grid2" style="align-items:center">
+      <figure class="plain"><img src="assets/week06/b05-2.png" alt="Kaplan et al. 2020 Figure 1: 연산량, 데이터셋 크기, 파라미터 수가 늘수록 테스트 손실이 감소" style="max-height:230px"><figcaption>Kaplan et al. (2020) <a href="https://arxiv.org/abs/2001.08361" target="_blank" rel="noopener">arxiv.org/abs/2001.08361</a></figcaption></figure>
+      <figure><img src="assets/week06/b05-3.jpg" alt="2018년부터 2023년까지 BERT, GPT-2, GPT-3, PaLM, LLaMA 등 언어모델의 학습 토큰 규모를 원 크기로 비교" style="max-height:230px"><figcaption>Model Size in Tokens <a href="https://scale.com/guides/large-language-models" target="_blank" rel="noopener">scale.com</a></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="스케일링 법칙의 3단계">
+  <div class="kicker">AI 에이전트의 개념</div>
+  <h2>스케일링 법칙의 3단계 진화</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr">
+      <ol class="bul compact">
+        <li><b>사전 학습(Pre-Training) 규모 확장</b>: 더 큰 모델, 더 많은 데이터, 더 많은 연산</li>
+        <li><b>사후 학습(Post-Training) 규모 확장</b>
+          <ul>
+            <li>같은 모델도 추가 학습(RLHF 등)으로 성능·안전성 개선 (예: GPT-3 → GPT-3.5)</li>
+            <li>최적화·정렬 과정으로 대중적 활용성 증가 → ChatGPT의 상업적 성공</li>
+          </ul>
+        </li>
+        <li><b>추론 단계(Test-Time) 규모 확장</b>
+          <ul>
+            <li>모델의 추론 과정에 더 많은 연산을 투입하여 성능 개선 (예: Chain-of-Thought, 다중 샘플링)</li>
+            <li>모델이 더 오래 추론하게 하여 더 나은 결과를 도출</li>
+          </ul>
+        </li>
+      </ol>
+      <figure><img src="assets/week06/b06-1.jpg" alt="From one to three scaling laws: 사전학습 스케일링, 사후학습 스케일링, 테스트 타임 스케일링(long thinking) 곡선" style="max-height:280px"></figure>
+    </div>
+    <p class="src"><a href="https://blogs.nvidia.com/blog/ai-scaling-laws/" target="_blank" rel="noopener">https://blogs.nvidia.com/blog/ai-scaling-laws/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="컨텍스트 윈도우">
+  <div class="kicker">AI 에이전트의 개념</div>
+  <h2>컨텍스트 윈도우 (Context Window)</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr">
+      <ul class="bul compact">
+        <li><b>개념</b>
+          <ul>
+            <li>LLM이 한 번에 읽고 쓸 수 있는 토큰의 총량</li>
+            <li>이용자 입력(질문·첨부 문서·대화 이력)과 모델 출력을 합한 한도</li>
+          </ul>
+        </li>
+        <li><b>중요성</b>
+          <ul>
+            <li>한도를 넘는 내용은 모델에 전달되지 않음 → 긴 문서의 앞부분, 오래된 대화 내용을 “잊은” 것처럼 답변</li>
+            <li>출력도 같은 한도를 씀 → 입력이 한도에 가까우면 답변이 잘리거나 앞의 입력이 밀려남</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="ctxw">
+        <div class="case"><b>이용자 입력이<br>컨텍스트 윈도우를 초과</b>
+          <div class="win"><div class="doc" data-l="이용자 입력" style="top:-18px;bottom:14px"><i class="cut"></i><i class="cut"></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        </div>
+        <div class="case"><b>이용자 입력 + 모델 출력이<br>컨텍스트 윈도우를 초과</b>
+          <div class="win"><div class="doc" data-l="이용자 입력" style="top:-18px;bottom:14px"><i class="cut"></i><i></i><i></i><i></i><span class="ol">모델 출력</span><i class="o"></i><i class="o"></i></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="muted center">흐리게 표시한 부분은 윈도우 밖으로 밀려나 모델에 전달되지 않는다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="컨텍스트 윈도우의 증가">
+  <div class="kicker">AI 에이전트의 개념</div>
+  <h2>컨텍스트 윈도우의 급속한 증가</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr">
+      <ul class="bul compact">
+        <li><b>최대 컨텍스트 윈도우의 증가</b>
+          <ul>
+            <li>2022년 이전 4k~8k (A4 4~8장) → 2024년 128k~1M (A4 130~1,000장) → 2025년 최대 10M (A4 약 10,000장)</li>
+            <li>A4 1장 ≈ 1,000 토큰 가정. 언어·편집에 따라 차이</li>
+          </ul>
+        </li>
+        <li><b>실효 컨텍스트 윈도우의 증가</b>
+          <ul>
+            <li>긴 소설·대화 관련 질문에서 80% 이상 정확도를 보이는 길이는 더 빠르게 증가</li>
+            <li>미국 세법전 전체를 단일 컨텍스트로 처리할 수 있는 수준에 곧 도달할 전망</li>
+          </ul>
+        </li>
+      </ul>
+      <figure><img src="assets/week06/b08-1.png" alt="Epoch AI 그래프: 2023년부터 2025년까지 모델별 컨텍스트 윈도우와 80% 정확도를 유지하는 길이가 매년 수십 배씩 증가. 법률 문헌(미국 항소법원 판결, 세법전) 분량이 참고선으로 표시됨" style="max-height:320px"></figure>
+    </div>
+    <p class="src"><a href="https://epoch.ai/data-insights/context-windows" target="_blank" rel="noopener">https://epoch.ai/data-insights/context-windows</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="AI 에이전트의 개념">
+  <div class="kicker">AI 에이전트의 개념</div>
+  <h2>AI Agent의 개념</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>에이전트(Agent)</b>: “무엇인가를 수행하는 것”을 가리킴. 어원은 라틴어 “agere”(~을 하다)</li>
+      <li><b>AI 에이전트</b>: Russell &amp; Norvig의 정의. <b>감지기(sensor)</b>를 통해 자신의 <b>환경</b>을 <b>지각(perceive)</b>하고, <b>작동기(actuator)</b>를 통해 환경에 대해 <b>동작(action)</b>을 수행하는 것</li>
+    </ul>
+    <figure class="plain"><img src="assets/week06/b09-1.png" alt="에이전트 순환 도식: 환경을 센서로 지각하고, 추론과 의사결정을 거쳐, 작동기로 환경에 행동" style="max-height:280px"><figcaption>박상철, “Heterogeneity of AI-Induced Societal Harms and the Failure of Omnibus AI Laws” (2023)</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="새로운 AI 에이전트 패러다임">
+  <div class="kicker">AI 에이전트의 개념</div>
+  <h2>새로운 AI 에이전트 패러다임</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr">
+      <ul class="bul compact">
+        <li><b>LLM 기반 AI 에이전트</b>
+          <ul>
+            <li>LLM이 판단과 추론을 맡고</li>
+            <li>도구·기억·계획 기능과 결합하여 주어진 환경에서 복잡한 작업을 수행</li>
+          </ul>
+        </li>
+        <li><b>주요 구성 요소</b>
+          <ul>
+            <li><b>도구(Tools)</b>: 코드 실행, 검색, 계산, 일정 관리 등 외부 시스템과 연동</li>
+            <li><b>기억(Memory)</b>: 단기 기억(대화 세션, 컨텍스트) / 장기 기억(벡터 DB 등)</li>
+            <li><b>계획(Planning)</b>: 문제 분해, 자기 검토(self-critique), 성찰로 지속적 개선</li>
+          </ul>
+        </li>
+      </ul>
+      <figure class="plain"><img src="assets/week06/b10-1.png" alt="AI 에이전트 구성도: 가운데 AI 에이전트, 왼쪽 도구(달력, 계산기, 코드해석기, 검색, 기타)와 MCP, 위쪽 메모리(단기·장기), 오른쪽 계획(반영, 자기 비판, 연쇄적 사고, 하위목표 분해), 아래 행동" style="max-height:280px"><figcaption>자료: Lilian Weng, 삼일PwC경영연구원</figcaption></figure>
+    </div>
+    <p class="em center"><span class="arrow"></span>기억·도구·계획 역량을 통합하여 복잡한 과제를 자율적으로 해결</p>
+    <p class="src"><a href="https://www.pwc.com/kr/ko/insights/issue-brief/ai-agent-in-action.html" target="_blank" rel="noopener">https://www.pwc.com/kr/ko/insights/issue-brief/ai-agent-in-action.html</a></p>
+  </div>
+</section>
+
+<!-- ===================== 8. 도구 활용 ===================== -->
+<section class="slide section" data-sec="8" data-title="도구 활용">
+  <div class="kicker"><span class="part-chip p2">후반부</span>Section 8</div>
+  <h2>(1) 도구 활용 능력</h2>
+  <p class="section-lead">에이전트가 검색하고, 외부 서비스를 호출하고, 컴퓨터를 조작한다. 데이터는 외부에서 들어오기도 하고 외부로 나가기도 한다.</p>
+  <div class="body"><ol class="roadmap" data-current="8"></ol></div>
+</section>
+
+<section class="slide" data-sec="8" data-title="도구 활용 능력">
+  <div class="kicker">도구 활용</div>
+  <h2>AI Agent의 도구 활용 능력</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr">
+      <ul class="bul compact">
+        <li><b>의의</b>
+          <ul>
+            <li>AI가 사람처럼 컴퓨터와 앱을 조작하여 다양한 작업을 수행</li>
+            <li>컴퓨팅 작업을 자율적으로 수행하여 활용 범위가 확장</li>
+          </ul>
+        </li>
+        <li><b>예시: 아마존 쇼핑 도우미</b>
+          <ul>
+            <li>2024년 2월: 상품 정보 제공 챗봇 Rufus 출시</li>
+            <li>2025년 4월: 쇼핑 AI 에이전트 ‘Buy for Me’ 공개
+              <ul>
+                <li>여러 쇼핑 사이트에서 검색·추천</li>
+                <li>에이전트가 직접 로그인하여 주문 정보를 입력하고 구매</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <figure><img src="assets/week06/b12-1.jpg" alt="아마존 Buy for Me 화면: 아마존 앱에서 다른 브랜드 사이트의 상품을 검색하고 구매하는 흐름" style="max-height:330px"></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="검색 증강 생성 (RAG)">
+  <div class="kicker">도구 활용</div>
+  <h2>검색 증강 생성 기법 (RAG)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>Retrieval-Augmented Generation (RAG)</b>: 별도의 지식 데이터베이스를 만들어 두고, 생성 과정에서 검색 결과를 문맥(context)으로 활용</li>
+      <li><b>기반모델 메모리의 구분</b>
+        <ul>
+          <li>Pre-trained parametric memory: 사전학습으로 모델 내부(파라미터)에 기억되는 정보</li>
+          <li>Non-parametric memory: 생성 과정에서 문맥으로 따로 주입되는 정보</li>
+        </ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week06/b13-1.jpg" alt="Lewis et al. 2020 Figure 1: 질문을 인코딩해 문서 인덱스에서 관련 문서를 찾고(Retriever), 생성기(Generator)가 문서를 참고해 답을 생성" style="max-height:280px"></figure>
+    <p class="src">Lewis et al. (2020) Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks <a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener">https://arxiv.org/abs/2005.11401</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="WebGPT">
+  <div class="kicker">도구 활용</div>
+  <h2>(예시) WebGPT</h2>
+  <div class="body">
+    <p>OpenAI WebGPT (2021. 12.): 웹 검색 결과를 답변 생성에 활용하고 인용 표시를 제공</p>
+    <div class="two" style="grid-template-columns:.9fr 1.1fr;align-items:start">
+      <div class="stack">
+        <figure><img src="assets/week06/b14-1.png" alt="WebGPT: Improving the factual accuracy of language models through web browsing" style="max-height:110px"></figure>
+        <figure><img src="assets/week06/b14-3.png" alt="We’ve fine-tuned GPT-3 to more accurately answer open-ended questions using a text-based web browser." style="max-height:90px"></figure>
+      </div>
+      <figure><img src="assets/week06/b14-2.jpg" alt="WebGPT 답변 예시: How do neural networks work? 질문에 대한 답변과 인용 출처 목록" style="max-height:300px"></figure>
+    </div>
+    <p class="src"><a href="https://openai.com/research/webgpt" target="_blank" rel="noopener">https://openai.com/research/webgpt</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="기존 생성 AI vs RAG AI">
+  <div class="kicker">도구 활용</div>
+  <h2>기존 생성 AI vs RAG AI</h2>
+  <div class="body">
+    <table class="tbl" style="width:100%;font-size:clamp(14px,1.3vw,17px)">
+      <thead><tr><th>기준</th><th>기존 생성 AI</th><th>RAG AI</th></tr></thead>
+      <tbody>
+        <tr><th>시의성</th><td>학습 종료 시점에 고정</td><td>실시간 정보 검색</td></tr>
+        <tr><th>활용 범위</th><td>일반적 과제 해결</td><td>특정 활용 사례에 특화 가능</td></tr>
+        <tr><th>투명성</th><td>“블랙박스” 문제</td><td>출처 표시 가능</td></tr>
+        <tr><th>신뢰성·정확성</th><td>“환각” 문제</td><td>검색 DB의 정보를 근거로 답변</td></tr>
+      </tbody>
+    </table>
+    <p class="src"><a href="https://insights.auquan.com/the-advantages-of-retrieval-augmented-generation-rag-ai-over-generative-ai-for-financial-services-white-paper" target="_blank" rel="noopener">https://insights.auquan.com/the-advantages-of-retrieval-augmented-generation-rag-ai-over-generative-ai-for-financial-services-white-paper</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="RAG AI의 활용">
+  <div class="kicker">도구 활용</div>
+  <h2>RAG AI의 활용</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>예시: 금융기관의 기업 정보 분석 AI
+        <ul>
+          <li>질문: “이 회사에 사기나 뇌물수수 이력이 있나?”</li>
+          <li>Retrieval AI: 지식 베이스 검색 (분석 보고서, 공시자료, 정부 기록, 뉴스 등)</li>
+          <li>Generative AI: 검색 결과를 맥락으로 입력받아 답변 생성</li>
+        </ul>
+      </li>
+    </ul>
+    <figure><img src="assets/week06/b16-2.png" alt="Retrieval AI + Generative AI = Retrieval Augmented Generation (RAG) AI" style="max-height:60px"></figure>
+    <figure><img src="assets/week06/b16-1.jpg" alt="RAG 질의 처리 도식: 질의를 임베딩하여 벡터 DB에서 지식을 검색하고, 프롬프트에 질의와 맥락을 넣어 LLM이 응답. RAG가 없으면 바로 LLM으로 감" style="max-height:270px"><figcaption>Query process with and without RAG</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="MCP">
+  <div class="kicker">도구 활용</div>
+  <h2>MCP: 에이전트 생태계의 새로운 프로토콜</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.05fr .95fr">
+      <ul class="bul compact">
+        <li><b>모델 컨텍스트 프로토콜 (Model Context Protocol, MCP)</b>
+          <ul>
+            <li>Anthropic이 2024년 11월 발표. 에이전트 생태계의 상호운용성(interoperability) 확보가 목표</li>
+            <li>AI 모델과 외부 도구·데이터 소스가 표준화된 방식으로 상호작용하게 하는 오픈 프로토콜</li>
+          </ul>
+        </li>
+        <li><b>핵심 특징</b>
+          <ul>
+            <li>표준화된 메시지 포맷: 모델 ↔ 도구·서비스 간 호출을 통일</li>
+            <li>구조화된 컨텍스트 교환: 상태를 유지하는 세션으로 맥락을 구조화하고 추적</li>
+            <li>보안·신뢰성: 인증·암호화 등 데이터 보호, 로그 기록 지원</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week06/b17-4.jpg" alt="MCP 구조도: 왼쪽 모델(Anthropic Claude, OpenAI), 가운데 Model Context Protocol, 오른쪽 도구·서비스(REST, 앱, 스토리지)" style="max-height:210px"></figure>
+        <figure class="doc"><img src="assets/week06/b17-1.png" alt="기사 제목: 인공지능의 새로운 커넥티드… MCP, 지능형 에이전트 시대의 서막을 열다" style="max-height:110px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.aitimes.kr/news/articleView.html?idxno=35424" target="_blank" rel="noopener">https://www.aitimes.kr/news/articleView.html?idxno=35424</a> · <a href="https://www.alphamatch.ai/blog/model-context-protocol" target="_blank" rel="noopener">https://www.alphamatch.ai/blog/model-context-protocol</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="검색 에이전트의 데이터 흐름">
+  <div class="kicker">도구 활용</div>
+  <h2>검색 Agent의 데이터 흐름과 법적 쟁점</h2>
+  <div class="body">
+    <svg class="flow" viewBox="0 0 760 320" role="img" aria-label="검색 에이전트가 이용자의 검색 요청을 받아 웹이나 MCP 서버, 내부 데이터 출처를 검색하고 결과를 이용자에게 돌려주는 흐름">
+      <use href="#i-web" x="40" y="50" width="100" height="80" class="ic"/>
+      <text class="lb" x="90" y="152" text-anchor="middle">웹 / MCP 서버 등</text>
+      <rect class="box soft" x="300" y="56" width="160" height="70" rx="10"/>
+      <text class="bt" x="380" y="97" text-anchor="middle">Search Agent</text>
+      <use href="#i-user" x="660" y="60" width="50" height="58" class="ic"/>
+      <text class="lb" x="685" y="140" text-anchor="middle">이용자</text>
+      <use href="#i-db" x="352" y="222" width="56" height="70" class="ic"/>
+      <text class="lb" x="380" y="312" text-anchor="middle">내부 데이터 출처</text>
+      <line class="ln" x1="296" y1="76" x2="146" y2="76" marker-end="url(#ah)"/><text class="lbs" x="221" y="68" text-anchor="middle">검색</text>
+      <g class="r"><line class="ln" x1="146" y1="106" x2="296" y2="106" marker-end="url(#ahr)"/><text class="note" x="221" y="124" text-anchor="middle">결과</text></g>
+      <line class="ln" x1="654" y1="76" x2="464" y2="76" marker-end="url(#ah)"/><text class="lbs" x="559" y="68" text-anchor="middle">검색 요청</text>
+      <line class="ln" x1="464" y1="106" x2="654" y2="106" marker-end="url(#ah)"/><text class="lbs" x="559" y="124" text-anchor="middle">결과</text>
+      <line class="ln" x1="366" y1="130" x2="366" y2="216" marker-end="url(#ah)"/><text class="lbs" x="356" y="178" text-anchor="end">검색</text>
+      <g class="r"><line class="ln" x1="394" y1="216" x2="394" y2="130" marker-end="url(#ahr)"/><text class="note" x="404" y="178">결과</text></g>
+    </svg>
+    <div class="cards">
+      <div class="card red"><h3>공개 데이터 출처 활용</h3><p style="margin:0;font-size:14.5px">고유식별정보 수집, 타인 사칭, 피싱 이메일 생성 등 <b>오용 위험성</b> (Hanna Kim et al., 2025)</p></div>
+      <div class="card red"><h3>내부 데이터 출처 활용</h3><p style="margin:0;font-size:14.5px">내부 정보에 대한 <b>정당한 접근 권한 검증</b> 필요 (예: 기업 내부 문서 DB에 대한 RAG)</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="웹 검색 에이전트의 오용 위험성">
+  <div class="kicker">도구 활용</div>
+  <h2>웹 검색 Agent의 오용 위험성</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr">
+      <div class="stack">
+        <p>LLM이 웹 기반 도구를 활용할 때의 위험성 (Hanna Kim et al., 2025)</p>
+        <div class="stats" style="grid-template-columns:1fr">
+          <div class="stat red"><b>95.9%</b><span>고유식별정보(PII) 수집: 온라인상 개인정보 추출 정밀도</span></div>
+          <div class="stat red"><b>93.9%</b><span>사칭 글 생성: 실제로 신뢰할 만하다고 평가된 비율</span></div>
+          <div class="stat red"><b>+46.7%</b><span>스피어 피싱 이메일: 클릭률 증가</span></div>
+        </div>
+      </div>
+      <figure class="plain"><img src="assets/week06/b19-1.jpg" alt="Hanna Kim et al. 2025 Figure 2: 이용자가 Bob의 개인정보를 찾아 달라고 하면, 도구 없는 LLM은 거절하지만 웹 검색 에이전트와 웹 탐색 에이전트는 검색과 페이지 탐색으로 전화번호 등을 찾아내는 과정" style="max-height:380px"><figcaption>Hanna Kim et al. (2025)</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="내부 DB 검색: 접근 권한">
+  <div class="kicker">도구 활용</div>
+  <h2>내부 DB Agent 검색: 접근 권한 검증의 필요성</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr">
+      <ul class="bul compact">
+        <li><b>PrivacyLens 실험 사례</b>
+          <ul>
+            <li>GPT-4 기반 에이전트가 기업 내부 협업 도구(Slack, Notion)에 접근하여 답변 생성</li>
+            <li>내부 민감 정보(인사·계약 관련 데이터)를 검색하여 응답에 포함</li>
+            <li>예: 한 직원의 퇴사 합의와 비밀유지조항 같은 민감한 내부 정보가 다른 직원에게 노출</li>
+          </ul>
+        </li>
+        <li class="arrow" style="list-style:none">에이전트가 접근할 수 있는 정보와, 질문한 사람이 볼 권한이 있는 정보는 다르다</li>
+      </ul>
+      <figure><img src="assets/week06/b20-1.jpg" alt="PrivacyLens 실험 로그: HR 담당자 에이전트가 Slack과 Notion을 검색해 Tom의 퇴사 합의와 비밀유지 계약 내용을 찾아 Mark에게 보내는 메시지에 포함" style="max-height:360px"></figure>
+    </div>
+    <p class="src"><a href="https://salt-nlp.github.io/PrivacyLens/" target="_blank" rel="noopener">https://salt-nlp.github.io/PrivacyLens/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="프롬프트 인젝션 공격">
+  <div class="kicker">도구 활용</div>
+  <h2>프롬프트 인젝션 공격</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>LLM의 본질적 한계와 프롬프트 인젝션 공격(Prompt Injection Attack)
+        <ul>
+          <li>LLM은 구조적으로 “명령”과 “데이터”를 구분하지 못함</li>
+          <li>웹페이지·PDF·이메일·MCP 서버에 심어 둔 지시를 이용자의 명령처럼 실행할 수 있음</li>
+        </ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week06/b21-1.jpg" alt="모바일 에이전트 공격 예시: 이용자는 최신 메시지 확인을 지시했으나, 메시지 안에 NVIDIA 주식 100주를 매도하라는 지시가 숨어 있어 에이전트가 주식 앱을 열고 매도 버튼을 누름" style="max-height:290px"></figure>
+    <p class="src"><a href="https://arxiv.org/abs/2410.17520" target="_blank" rel="noopener">https://arxiv.org/abs/2410.17520</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="치명적 3요소">
+  <div class="kicker">도구 활용</div>
+  <h2>AI 에이전트의 치명적 3요소 (Lethal Trifecta)</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.15fr .85fr">
+      <div class="stack">
+        <p>AI 에이전트가 다음 세 가지 능력을 동시에 갖추면 위험을 피할 수 없다.</p>
+        <ol class="bul compact">
+          <li><b>비공개 데이터 접근</b> (Access to private data): 이메일·문서·DB 등 민감 정보에 대한 접근 권한</li>
+          <li><b>신뢰할 수 없는 콘텐츠 노출</b> (Exposure to untrusted content): 공격자가 조작한 텍스트나 이미지가 LLM에 도달하는 경로</li>
+          <li><b>외부 통신 능력</b> (Ability to externally communicate): 데이터를 외부로 내보낼 수 있는 수단</li>
+        </ol>
+        <p class="em"><span class="arrow"></span>세 기능이 결합되면 공격자는 손쉽게 비공개 데이터를 외부로 보낼 수 있다</p>
+      </div>
+      <figure><img src="assets/week06/b22-1.jpg" alt="The lethal trifecta: Access to Private Data, Exposure to Untrusted Content, Ability to Externally Communicate 세 원" style="max-height:260px"></figure>
+    </div>
+    <p class="src"><a href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/" target="_blank" rel="noopener">https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="예시: 고객지원 서비스">
+  <div class="kicker">도구 활용</div>
+  <h2>예시 사례: 고객지원 서비스</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr">
+      <ul class="bul compact">
+        <li>보안 기업 Cato Networks가 공개한 개념증명(PoC) 공격
+          <ol>
+            <li>외부 이용자가 프롬프트 인젝션을 담은 지원 요청을 제출</li>
+            <li>고객지원 데스크(Jira Service Management)의 직원이 AI(MCP 연결)로 요청을 처리</li>
+            <li>AI가 요청에 숨은 지시를 실행하여 내부 데이터를 읽어 수집</li>
+            <li>수집한 내용을 지원 요청에 대한 답글로 게시 → 외부 이용자가 열람</li>
+          </ol>
+        </li>
+        <li class="arrow" style="list-style:none">비공개 데이터 접근 + 외부 콘텐츠 노출 + 외부 통신(답글 게시)이 모두 갖춰진 구조</li>
+      </ul>
+      <figure class="plain"><img src="assets/week06/b23-1.png" alt="공격 도식: 익명 외부 이용자가 프롬프트 인젝션이 담긴 요청을 JSM에 제출하고, 지원 엔지니어가 Atlassian MCP를 호출하면 테넌트 데이터가 유출됨" style="max-height:330px"></figure>
+    </div>
+    <p class="src"><a href="https://www.catonetworks.com/blog/cato-ctrl-poc-attack-targeting-atlassians-mcp/" target="_blank" rel="noopener">https://www.catonetworks.com/blog/cato-ctrl-poc-attack-targeting-atlassians-mcp/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="보도: 메타 AI 챗봇 지원 절차">
+  <div class="kicker">도구 활용</div>
+  <h2>이메일 해킹 없이 뚫린 인스타그램, 허점은 메타 AI 챗봇 지원 절차</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <figure class="doc"><img src="assets/week06/b24-1.png" alt="기사 제목: 이메일 해킹 없이 뚫린 인스타그램, 허점은 메타 AI 챗봇 지원 절차 (2026. 6. 3.). 부제: 공격자, 메타 AI 지원 챗봇을 속여 새 이메일을 등록하고 비밀번호 재설정" style="max-height:260px"></figure>
+      <figure class="doc"><img src="assets/week06/b24-2.png" alt="기사 본문: 공격자는 VPN으로 피해자 위치를 흉내 낸 뒤 메타 AI 지원 어시스턴트에 계정 주인인 척 새 이메일 추가를 요청했고, 챗봇은 공격자가 보낸 인증 코드를 받아 비밀번호 재설정 버튼을 제공해 계정이 넘어감" style="max-height:300px"></figure>
+    </div>
+    <p class="src"><a href="https://www.dailysecu.com/news/articleView.html?idxno=207027" target="_blank" rel="noopener">https://www.dailysecu.com/news/articleView.html?idxno=207027</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="개인용 AI 에이전트: OpenClaw">
+  <div class="kicker">도구 활용</div>
+  <h2>개인용 AI 에이전트의 확산</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr">
+      <ul class="bul compact">
+        <li><b>개인용 AI 비서: OpenClaw</b>
+          <ul>
+            <li>메신저(Telegram·Discord 등)로 받은 지시를 개인 PC에서 자율 수행</li>
+            <li>컴퓨터 전체 권한 보유: 프로그램(브라우저 등) 실행, 파일시스템 읽기·쓰기, 이메일 등 API 접근</li>
+            <li>치명적 3요소 결합: 개인 데이터 접근 + 외부 입력 노출 + 외부 통신 능력</li>
+          </ul>
+        </li>
+        <li><b>보안 위협</b>
+          <ul>
+            <li>악성코드 실행: 외부 공격자가 컴퓨터 권한 전체를 탈취할 수 있음 (CVE-2026-25253)</li>
+            <li>악성코드 배포 통로: 스킬 마켓플레이스를 통해 정보 탈취 악성 코드가 유포</li>
+            <li>무허가 에이전트 반입: 기업 안에서 직원이 무단으로 설치·실행하는 사례 (Shadow IT)</li>
+          </ul>
+        </li>
+      </ul>
+      <figure class="plain"><img src="assets/week06/b25-1.jpg" alt="OpenClaw 로컬 아키텍처: 메신저 앱에서 지시를 받아 이용자 컴퓨터의 OpenClaw가 터미널, 파일시스템, 이메일·캘린더 API에 전체 권한으로 접근" style="max-height:290px"></figure>
+    </div>
+    <p class="src"><a href="https://skywork.ai/skypage/en/openclaw-ai-framework-overview/2048630963316060160" target="_blank" rel="noopener">https://skywork.ai/skypage/en/openclaw-ai-framework-overview/2048630963316060160</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="보도: 필라테스 예약 취소">
+  <div class="kicker">도구 활용</div>
+  <h2>AI에 필라테스 예약 맡겼더니… 남의 예약 취소 후 “대기 3번입니다”</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.8fr 1.2fr;align-items:start">
+      <div class="stack">
+        <figure class="doc"><img src="assets/week06/b26-1.png" alt="기사 제목: AI에 필라테스 예약 맡겼더니… 남의 예약 취소 후 대기 3번입니다 (2026. 8. 14.)" style="max-height:80px"></figure>
+        <figure class="doc"><img src="assets/week06/b26-2.png" alt="기사 요약: 필라테스 인기 강좌 예약을 AI 에이전트에 맡겼다가 AI가 타인의 예약을 임의로 취소해버리는 사고 발생" style="max-height:70px"></figure>
+        <p class="muted" style="font-size:14px">이용자는 “예약해 달라”고만 했다. 에이전트는 목표를 이루려고 예약 시스템의 허점을 찾아 다른 회원의 대기 신청을 취소했다. 지시하지 않은 행동의 책임은 누구에게 있는가?</p>
+      </div>
+      <figure class="doc"><img src="assets/week06/b26-3.png" alt="기사 본문: 오픈클로는 예약 규정을 우회해 헬스장 정한 예약 개시 시점보다 먼저 예약할 수 있음을 알아냈고, 대기 순번을 올리려고 다른 회원의 신청을 취소했으며, 원상복구 지시는 이행하지 못함" style="max-height:400px"></figure>
+    </div>
+    <p class="src"><a href="https://www.mt.co.kr/society/2026/08/14/2026081410594767953" target="_blank" rel="noopener">https://www.mt.co.kr/society/2026/08/14/2026081410594767953</a></p>
+  </div>
+</section>
+
+<!-- ===================== 9. 기억 ===================== -->
+<section class="slide section" data-sec="9" data-title="기억">
+  <div class="kicker"><span class="part-chip p2">후반부</span>Section 9</div>
+  <h2>(2) 기억 능력</h2>
+  <p class="section-lead">에이전트는 대화 이력과 이메일·일정·사진 같은 개인 컨텍스트를 저장해 두고 다시 꺼내 쓴다. 저장된 데이터가 새로운 위험의 원천이 된다.</p>
+  <div class="body"><ol class="roadmap" data-current="9"></ol></div>
+</section>
+
+<section class="slide" data-sec="9" data-title="인간의 기억 체계">
+  <div class="kicker">기억</div>
+  <h2>인간의 기억 체계</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>감각(sensory) 기억</b>: 시각·청각·촉각 등 감각의 순간적 저장</li>
+      <li><b>단기(short-term) 기억</b>: 제한된 용량으로 학습과 추론에 활용</li>
+      <li><b>장기(long-term) 기억</b>
+        <ul>
+          <li>명시적·선언적·의식적 기억: 사건, 의미</li>
+          <li>묵시적·절차적·무의식적 기억: 기술, 습관</li>
+        </ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week06/b28-1.png" alt="기억 분류도: 감각 기억(시각, 청각, 촉각), 단기 기억(작업 기억), 장기 기억(명시적 기억은 일화·의미 기억, 묵시적 기억은 절차 기억)" style="max-height:250px"></figure>
+    <p class="src"><a href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank" rel="noopener">https://lilianweng.github.io/posts/2023-06-23-agent/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="AI 에이전트의 기억 체계">
+  <div class="kicker">기억</div>
+  <h2>AI 에이전트의 기억 체계</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>감각 기억</b>: 입력된 텍스트, 이미지, 음성 등 · <b>단기 기억</b>: 인-컨텍스트(in-context) 학습 · <b>장기 기억</b>: 외부 벡터 저장소(vector store)</li>
+    </ul>
+    <svg class="flow" viewBox="0 0 760 380" role="img" aria-label="LLM을 가운데 두고 웹·MCP 서버, 이용자, 종전 대화 이력, 내부 데이터 출처, 개인 컨텍스트가 연결된 에이전트 기억 구조">
+      <rect class="frame" x="200" y="6" width="370" height="364" rx="6"/>
+      <use href="#i-web" x="30" y="150" width="100" height="80" class="ic"/>
+      <text class="lb" x="80" y="252" text-anchor="middle">웹 / MCP 서버 등</text>
+      <use href="#i-db" x="358" y="16" width="50" height="62" class="ic"/>
+      <text class="lb" x="420" y="54">종전 대화 이력</text>
+      <rect class="box soft" x="318" y="160" width="130" height="58" rx="10"/>
+      <text class="bt" x="383" y="195" text-anchor="middle">LLM</text>
+      <use href="#i-user" x="664" y="156" width="48" height="56" class="ic"/>
+      <text class="lb" x="688" y="232" text-anchor="middle">이용자</text>
+      <use href="#i-db" x="234" y="270" width="50" height="62" class="ic"/>
+      <text class="lb" x="259" y="356" text-anchor="middle">내부 데이터 출처</text>
+      <use href="#i-db" x="478" y="270" width="50" height="62" class="ic"/>
+      <text class="lb" x="503" y="356" text-anchor="middle">개인 컨텍스트</text>
+      <line class="ln" x1="140" y1="189" x2="312" y2="189" marker-start="url(#ah)" marker-end="url(#ah)"/>
+      <line class="ln" x1="383" y1="84" x2="383" y2="154" marker-start="url(#ah)" marker-end="url(#ah)"/>
+      <line class="ln" x1="454" y1="189" x2="656" y2="189" marker-start="url(#ah)" marker-end="url(#ah)"/>
+      <text class="lbs" x="555" y="180" text-anchor="middle">프롬프트 / 응답</text>
+      <path class="ln" d="M350 222 V244 H259 V262" marker-start="url(#ah)" marker-end="url(#ah)"/>
+      <path class="ln" d="M416 222 V244 H503 V262" marker-start="url(#ah)" marker-end="url(#ah)"/>
+    </svg>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="Agentic RAG">
+  <div class="kicker">기억</div>
+  <h2>Agentic RAG 시스템</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr">
+      <ul class="bul compact">
+        <li><b>기존 RAG</b>: 검색된 문서를 바탕으로 한 번에 응답 생성</li>
+        <li><b>Agentic RAG</b>
+          <ul>
+            <li>RAG로 답변 생성 → 스스로 평가(관련성·근거성·충분성) → 반추(reflection) → 내부·웹 재검색, 재생성 반복</li>
+            <li>정확성, 근거성, 깊이를 계속 개선</li>
+          </ul>
+        </li>
+      </ul>
+      <figure class="plain"><img src="assets/week06/b30-1.gif" alt="Agentic RAG 흐름도: 이용자 질문, 질의 재작성, 내부 검색, 답변 생성, 답변 평가, 점수가 낮으면 반추 후 내부·웹 재검색, 충분하면 답변 표시" style="max-height:340px"></figure>
+    </div>
+    <p class="src"><a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/bonus-rag-time-journey-agentic-rag/4404652" target="_blank" rel="noopener">https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/bonus-rag-time-journey-agentic-rag/4404652</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="기억형 에이전트의 확산">
+  <div class="kicker">기억</div>
+  <h2>기억형(Memory-enabled) Agent의 확산</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>단순 대화 기억을 넘어 개인 컨텍스트(앱, 문서, 이메일, 일정 등)를 저장·활용</li>
+      <li>대화 맥락 유지 → 맞춤형 응답 → 개인 비서형 에이전트로 발전</li>
+      <li>사례: <b>Apple WWDC 2024</b>: iOS 안의 캘린더, 메시지 등 통합 · <b>Google I/O 2025</b>: Gmail, Docs, Drive와 연동</li>
+    </ul>
+    <div class="grid2">
+      <figure><img src="assets/week06/b31-1.jpg" alt="WWDC 2024 무대에서 Apple Intelligence를 소개하는 장면" style="max-height:260px"></figure>
+      <figure><img src="assets/week06/b31-2.png" alt="Gmail, Docs, Drive 문서 카드가 겹쳐 있는 Google 개인화 기능 화면" style="max-height:260px"></figure>
+    </div>
+    <p class="src"><a href="https://www.youtube.com/live/RXeOiIDNNek" target="_blank" rel="noopener">https://www.youtube.com/live/RXeOiIDNNek</a> · <a href="https://blog.google/technology/ai/io-2025-keynote/#personalization" target="_blank" rel="noopener">https://blog.google/technology/ai/io-2025-keynote/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="기억형 에이전트의 법적 쟁점">
+  <div class="kicker">기억</div>
+  <h2>기억형 Agent의 법적 쟁점</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.95fr 1.05fr">
+      <ul class="bul compact">
+        <li><b>개인정보 자기결정권 침해 위험</b>: 민감정보가 장기 저장·활용될 가능성</li>
+        <li><b>정보주체의 권리 보장</b>: 저장 범위 통제와 삭제권 보장 필요</li>
+        <li><b>투명성 확보</b>: 에이전트가 활용하는 컨텍스트를 명확히 알릴 필요</li>
+        <li><b>경쟁법적 우려</b>: 프라이버시 보호가 시장지배력 강화를 정당화하는 수단으로 쓰일 우려 (OECD, 2024)</li>
+      </ul>
+      <svg class="flow" viewBox="0 0 760 380" role="img" aria-label="에이전트 기억 구조에서 대화 이력과 개인 컨텍스트(이메일, 메시지, 일정, 사진 등)가 빨간색으로 강조됨">
+        <rect class="frame" x="200" y="6" width="370" height="364" rx="6"/>
+        <use href="#i-web" x="30" y="150" width="100" height="80" class="ic"/>
+        <text class="lb" x="80" y="252" text-anchor="middle">웹 / MCP 서버 등</text>
+        <g class="r"><use href="#i-db" x="358" y="16" width="50" height="62"/><text class="bt" x="420" y="54">대화 이력</text></g>
+        <rect class="box soft" x="318" y="160" width="130" height="58" rx="10"/>
+        <text class="bt" x="383" y="195" text-anchor="middle">LLM</text>
+        <use href="#i-user" x="664" y="156" width="48" height="56" class="ic"/>
+        <text class="lb" x="688" y="232" text-anchor="middle">이용자</text>
+        <use href="#i-db" x="234" y="270" width="50" height="62" class="ic"/>
+        <text class="lb" x="259" y="356" text-anchor="middle">내부 데이터 출처</text>
+        <g class="r"><use href="#i-db" x="478" y="270" width="50" height="62"/><text class="bt" x="540" y="296">개인 컨텍스트</text><text class="note" x="540" y="316">(이메일·메시지·</text><text class="note" x="540" y="332">일정·사진 등)</text></g>
+        <line class="ln" x1="140" y1="189" x2="312" y2="189" marker-start="url(#ah)" marker-end="url(#ah)"/>
+        <line class="ln r" x1="383" y1="84" x2="383" y2="154" marker-start="url(#ahr)" marker-end="url(#ahr)"/>
+        <line class="ln" x1="454" y1="189" x2="656" y2="189" marker-start="url(#ah)" marker-end="url(#ah)"/>
+        <text class="lbs" x="555" y="180" text-anchor="middle">프롬프트 / 응답</text>
+        <path class="ln" d="M350 222 V244 H259 V262" marker-start="url(#ah)" marker-end="url(#ah)"/>
+        <path class="ln r" d="M416 222 V244 H503 V262" marker-start="url(#ahr)" marker-end="url(#ahr)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="개인 통제 중심 모델의 한계">
+  <div class="kicker">기억</div>
+  <h2>개인 통제 중심 모델의 한계</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>문제점</b>: 지금은 이용자 “동의”에 기반하여 저장·이용되고 있으나 동의의 실효성에 의문
+        <ul>
+          <li>AI 답변 개선을 위해 개인 컨텍스트를 과도하게 모으고 이용할 우려 → 최소 수집 원칙 위배 문제</li>
+          <li>대화 이력에 기반한 개인 속성 추론, 프로파일링 등 침해 우려 증대 (예: 정치 성향, 건강 상태, 소비 패턴 추론)</li>
+          <li>Solove (2025): AI 시대의 프라이버시 문제는 개인 통제 중심 모델로 해결될 수 없다고 지적</li>
+        </ul>
+      </li>
+      <li><b>대화 이력과 개인 컨텍스트 관리가 AI 프라이버시·보안의 핵심 쟁점으로 부상</b>
+        <ul>
+          <li>수집·이용이 “과도”한지는 정성적 평가에 의존할 수밖에 없음</li>
+          <li>최소 수집 원칙 강화, 투명성 개선, 이용자 통제, 적절한 보관 기간 설정 등 다양한 정책적 고려 필요</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="grid2">
+      <div class="stack" style="gap:6px"><figure class="doc"><img src="assets/week06/b33-1.png" alt="칼럼 제목: [김병필의 인공지능 개척시대] 라이프 로깅 데이터와 인공지능 (2024. 6. 24.)" style="max-height:70px"></figure><figure class="doc"><img src="assets/week06/b33-2.png" alt="칼럼 소제목: 스마트폰에 축적된 인생 기록, AI 이용한 맞춤형 서비스 가능, 감시 목적 무분별 활용 우려도, 데이터 보안 강화가 새 숙제로" style="max-height:80px"></figure></div>
+      <div class="stack" style="gap:6px"><figure class="doc"><img src="assets/week06/b33-3.png" alt="칼럼 제목: [김병필의 인공지능 개척시대] 우리가 AI와 나눈 대화, 안녕합니까 (2025. 7. 14.)" style="max-height:70px"></figure><figure class="doc"><img src="assets/week06/b33-4.png" alt="칼럼 소제목: AI와 대화 기록 쌓여갈수록 사생활 침해 통제 어려워져, AI 심부름꾼 제대로 쓰려면 보안과 투명성이 필수 조건" style="max-height:80px"></figure></div>
+    </div>
+    <p class="src"><a href="https://www.joongang.co.kr/article/25258398" target="_blank" rel="noopener">https://www.joongang.co.kr/article/25258398</a> · <a href="https://www.joongang.co.kr/article/25351202" target="_blank" rel="noopener">https://www.joongang.co.kr/article/25351202</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="칼럼: AI 직원과 함께 일할 준비">
+  <div class="kicker">기억</div>
+  <h2>[김병필의 인공지능 개척시대] AI 직원과 함께 일할 준비</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:start">
+      <figure class="doc"><img src="assets/week06/b34-2.png" alt="칼럼 본문: AI 수습사원 관리 규칙 네 가지. 첫째 일종의 디지털 사원증 발급, 둘째 회사 정보를 한꺼번에 열어 주지 않고 권한 범위 제한, 셋째 중요한 업무에는 인간 사수의 결재라는 제어장치, 넷째 경험을 스스로 축적하는 AI의 기록 관리" style="max-height:420px"></figure>
+      <div class="stack">
+        <figure class="doc"><img src="assets/week06/b34-1.png" alt="칼럼 제목: [김병필의 인공지능 개척시대] AI 직원과 함께 일할 준비 (2026. 5. 25.)" style="max-height:80px"></figure>
+        <ol class="bul compact">
+          <li><b>신원</b>: 에이전트마다 식별 가능한 계정(디지털 사원증)을 발급하고 행위를 추적</li>
+          <li><b>권한</b>: 업무에 필요한 범위로 접근 권한을 제한</li>
+          <li><b>승인</b>: 구매·발송 같은 중요한 행위는 사람의 확인을 거침</li>
+          <li><b>기록</b>: 에이전트가 쌓는 작업 기록과 기억을 관리·점검</li>
+        </ol>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.joongang.co.kr/article/25430974" target="_blank" rel="noopener">https://www.joongang.co.kr/article/25430974</a></p>
+  </div>
+</section>
+
+<!-- ===================== 10. 추론과 계획 ===================== -->
+<section class="slide section" data-sec="10" data-title="추론과 계획">
+  <div class="kicker"><span class="part-chip p2">후반부</span>Section 10</div>
+  <h2>(3) 추론과 계획 능력</h2>
+  <p class="section-lead">중간 추론 단계를 거치고, 스스로 평가하고, 작업을 나누어 계획한다. 에이전트가 사람의 단계별 지시 없이 여러 단계의 작업을 이어 가는 근거가 된다.</p>
+  <div class="body"><ol class="roadmap" data-current="10"></ol></div>
+</section>
+
+<section class="slide" data-sec="10" data-title="Chain-of-Thought">
+  <div class="kicker">추론과 계획</div>
+  <h2>Chain-of-Thought Prompting</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>사고의 사슬(Chain-of-Thought) 프롬프팅</b>
+        <ul>
+          <li>중간 추론 단계를 few-shot 예시로 보여 주면 복잡한 추론 문제에서 성능이 좋아짐</li>
+          <li>“단계별로 생각하라(Let’s think step by step)” 같은 문장만 추가해도 성능이 개선됨 (zero-shot CoT)</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="grid2" style="align-items:center">
+      <figure class="plain"><img src="assets/week06/b36-1.png" alt="Standard prompting과 Chain-of-thought prompting 비교: 중간 계산 과정을 예시로 보여 준 경우 정답(9)을 맞힘" style="max-height:280px"></figure>
+      <figure class="plain"><img src="assets/week06/b36-2.jpg" alt="Few-shot CoT와 Zero-shot CoT 예시: Let's think step by step 문장을 넣으면 단계별 풀이 후 정답에 도달" style="max-height:280px"></figure>
+    </div>
+    <p class="src"><a href="https://www.promptingguide.ai/kr/techniques/cot" target="_blank" rel="noopener">https://www.promptingguide.ai/kr/techniques/cot</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="10" data-title="Tree of Thoughts">
+  <div class="kicker">추론과 계획</div>
+  <h2>Tree of Thoughts Prompting</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>사고 트리(Tree of Thoughts) 프롬프팅</b>
+        <ul>
+          <li>LLM이 여러 갈래의 Chain-of-Thought 답변을 생성</li>
+          <li>생성된 중간 추론 과정들을 LLM이 스스로 평가</li>
+          <li>가장 적합한 추론 경로를 골라 답변에 도달</li>
+        </ul>
+      </li>
+    </ul>
+    <figure class="plain"><img src="assets/week06/b37-1.png" alt="입력-출력 프롬프팅, Chain of Thought, Self Consistency with CoT, Tree of Thoughts 네 방식을 비교한 도식. ToT는 여러 생각을 가지처럼 펼치고 평가해 일부를 선택" style="max-height:300px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="10" data-title="자기 개선 메커니즘">
+  <div class="kicker">추론과 계획</div>
+  <h2>자기 개선 메커니즘</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>자기 평가와 반추의 의의</b>: 생성한 답변을 스스로 평가하여 오류 수정, 답변 보완, 더 나은 추론 경로 탐색
+        <ul>
+          <li><b>ReAct</b> (Yao et al., 2022): 생각 → 행동 → 관찰을 반복하며 답변 개선</li>
+          <li><b>Reflexion</b> (Shinn &amp; Labash, 2023): 과거 수행 결과를 돌아보며 계획을 동적으로 조정</li>
+        </ul>
+      </li>
+    </ul>
+    <figure><img src="assets/week06/b38-1.jpg" alt="ReAct 실행 예: 질문에 대해 생각, 검색 행동, 관찰을 여러 차례 반복하며 콜로라도 조산 운동의 동쪽 구역 고도 범위를 찾아가는 과정" style="max-height:300px"></figure>
+    <p class="src"><a href="https://www.promptingguide.ai/kr/techniques/react" target="_blank" rel="noopener">https://www.promptingguide.ai/kr/techniques/react</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="10" data-title="프롬프팅 기법의 결합">
+  <div class="kicker">추론과 계획</div>
+  <h2>다양한 프롬프팅 기법의 결합</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week06/b39-1.png" alt="논문 제목: Exploring the MIT Mathematics and EECS Curriculum Using Large Language Models" style="max-height:100px"></figure>
+    <figure class="plain"><img src="assets/week06/b39-2.png" alt="Table 5: MIT 시험 문제 정답률. GPT-4 단독 0.90, few-shot 0.93, CoT 0.95, self-critique 0.97, experts 추가 시 1" style="max-height:280px"></figure>
+    <p class="muted center">few-shot 예시, 단계별 추론, 자기 비판, 전문가 역할 부여를 차례로 더할수록 정답률이 올라간다.</p>
+    <p class="src"><a href="https://arxiv.org/pdf/2306.08997v1" target="_blank" rel="noopener">https://arxiv.org/pdf/2306.08997v1</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="10" data-title="계획 능력">
+  <div class="kicker">추론과 계획</div>
+  <h2>AI Agent의 계획 능력</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.9fr 1.1fr">
+      <ul class="bul">
+        <li>복잡한 작업은 여러 단계로 이루어지므로, 이를 미리 파악하고 계획해야 제대로 수행할 수 있음</li>
+        <li>이용자 요청을 수행하려고 작업을 분해하고 계획을 세워 응답을 생성</li>
+        <li>생성한 응답을 평가하여 반복적으로 답변을 다시 생성</li>
+      </ul>
+      <figure><img src="assets/week06/b40-1.jpg" alt="NVIDIA 에이전트 도식: 이용자 프롬프트를 받은 에이전트가 계획과 비판을 거쳐 계산기, 웹 검색, 시맨틱 검색, SQL 검색, 팟캐스트 생성 등 도구를 사용" style="max-height:330px"></figure>
+    </div>
+    <p class="src"><a href="https://www.nvidia.com/en-us/glossary/ai-agents/" target="_blank" rel="noopener">https://www.nvidia.com/en-us/glossary/ai-agents/</a></p>
+  </div>
+</section>
+
+<!-- ===================== 11. 다중 에이전트 ===================== -->
+<section class="slide section" data-sec="11" data-title="다중 에이전트">
+  <div class="kicker"><span class="part-chip p2">후반부</span>Section 11</div>
+  <h2>(4) 다중 에이전트</h2>
+  <p class="section-lead">에이전트가 다른 에이전트에게 일을 맡기고 결과를 주고받는다. 개인정보가 사람의 확인 없이 여러 주체를 거쳐 전달된다.</p>
+  <div class="body"><ol class="roadmap" data-current="11"></ol></div>
+</section>
+
+<section class="slide" data-sec="11" data-title="다중 에이전트 시스템 환경">
+  <div class="kicker">다중 에이전트</div>
+  <h2>다중 Agent 시스템 환경의 데이터 유출 위험성</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.85fr 1.15fr">
+      <ul class="bul compact">
+        <li><b>영업비밀·개인정보가 제3자에게 전달되거나 공개</b>될 가능성
+          <ul><li>예: 에이전트를 이용한 이메일·메시지 전송, SNS 게시</li></ul>
+        </li>
+        <li><b>외부 에이전트에게 불필요하거나 과도한 데이터가 제공·집적</b>될 우려
+          <ul><li>예: 에이전트를 이용한 각종 예약, 거래 업무</li></ul>
+        </li>
+        <li class="arrow" style="list-style:none">전반부의 질문이 다시 나온다: 외부 에이전트에 넘긴 정보는 위탁인가, 제3자 제공인가?</li>
+      </ul>
+      <svg class="flow" viewBox="0 0 640 340" role="img" aria-label="이용자가 메인 에이전트에 프롬프트를 주고, 메인 에이전트가 메시징·SNS 외부 에이전트와 예약·거래 외부 에이전트에 요청을 보내 응답을 받는 구조. 앞의 외부 에이전트는 제3자에게 공개하고, 뒤의 외부 에이전트는 데이터를 저장">
+        <use href="#i-user" x="574" y="132" width="44" height="52" class="ic"/>
+        <text class="lb" x="596" y="204" text-anchor="middle">이용자</text>
+        <rect class="box soft" x="360" y="128" width="120" height="60" rx="10"/>
+        <text class="bt" x="420" y="154" text-anchor="middle">Main</text><text class="bt" x="420" y="174" text-anchor="middle">Agent</text>
+        <g class="r"><line class="ln" x1="568" y1="158" x2="486" y2="158" marker-end="url(#ahr)"/><text class="note" x="527" y="150" text-anchor="middle">프롬프트</text></g>
+        <rect class="box" x="150" y="20" width="120" height="56" rx="10"/>
+        <text class="bt" x="210" y="44" text-anchor="middle">External</text><text class="bt" x="210" y="64" text-anchor="middle">Agent</text>
+        <text class="lbs" x="210" y="96" text-anchor="middle">예: 메시징, SNS</text>
+        <rect class="box" x="150" y="236" width="120" height="56" rx="10"/>
+        <text class="bt" x="210" y="260" text-anchor="middle">External</text><text class="bt" x="210" y="280" text-anchor="middle">Agent</text>
+        <text class="lbs" x="210" y="226" text-anchor="middle">예: 예약, 거래</text>
+        <g class="r"><path class="ln" d="M380 124 V48 H276" marker-end="url(#ahr)"/><text class="note" x="330" y="40" text-anchor="middle">요청</text></g>
+        <path class="ln" d="M276 66 H404 V124" marker-end="url(#ah)"/><text class="lbs" x="340" y="84" text-anchor="middle">응답</text>
+        <g class="r"><path class="ln" d="M380 192 V268 H276" marker-end="url(#ahr)"/><text class="note" x="330" y="286" text-anchor="middle">요청</text></g>
+        <path class="ln" d="M276 248 H404 V192" marker-end="url(#ah)"/><text class="lbs" x="340" y="240" text-anchor="middle">응답</text>
+        <use href="#i-user" x="30" y="22" width="40" height="48" class="ic"/>
+        <text class="lb" x="50" y="88" text-anchor="middle">제3자</text>
+        <g class="r"><line class="ln" x1="146" y1="48" x2="80" y2="48" marker-end="url(#ahr)"/><text class="note" x="113" y="40" text-anchor="middle">공개</text></g>
+        <g class="r"><use href="#i-db" x="40" y="236" width="44" height="56"/><line class="ln" x1="146" y1="264" x2="92" y2="264" marker-end="url(#ahr)"/><text class="note" x="119" y="256" text-anchor="middle">저장</text></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="전문가 AI 에이전트: MAI-DxO">
+  <div class="kicker">다중 에이전트</div>
+  <h2>전문가 AI Agent 시대의 개막</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>AI 의료 진단 오케스트레이터: MAI-DxO</b> (Microsoft AI Diagnostic Orchestrator)
+        <ul>
+          <li>여러 AI 에이전트(가설, 검증, 체크리스트, 검사 선택, 비용·윤리 관리)가 협력하여 진단 정확도 향상</li>
+          <li>에이전트들은 Chain of Debate(논의 체인)로 의견을 교환하고, 오케스트레이터가 의견을 종합하여 질문 / 검사 요청 / 진단 제시</li>
+          <li>NEJM 사례에서 85.5% 정확도. 숙련 의사 그룹보다 4배 이상 높은 수치</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="two" style="grid-template-columns:.9fr 1.1fr;align-items:start">
+      <figure><img src="assets/week06/b43-2.jpg" alt="MAI-Dx Orchestrator 화면: 가설, 검사 선택, 도전, 비용 관리, 체크리스트 에이전트가 가상 의사 패널을 이루고 질문·검사 요청·진단 중 하나를 선택" style="max-height:270px"></figure>
+      <div class="stack" style="gap:8px">
+        <figure class="doc"><img src="assets/week06/b43-1.png" alt="기사 제목: MS, 고성능 의료용 AI 어시스턴트 구축… 타사 첨단 모델 오케스트레이션" style="max-height:70px"></figure>
+        <figure class="doc"><img src="assets/week06/b43-4.png" alt="기사 본문: MS가 인간 의사보다 4배 더 정확하게 질병을 진단할 수 있는 MAI-DxO를 개발" style="max-height:100px"></figure>
+        <figure class="doc"><img src="assets/week06/b43-3.png" alt="기사 본문: OpenAI, 메타, 앤트로픽, 구글, xAI, 딥시크 등 주요 AI 기업의 첨단 LLM을 활용. NEJM 사례의 85.5%를 정확히 진단" style="max-height:100px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://microsoft.ai/new/the-path-to-medical-superintelligence/" target="_blank" rel="noopener">https://microsoft.ai/new/the-path-to-medical-superintelligence/</a> · <a href="https://www.aitimes.com/news/articleView.html?idxno=200275" target="_blank" rel="noopener">https://www.aitimes.com/news/articleView.html?idxno=200275</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="법정 시뮬레이션">
+  <div class="kicker">다중 에이전트</div>
+  <h2>Multi-Agentic Workflow: 법정 시뮬레이션</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>AgentCourt</b>: LLM 기반 에이전트들이 원고·피고 등 법정 안의 여러 역할을 맡아 모의 재판을 수행하는 시뮬레이션 플랫폼</li>
+      <li><b>AgentsBench</b>: 여러 에이전트가 법관과 배심원 역할로 참여. 각자 독립적으로 의견을 낸 뒤 평의를 거쳐 합의 도출</li>
+    </ul>
+    <div class="grid2" style="align-items:start">
+      <figure><img src="assets/week06/b44-1.jpg" alt="AgentCourt 모의 법정 화면: 픽셀 아트 법정에서 판사, 원고 측, 피고 측 에이전트가 변론하고 오른쪽에 변론 내용과 자기 발전 과정이 표시됨" style="max-height:290px"></figure>
+      <figure><img src="assets/week06/b44-2.png" alt="AgentsBench 도식: 사건 설명을 법관과 배심원 에이전트가 각각 검토해 형량 의견을 낸 뒤 다회차 논의로 최종 판단" style="max-height:290px"></figure>
+    </div>
+    <p class="src"><a href="https://www.mdpi.com/2079-8954/13/8/641" target="_blank" rel="noopener">https://www.mdpi.com/2079-8954/13/8/641</a> · <a href="https://aclanthology.org/2025.findings-acl.304/" target="_blank" rel="noopener">https://aclanthology.org/2025.findings-acl.304/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="PrivacyLens: 유출 위험 평가">
+  <div class="kicker">다중 에이전트</div>
+  <h2>Agent 환경 데이터 유출 위험성 평가 사례</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.1fr .9fr">
+      <ul class="bul compact">
+        <li><b>PrivacyLens 연구 (2024)</b>: LLM의 프라이버시 규범 인식 평가
+          <ul>
+            <li>이메일 작성, 메시지 응답 등 개인화된 커뮤니케이션에 쓰일 때 맥락적 프라이버시(contextual privacy) 규범을 인식하지 못함 → 민감정보 유출 가능</li>
+            <li>문제 상황 493건을 수집하여 정량 평가. Gmail, Slack, Notion, Facebook, Zoom 등 도구를 쓸 때 규범을 인식·준수하는지 평가</li>
+          </ul>
+        </li>
+        <li><b>평가방법 (1) 질의응답(QA) 기반</b>: 주어진 맥락에서 특정 정보 전송이 적절한지 질문 → 최신 모델들은 높은 정답률</li>
+        <li><b>평가방법 (2) 행위(action) 기반</b>: 실제 작업을 수행하는 과정에서 민감정보를 유출하는지 평가 → 상당한 유출률</li>
+        <li class="arrow" style="list-style:none">“알고 있는 것”과 “실제로 하는 것” 사이에 차이가 있다</li>
+      </ul>
+      <figure><img src="assets/week06/b45-1.png" alt="PrivacyLens 평가 예시: 발신자의 요청을 받은 LM 에이전트가 캘린더를 검색하고 읽은 뒤 이메일을 보내면서 추론 시점에 노출된 정보 가운데 민감한 일정을 포함하는 과정" style="max-height:330px"></figure>
+    </div>
+    <p class="src"><a href="https://salt-nlp.github.io/PrivacyLens/" target="_blank" rel="noopener">https://salt-nlp.github.io/PrivacyLens/</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="OpenAI·Hugging Face 보안 사고">
+  <div class="kicker">다중 에이전트</div>
+  <h2>OpenAI·Hugging Face 보안 사고 (2026. 7.)</h2>
+  <div class="body">
+    <div class="cards">
+      <div class="card"><h3>무슨 일이 있었나</h3>
+        <ul class="bul compact">
+          <li>OpenAI가 모델의 사이버 역량을 측정하는 내부 평가(ExploitGym)를 하던 중, 평가를 위해 거부(refusal)를 완화한 모델들이 격리 환경을 벗어나 Hugging Face 운영 인프라를 침해</li>
+          <li>OpenAI는 이를 “최첨단 사이버 역량이 동원된 전례 없는 사이버 사고”로 규정</li>
+        </ul>
+      </div>
+      <div class="card"><h3>관여 모델과 규모</h3>
+        <ul class="bul compact">
+          <li>에이전트 약 1,200개. 대부분 출시 계획이 없는 내부 연구용 프로토타입, 일부는 GPT-5.6 Sol</li>
+          <li>7. 9.~7. 13. 약 4.5일간 약 17,600건의 공격 행위 → Hugging Face 클러스터 관리자 권한 확보</li>
+          <li>제3자 서비스 4곳의 계정 이용</li>
+        </ul>
+      </div>
+      <div class="card red"><h3>사고 원인</h3>
+        <ul class="bul compact">
+          <li>해킹을 “지시”한 사람은 없음</li>
+          <li>AI 모델이 벤치마크 정답을 얻으려는 목표 최적화 과정에서 스스로 외부 시스템 침해로 나아감</li>
+        </ul>
+      </div>
+      <div class="card"><h3>공개 경과</h3>
+        <ul class="bul compact">
+          <li>HF 사고 공개 (7. 16.) → 공동 발표 (7. 21.) → 기술 보고서 발표 (8. 26.)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="보도: 에이전트 1,200개 집단 행동">
+  <div class="kicker">다중 에이전트</div>
+  <h2>오픈AI “에이전트 1,200개 집단 행동 확인”… 허깅페이스 해킹 전말 공개</h2>
+  <div class="body">
+    <figure class="doc"><img src="assets/week06/b47-1.png" alt="기사 제목: 오픈AI 에이전트 1200개 집단 행동 확인… 허깅페이스 해킹 전말 공개 (2026. 8. 27.)" style="max-height:80px"></figure>
+    <figure class="doc"><img src="assets/week06/b47-2.png" alt="기사 본문: 최종 보고서에서 크라우드스트라이크 등 외부 전문가와 함께 검증. 1,200개 에이전트가 비공식 메시지 게시판을 만들어 메시지와 파일을 교환하며 군집(스웜) 행동을 보였고, 700여 개가 제3자 서비스의 취약점을 공격하는 데 참여" style="max-height:340px"></figure>
+    <p class="src"><a href="https://www.aitimes.com/news/articleView.html?idxno=214495" target="_blank" rel="noopener">https://www.aitimes.com/news/articleView.html?idxno=214495</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="사고 원인">
+  <div class="kicker">다중 에이전트</div>
+  <h2>사고 원인</h2>
+  <div class="body">
+    <div class="cards">
+      <div class="card"><h3>보상 해킹 (reward hacking)</h3>
+        <ul class="bul compact">
+          <li>과제를 정직하게 푸는 대신 채점 체계의 허점을 이용해 정답에 접근하려는 경향이 학습 과정에서 점차 증가</li>
+          <li>성공 판정을 받으려고 채점 체계를 우회하다 외부 시스템 침해로 확대</li>
+        </ul>
+      </div>
+      <div class="card"><h3>풀 수 없는 과제에 대한 과도한 끈기</h3>
+        <ul class="bul compact">
+          <li>비공식 게시판에서 논의된 과제의 93%가 어떤 모델도 정답을 내지 못한 198개 과제</li>
+          <li>막대한 추론 능력이 “편법 찾기”에 사용</li>
+        </ul>
+      </div>
+      <div class="card red"><h3>무단 통신·협력: AI 스웜 (Swarm)</h3>
+        <ul class="bul compact">
+          <li>멀티에이전트 도구가 없던 에이전트도 우회 채널을 찾아 취약점·기법을 공유하고 역할을 분담</li>
+          <li>비공식 게시판에 참여한 1,200개 중 약 700개가 실제 해킹 과정에 참여</li>
+          <li>다른 에이전트의 지시를 의심 없이 수용: 주도 에이전트의 ‘Go’ 신호를 받으면 원래의 우려를 접고 따름</li>
+        </ul>
+      </div>
+      <div class="card amber"><h3>내부 평가 단계의 위험성</h3>
+        <ul class="bul compact">
+          <li>운영 환경의 시스템 프롬프트·자동 검토·안전 분류기·추론과정(CoT) 모니터링이 평가 환경에는 적용되지 않음</li>
+          <li>사후 예비실험: 운영 하네스와 시스템 프롬프트를 적용하면 범위 밖 인프라 침해 성향이 기준 대비 1% 미만으로 감소</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="11" data-title="전문가 AI 에이전트의 법적 과제">
+  <div class="kicker">다중 에이전트</div>
+  <h2>전문가 AI Agent의 법적 과제</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>전문가 AI Agent 활용 영역의 확장</b>
+        <ul>
+          <li>법률, 의료, 교육, 금융 등 다양한 전문 영역에서 <b>멀티 에이전트 협업 모델</b> 확산 예상</li>
+          <li>오케스트레이션 과정을 기록하여 <b>투명성·검증 가능성</b> 강화</li>
+          <li>기존 전문가 직역과의 이해 충돌 조정이 도입 확장의 현실적 관건</li>
+        </ul>
+      </li>
+      <li><b>고영향 AI 시스템의 안전성·신뢰성 확보조치</b> (AI 기본법 제34조)
+        <ul>
+          <li>현행 고시와 가이드라인은 단일 모델 중심으로 설계</li>
+          <li>다중 에이전트·오케스트레이션 환경에 적용하려면 구체화가 필요</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 12. 정리 ===================== -->
+<section class="slide section" data-sec="12" data-title="결론">
+  <div class="kicker"><span class="part-chip p2">후반부</span>Section 12</div>
+  <h2>결론</h2>
+  <p class="section-lead">기존 논의는 AI가 무엇을 “학습”했는지에 집중했다. 에이전트 환경에서는 AI가 데이터를 어떻게 “활용”하고 어디로 보내는지가 쟁점이 된다.</p>
+  <div class="body"><ol class="roadmap" data-current="12"></ol></div>
+</section>
+
+<section class="slide" data-sec="12" data-title="기존 패러다임: 학습-생성">
+  <div class="kicker">정리</div>
+  <h2>기존 패러다임: LLM 학습과 응답 생성</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:.8fr 1.2fr">
+      <ul class="bul compact">
+        <li><b>개발 단계</b>: 학습 데이터(공개·비공개) → LLM 학습</li>
+        <li><b>이용 단계</b>: 이용자 프롬프트 → LLM 응답 생성 (+ 프롬프트를 저장하여 추가 학습에 쓸 수 있음)</li>
+        <li class="arrow" style="list-style:none">데이터 흐름이 AI 서비스 기업 한 곳 안에서 닫혀 있다. 핵심 쟁점은 학습 데이터의 적법성</li>
+      </ul>
+      <svg class="flow" viewBox="0 0 700 360" role="img" aria-label="AI 서비스 기업 안에서 웹 데이터, 내부 데이터, 저장된 프롬프트가 LLM 학습에 쓰이고, 이용자는 프롬프트를 보내 응답을 받는 구조">
+        <rect class="frame" x="230" y="30" width="250" height="320" rx="6"/>
+        <text class="lb" x="355" y="20" text-anchor="middle">AI 서비스 기업</text>
+        <use href="#i-web" x="20" y="150" width="100" height="80" class="ic"/>
+        <text class="lb" x="70" y="252" text-anchor="middle">웹 데이터</text>
+        <rect class="box soft" x="270" y="160" width="120" height="58" rx="10"/>
+        <text class="bt" x="330" y="195" text-anchor="middle">LLM</text>
+        <use href="#i-db" x="400" y="48" width="48" height="60" class="ic"/>
+        <text class="lbs" x="424" y="126" text-anchor="middle">프롬프트</text>
+        <use href="#i-db" x="306" y="266" width="48" height="60" class="ic"/>
+        <text class="lb" x="330" y="344" text-anchor="middle">내부 데이터</text>
+        <use href="#i-user" x="620" y="160" width="44" height="52" class="ic"/>
+        <text class="lb" x="642" y="232" text-anchor="middle">이용자</text>
+        <g class="r">
+          <line class="ln" x1="128" y1="189" x2="264" y2="189" marker-end="url(#ahr)"/><text class="note" x="196" y="180" text-anchor="middle">학습</text>
+          <line class="ln" x1="330" y1="262" x2="330" y2="224" marker-end="url(#ahr)"/><text class="note" x="342" y="248">학습</text>
+          <path class="ln" d="M400 78 H330 V154" marker-end="url(#ahr)"/><text class="note" x="342" y="130">학습</text>
+        </g>
+        <line class="ln" x1="614" y1="180" x2="396" y2="180" marker-end="url(#ah)"/><text class="lbs" x="505" y="172" text-anchor="middle">프롬프트</text>
+        <line class="ln" x1="396" y1="204" x2="614" y2="204" marker-end="url(#ah)"/><text class="lbs" x="505" y="222" text-anchor="middle">응답 생성</text>
+        <path class="ln" d="M500 180 V78 H452" marker-end="url(#ah)"/><text class="lbs" x="510" y="130">저장</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="12" data-title="AI 에이전트 패러다임">
+  <div class="kicker">정리</div>
+  <h2>결론: AI 에이전트 패러다임</h2>
+  <div class="body">
+    <div class="vs">
+      <div class="card"><h3>기존 AI 패러다임</h3><p style="margin:0;font-size:15px">AI가 무엇을 <b style="color:var(--red)">“학습”</b>했는가?</p><p class="muted" style="margin:0;font-size:13px">데이터 흐름: 학습 데이터 → 모델 → 응답</p></div>
+      <span class="ar">➜</span>
+      <div class="card green"><h3>새로운 AI 패러다임</h3><p style="margin:0;font-size:15px">AI의 능력을 어떻게 <b style="color:var(--red)">“활용”</b>하는가?</p><p class="muted" style="margin:0;font-size:13px">데이터 흐름: 이용자 · 도구 · 기억 · 외부 에이전트 사이를 오감</p></div>
+    </div>
+    <p class="em center">AI 에이전트 환경의 핵심 특징: 기억·도구·계획의 통합 → 자율성 증대</p>
+    <div class="cards" style="--n:3">
+      <div class="card red"><h3>도구 활용 역량</h3><p style="margin:0;font-size:14.5px">오용 위험성: 개인정보 수집, 사칭, 피싱, 프롬프트 인젝션을 통한 유출</p></div>
+      <div class="card red"><h3>기억 역량</h3><p style="margin:0;font-size:14.5px">기억된 데이터의 유출 위험성, 과도한 집적과 프로파일링</p></div>
+      <div class="card red"><h3>계획 역량</h3><p style="margin:0;font-size:14.5px">전문가 AI 활용 가능성과 함께, 지시하지 않은 행동과 에이전트 간 협력의 통제 문제</p></div>
+    </div>
+    <p class="muted center">새로운 법적 쟁점에 대한 연구가 필요하다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="12" data-title="6강 정리">
+  <div class="kicker">정리</div>
+  <h2>6강 정리</h2>
+  <div class="body">
+    <ol class="recap">
+      <li><b>개인정보의 범위</b>이름이 없어도 다른 정보와 쉽게 결합하여 개인을 알아볼 수 있으면 개인정보다 (재식별 사례, 제2조)</li>
+      <li><b>수집·이용의 근거</b>동의는 여러 근거 가운데 하나다. 계약 이행, 정당한 이익 등도 근거가 되며, 형식적 고지만으로는 부족할 수 있다 (제15조, 홈플러스)</li>
+      <li><b>제3자 제공과 처리위탁</b>누구의 업무와 이익을 위해 넘어가는지로 구별한다. 계약서의 명칭이 아니라 실질을 본다 (제17조·제26조, 카카오페이)</li>
+      <li><b>민감정보</b>생체정보는 특정 개인을 알아볼 목적으로 기술적으로 처리될 때 민감정보가 된다 (제23조, 출입국 AI)</li>
+      <li><b>도구와 기억</b>에이전트는 외부 콘텐츠를 읽고, 개인 데이터에 접근하고, 외부로 데이터를 보낸다. 세 가지가 겹치면 유출을 막기 어렵다</li>
+      <li><b>계획과 다중 에이전트</b>지시하지 않은 행동, 에이전트 간 데이터 전달이 새로운 쟁점이다. 단일 모델 중심의 안전 조치를 넘어서는 관리 체계가 필요하다</li>
+    </ol>
+  </div>
+</section>
+
+    </div><!-- /deck -->
+
+    <nav class="pager" aria-label="페이지 이동">
+      <button class="pbtn prev" id="btnPrev" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span id="prevLabel">이전</span></button>
+      <div class="pinfo"><span class="sec" id="pSec"></span><span class="dots" id="pDots"></span><span class="cnt" id="pCnt"></span></div>
+      <button class="pbtn next" id="btnNext" type="button"><span id="nextLabel">다음</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    </nav>
+  </main>
+</div>
+
+<script>
+(function(){
+  const SECTIONS = [
+    {name:'들어가며', sub:'오늘의 구성'},
+    {name:'재식별 사례', sub:'“익명” 데이터는 안전한가', part:1},
+    {name:'개인정보의 개념', sub:'식별정보와 식별가능정보', part:1},
+    {name:'수집·이용', sub:'제15조의 적법 근거', part:1},
+    {name:'제3자 제공과 처리위탁', sub:'제17조·제18조·제26조', part:1},
+    {name:'민감정보와 생체인식정보', sub:'제23조, EU AI Act', part:1},
+    {name:'사례: 출입국 심사 AI', sub:'개인정보위 2022. 4. 27. 의결', part:1},
+    {name:'AI 에이전트의 개념', sub:'LLM 역량의 확장', part:2},
+    {name:'도구 활용', sub:'검색·MCP·프롬프트 인젝션', part:2},
+    {name:'기억', sub:'대화 이력과 개인 컨텍스트', part:2},
+    {name:'추론과 계획', sub:'CoT·ToT·ReAct', part:2},
+    {name:'다중 에이전트', sub:'에이전트 간 데이터 전달', part:2},
+    {name:'정리', sub:'“학습”에서 “활용”으로', part:2}
+  ];
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  const secOf = i => +slides[i].dataset.sec;
+  const secIdx = SECTIONS.map((_, s) => slides.map((sl, i) => i).filter(i => secOf(i) === s));
+  let cur = -1;
+
+  /* ---------- 사이드바 목차 ---------- */
+  const toc = document.getElementById('toc');
+  SECTIONS.forEach((s, k) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'toc-link';
+    btn.innerHTML = `<span class="no">${k}</span><span class="nm">${s.name}</span><span class="cnt">${secIdx[k].length}p</span>`;
+    btn.addEventListener('click', () => show(secIdx[k][0]));
+    if (!secIdx[k].length) { btn.disabled = true; btn.querySelector('.cnt').textContent = '준비 중'; }
+    const sub = document.createElement('ul'); sub.className = 'sub';
+    secIdx[k].forEach(i => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = slides[i].dataset.title || slides[i].querySelector('h2,h1')?.textContent || `슬라이드 ${i+1}`;
+      b.addEventListener('click', () => show(i));
+      const l = document.createElement('li'); l.appendChild(b); sub.appendChild(l);
+    });
+    li.appendChild(btn); li.appendChild(sub); toc.appendChild(li);
+  });
+  const tocItems = Array.from(toc.children);
+
+  /* 표지의 목차 버튼 */
+  const co = document.getElementById('coverOutline');
+  if (co) SECTIONS.slice(1).forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span class="num">${k+1}</span><span>${s.name}<small>${s.sub}</small></span>`;
+    b.addEventListener('click', e => { e.stopPropagation(); show(secIdx[k+1][0]); });
+    if (!secIdx[k+1].length) { b.disabled = true; b.querySelector('small').textContent = '준비 중'; }
+    co.appendChild(b);
+  });
+
+  /* ---------- 페이저 ---------- */
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const prevLabel = document.getElementById('prevLabel'), nextLabel = document.getElementById('nextLabel');
+  const pSec = document.getElementById('pSec'), pDots = document.getElementById('pDots'), pCnt = document.getElementById('pCnt');
+  const curNo = document.getElementById('curNo'), totNo = document.getElementById('totNo'), bar = document.getElementById('progressBar');
+  totNo.textContent = N;
+
+  function show(i, replace){
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    if (cur >= 0) { slides[cur].classList.remove('active'); slides[cur].querySelectorAll('video').forEach(v => v.pause()); }
+    cur = i;
+    const sl = slides[i]; sl.classList.add('active');
+    sl.querySelectorAll('video').forEach(v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const s = secOf(i), list = secIdx[s], k = list.indexOf(i);
+
+    tocItems.forEach((li, j) => {
+      const b = li.firstElementChild;
+      b.classList.toggle('active', j === s);
+      b.classList.toggle('done', j < s);
+      li.classList.toggle('open', j === s);
+      li.querySelectorAll('.sub button').forEach((sb, m) => sb.classList.toggle('active', j === s && m === k));
+    });
+    const act = toc.querySelector('.toc-link.active');
+    if (act && window.innerWidth <= 900) act.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+
+    pSec.textContent = SECTIONS[s].name;
+    pCnt.textContent = `${k + 1} / ${list.length} · 전체 ${i + 1} / ${N}`;
+    pDots.innerHTML = '';
+    list.forEach((idx, m) => { const d = document.createElement('i'); if (m === k) d.className = 'on'; d.title = slides[idx].dataset.title || ''; d.addEventListener('click', () => show(idx)); pDots.appendChild(d); });
+
+    btnPrev.disabled = i === 0; btnNext.disabled = i === N - 1;
+    prevLabel.textContent = k === 0 && s > 0 ? `이전 섹션: ${SECTIONS[s - 1].name}` : '이전';
+    nextLabel.textContent = k === list.length - 1 && s < SECTIONS.length - 1 ? `다음 섹션: ${SECTIONS[s + 1].name}` : (i === N - 1 ? '마지막 페이지' : '다음');
+
+    curNo.textContent = i + 1; bar.style.width = ((i + 1) / N * 100) + '%';
+    const h = '#' + (i + 1);
+    if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+    window.scrollTo({top:0, behavior:'auto'});
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} · 6강 에이전틱 AI 시대의 개인정보 보호와 보안`;
+  }
+  const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
+  btnPrev.addEventListener('click', () => show(cur - 1));
+  btnNext.addEventListener('click', () => show(cur + 1));
+  window.addEventListener('popstate', () => show(fromHash(), true));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+    else if (e.key === '+' || e.key === '=') { e.preventDefault(); setUserZoom(userZoom * 1.1); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); setUserZoom(userZoom / 1.1); }
+    else if (e.key === '0') { e.preventDefault(); setUserZoom(1); }
+  });
+  /* ---------- 화면 크기에 맞춘 슬라이드 확대 ---------- */
+  const stage = document.getElementById('stage'), zoomVal = document.getElementById('zoomVal');
+  let userZoom = 1;
+  try { userZoom = parseFloat(localStorage.getItem('itm690-w06-zoom')) || 1; } catch (e) {}
+  function applyZoom(){
+    const mobile = window.innerWidth <= 900;
+    const side = mobile ? 0 : 264;
+    const auto = mobile ? 1 : Math.min(1.5, Math.max(1, (window.innerWidth - side) / 1100));
+    const z = Math.max(.6, Math.min(2.4, +(auto * userZoom).toFixed(3)));
+    stage.style.zoom = z;
+    stage.style.minHeight = mobile ? '' : ((window.innerHeight - 64) / z) + 'px';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  function setUserZoom(v){ userZoom = Math.max(.5, Math.min(2, +v.toFixed(3))); try { localStorage.setItem('itm690-w06-zoom', userZoom); } catch (e) {} applyZoom(); }
+  document.getElementById('zoomIn').addEventListener('click', () => setUserZoom(userZoom * 1.1));
+  document.getElementById('zoomOut').addEventListener('click', () => setUserZoom(userZoom / 1.1));
+  zoomVal.addEventListener('click', () => setUserZoom(1));
+  window.addEventListener('resize', applyZoom);
+  applyZoom();
+
+  let tx = null;
+  document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('deck').addEventListener('touchend', e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 70) show(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  /* ---------- 섹션 로드맵: 같은 파트(전반부/후반부)의 섹션만 보여 준다 ---------- */
+  document.querySelectorAll('ol.roadmap').forEach(ol => {
+    const cur = +ol.dataset.current, part = SECTIONS[cur].part;
+    ol.innerHTML = SECTIONS.map((s, i) => ({s, i})).filter(o => o.s.part === part)
+      .map(o => `<li class="${o.i === cur ? 'cur' : (o.i < cur ? 'done' : '')}"><span class="n">${o.i}</span>${o.s.name}</li>`).join('');
+  });
+
+  show(fromHash(), true);
+})();
+</script>
+</body>
+</html>
