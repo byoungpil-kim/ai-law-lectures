@@ -1,0 +1,2635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>7강 실습 (2) 웹 서비스 배포: 검색엔진, RAG, 인증, 로깅 · 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 7강 실습: 임베딩 검색엔진, RAG 챗봇, Vercel 배포, 이메일 인증, Supabase 로깅, 업무 자동화 대상 선정, AI 도입 방법론 가이드(법적 쟁점, 신뢰성)" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6fa6" />
+<style>
+/* 2026 에이전틱 AI 부트캠프(aibootcamp2026) 디자인 토큰을 따른다 */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --ink-soft:#3a3f3b; --muted:#626a64; --line:#d5ddd3; --line-soft:#e9ede6;
+  --brand:#2e9bdb; --brand-dark:#1b6fa6; --brand-deep:#124d78; --sky-light:#e3f1fb;
+  --green:#2f765b; --green-light:#e6f2ec; --amber:#b8792e; --amber-light:#fbf1de; --red:#b0483f; --red-light:#fbe9e7; --navy:#132436;
+  --shadow:0 16px 45px rgba(54,42,31,.12); --shadow-sm:0 2px 10px rgba(21,29,23,.05);
+  --radius:14px; --sidebar-width:264px; --topbar-h:64px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-dark);}
+img,video,svg{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;} }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 clamp(16px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topbar-left{display:flex;align-items:center;gap:18px;min-width:0;}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:0 0 auto;}
+.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:9px;color:#fff;background:var(--brand);font-size:15px;font-weight:800;}
+.brand-text{display:block;line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;}
+.brand-text small{display:block;margin-top:1px;color:var(--muted);font-size:11.5px;font-weight:600;}
+.week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
+.week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.zoom-ctl{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;}
+.zoom-ctl button{border:0;background:transparent;padding:6px 10px;font-size:13px;font-weight:800;color:var(--brand-dark);cursor:pointer;line-height:1;}
+.zoom-ctl button:hover{background:var(--sky-light);}
+.zoom-ctl .zv{min-width:44px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);border-right:1px solid var(--line);padding:6px 4px;cursor:pointer;}
+.progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
+.progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
+.progress-label b{color:var(--ink);}
+.progress-track{overflow:hidden;height:7px;border-radius:999px;background:#e1e8df;}
+.progress-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-dark),var(--brand));transition:width 220ms ease;}
+
+/* ---------- layout ---------- */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{
+  position:sticky;top:var(--topbar-h);width:var(--sidebar-width);flex:0 0 auto;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:22px 14px 28px;
+  border-right:1px solid var(--line);background:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sidebar-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 8px;}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.toc-link{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:9px;border:0;background:transparent;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.toc-link .no{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;color:var(--muted);font-size:11px;font-weight:900;flex:0 0 auto;}
+.toc-link .nm{flex:1 1 auto;min-width:0;}
+.toc-link .cnt{font-size:11px;font-weight:600;color:var(--muted);opacity:.8;}
+.toc-link:hover{background:var(--sky-light);color:var(--brand-dark);}
+.toc-link.active{background:var(--brand);color:#fff;}
+.toc-link.active .no{background:rgba(255,255,255,.22);color:#fff;}
+.toc-link.active .cnt{color:#fff;opacity:.85;}
+.toc-link.done .no{background:var(--green-light);color:var(--green);}
+.sub{list-style:none;margin:2px 0 6px 22px;padding:0 0 0 12px;display:none;border-left:2px solid var(--line-soft);}
+.toc li.open .sub{display:block;}
+.sub button{
+  display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 10px;border-radius:6px;
+  color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sub button:hover{background:var(--sky-light);color:var(--brand-dark);}
+.sub button.active{color:var(--brand-dark);font-weight:800;}
+.side-hint{margin-top:auto;padding:14px 12px 0;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line-soft);}
+.side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
+
+.stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
+.deck{flex:1 1 auto;display:flex;flex-direction:column;}
+.slide{
+  display:none;position:relative;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
+}
+.slide.active{display:flex;flex:1 1 auto;animation:fadein .22s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
+.slide h2{margin:0 0 20px;font-size:clamp(22px,2.5vw,30px);line-height:1.3;letter-spacing:-.01em;font-weight:800;}
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0;}
+.slide.top .body{justify-content:flex-start;}
+.body p{margin:0;}
+
+/* ---------- pager ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.pbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brand-dark);font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;max-width:44%;
+}
+.pbtn span{overflow:hidden;text-overflow:ellipsis;}
+.pbtn svg{width:16px;height:16px;flex:0 0 auto;}
+.pbtn:hover{border-color:var(--brand);background:var(--sky-light);transform:translateY(-1px);}
+.pbtn.next{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.pbtn.next:hover{background:var(--brand);border-color:var(--brand);}
+.pbtn:disabled{opacity:.35;cursor:default;transform:none;}
+.pinfo{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;text-align:center;}
+.pinfo .sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-dark);}
+.pinfo .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:360px;}
+.pinfo .dots i{width:8px;height:8px;border-radius:999px;background:#d9e1d6;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.pinfo .dots i:hover{background:var(--brand);}
+.pinfo .dots i.on{background:var(--brand-dark);transform:scale(1.25);}
+.pinfo .cnt{font-size:12px;color:var(--muted);}
+
+/* ---------- cover / section slides ---------- */
+.slide.cover{
+  color:#eef3f7;border-color:transparent;
+  background:radial-gradient(1000px 460px at 85% -10%,rgba(46,155,219,.18),transparent 60%),linear-gradient(180deg,#101f30 0%,var(--navy) 55%,#17293b 100%);
+}
+.slide.cover .kicker{color:#7cc4ee;}
+.slide.cover .kicker .n{color:#9fb4c4;}
+.cover-body{display:flex;flex-direction:column;justify-content:center;gap:18px;flex:1;}
+.cover-kicker{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9d7ec;background:rgba(46,155,219,.15);border:1px solid rgba(46,155,219,.35);padding:7px 14px;border-radius:999px;}
+.cover h1{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.22;letter-spacing:-.02em;color:#fff;}
+.cover h1 em{color:#7cc4ee;font-style:normal;}
+.cover .lead{color:#c9d6e0;font-size:clamp(15px,1.4vw,18px);max-width:640px;}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#dbe7ef;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;}
+.cover .outline{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.cover .outline button{
+  display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:13.5px;
+}
+.cover .outline button:hover{background:rgba(255,255,255,.1);}
+.cover .outline .num{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(124,196,238,.16);color:#7cc4ee;font-size:12px;font-weight:900;display:grid;place-items:center;}
+.cover .outline small{display:block;font-weight:600;color:#a9bdcb;font-size:11.5px;}
+
+.slide.section .body{align-items:center;}
+.slide.section h2{text-align:center;}
+.section-lead{text-align:center;color:var(--muted);max-width:640px;margin:-8px auto 0;}
+
+/* 인공지능 ⊃ 머신러닝 ⊃ 인공신경망 ⊃ 딥 러닝 포함 관계 도식 */
+.nest{position:relative;width:min(100%,720px);aspect-ratio:16/10;margin:0 auto;}
+.nest .lv{position:absolute;border-radius:26px;transition:box-shadow .2s ease;}
+.nest .lv>span{position:absolute;top:16px;left:22px;font-weight:800;font-size:clamp(14px,1.7vw,19px);}
+.nest .l1{inset:0;background:#dbeefb;color:var(--brand-deep);}
+.nest .l2{left:26%;top:19%;right:4%;bottom:4%;background:#a9d5f1;color:var(--brand-deep);}
+.nest .l3{left:44%;top:37%;right:7%;bottom:8%;background:#3f9fd8;color:#fff;}
+.nest .l4{left:58%;top:54%;right:11%;bottom:14%;background:var(--brand-deep);color:#fff;display:grid;place-items:center;}
+.nest .l4>span{position:static;}
+.nest .lv.hi{box-shadow:0 0 0 4px var(--red),0 10px 30px rgba(176,72,63,.25);}
+
+/* ---------- content components ---------- */
+.bul{margin:0;padding-left:1.25em;font-size:clamp(15px,1.25vw,17px);line-height:1.72;}
+.bul>li{margin:0 0 9px;}
+.bul>li:last-child{margin-bottom:0;}
+.bul li::marker{color:var(--brand-dark);}
+.bul ul{list-style:none;margin:5px 0 0;padding-left:1.15em;}
+.bul ul li{position:relative;margin:0 0 4px;color:var(--ink-soft);}
+.bul ul li::before{content:"–";position:absolute;left:-1.1em;color:var(--muted);}
+.bul ul ul li::before{content:"·";}
+.bul ul ul li{font-size:.94em;}
+.bul b{font-weight:800;}
+.bul .arrow{color:var(--red);font-weight:800;}
+.bul .arrow::before{content:"➜ ";}
+.compact{font-size:clamp(14px,1.15vw,16px);}
+.compact>li{margin-bottom:5px;}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+.two.eq{grid-template-columns:1fr 1fr;}
+.two.wide-r{grid-template-columns:.85fr 1.15fr;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.figrow{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+figure{margin:0;text-align:center;min-width:0;}
+figure img,figure video{display:block;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);}
+figure.plain img{border:0;border-radius:0;}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
+.src{font-size:11.5px;color:var(--muted);word-break:break-all;margin-top:auto;padding-top:14px;line-height:1.6;}
+.src a{color:var(--brand-dark);text-decoration:none;}
+.src a:hover{text-decoration:underline;}
+.em{color:var(--red);font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.5;}
+.em.center{text-align:center;}
+.em .arrow::before{content:"➜ ";}
+.callout{border-left:4px solid var(--brand);background:var(--sky-light);padding:12px 16px;border-radius:8px;font-size:15px;}
+.callout.warn{border-color:var(--amber);background:var(--amber-light);}
+.callout.bad{border-color:var(--red);background:var(--red-light);}
+.callout.good{border-color:var(--green);background:var(--green-light);}
+.callout b{font-weight:800;}
+.quote{font-size:clamp(16px,1.45vw,19px);line-height:1.75;border-left:4px solid var(--brand);padding:8px 20px;margin:0;color:var(--ink);}
+.quote cite{display:block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;color:var(--ink-soft);}
+.center{text-align:center;}
+.muted{color:var(--muted);}
+
+.math{font-family:"Cambria","Times New Roman",Georgia,serif;font-size:1.06em;}
+.math i{font-style:italic;}
+.math .w{color:var(--red);font-weight:700;font-style:italic;}
+.fbox{display:inline-block;padding:10px 24px;border:2px solid var(--ink);border-radius:6px;background:#fff;font-family:"Cambria","Times New Roman",Georgia,serif;font-size:clamp(18px,1.9vw,25px);line-height:1.4;}
+.fbox.red{border-color:var(--red);}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 6px;}
+.frac>span{padding:0 6px;}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;}
+.sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;margin:0 4px;}
+.sum>span{font-size:.55em;}
+.sum>b{font-size:1.5em;font-weight:400;}
+
+.tbl{border-collapse:collapse;margin:0 auto;font-size:clamp(13px,1.15vw,15.5px);background:#fff;}
+.tbl th,.tbl td{border:1px solid #9aa39b;padding:8px 16px;text-align:center;line-height:1.35;}
+.tbl th{background:var(--sky-light);font-weight:800;}
+.tbl .hl{background:var(--amber-light);}
+.tbl .dim{color:var(--muted);}
+
+/* f( ) = 함수 표기 */
+.fn{
+  display:flex;align-items:center;justify-content:center;gap:clamp(6px,1.4vw,16px);flex-wrap:nowrap;
+  font-family:"Cambria","Times New Roman",Georgia,serif;padding:6px 0 62px;
+}
+.fn.nolbl{padding-bottom:6px;}
+.fn .f{font-style:italic;font-size:clamp(54px,7vw,92px);line-height:1;}
+.fn .par{font-size:clamp(62px,8.2vw,112px);line-height:1;font-weight:300;color:var(--ink);}
+.fn .eq{font-size:clamp(40px,5.2vw,70px);line-height:1;margin:0 4px;}
+.fn .part{position:relative;display:flex;flex-direction:column;align-items:center;}
+.fn .slot{min-width:clamp(80px,11vw,140px);min-height:56px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(16px,1.6vw,22px);font-weight:700;font-family:"Inter","Noto Sans KR",sans-serif;}
+.fn .slot.blank{border-bottom:3px solid var(--red);}
+.fn .slot img{max-height:clamp(90px,14vw,150px);width:auto;border-radius:6px;}
+.fn .slot.col{flex-direction:column;gap:4px;}
+.fn .slot.col img{max-height:56px;}
+.fn .lbl{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;
+  font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(13px,1.15vw,15.5px);font-weight:800;color:var(--red);
+  border-top:3px solid var(--red);padding-top:6px;text-align:center;line-height:1.35;white-space:nowrap;min-width:100%;
+}
+.fn.sm{padding-bottom:50px;}
+.fn.sm .f{font-size:clamp(40px,4.6vw,60px);}
+.fn.sm .par{font-size:clamp(46px,5.4vw,72px);}
+.fn.sm .eq{font-size:clamp(30px,3.4vw,44px);}
+.fn.sm .slot{min-height:44px;font-size:clamp(14px,1.3vw,17px);}
+.fn.sm .slot img{max-height:clamp(64px,9vw,96px);}
+.fn.sm .lbl{font-size:12.5px;}
+.fn.xs{padding-bottom:0;}
+.fn.xs .f{font-size:36px;} .fn.xs .par{font-size:40px;} .fn.xs .eq{font-size:26px;} .fn.xs .slot{min-height:36px;min-width:60px;font-size:14px;}
+.fn-list{display:flex;flex-direction:column;gap:18px;}
+.fn-list .fn{padding:0;justify-content:flex-start;}
+.fn-list .fn .out{font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(20px,2.4vw,30px);font-weight:700;margin-left:10px;}
+.fn .cjk{font-family:"Noto Sans KR",sans-serif;font-size:clamp(30px,3.6vw,46px);font-weight:800;}
+
+/* 트리 도식 */
+.tree{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;}
+.tnode{padding:10px 20px;border:2px solid var(--ink);border-radius:8px;background:#fff;font-weight:800;font-size:clamp(13px,1.2vw,16px);text-align:center;position:relative;}
+.tnode.hi{border-color:var(--red);background:var(--red-light);color:var(--red);}
+.tnode.dots{border:0;background:transparent;font-size:1.6em;padding:4px 0;letter-spacing:.1em;}
+.tnode small{display:block;font-weight:600;color:var(--muted);font-size:.85em;}
+.tree .stem{width:2px;height:26px;background:var(--ink);}
+.tree .row{position:relative;display:grid;gap:12px;width:100%;padding-top:26px;}
+.tree .row::before{content:"";position:absolute;top:0;left:calc(100% / var(--n) / 2);right:calc(100% / var(--n) / 2);height:2px;background:var(--ink);}
+.tree .row>div{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.tree .row>div::before{content:"";position:absolute;top:-26px;width:2px;height:26px;background:var(--ink);}
+.tree .row .desc{font-size:clamp(13px,1.1vw,15px);color:var(--ink-soft);text-align:left;margin:0;padding-left:1.1em;line-height:1.55;}
+.tree .row .desc li{margin-bottom:3px;}
+.hl-note{display:flex;align-items:center;gap:12px;justify-content:center;font-size:13.5px;color:var(--muted);font-weight:600;}
+.hl-note img{height:44px;width:auto;border-radius:6px;}
+.hl-note .ar{color:var(--red);font-size:22px;font-weight:900;}
+
+/* 신경망·뉴런 SVG */
+.nn{width:100%;max-width:680px;height:auto;display:block;margin:0 auto;}
+.nn .in{fill:#fff;stroke:var(--brand-dark);stroke-width:2.2;}
+.nn .hid{fill:#fff;stroke:var(--amber);stroke-width:2.2;}
+.nn .out{fill:#fff;stroke:var(--green);stroke-width:2.2;}
+.nn .e{stroke:#22201d;stroke-width:1.1;opacity:.72;}
+.nn .nl{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:15px;fill:var(--ink);}
+.nn .ol{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:17px;fill:var(--ink);}
+.nn .dots{font-size:22px;font-weight:800;fill:var(--ink);}
+.nn .box{fill:none;stroke:var(--red);stroke-dasharray:7 5;stroke-width:2.2;}
+.nn-wrap{position:relative;}
+.nn-wrap .overlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border:1.5px solid var(--ink);padding:8px 22px;font-weight:800;font-size:clamp(14px,1.4vw,18px);border-radius:6px;white-space:nowrap;}
+.neuron{width:100%;max-width:640px;height:auto;display:block;margin:0 auto;}
+.neuron .nb{fill:#fff;stroke:var(--brand-dark);stroke-width:2.4;}
+.neuron .ln{stroke:var(--brand-dark);stroke-width:2;fill:none;}
+.neuron .lab{font-family:"Cambria","Times New Roman",serif;font-size:17px;font-weight:700;fill:var(--ink);}
+.neuron .w{fill:var(--red);}
+.neuron .z{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:19px;fill:var(--red);font-weight:700;}
+.neuron .act{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--red);}
+.io-flow{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;}
+.io-flow .io{text-align:center;font-weight:800;color:var(--red);font-size:clamp(14px,1.3vw,17px);line-height:1.4;}
+.io-flow .io img{width:clamp(96px,12vw,150px);height:auto;border-radius:8px;border:1px solid var(--line);display:block;margin:0 auto 8px;}
+.io-flow .io .ink{color:var(--ink);font-weight:700;font-size:.9em;}
+.io-flow .outs{list-style:none;margin:0 0 8px;padding:0;font-weight:700;color:var(--ink);font-size:clamp(14px,1.3vw,17px);text-align:left;line-height:1.9;}
+.io-flow .outs li.first{color:var(--green);font-weight:900;}
+
+/* 기타 */
+.media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;}
+.media-grid img,.media-grid video{width:100%;aspect-ratio:16/9;max-height:250px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;background:#000;}
+.media-grid figcaption{font-size:12.5px;}
+.poster-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.poster-grid img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;}
+.cross{position:relative;display:inline-block;}
+.cross::before,.cross::after{content:"";position:absolute;left:50%;top:50%;width:112%;height:8px;background:var(--red);border-radius:4px;transform:translate(-50%,-50%) rotate(45deg);opacity:.92;}
+.cross::after{transform:translate(-50%,-50%) rotate(-45deg);}
+.stackpile{position:relative;height:190px;width:200px;margin:0 auto;}
+.stackpile img{position:absolute;width:120px;height:auto;border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-sm);background:#fff;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
+.step .no{min-width:30px;height:30px;padding:0 8px;align-self:flex-start;white-space:nowrap;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
+.step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
+.step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
+.step .sol::before{content:"➜ ";}
+.cycle{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;}
+.cycle .node{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;min-height:150px;justify-content:center;}
+.cycle .node img{height:46px;width:auto;}
+.cycle .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.cycle .node p b{display:block;color:var(--red);font-weight:800;}
+.cycle .ar{font-size:30px;color:var(--brand-dark);font-weight:900;}
+.tri{position:relative;width:min(100%,780px);aspect-ratio:780/480;margin:0 auto;}
+.tri-arrows{position:absolute;inset:0;width:100%;height:100%;}
+.tri-arrows path{fill:none;stroke:var(--brand-dark);stroke-width:3;}
+.tri .node{position:absolute;width:32%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:center;}
+.tri .node img{height:44px;width:auto;}
+.tri .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.tri .node p b{display:block;color:var(--red);font-weight:800;}
+.tri .n1{left:1%;top:3%;}
+.tri .n2{right:1%;top:3%;}
+.tri .n3{left:34%;bottom:2%;}
+.cycle-back{text-align:center;color:var(--muted);font-size:13.5px;font-weight:700;margin-top:-6px;}
+.cycle-back::before{content:"↺ ";color:var(--brand-dark);font-size:18px;}
+.pyr{display:grid;grid-template-columns:150px 1fr 150px;gap:14px;align-items:center;max-width:820px;margin:0 auto;width:100%;}
+.pyr svg{width:100%;height:auto;display:block;}
+.pyr .side{text-align:center;font-weight:800;font-size:14px;line-height:1.5;}
+.pyr .side .ar{display:block;font-size:44px;line-height:1;color:var(--brand-dark);}
+.pyr .side.left .ar{color:var(--muted);}
+.chart-box{width:100%;max-width:760px;margin:0 auto;}
+.chart-box svg{width:100%;height:auto;display:block;}
+.chart-box .axis{stroke:#7b857d;stroke-width:1;}
+.chart-box .grid{stroke:#e1e8df;stroke-width:1;}
+.chart-box .tick{font-size:12px;fill:var(--muted);}
+.chart-box .lbl{font-size:12.5px;font-weight:700;fill:var(--ink);}
+.chart-box .pct{font-size:12px;font-weight:800;fill:var(--ink);}
+.chart-box .ln{fill:none;stroke:var(--brand-dark);stroke-width:2.4;}
+.chart-box .pt{fill:var(--brand-dark);}
+.chart-box .target{stroke:var(--red);stroke-width:2;stroke-dasharray:7 5;}
+.chart-box .ttl{font-size:13px;font-weight:800;fill:var(--muted);}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);}
+.logo-title{display:flex;align-items:center;gap:14px;}
+.logo-title img{height:34px;width:auto;}
+.cover-img{position:absolute;inset:0;border-radius:inherit;overflow:hidden;}
+.cover-img img{width:100%;height:100%;object-fit:cover;object-position:left center;filter:grayscale(1) brightness(.55);}
+.cover .over{position:relative;z-index:1;}
+
+@media (max-width:1100px){ .two,.two.eq,.two.wide-r{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;} }
+@media (max-width:900px){
+  .layout{display:block;}
+  .sidebar{position:sticky;top:var(--topbar-h);width:auto;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:10px 12px;background:rgba(243,246,242,.96);backdrop-filter:blur(8px);z-index:20;flex-direction:row;}
+  .sidebar-title,.sub,.side-hint{display:none!important;}
+  .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
+  .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
+  .toc-link .cnt{display:none;}
+  .stage{min-height:auto;}
+}
+@media (max-width:640px){
+  .topbar{gap:10px;}
+  .week-title{display:none;}
+  .zoom-ctl{display:none;}
+  .progress-wrap{width:110px;}
+  .pbtn{padding:10px 12px;font-size:13px;}
+  .pbtn span{display:none;}
+  .pbtn svg{width:18px;height:18px;}
+  .poster-grid{grid-template-columns:repeat(2,1fr);}
+  .tri{aspect-ratio:auto;display:flex;flex-direction:column;gap:10px;}
+  .tri-arrows{display:none;}
+  .tri .node{position:static;width:100%;}
+  .pyr{grid-template-columns:1fr;}
+  .io-flow{grid-template-columns:1fr;}
+  .slide{overflow-x:auto;}
+  .fn{flex-wrap:wrap;gap:4px;padding-bottom:70px;}
+  .fn .f{font-size:44px;} .fn .par{font-size:52px;} .fn .eq{font-size:34px;flex-basis:100%;text-align:center;margin:6px 0;}
+  .fn .slot{min-width:56px;min-height:40px;font-size:14px;}
+  .fn .slot img{max-height:84px;}
+  .fn .slot.col img{max-height:40px;}
+  .fn .lbl{white-space:normal;font-size:12px;min-width:0;width:max-content;max-width:150px;}
+  .fn .part{margin-bottom:8px;}
+  .fn.sm,.fn.xs{padding-bottom:60px;}
+  .fn.nolbl,.fn-list .fn{padding-bottom:0;}
+  .fn.nolbl .eq,.fn-list .fn .eq{flex-basis:auto;}
+  .tbl th,.tbl td{padding:6px 8px;font-size:12.5px;}
+  .nest{aspect-ratio:4/3;}
+  .nest .lv>span{font-size:13px;top:10px;left:12px;}
+}
+/* ---------- 2강 추가 컴포넌트 ---------- */
+.roadmap{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px;}
+.roadmap li{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:700;color:var(--muted);}
+.roadmap li .n{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;font-size:11px;font-weight:900;}
+.roadmap li.cur{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;transform:scale(1.06);box-shadow:0 8px 20px rgba(27,111,166,.25);}
+.roadmap li.cur .n{background:rgba(255,255,255,.22);color:#fff;}
+.roadmap li.done{background:var(--green-light);border-color:#cfe3d8;color:var(--green);}
+.roadmap li.done .n{background:#fff;color:var(--green);}
+.step .ttl{display:block;font-size:16px;font-weight:800;color:var(--ink);}
+.step .bul{padding-left:1.1em;}
+.tbl.mini{font-size:12px;margin:0;}
+.tbl.mini th{padding:3px 10px;font-size:11px;}
+.tbl.mini tr.dim td{padding:0 10px;line-height:1;}
+.tbl.mini td{padding:3px 10px;text-align:left;}
+.tbl.mini td:last-child{text-align:center;font-weight:700;}
+.toc-link:disabled{opacity:.5;cursor:default;}
+.toc-link:disabled:hover{background:transparent;color:var(--muted);}
+.cover .outline button:disabled{opacity:.45;cursor:default;}
+.cover .outline button:disabled:hover{background:rgba(255,255,255,.045);}
+
+/* ---------- 섹션 2: RNN 도식, seq2seq, 영상 카드 ---------- */
+.lat{width:100%;max-width:560px;height:auto;display:block;margin:0 auto;}
+.lat .pred{fill:#e3f1fb;stroke:#1b6fa6;stroke-width:1.8;} .lat .hid{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;stroke-dasharray:6 4;} .lat .obs{fill:#fbe9e7;stroke:#b0483f;stroke-width:1.8;}
+.lat .a{stroke:#22201d;stroke-width:1.8;} .lat .t{font-family:"Inter","Noto Sans KR",sans-serif;font-size:13px;font-weight:800;fill:var(--ink);} .lat .v{font-family:"Cambria","Times New Roman",serif;font-size:13px;fill:var(--ink-soft);} .lat .tm{font-family:"Inter",sans-serif;font-size:13px;font-weight:700;fill:var(--muted);}
+.rnn{width:100%;max-width:800px;height:auto;display:block;margin:0 auto;}
+.rnn .enc{fill:#fbf1de;stroke:#b8792e;stroke-width:1.8;}
+.rnn .dec{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;}
+.rnn .ctx{fill:#fff;stroke:#b0483f;stroke-width:2.2;}
+.rnn .ctxt{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:800;fill:var(--brand-dark);letter-spacing:.06em;}
+.rnn .ctxv{font-family:"Cambria","Times New Roman",serif;font-size:13px;fill:var(--ink);}
+.rnn .in{fill:#fbe9e7;stroke:#b0483f;stroke-width:1.8;}
+.rnn .hid{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;}
+.rnn .out{fill:#e3f1fb;stroke:#1b6fa6;stroke-width:1.8;}
+.rnn .ar{stroke:#22201d;stroke-width:1.6;fill:none;}
+.rnn .fb{stroke:#b0483f;stroke-width:2;fill:none;}
+.rnn .w{font-family:"Inter","Noto Sans KR",sans-serif;font-size:14px;font-weight:700;fill:var(--ink);}
+.rnn .lab{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:13px;fill:var(--ink-soft);}
+.rnn .tag{font-family:"Inter","Noto Sans KR",sans-serif;font-size:11.5px;font-weight:700;fill:var(--muted);}
+.rnn .big{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--brand-dark);}
+.onehot{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
+.oh{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.oh b{font-family:"Cambria","Times New Roman",serif;font-size:15px;font-weight:700;}
+.oh .v{display:flex;flex-direction:column;align-items:center;padding:4px 10px;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:8px;font-family:"Cambria","Times New Roman",serif;font-size:15px;line-height:1.35;}
+.oh .v span{min-width:1em;text-align:center;}
+.oh.dots{align-self:center;font-size:22px;font-weight:800;color:var(--muted);}
+.oh-note{align-self:center;font-size:12.5px;color:var(--muted);line-height:1.5;max-width:150px;}
+.s2s{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;}
+.s2s-txt{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:15px;font-weight:700;white-space:nowrap;}
+.s2s-ar{color:var(--brand-dark);font-size:20px;font-weight:900;}
+.s2s-box{display:flex;flex-direction:column;align-items:center;justify-content:center;width:74px;height:60px;border-radius:10px;color:#fff;font-weight:800;font-size:14px;line-height:1.2;}
+.s2s-box small{font-weight:600;font-size:10.5px;opacity:.85;}
+.s2s-box.enc{background:#d97706;} .s2s-box.dec{background:#2f765b;}
+.s2s-ctx{display:flex;flex-direction:column;align-items:stretch;border:2px solid var(--red);border-radius:8px;padding:3px 5px;background:#fff;font-size:11.5px;font-weight:700;text-align:center;min-width:56px;}
+.s2s-ctx b{font-size:10.5px;color:var(--brand-dark);letter-spacing:.04em;margin-bottom:2px;}
+.s2s-ctx span{background:var(--sky-light);margin:1px 0;padding:1px 4px;border-radius:3px;}
+.vid-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.vid{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;transition:transform .15s ease,box-shadow .15s ease;}
+.vid:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);border-color:var(--brand);}
+.vid img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;display:block;background:#000;}
+.vid span{font-size:12.5px;font-weight:700;line-height:1.4;}
+.vid span::before{content:"▶ ";color:var(--red);}
+
+/* ---------- 섹션 3 ---------- */
+.tbl.lm{font-size:clamp(15px,1.4vw,19px);}
+.tbl.lm td.s{text-align:left;font-family:"Cambria","Times New Roman",serif;padding:8px 22px;}
+.tbl.lm td.ok{color:var(--green);font-weight:900;} .tbl.lm td.no{color:var(--red);font-weight:900;}
+.tbl.lm td.why{font-size:.85em;font-weight:800;color:var(--brand-dark);background:var(--sky-light);}
+.guess{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;}
+.guess .g{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 26px;border-radius:12px;border:1px solid var(--line);background:var(--bg);min-width:160px;}
+.guess .g b{font-size:clamp(18px,1.8vw,24px);font-family:"Cambria","Times New Roman",serif;}
+.guess .g span{font-size:14px;font-weight:800;}
+.guess .up2{border-color:var(--green);background:var(--green-light);} .guess .up2 span{color:var(--green);}
+.guess .up{border-color:#cfe3d8;} .guess .up span{color:var(--green);}
+.guess .down{border-color:var(--red);background:var(--red-light);} .guess .down span{color:var(--red);}
+
+/* ---------- 섹션 5: 그림 위 강조 상자 ---------- */
+.hl-img{position:relative;display:block;margin:0 auto;width:100%;}
+.hl-img img{display:block;width:100%;height:auto;border-radius:8px;}
+.hl-img .hl-box{position:absolute;border:3px solid var(--red);border-radius:8px;box-shadow:0 0 0 2px rgba(255,255,255,.6);pointer-events:none;}
+
+/* ---------- 섹션 7: 정리 목록 ---------- */
+.recap{margin:0;padding:0;list-style:none;counter-reset:rc;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;}
+.recap li{counter-increment:rc;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:14.5px;line-height:1.55;}
+.recap li::before{content:counter(rc);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:7px;background:var(--brand-dark);color:#fff;font-weight:900;font-size:12px;display:grid;place-items:center;}
+.recap li b{display:block;color:var(--brand-dark);}
+@media (max-width:760px){.recap{grid-template-columns:1fr;}}
+
+/* ---------- 3강 컴포넌트 ---------- */
+.prompt{position:relative;margin:0;padding:14px 84px 14px 18px;border-radius:12px;background:var(--navy);color:#eef3f7;font-family:"Inter","Noto Sans KR",sans-serif;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-all;}
+.prompt::before{content:"💬 프롬프트";position:absolute;top:-10px;left:14px;font-size:11px;font-weight:800;background:var(--brand);color:#fff;padding:2px 9px;border-radius:999px;}
+.prompt .copy{position:absolute;top:10px;right:10px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:12px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;}
+.prompt .copy:hover{background:rgba(255,255,255,.18);}
+.prompt.sm{font-size:13px;padding:12px 78px 12px 14px;}
+.code{margin:0;padding:10px 14px;border-radius:10px;background:#f4f6f3;border:1px solid var(--line);font-family:ui-monospace,Consolas,Menlo,monospace;font-size:12.5px;line-height:1.45;white-space:pre-wrap;word-break:break-all;color:var(--ink);}
+.follow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px;}
+.follow b{color:var(--muted);font-weight:700;margin-right:4px;}
+.follow span{background:var(--sky-light);color:var(--brand-dark);border:1px solid #cfe6f6;border-radius:999px;padding:4px 10px;font-weight:700;}
+.follow span::before{content:"↩ ";}
+code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(--brand-dark);font-family:ui-monospace,Consolas,Menlo,monospace;font-size:.92em;}
+.harness{display:flex;justify-content:center;}
+.hbox{border:1.5px dashed var(--amber);background:var(--amber-light);border-radius:14px;padding:14px 18px 12px;width:100%;max-width:420px;}
+.hlabel{font-size:12px;font-weight:800;color:#8a5a1e;margin-bottom:10px;}
+.engine{border:1.5px solid var(--brand);background:var(--sky-light);border-radius:10px;padding:12px;text-align:center;font-weight:800;}
+.engine small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:3px;}
+.harr{text-align:center;font-size:12px;color:var(--muted);padding:8px 0;}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tools span{border:1.5px solid var(--green);background:var(--green-light);border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;}
+.ctxbar{display:flex;align-items:flex-end;justify-content:center;gap:28px;height:220px;padding:0 20px;}
+.ctxbar div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:90px;font-size:12.5px;color:var(--muted);}
+.ctxbar span{display:block;width:100%;background:linear-gradient(180deg,var(--brand),var(--brand-dark));border-radius:8px 8px 0 0;}
+.ctxbar b{margin-top:6px;color:var(--ink);}
+.loop{display:grid;grid-template-columns:repeat(9,auto);gap:8px;align-items:center;justify-content:center;}
+.lnode{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center;font-weight:800;font-size:14px;min-width:120px;}
+.lnode.user{background:var(--sky-light);border-color:#cfe6f6;}
+.lnode small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:3px;}
+.lar{color:var(--brand-dark);font-size:22px;font-weight:900;}
+.tbl.cmp{width:100%;font-size:14px;}
+.tbl.cmp th small{display:block;font-weight:600;color:var(--muted);font-size:11px;}
+.tbl.cmp td{text-align:left;}
+@media (max-width:900px){.loop{grid-template-columns:1fr;} .lar{transform:rotate(90deg);}}
+
+/* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
+@page{size:320mm 180mm;margin:0;}
+.step.link{text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;}
+.step.link:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--brand);}
+.step.link .ttl::after{content:" ↗";color:var(--brand);font-size:13px;}
+.step .pp{font-size:12.5px;color:var(--brand-dark);background:var(--sky-light);border-radius:8px;padding:6px 10px;margin-top:auto;line-height:1.5;}
+.step .bul{margin:0;}
+@media print{
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .topbar,.sidebar,.pager{display:none!important;}
+  .layout{display:block;}
+  .stage{zoom:1!important;min-height:0!important;padding:0!important;display:block;}
+  .deck{display:block;}
+  .slide{display:flex!important;flex-direction:column;zoom:.85;width:calc(320mm / .85);height:calc(180mm / .85);overflow:hidden;box-sizing:border-box;
+    margin:0;border:0;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;animation:none!important;
+    padding:14mm 18mm 12mm;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .two{grid-template-columns:1.1fr .9fr;} .two.eq{grid-template-columns:1fr 1fr;} .two.wide-r{grid-template-columns:.85fr 1.15fr;}
+  .steps{grid-template-columns:repeat(3,1fr);} .io-flow{grid-template-columns:auto 1fr auto;} .pyr{grid-template-columns:150px 1fr 150px;}
+  .poster-grid{grid-template-columns:repeat(4,1fr);} .fn{flex-wrap:nowrap;}
+  .slide.cover{border-radius:0;}
+  .cover-img{border-radius:0;}
+  video{background:#000;}
+  a{text-decoration:none;color:inherit;}
+}
+
+/* ---------- 7강 컴포넌트 ---------- */
+.dia{width:100%;max-width:760px;margin:0 auto;}
+.dia svg{width:100%;height:auto;display:block;}
+.dia.tall svg{max-height:540px;}
+.dia.mid svg{max-height:400px;}
+.dia-cap{font-size:12.5px;color:var(--muted);text-align:center;margin-top:6px;}
+.code .k{color:var(--brand-dark);font-weight:700;}
+.code .c{color:var(--muted);}
+.code .sys{color:#8a5a1e;}
+.code .doc{color:var(--brand-dark);}
+.code .q{color:var(--green);font-weight:700;}
+.mock{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;box-shadow:var(--shadow-sm);}
+.mock .mbar{display:flex;align-items:center;gap:6px;background:#eef2ee;border-bottom:1px solid var(--line);padding:6px 12px;font-size:11.5px;color:var(--muted);}
+.mock .mbar::before{content:"● ● ●";letter-spacing:2px;color:#c3cbc2;font-size:9px;margin-right:6px;}
+.mock .min{padding:12px 16px;font-size:13px;line-height:1.55;display:flex;flex-direction:column;gap:8px;}
+.mock .min h4{margin:0;font-size:15px;}
+.mock .qbox{border:1.5px solid var(--brand);border-radius:8px;padding:6px 10px;font-weight:700;}
+.mock .res{border-top:1px solid var(--line-soft);padding-top:8px;}
+.mock .res b{color:var(--brand-dark);}
+.mock .res .sc{float:right;font-size:11.5px;font-weight:800;color:var(--green);}
+.mock .res small{display:block;color:var(--muted);font-size:11.5px;}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);white-space:nowrap;}
+.pill.ok{background:var(--green-light);color:var(--green);}
+.pill.warn{background:var(--amber-light);color:#8a5a1e;}
+.pill.bad{background:var(--red-light);color:var(--red);}
+.mx{display:grid;grid-template-columns:34px 1fr 1fr;grid-template-rows:minmax(130px,auto) minmax(130px,auto) 30px;gap:10px;max-width:760px;margin:0 auto;width:100%;}
+.mx .ax{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--muted);}
+.mx .ax.y{writing-mode:vertical-rl;transform:rotate(180deg);grid-row:1 / span 2;}
+.mx .ax.x{grid-column:2 / span 2;}
+.mx .cell{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg);font-size:13.5px;line-height:1.5;}
+.mx .cell b{display:block;font-size:14.5px;margin-bottom:3px;}
+.mx .cell.go{background:var(--green-light);border-color:#bfe0c9;} .mx .cell.go b{color:var(--green);}
+.mx .cell.care{background:var(--amber-light);border-color:#efdcb8;} .mx .cell.care b{color:#8a5a1e;}
+.mx .cell.no{background:var(--red-light);border-color:#efc9c4;} .mx .cell.no b{color:var(--red);}
+.tbl.cmp td,.tbl.cmp th{font-size:13.5px;}
+.tbl.cmp.sm td,.tbl.cmp.sm th{font-size:12.5px;padding:6px 10px;}
+.tbl.cmp td.c{text-align:center;}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;margin:0;}
+.kv dt{font-weight:800;color:var(--brand-dark);}
+.kv dd{margin:0;color:var(--ink-soft);}
+.steps.s4{grid-template-columns:repeat(4,1fr);}
+.steps.s2{grid-template-columns:1fr 1fr;}
+.step .prob b{color:var(--ink);}
+@media (max-width:1100px){ .steps.s4,.steps.s2{grid-template-columns:1fr;} }
+@media print{ .steps.s4{grid-template-columns:repeat(4,1fr);} .steps.s2{grid-template-columns:1fr 1fr;} }
+.code.pre{white-space:pre;word-break:normal;overflow-x:auto;font-size:12px;}
+.tbl.cmp.sm tbody th{white-space:nowrap;}
+.code.kr{word-break:keep-all;}
+.tbl.nw td:first-child{white-space:nowrap;}
+@media print{ .loop{grid-template-columns:repeat(9,auto);} .lar{transform:none;} .mx{grid-template-columns:34px 1fr 1fr;} }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="brand" title="강의 일정으로">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
+    </a>
+    <div class="week-tag"><span class="week-num">7강</span><span class="week-title">실습 (2) – 웹 서비스 배포</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="zoom-ctl" role="group" aria-label="슬라이드 크기">
+      <button type="button" id="zoomOut" title="작게 (−)">A−</button>
+      <span class="zv" id="zoomVal" title="자동 크기로 되돌리기 (0)">100%</span>
+      <button type="button" id="zoomIn" title="크게 (+)">A+</button>
+    </div>
+    <div class="progress-wrap" aria-label="진행률">
+      <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">0</span></span>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="목차">
+    <div class="sidebar-title">목차</div>
+    <ol class="toc" id="toc"></ol>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · <kbd>+</kbd> <kbd>−</kbd> 크기 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="deck" id="deck">
+
+<!-- ===================== 0. 들어가며 ===================== -->
+<section class="slide cover" data-sec="0" data-title="표지">
+  <div class="cover-body">
+    <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 7강 · 실습 (2)</span>
+    <h1>웹 서비스 배포: <em>검색엔진, RAG, 인증, 로깅</em></h1>
+    <p class="lead">3강에서 만든 판결문 임베딩으로 유사 판례 검색엔진과 근거를 인용하는 RAG 챗봇을 만들고, Vercel로 공개 URL에 배포한 뒤 이메일 인증과 Supabase 로그를 붙인다. 이어서 내 업무 중 AI로 자동화할 대상을 고르는 방법과, 도입할 때 참조할 방법론·법적 쟁점·신뢰성 점검 기준을 정리한다.</p>
+    <div class="meta">
+      <span class="meta-chip">2026. 10. 15.</span>
+      <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
+      <span class="meta-chip">2026 에이전틱 AI 부트캠프 3주차 자료 기반</span>
+    </div>
+    <div class="outline" id="coverOutline"></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="오늘의 구성">
+  <div class="kicker">들어가며</div>
+  <h2>오늘의 구성: 만들어 보고, 내 업무에 옮긴다</h2>
+  <div class="body">
+    <div class="steps s4">
+      <div class="step"><span class="no">A</span><b class="ttl">서비스 만들기 (§1~6)</b><p class="prob">Claude Code 준비 → 검색엔진 → RAG 챗봇 → Vercel 배포 → 이메일 인증 → Supabase 로그. 부트캠프 3주차 실습을 강의 형식으로 압축</p></div>
+      <div class="step"><span class="no">B</span><b class="ttl">자동화 대상 고르기 (§7)</b><p class="prob">내 업무를 과업 단위로 나누고, 가치와 위험으로 후보를 고른다. 스킬로 할지 웹앱으로 할지 정한다</p></div>
+      <div class="step"><span class="no">C</span><b class="ttl">과제 (§8)</b><p class="prob">10/29(9강) 발표. 스킬 1건 + Vercel 웹앱 2건. “이것을 해도 되는가”의 애매한 점과 극복 방법을 함께 발표</p></div>
+      <div class="step"><span class="no">D</span><b class="ttl">도입 방법론 가이드 (§9)</b><p class="prob">업무에 AI를 도입할 때 참조할 공개 가이드. 특히 법적 쟁점과 신뢰성 점검. 약 30분</p></div>
+    </div>
+    <div class="callout">3강과 달라지는 점: 3강의 결과물은 <b>정적 페이지</b>(GitHub Pages)였다. 오늘의 결과물은 <b>서버가 있는 서비스</b>다. 서버가 생기면 비밀(API 키) 보관, 접근 통제, 기록 보관이라는 문제가 함께 생긴다. 6강에서 다룬 개인정보 보호법이 이 지점에서 실무 문제가 된다.</div>
+    <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week3/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프 3주차: 검색엔진과 RAG</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="오늘 만드는 것">
+  <div class="kicker">들어가며</div>
+  <h2>오늘 만드는 것: 판결문 347건으로 공개 서비스까지</h2>
+  <div class="body">
+    <div class="loop">
+      <div class="lnode">🔎 검색엔진<small>문장으로 묻고 유사 판례 목록</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">💬 RAG 챗봇<small>판례를 근거로 답변 + 인용 번호</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">🚀 Vercel 배포<small>*.vercel.app 공개 URL</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">🔐 이메일 인증<small>허용 명단의 사람만 사용</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode user">🗂️ Supabase 로그<small>질문·답변·비용 기록</small></div>
+    </div>
+    <div class="two eq" style="align-items:start">
+      <ul class="bul compact">
+        <li><b>재료</b>: 3강에서 수집한 직장 내 괴롭힘 손해배상 판결 347건(요약 + 본문)과 임베딩 JSON 347개. 3강 과제의 특허·논문 임베딩이 있으면 그것을 써도 된다</li>
+        <li><b>도구</b>: Claude 데스크톱 앱의 Code(Claude Code). 서버를 내 PC에서 켜 두고, 코드를 깃헙에 올려야 하기 때문</li>
+        <li><b>계정</b>: GitHub(3강), OpenRouter 키(3강), Vercel·Supabase(GitHub 계정으로 가입), Gmail 앱 비밀번호</li>
+      </ul>
+      <div class="callout good"><b>완성본 예시</b>: 부트캠프 실습의 실제 배포 결과가 <a href="https://no-bullying-gamma.vercel.app" target="_blank" rel="noopener">no-bullying-gamma.vercel.app</a>에 공개되어 있다. 오늘 슬라이드의 화면과 기록은 이 서비스를 만들면서 나온 실제 기록이다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 1. Claude Code 시작하기 ===================== -->
+<section class="slide section" data-sec="1" data-title="Claude Code 시작하기">
+  <div class="kicker">Section 1</div>
+  <h2>Claude Code 시작하기</h2>
+  <p class="section-lead">git·gh·파이썬을 설치하고, 작업 폴더를 Claude Code로 열어 지시 한 번으로 깃헙 저장소를 만든다. 자동 승인을 어디까지 허용할지도 정한다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="1"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="설치: git · gh · 파이썬">
+  <div class="kicker">Claude Code 시작하기</div>
+  <h2>설치: git · gh · 파이썬</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">git</span><b class="ttl">변경 이력 기록</b><p class="prob">파일이 언제 어떻게 바뀌었는지 기록하고 깃헙 저장소와 주고받는다. Claude Code가 코드를 저장·업로드할 때 내부에서 쓴다</p></div>
+      <div class="step"><span class="no">gh</span><b class="ttl">터미널에서 깃헙 조작</b><p class="prob">GitHub 공식 명령줄 도구. “저장소를 만들어 줘”라는 지시를 Claude Code가 실행할 때 이 도구를 쓴다</p></div>
+      <div class="step"><span class="no">py</span><b class="ttl">검색 서버 실행</b><p class="prob">파이썬 코드는 Claude Code가 쓴다. 다만 그 코드를 실행할 파이썬은 내 PC에 있어야 한다</p></div>
+    </div>
+    <div class="two eq" style="align-items:start">
+      <pre class="code"><span class="c"># Windows (PowerShell)</span>
+winget install --id Git.Git -e
+winget install --id GitHub.cli -e
+winget install --id Python.Python.3.13 -e
+<span class="c"># macOS (터미널)</span>
+git --version ; python3 --version ; brew install gh</pre>
+      <pre class="code"><span class="c"># 설치 확인: 셋 다 버전 번호가 나오면 성공</span>
+git --version
+gh --version
+python --version
+<span class="c"># 깃헙 로그인: 브라우저가 열리고 일회용 코드 입력</span>
+gh auth login --hostname github.com --git-protocol https --web</pre>
+    </div>
+    <p class="muted">Windows에서 명령을 찾지 못하면 터미널 창을 새로 연다. brew가 없으면 Claude Code를 먼저 열고 “gh를 설치해줘”라고 요청하면 환경에 맞는 방법을 안내한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="폴더 열기와 첫 지시">
+  <div class="kicker">Claude Code 시작하기</div>
+  <h2>작업 폴더를 열고, 지시 한 번으로 깃헙 저장소 만들기</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>프로젝트 폴더를 만든다. 예: <code>C:\claude\no-bullying</code> (macOS <code>~/claude/no-bullying</code>). 3강 산출물(판결문 <code>rulings/</code>, 임베딩 <code>embeddings_json/</code>, 요약 <code>rulings_summary.csv</code>)과 OpenRouter 키 파일을 이 안으로 옮긴다</li>
+      <li>데스크톱 앱에서 <b>Code</b>를 고르고 이 폴더를 작업 폴더로 연다. Cowork와 달리 AI가 이 폴더 안에서 프로그램을 직접 실행한다</li>
+    </ul>
+    <pre class="prompt"><button class="copy" type="button">복사</button>현재 폴더 내용으로 깃헙 레포를 만들어서 작업하려고 해.
+깃헙에 no-bullying이라는 레포를 만들어줘.
+openrouterkey.txt 같은 비밀 파일은 레포에 올리지 말고.</pre>
+    <ul class="bul compact">
+      <li>Claude Code가 git 초기화, 제외 파일 목록(<code>.gitignore</code>) 작성, gh로 저장소 생성과 업로드까지 진행한다. 공개 범위는 <b>비공개(private)</b>로 시작한다</li>
+    </ul>
+    <div class="callout bad"><b>올리기 전에 직접 확인</b>: github.com에서 저장소를 열어 키 파일이 없는지 본다. 이미 올라갔다면 파일을 지우는 것으로는 부족하다. 커밋 이력에 남기 때문이다. 해당 키를 <b>폐기하고 새로 발급</b>한다. 공개 저장소의 키를 자동으로 수집하는 프로그램이 상시 동작한다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="권한: 자동 승인의 범위">
+  <div class="kicker">Claude Code 시작하기</div>
+  <h2>권한: 자동 승인을 어디까지 허용할 것인가</h2>
+  <div class="body">
+    <table class="tbl cmp">
+      <thead><tr><th>방식</th><th>동작</th><th>어울리는 경우</th></tr></thead>
+      <tbody>
+        <tr><th>매번 확인</th><td>명령 실행·파일 변경마다 내용을 읽고 승인</td><td>처음 쓰는 도구, 낯선 폴더, 민감한 자료</td></tr>
+        <tr><th>선택적 허용</th><td>같은 종류의 작업은 계속 허용</td><td>반복 작업이 많은 실습 중반부터</td></tr>
+        <tr><th>자동 승인</th><td>대부분의 작업을 확인 없이 진행. 대량 삭제·외부 전송 같은 위험 작업은 따로 확인을 요청</td><td>신뢰하는 폴더의 학습·개인 프로젝트</td></tr>
+      </tbody>
+    </table>
+    <p class="em center">기준은 작업의 종류가 아니라 다루는 자료다</p>
+    <ul class="bul compact">
+      <li>오늘의 자료는 법원이 비실명화해 공개한 판결문이고, 잘못되어도 잃는 것은 폴더 하나다. 자동 승인을 켜도 된다</li>
+      <li>회사 문서, 고객 정보가 든 폴더라면 다르다. 승인 수준은 §9에서 다룰 위험 분류와 함께 정한다</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 2. 검색엔진 구현 ===================== -->
+<section class="slide section" data-sec="2" data-title="검색엔진 구현">
+  <div class="kicker">Section 2</div>
+  <h2>검색엔진 구현: 단어가 아니라 의미로 찾기</h2>
+  <p class="section-lead">키워드 검색의 한계를 확인하고, 임베딩 유사도 검색엔진의 구조(색인과 검색)를 이해한 뒤, 계획서부터 대화로 Claude Code에게 구현을 맡긴다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="2"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="키워드 매칭 vs 임베딩 유사도">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>두 가지 검색 방식: 키워드 매칭 vs 임베딩 유사도</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:stretch">
+      <div class="step"><span class="no">①</span><b class="ttl">키워드 매칭</b>
+        <ul class="bul compact"><li>질의어가 문서에 글자 그대로 있는지 확인한다</li><li>구현이 쉽고 서버 없이 브라우저만으로 동작한다</li><li>전통적 검색의 기본 방식</li></ul></div>
+      <div class="step"><span class="no">②</span><b class="ttl">임베딩 유사도</b>
+        <ul class="bul compact"><li>질의와 문서를 같은 좌표계의 벡터로 바꾸어 거리를 잰다</li><li>단어가 달라도 의미가 같으면 찾는다</li><li>질의를 실시간으로 임베딩해야 하므로 <b>API 호출이 필요</b>하다</li></ul></div>
+    </div>
+    <p style="font-weight:800;margin:0">판결문 요약 347건에 키워드 검색을 해 보면 세 가지 실패가 나타난다</p>
+    <div class="steps">
+      <div class="step"><span class="no">1</span><b class="ttl">동의어를 모른다</b><p class="prob">“폭언” 90건, “욕설” 44건. 같은 현상인데 판결문이 어느 단어를 썼는지에 따라 결과가 갈린다</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">표현이 다르면 놓친다</b><p class="prob">“예견가능성”은 5건. “회사가 알 수 있었다”라고 쓴 판결은 뜻이 같아도 찾지 못한다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">의도를 모른다</b><p class="prob">“괴롭힘을 인정하지 않은 사건”을 검색하면 “괴롭힘”, “인정”이 많이 나오는 인정 사건이 위로 올라온다</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="임베딩 유사도 검색의 원리">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>임베딩 유사도: “비슷한 판결 찾기”를 “가까운 점 찾기”로</h2>
+  <div class="body">
+    <div class="dia mid"><svg viewBox="0 0 680 302" role="img" aria-label="판결문들이 임베딩 공간의 점이 되고, 기준 판결과 가까운 점들이 유사 판례로 찾아지는 개념도">
+<!-- 왼쪽: 판결문 문서들 -->
+<g font-family="inherit">
+<g fill="#ffffff" stroke="#b9c2ba" stroke-width="1.4">
+<path d="M22 44 h30 l10 10 v34 h-40 z"/><path d="M52 44 v10 h10" fill="none"/>
+<path d="M78 36 h30 l10 10 v34 h-40 z"/><path d="M108 36 v10 h10" fill="none"/>
+<path d="M36 108 h30 l10 10 v34 h-40 z"/><path d="M66 108 v10 h10" fill="none"/>
+<path d="M92 100 h30 l10 10 v34 h-40 z"/><path d="M122 100 v10 h10" fill="none"/>
+<path d="M24 172 h30 l10 10 v34 h-40 z"/><path d="M54 172 v10 h10" fill="none"/>
+<path d="M80 166 h30 l10 10 v34 h-40 z"/><path d="M110 166 v10 h10" fill="none"/>
+</g>
+<g stroke="#d5ddd3" stroke-width="2" stroke-linecap="round">
+<path d="M28 62 h26 M28 70 h26 M28 78 h18"/><path d="M84 54 h26 M84 62 h26 M84 70 h18"/>
+<path d="M42 126 h26 M42 134 h26 M42 142 h18"/><path d="M98 118 h26 M98 126 h26 M98 134 h18"/>
+<path d="M30 190 h26 M30 198 h26 M30 206 h18"/><path d="M86 184 h26 M86 192 h26 M86 200 h18"/>
+</g>
+<text x="80" y="240" text-anchor="middle" font-size="12.5" font-weight="800" fill="#22201d">판결문 347건</text>
+<text x="80" y="256" text-anchor="middle" font-size="11" fill="#626a64">평균 8,500자 텍스트</text>
+</g>
+<!-- 가운데: 임베딩 화살표 -->
+<g>
+<path d="M162 128 h58" stroke="#1b6fa6" stroke-width="2.5" fill="none"/>
+<path d="M220 128 l-9 -6 v12 z" fill="#1b6fa6"/>
+<text x="191" y="112" text-anchor="middle" font-size="12.5" font-weight="900" fill="#1b6fa6">임베딩</text>
+<text x="191" y="150" text-anchor="middle" font-size="10.5" fill="#626a64">문서마다</text>
+<text x="191" y="164" text-anchor="middle" font-size="10.5" fill="#626a64">의미의 좌표 부여</text>
+</g>
+<!-- 오른쪽: 임베딩 공간 -->
+<rect x="238" y="16" width="430" height="228" rx="14" fill="#f4f8fb" stroke="#c9e2f5"/>
+<text x="252" y="38" font-size="11.5" font-weight="800" fill="#7d97ab">임베딩 공간: 점 하나 = 판결문 한 건</text>
+<!-- 먼 점들 (회색) -->
+<g fill="#b0b8b0">
+<circle cx="286" cy="86" r="6"/><circle cx="318" cy="140" r="6"/><circle cx="292" cy="196" r="6"/>
+<circle cx="360" cy="66" r="6"/><circle cx="384" cy="210" r="6"/><circle cx="430" cy="58" r="6"/>
+<circle cx="610" cy="80" r="6"/><circle cx="636" cy="150" r="6"/><circle cx="600" cy="214" r="6"/>
+<circle cx="352" cy="160" r="6"/><circle cx="348" cy="224" r="6"/><circle cx="560" cy="46" r="6"/>
+</g>
+<!-- 가까운 이웃 원 -->
+<circle cx="497" cy="148" r="60" fill="rgba(46,155,219,.07)" stroke="#1b6fa6" stroke-width="1.6" stroke-dasharray="5 4"/>
+<!-- 가까운 점들 (파랑) -->
+<g fill="#2e9bdb" stroke="#1b6fa6" stroke-width="1.4">
+<circle cx="470" cy="120" r="7"/><circle cx="530" cy="168" r="7"/><circle cx="462" cy="172" r="7"/>
+</g>
+<!-- 기준 판결 (주황) -->
+<circle cx="497" cy="148" r="9" fill="#b8792e" stroke="#8a5a13" stroke-width="1.6"/>
+<text x="497" y="78" text-anchor="middle" font-size="11.5" font-weight="900" fill="#8a5a13">기준 판결(질의)</text>
+<path d="M497 83 v52" stroke="#b8792e" stroke-width="1.3" stroke-dasharray="3 3" fill="none"/>
+<text x="497" y="232" text-anchor="middle" font-size="11.5" font-weight="900" fill="#1b6fa6">원 안의 가까운 점들 = 유사 판례</text>
+<!-- 범례 -->
+<g font-size="11" fill="#626a64">
+<circle cx="250" cy="276" r="6" fill="#b8792e"/><text x="262" y="280">기준 판결(질의)</text>
+<circle cx="374" cy="276" r="6" fill="#2e9bdb"/><text x="386" y="280">가까운 판결: 유사도 높음</text>
+<circle cx="540" cy="276" r="6" fill="#b0b8b0"/><text x="552" y="280">먼 판결: 다른 쟁점</text>
+</g>
+</svg></div>
+    <ul class="bul compact">
+      <li>판결문마다 4,096차원 벡터가 있다(3강에서 추출). 두 벡터의 <b>코사인 유사도</b>가 “의미가 얼마나 비슷한가”를 숫자로 나타낸다</li>
+      <li>질의 문장도 같은 방식으로 벡터로 만들면 문장으로 검색할 수 있다. 실제 점검에서 “업무상 적정범위를 넘지 않았다고 보아 괴롭힘을 부정한 사례”라고 묻자 1·2위가 그 논리로 기각된 원고패 판결이었다. 단어가 아니라 <b>판시 논리</b>가 검색된 것이다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="왜 백엔드가 필요한가">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>새 질의를 받으려면 백엔드가 필요하다</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>347건끼리의 유사도는 미리 계산해 페이지에 넣어 둘 수 있다. 그러나 사용자가 새로 입력한 문장의 벡터는 미리 계산할 수 없다. 검색할 때마다 임베딩 API를 불러야 한다</li>
+    </ul>
+    <div class="two eq" style="align-items:stretch">
+      <div class="callout warn"><b>문제 1. 호출마다 비용</b><br>질의 하나는 1원 미만이지만, 공개된 웹앱이라면 누가 몇 번 검색할지 통제할 수 없다. 비용은 내 크레딧에서 나간다.</div>
+      <div class="callout bad"><b>문제 2. 키를 숨길 곳이 없다</b><br>브라우저 자바스크립트에 API 키를 넣으면 누구나 개발자도구(F12)로 키를 복사해 내 크레딧으로 호출할 수 있다. 정적 웹페이지에는 비밀을 둘 곳이 없다.</div>
+    </div>
+    <div class="dia"><svg viewBox="0 0 680 150" role="img" aria-label="백엔드 구조 다이어그램">
+<rect x="8" y="40" width="150" height="66" rx="10" fill="#fafcf9" stroke="#d5ddd3"/>
+<text x="83" y="66" text-anchor="middle" font-size="13" font-weight="800" fill="#22201d">브라우저 (웹앱)</text>
+<text x="83" y="86" text-anchor="middle" font-size="10.5" fill="#626a64">질의문만 보냄 · 키 없음</text>
+<text x="180" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#2e9bdb">질의 →</text>
+<text x="180" y="96" text-anchor="middle" font-size="12" font-weight="800" fill="#2f765b">← Top-5</text>
+<rect x="205" y="30" width="200" height="86" rx="10" fill="#1b6fa6"/>
+<text x="305" y="56" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">백엔드 서버 (내 PC)</text>
+<text x="305" y="76" text-anchor="middle" font-size="10.5" fill="#cde2fb">🔑 API 키 보관 (환경변수)</text>
+<text x="305" y="93" text-anchor="middle" font-size="10.5" fill="#cde2fb">질의 임베딩 → 코사인 → 랭킹</text>
+<text x="428" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#2e9bdb">API 호출 →</text>
+<text x="428" y="96" text-anchor="middle" font-size="12" font-weight="800" fill="#2f765b">← 벡터</text>
+<rect x="452" y="40" width="150" height="66" rx="10" fill="#eceae6"/>
+<text x="527" y="66" text-anchor="middle" font-size="13" font-weight="800" fill="#52514e">OpenRouter</text>
+<text x="527" y="86" text-anchor="middle" font-size="10.5" fill="#898781">임베딩 모델</text>
+</svg></div>
+    <p class="em center">사용자 입력을 실시간으로 처리하고 비밀(키)을 지키려면 키를 가진 중간 프로그램, 백엔드가 필요하다</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="이미 널리 쓰이는 기술">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>임베딩 유사도 검색은 이미 널리 쓰이는 산업 표준이다</h2>
+  <div class="body">
+    <div class="steps s4">
+      <div class="step"><span class="no">📋</span><b class="ttl">KIPRIS 유사 특허 검색</b><p class="prob">발명의 설명을 넣으면 표현이 달라도 기술적으로 유사한 선행 특허를 찾는다</p></div>
+      <div class="step"><span class="no">⚖️</span><b class="ttl">유사 판례·조항 검색</b><p class="prob">리걸테크의 “이 판결과 유사한 판례”, 계약서의 유사 조항 검색</p></div>
+      <div class="step"><span class="no">🎓</span><b class="ttl">관련 논문 탐색</b><p class="prob">초록 임베딩으로 관련 논문 추천, 심사위원 매칭</p></div>
+      <div class="step"><span class="no">🎧</span><b class="ttl">고객센터 FAQ 매칭</b><p class="prob">표현이 달라도 같은 뜻의 과거 문의와 답변을 찾아 상담원에게 제시</p></div>
+      <div class="step"><span class="no">📑</span><b class="ttl">표절·중복 탐지</b><p class="prob">지나치게 비슷한 문서 찾기, 같은 사건을 다룬 기사 묶기</p></div>
+      <div class="step"><span class="no">💼</span><b class="ttl">매칭 서비스</b><p class="prob">이력서와 채용공고처럼 서로 다른 두 종류의 문서를 같은 좌표계에 놓고 비교</p></div>
+      <div class="step"><span class="no">🔍</span><b class="ttl">사내 문서 검색</b><p class="prob">키워드 매칭에 의미 검색을 결합한 하이브리드 검색이 일반화되었다</p></div>
+      <div class="step"><span class="no">🤖</span><b class="ttl">챗봇의 검색 단계</b><p class="prob">기업 챗봇이 답하기 전에 사내 문서를 찾아오는 단계. §3의 RAG</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="아키텍처: 색인과 검색">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>전체 구조: 색인(미리 한 번)과 검색(질의마다)</h2>
+  <div class="body">
+    <div class="dia"><svg viewBox="0 0 680 320" role="img" aria-label="검색엔진 아키텍처">
+<!-- 색인 국면 -->
+<rect x="8" y="8" width="664" height="104" rx="12" fill="#fdf8ef" stroke="#e8d9bd"/>
+<text x="24" y="32" font-size="11.5" font-weight="900" fill="#8a5a13">색인 국면: 미리 한 번 (3강에서 Cowork로 완료)</text>
+<rect x="24" y="44" width="150" height="52" rx="9" fill="#fff" stroke="#e8d9bd"/>
+<text x="99" y="66" text-anchor="middle" font-size="12" font-weight="800" fill="#22201d">판결문 347건</text>
+<text x="99" y="84" text-anchor="middle" font-size="10" fill="#898781">수집된 원문·요약</text>
+<text x="196" y="74" text-anchor="middle" font-size="13" font-weight="900" fill="#b8792e">→</text>
+<rect x="218" y="44" width="170" height="52" rx="9" fill="#fff" stroke="#e8d9bd"/>
+<text x="303" y="66" text-anchor="middle" font-size="12" font-weight="800" fill="#22201d">임베딩 모델 (API)</text>
+<text x="303" y="84" text-anchor="middle" font-size="10" fill="#898781">문서마다 벡터 1개씩 추출</text>
+<text x="410" y="74" text-anchor="middle" font-size="13" font-weight="900" fill="#b8792e">→</text>
+<rect x="432" y="44" width="224" height="52" rx="9" fill="#fff" stroke="#e8d9bd"/>
+<text x="544" y="66" text-anchor="middle" font-size="12" font-weight="800" fill="#22201d">벡터 DB (우리는 JSON 347개)</text>
+<text x="544" y="84" text-anchor="middle" font-size="10" fill="#898781">서지 + 벡터 저장 · 산업은 전용 벡터 DB 사용</text>
+<!-- 검색 국면 -->
+<rect x="8" y="126" width="664" height="186" rx="12" fill="#f4f9fd" stroke="#bcdcf3"/>
+<text x="24" y="150" font-size="11.5" font-weight="900" fill="#1b6fa6">검색 국면: 사용자가 검색할 때마다</text>
+<rect x="24" y="166" width="128" height="58" rx="9" fill="#fff" stroke="#bcdcf3"/>
+<text x="88" y="186" text-anchor="middle" font-size="11.5" font-weight="800" fill="#22201d">① 검색창</text>
+<text x="88" y="203" text-anchor="middle" font-size="9.8" fill="#898781">"동료 직원에 의한</text>
+<text x="88" y="216" text-anchor="middle" font-size="9.8" fill="#898781">따돌림(왕따)"</text>
+<text x="168" y="198" text-anchor="middle" font-size="13" font-weight="900" fill="#2e9bdb">→</text>
+<rect x="186" y="166" width="150" height="58" rx="9" fill="#1b6fa6"/>
+<text x="261" y="186" text-anchor="middle" font-size="11.5" font-weight="800" fill="#fff">② 백엔드 서버</text>
+<text x="261" y="203" text-anchor="middle" font-size="9.8" fill="#cde2fb">질의 접수 · 🔑 키 보관</text>
+<text x="261" y="216" text-anchor="middle" font-size="9.8" fill="#cde2fb">(브라우저엔 키 없음)</text>
+<text x="352" y="198" text-anchor="middle" font-size="13" font-weight="900" fill="#2e9bdb">→</text>
+<rect x="370" y="166" width="140" height="58" rx="9" fill="#fff" stroke="#bcdcf3"/>
+<text x="440" y="186" text-anchor="middle" font-size="11.5" font-weight="800" fill="#22201d">③ 질의 임베딩</text>
+<text x="440" y="203" text-anchor="middle" font-size="9.8" fill="#898781">임베딩 API 호출</text>
+<text x="440" y="216" text-anchor="middle" font-size="9.8" fill="#898781">문서와 반드시 같은 모델</text>
+<text x="526" y="198" text-anchor="middle" font-size="13" font-weight="900" fill="#2e9bdb">→</text>
+<rect x="544" y="166" width="112" height="58" rx="9" fill="#fff" stroke="#bcdcf3"/>
+<text x="600" y="186" text-anchor="middle" font-size="11.5" font-weight="800" fill="#22201d">④ 최근접 탐색</text>
+<text x="600" y="203" text-anchor="middle" font-size="9.8" fill="#898781">벡터 DB에서 코사인</text>
+<text x="600" y="216" text-anchor="middle" font-size="9.8" fill="#898781">유사도 정렬 → Top-k</text>
+<path d="M600 232 v22 H120 v0" stroke="#2f765b" stroke-width="2" fill="none"/>
+<rect x="24" y="248" width="632" height="52" rx="9" fill="#edf4ef" stroke="#bfe0c9"/>
+<text x="340" y="270" text-anchor="middle" font-size="11.5" font-weight="800" fill="#2f765b">⑤ 결과 반환: 유사도 순으로 정렬된 판결 목록(서지·요약·점수)이 브라우저에 표시</text>
+<text x="340" y="288" text-anchor="middle" font-size="10" fill="#628a72">출력은 "문서 목록": 읽고 판단하는 것은 사람의 몫</text>
+</svg></div>
+    <ul class="bul compact">
+      <li><b>질의 임베딩 모델은 색인 때와 같은 모델</b>이어야 한다. 모델이 다르면 좌표계가 달라 유사도가 의미를 잃는다</li>
+      <li>347건이면 전수 비교로 충분하다. 수백만 건이면 전용 벡터 DB의 근사 최근접 탐색이 이 단계를 대신한다. 구조는 같다</li>
+      <li>출력은 <b>문서 목록</b>이다. 읽고 판단하는 것은 사람이 한다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="벡터 DB의 실물">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>“벡터 DB”의 실물: 문서 id와 벡터의 대응표</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">우리 것: 폴더 하나에 JSON 347개 (파일당 평균 181KB)</p>
+<pre class="code pre">{
+  <span class="k">"id"</span>: "수원지방법원_2020가단8667",
+  <span class="k">"법원"</span>: "수원지방법원", <span class="k">"사건번호"</span>: "2020가단8667",
+  <span class="k">"선고일"</span>: "2021. 4. 21.", <span class="k">"소송결과"</span>: "원고일부승",
+  <span class="k">"embedding_model"</span>: "qwen/qwen3-embedding-8b",
+  <span class="k">"embedding_dim"</span>: 4096,
+  <span class="k">"body_embedding"</span>: [-0.01119, -0.00574, 0.03813, …],  <span class="c">// 숫자 4,096개</span>
+  <span class="k">"summary"</span>: "원고가 노동조합 조합장인 피고를 상대로…",
+  <span class="k">"summary_embedding"</span>: [-0.03728, -0.00944, …]
+}</pre>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">일반적 서비스: 전용 벡터 DB (예: PostgreSQL + pgvector)</p>
+<pre class="code pre"><span class="c">-- rulings 테이블: 문서 1건 = 1행, 벡터 칸이 하나 더 있는 표</span>
+ id | 법원         | 사건번호      | embedding vector(4096)
+  1 | 수원지방법원 | 2020가단8667  | [-0.0112, -0.0057, …]
+  2 | 대구지방법원 | 2024가단138550| [ 0.0093, -0.0141, …]
+
+<span class="c">-- 검색: 가까운 순으로 정렬해 5건</span>
+<span class="k">SELECT</span> 법원, 사건번호 <span class="k">FROM</span> rulings
+<span class="k">ORDER BY</span> embedding &lt;=&gt; [질의 벡터]  <span class="c">-- 벡터 거리 연산자</span>
+<span class="k">LIMIT</span> 5;</pre>
+        <p class="muted" style="font-size:13.5px">Pinecone, Chroma, Milvus, pgvector 등. 전용 DB의 가치는 수십만 건 이상에서 전수 비교 없이 빠르게 정렬하는 색인 기술에 있다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="계획서부터 대화로">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>구현 방법: 사양서를 쓰지 말고 계획서부터 대화로</h2>
+  <div class="body">
+    <div class="loop">
+      <div class="lnode user">① 원하는 것만 서술<small>무엇을(what)만, 기술 용어 없이</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">② AI가 계획서 작성<small>순서·확인 지점·질문</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode user">③ 피드백 주고받기<small>질문에 답하고 요구를 다듬음</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">④ 확정 계획대로 구현<small>계획에 없는 것은 먼저 질문</small></div>
+    </div>
+    <pre class="prompt"><button class="copy" type="button">복사</button>나는 개발자가 아니야. 바로 코드를 짜지 말고, 계획서부터 만들어줘.
+내가 원하는 것:
+- 이 폴더의 embeddings_json/ 안에 판결문 347건의 임베딩 JSON이 있어
+- 검색창에 문장으로 질의하면, 의미가 비슷한 판결을 순서대로
+  보여주는 검색 서비스를 내 컴퓨터에서 돌리고 싶어
+- OpenRouter 키는 이 폴더의 openrouterkey.txt 파일에 저장해 두었어
+- 완성되면 내가 직접 켜고 끌 수 있어야 해
+계획서에는 무엇을 만드는지, 어떤 순서로 만드는지, 중간에 내가
+확인할 지점이 어디인지 넣어줘. 결정이 필요한 것은 나에게 질문해줘.</pre>
+    <p class="muted">코드를 읽지 못해도 계획서는 읽고 고칠 수 있다. 비개발자가 개발을 통제하는 지점이 계획서다. 사람 개발자에게 외주를 줄 때와 같은 방식이다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="질문에 답하고 계획 확정">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>AI의 질문에 답하고, 요구를 계획서에 명문화한다</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <div class="callout"><b>계획서 v1 (요약)</b>: 작은 웹서버 + 검색 화면. 데이터 통합 → 검색 엔진(화면 없이 먼저 검증) → 웹 화면 → 실행 방법. 질문 3가지: (a) 본문 임베딩만 쓸까, 요약 임베딩과 조합할까 (b) 법원·연도 필터를 넣을까 (c) 질의 임베딩 모델을 지정해 줄 수 있나</div>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>계획 좋아. 질문에 답할게.
+(a) 본문 임베딩과 요약 임베딩 둘 다 비교해서 높은 쪽으로 순위를 정해줘
+(b) 필터는 빼고 검색창만 있는 단순 버전으로 하자
+(c) 임베딩 모델은 347건을 만들 때 쓴 qwen/qwen3-embedding-8b를
+    그대로 써야 해. 왜 같은 모델이어야 하는지도 계획서에 한 줄 적어줘
+추가 요구 두 가지:
+- 키는 openrouterkey.txt 파일에서만 읽고, 화면·로그·코드
+  어디에도 키 값을 출력하거나 복사해 넣지 마
+- 서버에 문제가 생기면 비개발자인 내가 읽을 수 있는
+  한국어 안내를 보여줘
+이 내용 반영해서 계획서 v2로 확정해줘.</pre>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">확정된 계획서(PLAN.md)의 구성</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><th>만들 것</th><td>내 컴퓨터에서만 도는 판결문 의미 검색 웹페이지. 외부로 나가는 것은 “검색 문장을 임베딩해 달라”는 요청 하나뿐</td></tr>
+            <tr><th>확정 사항</th><td>본문+요약 임베딩 중 높은 쪽 · 필터 없음 · 같은 임베딩 모델 · DB 설치 없이 메모리 계산</td></tr>
+            <tr><th>확인 지점</th><td>① 347건 통합, 누락 0건 보고 ② 시험 검색 결과 승인 ③ 직접 검색해 보고 완료 판단</td></tr>
+            <tr><th>비용</th><td>검색 1회당 임베딩 호출 1번, 1원 미만</td></tr>
+            <tr><th>하지 않는 것</th><td>필터, 인터넷 공개, 로그인, 키워드 검색, 새 판결 자동 임베딩</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13.5px">확인 지점이 문서에 들어 있어 구현 내내 통제권이 사용자에게 남는다. “하지 않는 것”을 적어 두면 범위가 늘어나지 않는다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="구현 결과와 두 번째 왕복">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>구현 결과, 그리고 써 보면서 기능을 덧붙인다</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="mock">
+        <div class="mbar">http://localhost:8000/search</div>
+        <div class="min">
+          <h4>직장 내 괴롭힘 판결문 검색 <small class="muted">· 전체 347건</small></h4>
+          <div class="qbox">업무상 적정범위를 넘지 않았다고 보아 괴롭힘을 부정한 사례</div>
+          <div class="res"><span class="sc">유사도 72.0%</span><b>1 수원지법 평택지원 2024가단76216</b><small>2025. 7. 10. · 원고패</small>사내이사·팀장의 폭언 등을 이유로 위자료 7,000만 원 청구. 업무상 적정범위를 넘는 괴롭힘으로 보기 어렵고 회사도 필요한 조치를 했다며 기각</div>
+          <div class="res"><span class="sc">유사도 71.1%</span><b>2 부산지법 2023가소568249</b><small>2024. 4. 23. · 원고패</small>동료의 괴롭힘을 이유로 위자료 600만 원 청구. 증거 부족으로 기각</div>
+        </div>
+      </div>
+      <div class="stack">
+        <ul class="bul compact">
+          <li>판결문은 스스로를 “부정한 사례”라고 부르지 않는다. 키워드 검색으로는 성립하지 않는 질의에 원고패 판결이 상위로 나왔다</li>
+          <li>시험 질의 “동료 직원들에 의한 따돌림(왕따)”에서 “왕따”라는 구어와 “집단 따돌림”이라는 판결문 표현이 달라도 찾아내는지 확인한다</li>
+        </ul>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>다음 2가지 기능을 추가한다.
+(1) 판결문을 클릭했을 때 새창에 뜨는 것이 아니라 오른쪽 패널에 표시
+(2) 검색된 가까운 20건에 대해서 원고 승패 비율과 인용된 금액 분포
+    히스토그램을 상단에 표시 - 곧바로 전체 현황을 알 수 있도록 설명</pre>
+        <div class="callout good">“회식 자리 성희롱으로 징계받은 사건” 상위 20건: 원고가 일부라도 이긴 사건 75%, 인용액 중앙값 700만 원. 검색기가 분석 도구가 되었다. 완성은 “써 보고, 아쉬운 점을 말하고, 고치게 하는 것”의 반복이다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="문서화: 3 + 1 파일">
+  <div class="kicker">검색엔진 구현</div>
+  <h2>문서화: 코드만 남기지 말고 계획·결정·사용법을 남긴다</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>파일</th><th>담는 것</th><th>실무 표준으로 치면</th></tr></thead>
+      <tbody>
+        <tr><th>PLAN.md</th><td>합의한 계획서의 최종본. 무엇을, 어떤 구조로, 어떤 순서로</td><td>설계 문서(design doc)</td></tr>
+        <tr><th>DECISIONS.md</th><td>날짜 + 결정 + 이유 + 검토했다가 버린 대안. 지우지 않고 아래로만 추가</td><td>결정 기록(ADR)</td></tr>
+        <tr><th>README.md</th><td>처음 보는 사람이 실행·배포까지: 필요한 것, 실행 명령, 환경변수 목록(이름과 용도만), 자주 나는 문제</td><td>README + 운영 문서</td></tr>
+        <tr><th>CLAUDE.md</th><td>Claude Code가 폴더에서 자동으로 읽는 프로젝트 메모. 폴더 구조, 규칙, 자주 쓰는 명령</td><td>팀 온보딩 문서</td></tr>
+      </tbody>
+    </table>
+    <div class="two eq" style="align-items:start">
+      <pre class="prompt sm"><button class="copy" type="button">복사</button>오늘 작업을 문서로 남기자. 프로젝트 폴더에 PLAN.md,
+DECISIONS.md, README.md, CLAUDE.md 네 파일을 만들어줘.
+전부 코드에서 확인되는 사실만 쓰고, 확실하지 않은 것은
+[확인 필요]로 표시해줘.</pre>
+      <pre class="prompt sm"><button class="copy" type="button">복사</button>CLAUDE.md에 다음 규칙을 추가해줘:
+"코드를 변경하면 관련된 문서(README.md, PLAN.md)를 같은
+커밋에서 갱신한다. 방향을 정하는 결정을 내렸으면
+DECISIONS.md에 항목을 추가한다."</pre>
+    </div>
+    <p class="muted">문서화가 실패하는 시점은 처음 만들 때가 아니라 고치지 않을 때다. 갱신 규칙을 CLAUDE.md에 두면 이후에는 AI가 코드와 문서를 함께 고친다. 이 기록은 §4에서 다시 쓰인다.</p>
+  </div>
+</section>
+
+<!-- ===================== 3. RAG 적용 ===================== -->
+<section class="slide section" data-sec="3" data-title="RAG 적용">
+  <div class="kicker">Section 3</div>
+  <h2>RAG 적용: 검색한 문서를 근거로 답하게 하기</h2>
+  <p class="section-lead">검색엔진이 문서 목록을 돌려준다면, RAG는 검색된 문서를 AI의 컨텍스트에 넣고 그 문서만 근거로 답변을 쓰게 한다. 근거 번호를 인용하고, 근거가 없으면 답하지 않는 판례 챗봇을 만든다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="3"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="RAG란 무엇인가">
+  <div class="kicker">RAG 적용</div>
+  <h2>RAG(Retrieval-Augmented Generation)란 무엇인가</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>LLM에게 그냥 물으면 학습 데이터에 기초해 답한다. 이 방식에는 세 가지 한계가 있다: <b>학습 이후의 일을 모르고</b>, <b>내 데이터(사내 문서, 수집한 판결문)를 모르고</b>, 모르는 내용도 <b>그럴듯하게 지어낸다(환각)</b></li>
+      <li>RAG: 질문이 들어오면 관련 문서를 <b>검색</b>(Retrieval)해 질문과 함께 컨텍스트에 <b>추가</b>(Augmented)하고, 그 문서를 근거로 답을 <b>생성</b>(Generation)하게 한다</li>
+    </ul>
+    <div class="steps">
+      <div class="step"><span class="no">🆕</span><b class="ttl">최신·내부 데이터</b><p class="prob">모델이 학습한 적 없는 문서(어제 수집한 판결문, 사내 규정)로 답할 수 있다</p></div>
+      <div class="step"><span class="no">🔗</span><b class="ttl">출처 표시</b><p class="prob">어느 문서를 근거로 답했는지 인용을 요구할 수 있어 검증이 가능해진다</p></div>
+      <div class="step"><span class="no">🚫</span><b class="ttl">환각 억제</b><p class="prob">“제공된 문서로 답할 수 없으면 모른다고 하라”는 지시가 가능해진다. 다만 환각이 사라지지는 않는다(§9)</p></div>
+    </div>
+    <div class="callout"><b>검색엔진과 RAG는 목적이 다르다.</b> 검색엔진의 사용자는 문서 목록을 직접 읽고 판단하려는 사람이고, RAG의 사용자는 종합된 답을 원하는 사람이다. RAG는 검색엔진을 구성요소로 쓴다. 연구·실무에서는 대개 둘 다 필요하다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="데이터 플로우: API를 두 번">
+  <div class="kicker">RAG 적용</div>
+  <h2>데이터 플로우: OpenRouter를 두 번(임베딩, 챗) 호출한다</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.15fr .85fr;align-items:center">
+      <div class="dia tall"><svg viewBox="0 0 680 660" role="img" aria-label="RAG 데이터 플로우 시퀀스 다이어그램">
+<rect x="8" y="8" width="184" height="46" rx="9" fill="#fafcf9" stroke="#d5ddd3"/>
+<text x="100" y="37" text-anchor="middle" font-size="15" font-weight="800" fill="#22201d">🖥 브라우저</text>
+<rect x="248" y="8" width="184" height="46" rx="9" fill="#1b6fa6"/>
+<text x="340" y="37" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">⚙ 서버 (내 PC) 🔑</text>
+<rect x="488" y="8" width="184" height="46" rx="9" fill="#eceae6"/>
+<text x="580" y="37" text-anchor="middle" font-size="15" font-weight="800" fill="#52514e">☁ OpenRouter</text>
+<line x1="100" y1="54" x2="100" y2="648" stroke="#d5ddd3" stroke-dasharray="4 4"/>
+<line x1="340" y1="54" x2="340" y2="648" stroke="#9dc4de" stroke-dasharray="4 4"/>
+<line x1="580" y1="54" x2="580" y2="648" stroke="#d5ddd3" stroke-dasharray="4 4"/>
+<!-- 1 -->
+<rect x="12" y="68" width="176" height="42" rx="8" fill="#fff" stroke="#d5ddd3"/>
+<text x="100" y="87" text-anchor="middle" font-size="12.5" font-weight="800" fill="#22201d">① 질문 입력</text>
+<text x="100" y="103" text-anchor="middle" font-size="11" fill="#898781">"동료들의 따돌림도…?"</text>
+<!-- 2 -->
+<line x1="100" y1="132" x2="331" y2="132" stroke="#2e9bdb" stroke-width="2.5"/>
+<path d="M331 132 l-10 -6 v12 z" fill="#2e9bdb"/>
+<text x="216" y="124" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1b6fa6">② POST /ask</text>
+<text x="216" y="149" text-anchor="middle" font-size="11" fill="#52514e" font-family="monospace">{"question": "동료들의 따돌림도…"}</text>
+<!-- 3 -->
+<line x1="340" y1="182" x2="571" y2="182" stroke="#b8792e" stroke-width="2.5"/>
+<path d="M571 182 l-10 -6 v12 z" fill="#b8792e"/>
+<text x="456" y="174" text-anchor="middle" font-size="12.5" font-weight="800" fill="#8a5a13">③ 임베딩 요청 (🔑)</text>
+<text x="456" y="199" text-anchor="middle" font-size="11" fill="#52514e" font-family="monospace">{model:"qwen3-embedding-8b", input:"…"}</text>
+<!-- 4 -->
+<line x1="571" y1="228" x2="349" y2="228" stroke="#2f765b" stroke-width="2.5"/>
+<path d="M349 228 l10 -6 v12 z" fill="#2f765b"/>
+<text x="456" y="220" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2f765b">④ 질문 벡터 반환</text>
+<text x="456" y="245" text-anchor="middle" font-size="11" fill="#52514e" font-family="monospace">[0.021, −0.011, …] (4,096개)</text>
+<!-- 5 -->
+<rect x="240" y="262" width="200" height="58" rx="8" fill="#e3f1fb" stroke="#2e9bdb"/>
+<text x="340" y="283" text-anchor="middle" font-size="12.5" font-weight="900" fill="#1b6fa6">⑤ 검색 (서버 내부)</text>
+<text x="340" y="301" text-anchor="middle" font-size="11" fill="#375f8f">347건과 코사인 → 관련 판결 Top-20</text>
+<!-- 6 -->
+<line x1="340" y1="352" x2="571" y2="352" stroke="#b8792e" stroke-width="2.5"/>
+<path d="M571 352 l-10 -6 v12 z" fill="#b8792e"/>
+<text x="456" y="344" text-anchor="middle" font-size="12.5" font-weight="800" fill="#8a5a13">⑥ 챗 모델 요청 (🔑): 두 번째 방문</text>
+<text x="456" y="369" text-anchor="middle" font-size="11" fill="#52514e" font-family="monospace">{지시 + 판결 요약 20건 + 질문}</text>
+<text x="456" y="384" text-anchor="middle" font-size="10.5" fill="#898781">← 다음 장에서 실물을 본다</text>
+<!-- 7 -->
+<rect x="492" y="398" width="176" height="42" rx="8" fill="#fff" stroke="#d5ddd3"/>
+<text x="580" y="417" text-anchor="middle" font-size="12.5" font-weight="800" fill="#22201d">⑦ 문서를 읽고 답변 생성</text>
+<text x="580" y="433" text-anchor="middle" font-size="11" fill="#898781">제공 문서 밖 내용은 금지</text>
+<!-- 8 -->
+<line x1="571" y1="470" x2="349" y2="470" stroke="#2f765b" stroke-width="2.5"/>
+<path d="M349 470 l10 -6 v12 z" fill="#2f765b"/>
+<text x="456" y="462" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2f765b">⑧ 답변 텍스트 반환</text>
+<text x="456" y="487" text-anchor="middle" font-size="11" fill="#52514e" font-family="monospace">"…인정된 사례가 있습니다 [1]"</text>
+<!-- 9 -->
+<line x1="331" y1="530" x2="109" y2="530" stroke="#2f765b" stroke-width="2.5"/>
+<path d="M109 530 l10 -6 v12 z" fill="#2f765b"/>
+<text x="216" y="522" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2f765b">⑨ 답변 + 근거 목록 반환</text>
+<text x="216" y="547" text-anchor="middle" font-size="11" fill="#52514e" font-family="monospace">{answer:"…", sources:[근거 서지]}</text>
+<!-- 10 -->
+<rect x="12" y="576" width="176" height="46" rx="8" fill="#edf4ef" stroke="#bfe0c9"/>
+<text x="100" y="596" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2f765b">⑩ 답변 + 근거 카드 표시</text>
+<text x="100" y="613" text-anchor="middle" font-size="11" fill="#628a72">답변 + 근거 카드 표시</text>
+</svg></div>
+      <ul class="bul compact">
+        <li>③~⑤는 §2의 검색엔진과 같다. 질문과 가까운 판결 20건을 고른다</li>
+        <li>⑥에서 <b>지시 + 판례 요약 20건 + 질문</b>을 하나의 요청으로 챗 모델에 보낸다</li>
+        <li>키는 서버만 가진다. 판결문 347건 원본은 내 PC를 떠나지 않고, 검색된 20건의 요약만 전송된다</li>
+        <li>소요 시간은 십수 초로 늘어난다. 실측: 임베딩 1초 + 답변 생성 12초</li>
+        <li><b>데이터가 어디로 가는가</b>를 그림으로 그릴 수 있어야 6강의 처리위탁·국외 이전 문제를 판단할 수 있다</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="왜 외부 API인가">
+  <div class="kicker">RAG 적용</div>
+  <h2>왜 Chat·Cowork가 아니라 유료 API인가</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:stretch">
+      <div class="step"><span class="no">👤</span><b class="ttl">Chat · Cowork: 사람이 쓰는 도구</b>
+        <ul class="bul compact"><li>사람이 로그인해 화면에서 직접 실행하는 개인용 서비스</li><li>내 연구·업무를 내가 할 때는 이것으로 충분하다</li><li>그러나 내 프로그램(서버)이 대신 호출할 수 없고, 계정 1인분이다. 이용자 100명을 받을 수 없다</li></ul></div>
+      <div class="step"><span class="no">⚙️</span><b class="ttl">외부 API: 프로그램이 부르는 인터페이스</b>
+        <ul class="bul compact"><li>서버가 자동으로, 동시에, 사람 없이 호출한다</li><li>쓴 만큼 과금. 이용자가 늘면 비용도 비례해 늘어나는 구조</li><li>챗봇·웹앱 같은 서비스는 일반적으로 이 구조를 쓴다</li></ul></div>
+    </div>
+    <p class="em center">혼자 쓰는 분석이면 Chat·Cowork, 다른 사람이 쓰는 서비스를 만드는 순간 API</p>
+    <p class="muted">이 구분은 §7에서 업무 자동화의 형태(스킬 vs 웹앱)를 고르는 기준이 된다. 법적으로도 다르다: 개인 구독 서비스의 약관과 API 이용 약관은 데이터 학습·보존 조건이 다를 수 있다(§9).</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="컨텍스트에 실제로 담기는 것">
+  <div class="kicker">RAG 적용</div>
+  <h2>“증강”의 실물: 서버가 보내는 요청 하나</h2>
+  <div class="body">
+<pre class="code pre" style="font-size:11.5px">POST https://openrouter.ai/api/v1/chat/completions
+{ <span class="k">"model"</span>: "deepseek/deepseek-v4-flash", <span class="k">"temperature"</span>: 0.2, <span class="k">"max_tokens"</span>: 3000, <span class="k">"stream"</span>: true,
+  <span class="k">"messages"</span>: [
+    { "role": "system", "content": <span class="sys">"아래 <판례>에 적힌 내용만 근거로 삼는다. 근거가 된 판례의 번호를 [1], [7]처럼 붙인다.
+       <판례>만으로 답할 수 없으면 '제가 가진 347건의 판결문으로는 답변드릴 수 없습니다'라고 답한다. …"</span> },
+    { "role": "user", "content":
+       <span class="doc">"<판례>
+        [1] 수원지방법원 안산지원 2022가단87835 · 원고일부승 · 333,751,696원
+            팀장의 지속적인 공개 질책·모욕 등 직장 내 괴롭힘으로 우울증을 겪다 자살한 근로자의 유족이 …
+        [2] … [20] (같은 형식, 약 4,900자)
+        </판례></span>
+        <span class="q">질문: 직장 내 괴롭힘으로 우울증이 생겼을 때 회사에도 책임을 물을 수 있나요?"</span> } ] }</pre>
+    <ul class="bul compact">
+      <li><span style="color:#8a5a1e;font-weight:800">지시(system)</span>는 매번 같고, <span style="color:var(--brand-dark);font-weight:800">근거 자료(user)</span>는 질문마다 새로 담긴다. <span style="color:var(--green);font-weight:800">질문</span>은 40자, 근거는 5,252자. 전송량의 대부분이 근거 자료다</li>
+      <li>모델은 판결문 347건을 갖고 있지 않다. 매번 고른 20건만 보고 답한다. 검색이 문서를 잘못 고르면 답도 틀린다. <b>RAG 품질의 절반은 검색 품질</b>이고, 답이 이상하면 생성보다 검색 결과부터 확인한다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="실습: 계획 문답과 결정 위임">
+  <div class="kicker">RAG 적용</div>
+  <h2>실습: 계획 문답, 그리고 모르는 결정은 근거를 요구하며 위임한다</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>나는 개발자가 아니야. 바로 코드를 짜지 말고 계획서부터 만들어줘.
+내가 원하는 것:
+- 지금 만든 판례 검색 서비스에 챗봇 기능을 추가하고 싶어
+- 질문을 하면, 판결문 347건에서 관련 판례를 찾아 그것을
+  근거로 답해주는 방식(RAG)이면 좋겠어
+- 답변에는 어떤 판결을 근거로 했는지 표시되어야 해
+- 근거가 없으면 아는 척하지 말고 모른다고 해야 해
+계획서에 무엇을 만들지, 순서, 내가 확인할 지점을 넣고,
+결정이 필요한 것은 나에게 질문해줘.</pre>
+        <table class="tbl cmp sm">
+          <thead><tr><th>AI의 질문</th><th>실제 답</th></tr></thead>
+          <tbody>
+            <tr><td>(a) 무엇을 근거로 읽게 할까</td><td>요약만 20건 (직접 선택)</td></tr>
+            <tr><td>(b) 답변 모델</td><td>“가성비 좋은 것으로 추천하고 이유를 계획서에 적어줘” (위임)</td></tr>
+            <tr><td>(c) 대화 방식 · (d) 화면 위치</td><td>AI 추천안 수락</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack">
+        <div class="callout good"><b>위임한 결정에 돌아온 보고</b><br>후보 6개에 실제 챗봇과 같은 프롬프트로 시험. 답이 있는 질문과 무관한 질문(“이혼 재산분할 비율”)을 던졌다. GLM 4.7 Flash는 빈 응답으로 탈락, 나머지 5개는 무관한 질문을 정확히 거절.<br><b>DeepSeek V4 Flash 추천</b>: 질문당 약 2원(Claude 약 40원). “회사가 징계·전보를 다한 경우 책임이 부정되기도 한다”는 반대 사례를 스스로 짚었다. 단점은 16초로 느린 응답이라 스트리밍 출력으로 보완.</div>
+        <div class="callout warn"><b>묻지 않은 한계도 먼저 고지</b><br>요약은 한 건에 190자라 법원이 왜 그렇게 판단했는지는 담겨 있지 않다. “347건 중 승소율은?” 같은 전체 통계 질문은 답하지 못한다(매번 20건만 보기 때문). 필요하면 상위 3~5건의 전문을 추가할 수 있다(질문당 2원 → 10원).</div>
+        <p class="muted" style="font-size:13.5px">모르는 결정은 “추천하되 이유를 문서에 적어라”라는 조건으로 넘긴다. 근거가 문서로 남아 나중에 검토할 수 있다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="시스템 프롬프트: 규칙 6개">
+  <div class="kicker">RAG 적용</div>
+  <h2>시스템 프롬프트: 모델에게 주는 규칙 (실제 사용한 것)</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.15fr .85fr;align-items:start">
+<pre class="code kr" style="font-size:12.5px">너는 한국의 '직장 내 괴롭힘' 관련 민사판결 347건만을 근거로 답하는 조수다.
+사용자는 법률 전문가가 아니다. 반드시 지킬 규칙:
+1. 아래 <판례>에 적힌 내용만 근거로 삼는다. 네가 따로 아는 법률지식이나
+   일반론으로 보충하지 마라. <판례>에 없는 법조문·판례번호·금액을 지어내지 마라.
+2. 답변의 각 주장 끝에 근거가 된 판례의 번호를 [1], [7]처럼 붙인다.
+   반드시 <판례>에 실제로 있는 번호만 쓴다.
+3. <판례>만으로 질문에 답할 수 없으면, 추측하지 말고 정확히 이렇게 답한다:
+   "제가 가진 347건의 판결문으로는 답변드릴 수 없습니다" 그리고 이유를 한 줄로.
+   일부만 답할 수 있으면 그 부분만 답하고, 나머지는 근거가 없다고 밝힌다.
+4. 결론이 갈리는 쟁점이면 반대 방향의 사례도 함께 제시한다.
+5. 한국어로, 법률용어는 풀어서 설명한다. 핵심부터 말하고 갈래를 잡아 정리한다.
+6. 너는 변호사가 아니며 이 답변은 법률 자문이 아니다. 다만 매 답변마다
+   그 사실을 반복해 적지는 마라 (화면에 이미 표시된다).</pre>
+      <ul class="bul compact">
+        <li><b>규칙 1·3</b>: 이 문장이 없으면 모델은 일반 법률지식으로 그럴듯하게 보충한다. 근거 밖 답변을 막는 장치</li>
+        <li><b>규칙 2</b>: 인용 번호는 검증 수단이다. 서버는 답변의 번호가 실제 20건 목록에 있는지 확인하고, 있는 번호만 근거 카드로 만든다. 모델이 붙인 번호를 그대로 믿지 않는다</li>
+        <li><b>규칙 4</b>: 법률 자료에서 예외를 함께 제시하게 한다</li>
+        <li><b>규칙 6</b>: 변호사법 제109조(비변호사의 법률사무 취급) 문제를 의식한 고지. 고지 문구는 화면에 고정 표시한다</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="구현 완료 보고와 검증">
+  <div class="kicker">RAG 적용</div>
+  <h2>구현 완료 보고: “됩니다” 한 줄이 아니라 검증 결과로 받는다</h2>
+  <div class="body">
+    <div class="steps s4">
+      <div class="step"><span class="no">1</span><b class="ttl">답이 있는 질문</b><p class="prob">“회사에도 책임을 물을 수 있나요”: 책임이 인정된 경우와 부정된 경우로 나눠 답하고 근거 카드 13건, 인용 25개를 붙였다</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">범위 밖 질문</b><p class="prob">“이혼 재산분할”: 정해진 문구로 거절하고 근거 카드도 표시하지 않았다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">애매한 질문</b><p class="prob">“녹음 파일이 몇 개나 필요한가요”: 구체적 숫자 기준은 답할 수 없다고 먼저 밝히고 판례에서 읽히는 경향만 설명</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">금액 질문</b><p class="prob">판례에 있는 금액만 인용. 요약의 위자료 금액과 카드의 전체 인용액(치료비 포함)은 성격이 다른 숫자임을 고지</p></div>
+    </div>
+    <div class="two eq" style="align-items:start">
+      <div class="callout warn"><b>구현 중 잡은 버그 2개</b><br>① 스트리밍 응답의 한글이 깨짐: 응답에 문자 인코딩 정보가 없어 라이브러리가 서유럽 문자로 읽었다 ② 모델이 [6, 13, 17]처럼 번호를 묶어 쓰는데 코드가 [6] 형태만 인식해 근거 카드가 적게 나왔다</div>
+      <div class="callout bad"><b>답이 잘리는 경우</b><br>max_tokens를 1500으로 두었더니 답변이 문장 중간에서 끊겼다. 응답의 <code>finish_reason</code>이 <code>"length"</code>면 잘린 것이다. 화면에는 그럴듯하게 보이므로 모델을 바꿀 때마다 확인한다(3000으로 올려 해결).</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="질문 한 번의 비용과 로그">
+  <div class="kicker">RAG 적용</div>
+  <h2>질문 한 번의 비용, 그리고 요청이 처리된 서버</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <table class="tbl cmp sm">
+          <thead><tr><th>단계</th><th>토큰</th><th>비용(원)</th></tr></thead>
+          <tbody>
+            <tr><td>질문 임베딩</td><td class="c">30</td><td class="c">0.00044</td></tr>
+            <tr><td>(내 PC) 347건과 비교해 20건 선택</td><td class="c">API 없음</td><td class="c">0</td></tr>
+            <tr><td>답변 생성</td><td class="c">입력 4,332 + 출력 761</td><td class="c">1.19</td></tr>
+            <tr><th>합계</th><td class="c">5,123</td><td class="c"><b>약 1.19원</b></td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">1달러 = 1,450원 기준. 입력 토큰 대부분이 판례 요약 20건이다.</p>
+      </div>
+      <div class="stack">
+        <table class="tbl cmp sm">
+          <thead><tr><th>시각</th><th>모델</th><th>처리 서버(provider)</th></tr></thead>
+          <tbody>
+            <tr><td>02:15</td><td>DeepSeek V4 Flash</td><td>Azure</td></tr>
+            <tr><td>02:15</td><td>Qwen3 Embedding 8B</td><td>DeepInfra</td></tr>
+            <tr><td>02:15</td><td>DeepSeek V4 Flash</td><td>StreamLake</td></tr>
+            <tr><td>02:13</td><td>DeepSeek V4 Flash</td><td>CoreWeave</td></tr>
+            <tr><td>02:13</td><td>Qwen3 Embedding 8B</td><td>Nebius</td></tr>
+            <tr><td>02:12</td><td>DeepSeek V4 Flash</td><td>GMICloud</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">OpenRouter Activity 화면의 실제 기록</p>
+      </div>
+    </div>
+    <div class="callout warn"><b>법적으로 중요한 관찰</b>: 우리는 모델 이름만 지정했는데, 그 모델을 어느 회사 서버에서 돌릴지는 OpenRouter가 가격·속도·혼잡도를 보고 그때그때 고른다. 같은 질문이 Azure, CoreWeave, StreamLake 등 다른 회사 서버로 갔다. 질문에 개인정보가 들어 있다면 <b>누구에게 처리를 맡겼는지(수탁자), 어느 나라로 이전되었는지</b>를 미리 특정하기 어렵다. 6강의 처리위탁(제26조)·국외 이전(제28조의8) 문제가 여기서 생긴다. OpenRouter는 provider를 지정하거나 데이터 보존 정책으로 거르는 설정을 제공한다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="RAG vs Long Context vs 하이브리드">
+  <div class="kicker">RAG 적용</div>
+  <h2>대안: 검색 없이 통째로 읽히면 안 되나 (Long Context)</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th></th><th>RAG (검색 후 로딩)</th><th>Long Context (통째로 로딩)</th><th>하이브리드</th></tr></thead>
+      <tbody>
+        <tr><th>컨텍스트에 싣는 것</th><td>검색된 요약 20건 (약 3천 토큰)</td><td>요지 347건 전부 (약 4~5만 토큰)</td><td>요지 전부 + 모델이 고른 판결의 전문을 도구로 읽어 추가</td></tr>
+        <tr><th>규모</th><td>수만~수백만 건</td><td>모델의 컨텍스트 창에 들어가는 만큼</td><td>요지가 컨텍스트에 들어가는 만큼</td></tr>
+        <tr><th>구현</th><td>임베딩 + 벡터 DB + 백엔드</td><td>파일 첨부 + 프롬프트</td><td>파일 읽기 도구 필요 (Cowork, Claude Code, 도구 호출 API)</td></tr>
+        <tr><th>1회 비용</th><td>낮음</td><td>높음 (매 질문 전체 과금)</td><td>높음 + 도구 왕복만큼 느림</td></tr>
+        <tr><th>실패 모드</th><td>검색이 놓치면 답도 틀림</td><td>창을 넘거나, 긴 문맥 중간의 정보를 놓침</td><td>모델이 요지만 보고 답하고 끝내는 경우</td></tr>
+        <tr><th>어울리는 일</th><td>반복 질문, 서비스, 대규모</td><td>혼자 하는 전체 경향 분석</td><td>요지는 다 보되 전문은 골라 읽는 연구 작업</td></tr>
+      </tbody>
+    </table>
+    <ul class="bul compact">
+      <li>사용 전 점검: 자료의 토큰 수를 추정한다(한국어는 대략 글자 수 × 0.7~1). 모델의 컨텍스트 창과 비교해 절반을 넘으면 여유가 없다. 창의 명목 길이가 실제 독해력을 보장하지는 않는다</li>
+      <li>Cowork·Claude Code가 일하는 방식이 하이브리드다. 목록을 훑고 필요한 파일만 읽는다. 이 절차를 반복해 쓰려면 <b>스킬</b>로 저장한다(3강 §9, 과제 (i))</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="하이브리드 구조">
+  <div class="kicker">RAG 적용</div>
+  <h2>하이브리드: 요지는 통째로 싣고, 전문은 골라 읽는다</h2>
+  <div class="body">
+    <div class="dia mid"><svg viewBox="0 0 680 470" role="img" aria-label="하이브리드 구조도">
+<!-- A: 초기 컨텍스트 -->
+<rect x="8" y="10" width="300" height="150" rx="12" fill="#f4f9fd" stroke="#bcdcf3"/>
+<text x="24" y="34" font-size="12.5" font-weight="900" fill="#1b6fa6">① 초기 컨텍스트 (Long Context)</text>
+<rect x="24" y="46" width="268" height="26" rx="6" fill="#20242a"/>
+<text x="158" y="63" text-anchor="middle" font-size="11" fill="#f0c987">지시: 요지를 훑고, 필요한 전문은 파일로 읽어라</text>
+<rect x="24" y="78" width="268" height="46" rx="6" fill="#eaf3fb" stroke="#9dc4de"/>
+<text x="158" y="97" text-anchor="middle" font-size="11.5" font-weight="800" fill="#2d4a63">판결 요지 347건 전부 (~4.5만 토큰)</text>
+<text x="158" y="113" text-anchor="middle" font-size="10" fill="#7d97ab">코퍼스 전체의 "목차" 역할</text>
+<rect x="24" y="130" width="268" height="22" rx="6" fill="#e7f2ea" stroke="#bfe0c9"/>
+<text x="158" y="145" text-anchor="middle" font-size="11" fill="#2b4a37">질문: 동료들의 따돌림도 배상되나?</text>
+<!-- arrow A->B -->
+<text x="340" y="90" text-anchor="middle" font-size="15" font-weight="900" fill="#2e9bdb">→</text>
+<!-- B: 모델이 선별 -->
+<rect x="372" y="34" width="300" height="100" rx="12" fill="#1b6fa6"/>
+<text x="522" y="60" text-anchor="middle" font-size="12.5" font-weight="900" fill="#fff">② 모델이 요지 전체를 훑고 선별</text>
+<text x="522" y="82" text-anchor="middle" font-size="11" fill="#cde2fb">"관련 사건은 대구 2024가단138550,</text>
+<text x="522" y="98" text-anchor="middle" font-size="11" fill="#cde2fb">수원 2022가단546552, 울산 2022가단128995.</text>
+<text x="522" y="114" text-anchor="middle" font-size="11" fill="#cde2fb">이 3건은 전문을 읽어야겠다"</text>
+<!-- arrow B->C -->
+<path d="M522 134 v34" stroke="#b8792e" stroke-width="2.5" fill="none"/>
+<path d="M522 168 l-6 -10 h12 z" fill="#b8792e"/>
+<text x="600" y="156" text-anchor="middle" font-size="11.5" font-weight="800" fill="#8a5a13">③ 도구 호출</text>
+<!-- C: 도구 -->
+<rect x="372" y="176" width="300" height="88" rx="12" fill="#fdf8ef" stroke="#e8d9bd"/>
+<text x="522" y="199" text-anchor="middle" font-size="12" font-weight="900" fill="#8a5a13">파일 읽기 도구 (저장된 판결문 폴더)</text>
+<text x="522" y="219" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#52514e">read_file("대구지방법원_2024가단138550.md")</text>
+<text x="522" y="235" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#52514e">read_file("수원지방법원_2022가단546552.md")</text>
+<text x="522" y="251" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#52514e">read_file("울산지방법원_2022가단128995.md")</text>
+<!-- arrow C->D -->
+<path d="M372 220 H340 V300 H316" stroke="#2f765b" stroke-width="2.5" fill="none"/>
+<path d="M316 300 l10 -6 v12 z" fill="#2f765b"/>
+<!-- D: 확장된 컨텍스트 -->
+<rect x="8" y="230" width="300" height="140" rx="12" fill="#f4f9fd" stroke="#bcdcf3"/>
+<text x="24" y="254" font-size="12.5" font-weight="900" fill="#1b6fa6">④ 확장된 컨텍스트</text>
+<rect x="24" y="266" width="268" height="26" rx="6" fill="#eaf3fb" stroke="#9dc4de"/>
+<text x="158" y="283" text-anchor="middle" font-size="10.5" fill="#7d97ab">(요지 347건 + 질문, 그대로 유지)</text>
+<rect x="24" y="298" width="268" height="60" rx="6" fill="#e3f1fb" stroke="#2e9bdb"/>
+<text x="158" y="318" text-anchor="middle" font-size="11.5" font-weight="800" fill="#1b6fa6">+ 선별된 3건의 판결문 전문</text>
+<text x="158" y="335" text-anchor="middle" font-size="10" fill="#5c7fa3">도구가 읽어온 원문이 컨텍스트에 추가됨</text>
+<text x="158" y="350" text-anchor="middle" font-size="10" fill="#5c7fa3">(전문이 필요한 사건만, 필요한 만큼)</text>
+<!-- arrow D->E -->
+<path d="M158 370 v28" stroke="#2f765b" stroke-width="2.5" fill="none"/>
+<path d="M158 398 l-6 -10 h12 z" fill="#2f765b"/>
+<!-- E: 답변 -->
+<rect x="8" y="406" width="664" height="52" rx="12" fill="#edf4ef" stroke="#bfe0c9"/>
+<text x="340" y="428" text-anchor="middle" font-size="12.5" font-weight="900" fill="#2f765b">⑤ 전문을 근거로 한 정밀 답변: 요지에는 없는 판시 이유·인용액 산정까지 인용 가능</text>
+<text x="340" y="447" text-anchor="middle" font-size="10.5" fill="#628a72">"대구 사건에서 법원은 … 라고 판시하며 위자료를 인정하였고 [대구지방법원 2024가단138550, 판결 이유 2.가.] …"</text>
+</svg></div>
+    <pre class="prompt sm"><button class="copy" type="button">복사</button>연동 폴더에 판결 요지 CSV(347건)와 판결문 전문 파일들(rulings_md/)이 있어.
+질문: 동료 직원들의 따돌림에 대해 손해배상이 인정된 사건과 기각된 사건의 갈림길은 무엇이었나?
+먼저 요지 전체를 훑어서 관련 사건을 고르고, 고른 사건은 반드시 전문 파일을 읽은 다음,
+전문을 근거로 사건번호와 판시 대목을 인용해서 답해줘. 요지만 보고 답하지 마.</pre>
+  </div>
+</section>
+
+<!-- ===================== 4. Vercel 배포 ===================== -->
+<section class="slide section" data-sec="4" data-title="Vercel 배포">
+  <div class="kicker">Section 4</div>
+  <h2>Vercel 배포: 내 PC의 서비스를 공개 URL로</h2>
+  <p class="section-lead">로컬 서버로 돌던 검색·챗봇 웹앱을 Vercel의 서버리스 함수로 옮겨, 누구나 접속하는 URL을 받는다. 비밀은 코드가 아니라 서버의 환경변수에 둔다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="4"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="로컬 백엔드의 한계">
+  <div class="kicker">Vercel 배포</div>
+  <h2>지금까지의 한계: 왜 나만 쓸 수 있었나</h2>
+  <div class="body">
+    <div class="loop">
+      <div class="lnode user">🌐 브라우저<small>검색어 입력</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">💻 내 PC의 로컬 서버<small>키 보관 · 임베딩 · 검색</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">☁️ OpenRouter API<small>임베딩 · 챗 모델</small></div>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="no">🔌</span><b class="ttl">PC를 끄면 서비스도 꺼진다</b><p class="prob">노트북을 닫으면 검색기도 접속할 수 없다</p></div>
+      <div class="step"><span class="no">🏠</span><b class="ttl">주소가 localhost</b><p class="prob">127.0.0.1은 “이 컴퓨터 자신”이라는 뜻이다. 남에게 보낼 수 있는 주소가 아니다</p></div>
+      <div class="step"><span class="no">👤</span><b class="ttl">동시 사용자 = 나 혼자</b><p class="prob">동료에게 “이거 써 봐”라고 보낼 방법이 없다</p></div>
+    </div>
+    <p class="em center">키를 가진 백엔드를 내 PC에서 클라우드로 옮긴다. 코드는 거의 그대로이고 실행 위치만 바뀐다</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="Vercel과 서버리스 함수">
+  <div class="kicker">Vercel 배포</div>
+  <h2>Vercel과 서버리스 함수: push하면 배포된다</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <table class="tbl cmp sm">
+        <thead><tr><th></th><th>GitHub Pages (3강)</th><th>Vercel (오늘)</th></tr></thead>
+        <tbody>
+          <tr><th>올릴 수 있는 것</th><td>정적 파일 (HTML·CSS·JS)</td><td>정적 파일 + 서버에서 실행되는 코드</td></tr>
+          <tr><th>비밀 보관</th><td>불가능. 모든 파일이 공개</td><td>가능. 환경변수에 저장</td></tr>
+          <tr><th>배포 방법</th><td>저장소에 push</td><td>저장소에 push (같다)</td></tr>
+          <tr><th>무료 범위</th><td>공개 저장소면 무제한</td><td>Hobby 플랜 (개인·비상업 프로젝트)</td></tr>
+          <tr><th>주소</th><td>아이디.github.io/저장소</td><td>프로젝트명.vercel.app</td></tr>
+        </tbody>
+      </table>
+      <table class="tbl cmp sm">
+        <thead><tr><th></th><th>로컬 서버 (§2·3)</th><th>Vercel 서버리스 함수</th></tr></thead>
+        <tbody>
+          <tr><th>실행</th><td>터미널에서 직접 실행</td><td><code>api/</code> 폴더에 파일을 넣으면 끝</td></tr>
+          <tr><th>살아 있는 시간</th><td>내가 켜 둔 동안</td><td>요청이 올 때만 실행되고 종료</td></tr>
+          <tr><th>주소</th><td>localhost:8000/search</td><td>내앱.vercel.app/api/search</td></tr>
+          <tr><th>키</th><td>내 PC의 키 파일</td><td>Vercel 환경변수 설정 화면</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="bul compact">
+      <li><b>서버리스(serverless)</b>는 서버가 없다는 뜻이 아니라 <b>서버를 내가 관리하지 않는다</b>는 뜻이다. 서버는 Vercel의 데이터센터에 있고, 나는 코드만 올린다</li>
+      <li>요청이 올 때만 실행되므로 실행된 시간만큼만 자원을 쓴다. 개인 프로젝트나 MVP 수준의 트래픽이면 무료 한도 안에서 운영된다</li>
+      <li>Hobby 플랜은 개인·비상업 용도로 제한된다. 회사 업무용으로 계속 쓰려면 약관과 유료 플랜을 확인한다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="변환 지시: AI가 먼저 위험을 지적">
+  <div class="kicker">Vercel 배포</div>
+  <h2>변환 지시: AI가 먼저 위험을 지적했다</h2>
+  <div class="body">
+    <p>“Vercel에 배포할 수 있게 바꿔 달라”고 지시하자, Claude Code는 바로 바꾸지 않고 두 가지 문제를 먼저 제기했다.</p>
+    <div class="two eq" style="align-items:stretch">
+      <div class="callout warn"><b>① 판결문 347건이 인터넷에 공개된다</b><br>저장소를 비공개로 한 이유가 바로 이것이었다(DECISIONS.md의 D-12 결정). Vercel에 올리면 URL을 아는 누구나 볼 수 있다. 무료 플랜에는 비밀번호 보호 기능이 없다.</div>
+      <div class="callout bad"><b>② API 키가 무방비로 노출된 것과 같다</b><br>공개 URL 뒤의 챗봇은 누구나 무제한으로 질문할 수 있고, 비용은 전부 내 OpenRouter 잔액에서 나간다. 질문당 1.2원이라도 자동화된 요청 수만 건이면 큰 금액이 된다.</div>
+    </div>
+    <pre class="prompt sm"><button class="copy" type="button">복사</button>현재 웹앱을 vercel에 배포할 수 있도록 바꿔줘. 판결문 공개되어도 무방함.
+openrouter credit 부담할 것이야. 나중에 인증 기능 추가할 예정이라서
+지금은 상관 없음.</pre>
+    <ul class="bul compact">
+      <li>§2에서 남긴 결정 기록을 AI가 스스로 찾아 새 지시와 충돌한다고 지적했다. 문서화의 효과다</li>
+      <li>둘 다 기술 문제가 아니라 <b>사람이 내릴 결정</b>이다. 위험을 듣고 감수 여부를 정하는 것은 사용자의 몫이고, 그 결정(공개 무방, 비용 부담, 인증은 §5에서)도 기록으로 남는다</li>
+      <li>업무 데이터라면 답이 달라진다. “공개되어도 무방함”이라고 말할 수 있는지가 §9의 첫 번째 점검 질문이다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="배포 4단계">
+  <div class="kicker">Vercel 배포</div>
+  <h2>배포 4단계</h2>
+  <div class="body">
+    <div class="steps s4">
+      <div class="step"><span class="no">1</span><b class="ttl">Vercel 가입</b><p class="prob">vercel.com → Sign Up → <b>Hobby</b> → <b>Continue with GitHub</b>. 첫 화면의 Import Git Repository에서 <b>Install GitHub</b>으로 저장소 접근을 허용한다</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">코드 변환</b><p class="prob">앞 장의 지시로 로컬 서버 코드를 서버리스 함수 형식으로 바꾼다. 키는 파일 대신 <b>환경변수</b>에서 읽도록 바뀐다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">push → Import</b><p class="prob">변경을 commit·push. Vercel 대시보드 → Add New… → Project → 저장소 옆 <b>Import</b></p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">New Project 화면</b><p class="prob">Application Preset(이 빌드는 Flask, 모르면 Claude Code에 질문) 확인. <b>Environment Variables</b>에 <code>OPENROUTER_API_KEY</code>와 키 값 입력 → Deploy</p></div>
+    </div>
+    <div class="two eq" style="align-items:start">
+      <div class="mock">
+        <div class="mbar">vercel.com · no-bullying · Deployments</div>
+        <div class="min" style="font-size:12.5px">
+          <div class="res"><b>배포본에서 판결문을 못 찾던 원…</b> <span class="pill ok">Ready 21s</span> <span class="pill">Production</span><small>2b81927 · master · Just now</small></div>
+          <div class="res"><b>Vercel 배포 차단 해결: 커밋 작성…</b> <span class="pill ok">Ready 19s</span><small>b0a2e2a · master · 5m ago</small></div>
+          <div class="res"><b>Vercel 배포 가능하도록 수정</b> <span class="pill ok">Ready 21s</span><small>d706ea0 · master · 29m ago</small></div>
+        </div>
+      </div>
+      <ul class="bul compact">
+        <li>1~2분 뒤 <code>프로젝트명.vercel.app</code> 주소가 나온다. 다른 사람의 휴대폰에서 열어 검색이 되면 배포에 성공한 것이다. 내 PC는 꺼도 된다</li>
+        <li>이후에는 <b>push가 곧 배포</b>다. Vercel이 새 커밋을 감지해 빌드(라이브러리 설치, 함수 묶기)한 뒤 교체한다</li>
+        <li>빌드가 실패하면 이전 버전이 그대로 서비스된다. 고치다 실수해도 사이트가 멈추지 않는다</li>
+        <li>행 하나가 배포 한 번이고 이름은 커밋 메시지다. 커밋 번호로 어느 코드가 올라가 있는지 맞춰 볼 수 있다</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="핵심: 비밀은 환경변수에">
+  <div class="kicker">Vercel 배포</div>
+  <h2>핵심: 비밀은 코드가 아니라 서버의 환경변수에</h2>
+  <div class="body">
+    <dl class="kv">
+      <dt>환경변수</dt><dd>코드 바깥, 서버의 설정 공간에 저장하는 이름=값 쌍. 코드에는 “OPENROUTER_API_KEY라는 이름의 값을 읽어라”만 적혀 있고, 실제 값은 Vercel 설정 화면에만 있다</dd>
+      <dt>코드에 넣지 않는 이유</dt><dd>코드는 GitHub에 올라간다. 공개 저장소면 누구나, 비공개라도 저장소 접근자 전원이 키를 본다. 노출된 키를 자동으로 수집해 도용하는 프로그램이 상시 동작한다</dd>
+      <dt>브라우저에 넣지 않는 이유</dt><dd>프런트엔드 JS에 넣은 값은 개발자도구의 Network·Sources 탭에서 누구나 볼 수 있다. 브라우저에 전달된 값은 공개된 값이다</dd>
+    </dl>
+    <div class="loop">
+      <div class="lnode user">🌐 브라우저<small>키 없음 · 검색어만 보냄</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">⚙️ 서버리스 함수<small>환경변수에서 키를 읽어 대신 호출</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">☁️ OpenRouter<small>결과만 브라우저로</small></div>
+    </div>
+    <div class="callout"><b>로컬 개발용 <code>.env</code> 파일</b>: 내 PC에서는 같은 값을 프로젝트 폴더의 <code>.env</code> 파일에 <code>이름=값</code>으로 둔다. 코드는 내 PC에서는 .env에서, Vercel에서는 설정 화면에서 같은 이름을 읽는다. .env는 비밀 모음이므로 <code>.gitignore</code>에 들어 있는지 반드시 확인한다.</div>
+    <p class="em center">오늘 나오는 비밀(OpenRouter 키, Gmail 앱 비밀번호, Supabase 키, 비밀번호 해시)은 모두 같은 자리에 둔다</p>
+  </div>
+</section>
+
+<!-- ===================== 5. 인증 ===================== -->
+<section class="slide section" data-sec="5" data-title="인증: 고려할 사항">
+  <div class="kicker">Section 5</div>
+  <h2>인증: 허용된 사람만 쓰게 하기, 그리고 고려할 사항</h2>
+  <p class="section-lead">URL이 생기는 순간 무엇이 달라지는지 정리하고, 이메일 6자리 인증코드로 허용 명단의 사람만 챗봇을 쓰게 한다. 혼자 쓰는 앱을 위한 비밀번호 잠금과 각 방식의 한계도 함께 본다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="5"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="URL이 생기면 달라지는 것">
+  <div class="kicker">인증: 고려할 사항</div>
+  <h2>URL이 생기는 순간 달라지는 세 가지</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">🤖</span><b class="ttl">모르는 방문자</b><p class="prob">초대한 사람만 오지 않는다. 흔한 주소 패턴을 자동으로 두드리는 봇은 배포 직후부터 접속한다. vercel.app 주소는 생각보다 쉽게 퍼진다</p></div>
+      <div class="step"><span class="no">💸</span><b class="ttl">비용은 내 계정으로</b><p class="prob">서비스가 부르는 API(임베딩·LLM) 요금은 전부 내 키로 청구된다. 누가 얼마나 쓰게 할지 내가 정해야 한다. 키에 사용 한도를 걸어 두는 것이 1차 안전장치다</p></div>
+      <div class="step"><span class="no">⚖️</span><b class="ttl">데이터의 책임</b><p class="prob">서비스에 담긴 데이터와 서비스가 수집하는 데이터(질문, 이메일)의 관리 책임이 나에게 생긴다. 개인정보 보호법상 개인정보처리자가 될 수 있다</p></div>
+    </div>
+    <div class="callout bad"><b>사례</b>: 2021년 국내 챗봇 서비스 ‘이루다’는 연인 간 대화 데이터로 학습했는데, 실명·주소 등이 응답으로 노출된 사례가 드러나 서비스가 중단되었고 개인정보보호위원회의 과징금·과태료 처분을 받았다. 개인정보가 섞인 데이터를 서비스에 실어 공개하면 그 정보의 제공자가 된다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="접근 통제의 4단계">
+  <div class="kicker">인증: 고려할 사항</div>
+  <h2>접근 통제는 공개·비공개의 둘이 아니라 4단계다</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>수준</th><th>누가 들어오나</th><th>예</th><th>맞는 데이터</th></tr></thead>
+      <tbody>
+        <tr><th>1. 완전 공개</th><td>누구나, 검색엔진에도 노출</td><td>3강의 GitHub Pages 소개 사이트</td><td>공개해도 아무도 피해를 입지 않는 정보</td></tr>
+        <tr><th>2. URL만 아는 사람</th><td>주소를 받은(또는 추측한) 누구나</td><td>§4에서 배포한 챗봇의 첫 상태</td><td>민감하지 않은 것. 보안 수단이 아니라 노출을 줄이는 정도임을 알고 쓴다</td></tr>
+        <tr><th>3. 인증된 사람</th><td>명단에 있고 본인임을 증명한 사람</td><td>오늘 만드는 이메일 인증코드</td><td>내부 자료, 팀 데이터, 비용이 드는 기능</td></tr>
+        <tr><th>4. 권한별 차등</th><td>인증된 사람 중에서도 역할별로</td><td>관리자 화면과 일반 화면 분리(§6)</td><td>타인의 개인정보, 삭제·결제처럼 되돌릴 수 없는 조작</td></tr>
+      </tbody>
+    </table>
+    <p class="em center">수준을 고르는 질문: “이것이 유출되면 누가, 얼마나 피해를 입는가”</p>
+    <ul class="bul compact">
+      <li>접근 통제는 <b>데이터 단위</b>로 정한다. 같은 서비스 안에서도 챗봇 화면은 2~3, 문답 기록 열람은 4일 수 있다</li>
+      <li><b>인증</b>(authentication)은 “너는 누구인가”를 확인하는 절차, <b>인가</b>(authorization)는 “확인된 너는 무엇을 할 수 있나”를 정하는 규칙이다. 인가는 인증을 전제로 한다. 오늘은 인증을 만들고, 인가는 “인증된 사람은 모두 같은 권한”으로 시작한다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="이메일 인증코드의 흐름">
+  <div class="kicker">인증: 고려할 사항</div>
+  <h2>이메일 인증코드의 전체 흐름</h2>
+  <div class="body">
+    <div class="loop" style="grid-template-columns:repeat(11,auto)">
+      <div class="lnode user">① 이메일 입력<small>브라우저</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">② /api/send-code<small>명단 확인 → 코드 생성 → 발송</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode user">③ 메일함<small>6자리 코드 도착</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode">④ /api/verify-code<small>대조 → 통과 시 세션 발급</small></div>
+      <span class="lar">➜</span>
+      <div class="lnode user">⑤ 챗봇 사용<small>세션이 있을 때만</small></div>
+    </div>
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">서버만 아는 것 세 가지</p>
+        <ul class="bul compact">
+          <li><b>허용 이메일 명단</b>: 명단에 없으면 코드 발송 자체를 하지 않는다</li>
+          <li><b>발송된 코드</b>: 서버가 잠시(예: 5분) 보관하고 대조 후 폐기한다</li>
+          <li><b>메일 발송 자격증명</b>: Gmail 앱 비밀번호. 환경변수에 둔다</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">이 방식이 본인 확인이 되는 이유</p>
+        <ul class="bul compact">
+          <li>코드는 그 메일함으로만 간다. 메일함을 열 수 있는 사람을 그 이메일의 주인으로 보는 것이다. 즉 이메일 서비스(구글 등)의 로그인 보안에 의존한다</li>
+          <li>통과하면 서버가 <b>세션</b>(서명된 쿠키)을 발급한다. 이후 요청마다 이 쿠키가 함께 가므로 질문할 때마다 코드를 다시 받지 않는다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="발송 수단: Gmail SMTP">
+  <div class="kicker">인증: 고려할 사항</div>
+  <h2>발송 수단: Gmail SMTP + 앱 비밀번호</h2>
+  <div class="body">
+    <dl class="kv">
+      <dt>SMTP</dt><dd>메일 발송의 표준 프로토콜. 코드가 smtp.gmail.com:587에 접속해 “이 주소로 이 내용을 보내라”고 요청한다</dd>
+      <dt>앱 비밀번호</dt><dd>구글 계정 비밀번호 대신 프로그램 전용으로 발급하는 16자리 비밀번호. 계정 비밀번호를 코드나 서버에 두지 않기 위한 장치이고, 유출되면 그것만 폐기하고 재발급한다</dd>
+      <dt>발급</dt><dd>구글 계정 관리 → 보안 → 2단계 인증 켜기 → 검색창에 “앱 비밀번호” → 이름 입력 → 생성</dd>
+      <dt>한도</dt><dd>개인 Gmail 기준 하루 수백 통 수준. 인증코드 용도로는 충분하다</dd>
+    </dl>
+    <div class="callout"><b>직접 메일 서버를 운영하지 않는 이유</b>: 수신 측(Gmail, 네이버)은 평판이 없는 발신 서버의 메일을 스팸으로 분류하거나 거부한다. SPF·DKIM 설정을 갖추어도 신규 서버는 배달이 불안정하다. Gmail을 이용하면 구글 발신 서버의 평판으로 발송된다. 발송량이 늘면 Resend 같은 발송 서비스와 자기 도메인으로 옮긴다.</div>
+    <div class="callout warn"><b>업무에 쓸 때</b>: 개인 Gmail 계정으로 회사 업무 메일(인증코드 포함)을 보내도 되는지는 회사 정보보호 규정을 먼저 확인한다. 회사 메일 시스템이나 공식 발송 서비스를 쓰는 것이 원칙이다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="구현 프롬프트와 환경변수">
+  <div class="kicker">인증: 고려할 사항</div>
+  <h2>구현 프롬프트와 환경변수</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.2fr .8fr;align-items:start">
+      <pre class="prompt sm"><button class="copy" type="button">복사</button>이 판결문 챗봇 웹앱에 이메일 인증코드 로그인을 추가해줘.
+Vercel에 배포되어 있는 프로젝트야.
+흐름:
+1. 첫 화면은 이메일 입력 폼. 인증 전에는 챗봇 화면도, 검색·챗봇 API도
+   절대 동작하면 안 돼.
+2. /api/send-code : 입력된 이메일이 허용 명단(환경변수 ALLOWED_EMAILS,
+   쉼표 구분)에 있으면 6자리 코드를 생성해 Gmail SMTP로 발송.
+   명단에 없으면 "발송되지 않았습니다"라고만 답하고 이유는 알려주지 마.
+3. 코드는 서버 측에 5분간만 유효하게 보관하고, 검증 3회 실패 시 폐기해줘.
+4. /api/verify-code : 코드가 맞으면 세션(서명된 쿠키)을 발급.
+   이후 /api/chat과 /api/search는 유효한 세션이 있을 때만 동작하게 해줘.
+5. SMTP 설정은 환경변수로: SMTP_USER(내 지메일 주소), SMTP_APP_PASSWORD(앱
+   비밀번호). smtp.gmail.com 587 포트 사용. 자격증명을 코드에 넣지 마.
+6. 메일 제목은 "[판결문 챗봇] 인증코드 안내", 본문에 코드와 유효시간을 담아줘.</pre>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">Vercel → 프로젝트 → Environment Variables</p>
+<pre class="code"><span class="c"># .env 예시 (값은 각자의 것으로)</span>
+SMTP_USER=mybootcamp@gmail.com
+SMTP_APP_PASSWORD=abcd efgh ijkl mnop
+ALLOWED_EMAILS=kim@itm.kaist.ac.kr,park@itm.kaist.ac.kr
+OPENROUTER_API_KEY=sk-or-v1-...</pre>
+        <ul class="bul compact">
+          <li>환경변수를 추가·변경한 뒤에는 <b>재배포</b>해야 반영된다</li>
+          <li>“Sensitive”로 저장하면 대시보드에서도 값이 가려진다</li>
+          <li>수업에서는 강사가 시연한다. 각자 구현은 과제의 웹앱에서 선택적으로 적용한다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="인증에서 고려할 사항">
+  <div class="kicker">인증: 고려할 사항</div>
+  <h2>인증에서 고려할 사항: 프롬프트의 각 줄이 막는 공격</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>고려 사항</th><th>하지 않으면 생기는 일</th><th>조치</th></tr></thead>
+      <tbody>
+        <tr><th>API까지 막기</th><td>화면만 가리고 API를 열어 두면, 화면을 거치지 않고 API를 직접 호출하는 사람에게는 인증이 없는 것과 같다</td><td>모든 API에서 세션을 검사 (프롬프트 1·4번)</td></tr>
+        <tr><th>명단 여부를 알려주지 않기</th><td>“등록되지 않은 이메일입니다”라고 답하면 공격자가 어떤 주소가 명단에 있는지 탐색할 수 있다(계정 열거)</td><td>성공·실패 응답을 같게 (2번)</td></tr>
+        <tr><th>유효시간·시도 횟수 제한</th><td>6자리 코드는 100만 가지뿐이다. 제한이 없으면 무차별 대입으로 맞힐 수 있다</td><td>5분 유효, 3회 실패 시 폐기 (3번)</td></tr>
+        <tr><th>발송 횟수 제한</th><td>같은 주소로 코드를 반복 요청해 상대 메일함을 채우거나 내 Gmail 발송 한도를 소진시킬 수 있다</td><td>주소별·IP별 분당 발송 제한 (추가 지시 필요)</td></tr>
+        <tr><th>세션 보호</th><td>쿠키 서명 키가 약하거나 만료가 없으면 세션을 위조하거나 영구히 쓸 수 있다</td><td>서명 키를 환경변수에, 세션 만료 시간 설정, HttpOnly·Secure 쿠키</td></tr>
+        <tr><th>자격증명 위치</th><td>코드·GitHub에 앱 비밀번호가 남으면 내 이름으로 스팸이 발송된다</td><td>환경변수 + .gitignore 확인 (5번)</td></tr>
+        <tr><th>명단도 개인정보</th><td>허용 명단의 이메일은 타인의 개인정보다. 화면·로그·저장소에 노출되면 유출이다</td><td>필요한 주소만, 화면 비노출, 목적 종료 시 삭제</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Vercel의 서버리스 함수는 요청마다 새로 실행될 수 있어 메모리에 둔 코드가 사라질 수 있다. 코드 보관을 서명된 토큰이나 DB로 처리했는지 Claude Code에 확인한다. 보안 요구는 이렇게 하나씩 명시해야 반영된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="지름길: 비밀번호 잠금">
+  <div class="kicker">인증: 고려할 사항</div>
+  <h2>나만 쓴다면: 비밀번호 하나로 잠그기 (해시 비교)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>비밀번호를 코드에 그대로 적으면 GitHub에 올라가는 순간 공개된다. 그래서 <b>해시</b>(단방향 암호화)를 쓴다. SHA-256 같은 해시 함수는 입력을 고정 길이 문자열로 바꾸며, 그 값에서 원래 비밀번호를 계산해 낼 수 없다</li>
+      <li>서버에는 비밀번호의 해시값만 두고, 입력값을 해시해 같은지 비교한다. 환경변수가 노출되어도 원문은 복원되지 않는다</li>
+    </ul>
+    <div class="two eq" style="align-items:start">
+      <pre class="prompt sm"><button class="copy" type="button">복사</button>비밀번호 문자열을 SHA-256으로 해시해 16진수 문자열로 출력하는
+아주 짧은 파이썬 스크립트를 만들어 실행해줘.
+비밀번호는 실행할 때 내가 직접 입력할게 (코드나 대화에 남기지 않게).</pre>
+      <pre class="prompt sm"><button class="copy" type="button">복사</button>배포한 사이트에 비밀번호 입구를 달아줘.
+1. 첫 화면에서 비밀번호 하나만 입력받는다.
+2. 서버(/api/login)는 입력값을 SHA-256으로 해시해 환경변수
+   PASSWORD_HASH와 비교하고, 일치하면 세션을 발급한다.
+3. 세션이 없으면 화면과 모든 API가 동작하지 않아야 한다.
+4. 틀렸을 때는 "비밀번호가 올바르지 않습니다"만 안내한다.
+5. 원문 비밀번호는 어디에도 저장하거나 기록(log)하지 않는다.</pre>
+    </div>
+    <div class="callout warn"><b>한계: 이것은 잠금이지 인증이 아니다.</b> 비밀번호 하나로는 누가 들어왔는지 구분할 수 없다. 한 번 공유되면 통제가 끝나고, 사람별 접근 기록도 남지 않는다. 짧은 비밀번호의 단순 해시는 무차별 대입에 약하므로 문장형으로 길게 정한다. 실제 회원 비밀번호 저장에는 솔트와 느린 해시 함수(bcrypt, Argon2 등)를 쓴다. 혼자 또는 신뢰하는 소수가 쓰는 사이트까지가 적정 범위다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="비밀 총정리와 기성 서비스">
+  <div class="kicker">인증: 고려할 사항</div>
+  <h2>비밀 총정리, 그리고 인증은 직접 만들지 않는 선택지</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <table class="tbl cmp sm">
+        <thead><tr><th>비밀</th><th>유출되면</th></tr></thead>
+        <tbody>
+          <tr><td>OpenRouter API 키</td><td>내 계정으로 요금 청구</td></tr>
+          <tr><td>Gmail 앱 비밀번호</td><td>내 이름으로 스팸 발송</td></tr>
+          <tr><td>허용 명단·인증코드</td><td>인증 우회, 명단(개인정보) 노출</td></tr>
+          <tr><td>세션 서명 키</td><td>세션 위조</td></tr>
+          <tr><td>비밀번호 해시</td><td>원문 복원은 불가하나 무차별 대입의 대상</td></tr>
+          <tr><td>Supabase Secret key (§6)</td><td>문답 기록 전체 열람·삭제</td></tr>
+        </tbody>
+      </table>
+      <div class="stack">
+        <p class="em" style="margin:0">보관 위치는 모두 같다: 서버의 환경변수. 브라우저·코드·GitHub 어디에도 없어야 한다</p>
+        <ul class="bul compact">
+          <li><b>소셜 로그인(OAuth)</b>: “구글로 로그인”. 비밀번호 관리를 구글·카카오에 맡긴다. 회사라면 사내 계정(SSO) 연동이 표준이다</li>
+          <li><b>인증 서비스</b>: Supabase Auth, Firebase Auth 등. 가입·로그인·세션·비밀번호 재설정을 통째로 제공한다</li>
+          <li><b>메일 발송 서비스</b>: 발송량이 늘면 Resend 등 발송 API + 자기 도메인</li>
+        </ul>
+        <div class="callout good">판단 기준: 인증이 서비스의 본질이 아니라면 직접 만들지 말고 검증된 서비스를 쓴다. 오늘 직접 만들어 본 것은 그 서비스를 고를 때 무엇을 확인해야 하는지 알기 위해서다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. 로깅 ===================== -->
+<section class="slide section" data-sec="6" data-title="로깅: Supabase">
+  <div class="kicker">Section 6</div>
+  <h2>로깅: Supabase에 문답 기록 남기기</h2>
+  <p class="section-lead">챗봇에 어떤 질문과 답변이 오가는지 클라우드 데이터베이스(Supabase)에 기록하고, 관리자만 여는 기록 화면을 만든다. 로그는 운영의 자산이자 개인정보 보호법상 책임의 대상이다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="6"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="로그의 세 측면">
+  <div class="kicker">로깅: Supabase</div>
+  <h2>로그의 세 측면: 자산 · 진단 · 책임</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">📈</span><b class="ttl">자산</b><p class="prob">사람들이 무엇을 자주 묻는가, 근거 판례가 빈약했던(데이터가 부족한) 주제는 무엇인가. 다음 개선 방향이 기록에서 나온다</p></div>
+      <div class="step"><span class="no">🩺</span><b class="ttl">진단</b><p class="prob">“어제 이상한 답이 나왔다”는 문의에 답하려면 그때의 질문과 답변이 남아 있어야 한다. 호출 횟수로 비용도 검증한다. §9의 신뢰성 평가 데이터가 된다</p></div>
+      <div class="step"><span class="no">⚖️</span><b class="ttl">책임</b><p class="prob">질문에는 이용자의 관심사, 때로는 민감한 사정이 담긴다. 법률 질문이면 더욱 그렇다. 필요한 것만 수집하고, 수집 사실을 알리고, 목적이 끝나면 지운다</p></div>
+    </div>
+    <table class="tbl cmp sm">
+      <thead><tr><th>저장소 후보</th><th>평가</th><th>결론</th></tr></thead>
+      <tbody>
+        <tr><td>Vercel Logs</td><td>이미 있지만 며칠 뒤 사라지고 검색·집계가 어렵다</td><td>오류 확인용</td></tr>
+        <tr><td>서버에 파일로</td><td>서버리스 함수에는 고정 디스크가 없다. 실행이 끝나면 파일도 사라진다</td><td>불가</td></tr>
+        <tr><td>클라우드 데이터베이스</td><td>영구 저장, 표로 조회, 어디서나 접속. 서비스 로그의 표준적 위치</td><td><b>채택 (Supabase)</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="Supabase 준비와 표 만들기">
+  <div class="kicker">로깅: Supabase</div>
+  <h2>Supabase 준비: 프로젝트, 키, 표 하나</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <ul class="bul compact">
+        <li><b>가입·프로젝트 생성</b>: supabase.com → GitHub 계정으로 가입 → New project. 이름은 자유, Database password는 생성 후 보관, <b>Region은 가까운 곳</b>(아시아 태평양, 서울 리전이 있으면 서울), Security는 기본값</li>
+        <li><b>접속 정보 두 가지</b>: 프로젝트 홈의 Project URL, 그리고 API Keys의 키</li>
+        <li><b>Publishable key가 아니라 Secret key</b>: Publishable key(<code>sb_publishable_…</code>)는 브라우저에 노출해도 되는 키로, 행 단위 보안 규칙(RLS)과 함께 쓴다. 우리 구조는 서버리스 함수만 DB에 접근하므로 서버 전용 <b>Secret key</b>(<code>sb_secret_…</code>)를 쓴다. 환경변수로만 다룬다</li>
+        <li><b>Vercel 환경변수 3개</b>: <code>SUPABASE_URL</code>, <code>SUPABASE_KEY</code>, <code>ADMIN_PASSWORD_HASH</code>(사이트 접속용 해시와 다른 값)</li>
+      </ul>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">SQL Editor → New query → Run</p>
+<pre class="code"><span class="k">create table if not exists</span> public.chat_logs (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  question text not null,
+  answer text not null,
+  cost_krw numeric(12,4),
+  duration_sec numeric(8,2)
+);
+<span class="k">create index if not exists</span> chat_logs_created_at_idx
+  on public.chat_logs (created_at desc);
+<span class="k">alter table</span> public.chat_logs enable row level security;</pre>
+        <p class="muted" style="font-size:13px">“Success. No rows returned”는 빈 표가 만들어졌다는 뜻이다. 칸: 시각·질문·답변·비용·소요 시간. <b>이용자 신원(이메일, IP)은 저장하지 않는다.</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="지시와 관리자 화면">
+  <div class="kicker">로깅: Supabase</div>
+  <h2>지시 한 번, 그리고 관리자만 여는 기록 화면</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <pre class="prompt sm"><button class="copy" type="button">복사</button>배포된 판례 챗봇에 문답 로그 기능을 추가한다.
+- 이용자가 챗봇에 질문할 때마다 시각, 질문, 답변, 비용(원화 환산),
+  소요 시간을 Supabase의 chat_logs 표에 기록해줘.
+  접속 정보는 Vercel 환경변수 SUPABASE_URL, SUPABASE_KEY에 있어.
+- 화면 우측 상단에 작은 톱니바퀴 아이콘을 추가해줘. 누르면 관리자
+  화면이 열리고, 비밀번호를 맞게 넣어야 기록을 볼 수 있어.
+- 관리자 비밀번호는 입력값을 해시해서 환경변수 ADMIN_PASSWORD_HASH와
+  비교해줘. 비밀번호 원문은 어디에도 저장하지 마.
+- 기록 화면은 최근 순서로 시각·질문·답변·비용·소요 시간을 표로 보여줘.</pre>
+      <ul class="bul compact">
+        <li><b>관문을 둘로</b>: 접속 비밀번호(또는 이메일 인증)는 이용자와 공유하지만, 기록은 관리자만 본다. 접근 통제 4단계 중 수준 4</li>
+        <li><b>비용은 실제 청구액</b>: OpenRouter가 응답에 그 요청의 실제 달러 비용을 알려준다. 질문 한 번에 최대 3회 호출(임베딩 + 이어지는 대화의 검색문 재작성 + 답변)을 더해 저장. 실측 질문당 1.2~1.5원</li>
+        <li><b>기록 실패는 조용히 건너뛴다</b>: 로그 때문에 본 기능이 멈추면 안 되기 때문이다. 반대로 기록이 안 쌓여도 겉으로 드러나지 않는다. 설정을 바꾼 뒤에는 질문 → Table Editor 확인을 한 번 거치고, 안 되면 <code>/api/health</code>로 무엇이 빠졌는지 확인한다</li>
+        <li>표 위에 건수·비용 합계·평균 소요 시간을 요약하면 열자마자 운영 현황이 보인다</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="로그와 개인정보 보호법">
+  <div class="kicker">로깅: Supabase</div>
+  <h2>로그와 개인정보 보호법: 6강의 원칙을 적용하면</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>쟁점</th><th>질문 로그에서의 의미</th><th>설계 조치</th></tr></thead>
+      <tbody>
+        <tr><th>개인정보 해당 여부</th><td>신원을 저장하지 않아도 질문 본문에 이름·사건 정황이 들어갈 수 있다. 다른 정보와 결합해 식별 가능하면 개인정보다</td><td>신원 칸을 두지 않음. 질문 본문은 개인정보가 섞일 수 있다는 전제로 다룬다</td></tr>
+        <tr><th>민감정보 (제23조)</th><td>괴롭힘으로 인한 우울증 같은 건강 정보가 질문에 담길 수 있다</td><td>입력 화면에 “실명·건강정보를 입력하지 마십시오” 안내</td></tr>
+        <tr><th>수집 고지와 처리방침 (제15조·제30조)</th><td>무엇을 왜 얼마나 보관하는지 알려야 한다</td><td>“문답이 서비스 개선을 위해 기록됩니다” 고지, 처리방침 게시</td></tr>
+        <tr><th>보관 기간과 파기 (제21조)</th><td>목적이 끝난 기록을 계속 두면 위반이 될 수 있다</td><td>예: 90일 지난 행 자동 삭제 지시</td></tr>
+        <tr><th>안전조치 (제29조)</th><td>기록 열람 권한을 통제해야 한다</td><td>관리자 비밀번호 해시, Secret key는 환경변수, 브라우저의 직접 DB 접근 차단(RLS)</td></tr>
+        <tr><th>처리위탁·국외 이전 (제26조·제28조의8)</th><td>Supabase, Vercel, OpenRouter와 그 뒤의 모델 제공자가 모두 처리에 관여한다</td><td>리전 선택, 위탁 사실과 이전 국가 공개, 데이터 보존하지 않는 제공자 선택</td></tr>
+      </tbody>
+    </table>
+    <p class="em center">개인 실습 수준에서는 과한 장치처럼 보이지만, 업무 서비스로 옮기는 순간 모두 필요한 항목이다. 이것이 과제의 “해도 되나” 토론의 출발점이다</p>
+  </div>
+</section>
+
+<!-- ===================== 7. 자동화 대상 고르기 ===================== -->
+<section class="slide section" data-sec="7" data-title="내 업무에서 자동화 대상 고르기">
+  <div class="kicker">Section 7</div>
+  <h2>내 업무에서 AI 자동화 대상 고르기</h2>
+  <p class="section-lead">직무 전체가 아니라 과업 단위로 업무를 나누고, 가치와 위험을 기준으로 첫 번째 대상을 고른다. 그다음 스킬로 만들지, 웹앱으로 만들지 정한다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="7"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="직무가 아니라 과업 단위로">
+  <div class="kicker">자동화 대상 고르기</div>
+  <h2>출발점: 직무가 아니라 과업(task) 단위로 나눈다</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>“계약 검토를 AI로 자동화한다”는 너무 크다. 계약 검토는 여러 과업의 묶음이고, 과업마다 AI가 잘하는 정도와 틀렸을 때의 비용이 다르다</li>
+      <li>과업은 <b>입력 → 처리 → 출력</b>이 분명한 한 덩어리의 일이다. 출력이 누구에게 가는지(나, 동료, 고객, 기관)까지 적는다</li>
+    </ul>
+    <table class="tbl cmp sm">
+      <thead><tr><th>과업 (예: 사내 법무팀의 계약 검토)</th><th>입력</th><th>출력과 받는 사람</th><th>AI 적합도</th></tr></thead>
+      <tbody>
+        <tr><td>검토 요청 접수·분류 (계약 유형, 긴급도)</td><td>요청 메일, 첨부 계약서</td><td>분류표 → 나</td><td><span class="pill ok">높음</span></td></tr>
+        <tr><td>표준 계약서와 차이점 비교</td><td>상대방 초안, 사내 표준안</td><td>변경 조항 목록 → 나</td><td><span class="pill ok">높음</span></td></tr>
+        <tr><td>사내 체크리스트 대조 (손해배상 한도, 준거법 등)</td><td>계약서, 체크리스트</td><td>위험 조항 표시 → 나</td><td><span class="pill ok">높음</span> (기준이 문서화된 경우)</td></tr>
+        <tr><td>수정 문구 초안 작성</td><td>위험 조항, 과거 협상 사례</td><td>수정안 → 상대방</td><td><span class="pill warn">중간</span> (사람 검토 필수)</td></tr>
+        <tr><td>현업 부서 질문 응대 (“이 조항 괜찮나요?”)</td><td>질문, 사내 규정</td><td>답변 → 동료</td><td><span class="pill warn">중간</span> (RAG 후보)</td></tr>
+        <tr><td>최종 승인 판단·서명</td><td>전체 검토 결과</td><td>결재 → 회사</td><td><span class="pill bad">사람</span> (책임 주체)</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">여러분의 업무도 같은 표로 10개 안팎의 과업으로 나눌 수 있다. 일주일 업무 일지나 캘린더를 보며 적으면 빠르다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="후보를 평가하는 6가지 기준">
+  <div class="kicker">자동화 대상 고르기</div>
+  <h2>후보 과업을 평가하는 6가지 기준</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">1</span><b class="ttl">빈도와 소요 시간</b><p class="prob">주 1회 이상, 회당 30분 이상이면 절감 효과가 분명하다. 1년에 한 번 하는 일은 자동화보다 그때 Chat에 묻는 편이 낫다</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">입력이 디지털 텍스트인가</b><p class="prob">메일, 문서, 표, PDF면 바로 시작할 수 있다. 종이·구두·사내 시스템 화면에만 있는 정보는 수집 단계부터 일이 된다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">기준이 문서화되어 있는가</b><p class="prob">체크리스트, 규정, 과거 사례가 있으면 AI에게 줄 수 있다. 판단 기준이 머릿속에만 있다면 그것을 적는 일이 첫 작업이다(3강의 스킬)</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">결과를 검증하기 쉬운가</b><p class="prob">결과가 맞는지 확인하는 데 드는 시간이 직접 하는 시간보다 훨씬 짧아야 한다. 검증이 어려운 일은 AI가 틀려도 알아채기 어렵다</p></div>
+      <div class="step"><span class="no">5</span><b class="ttl">틀렸을 때의 비용</b><p class="prob">내부 초안이 틀리면 고치면 된다. 고객·기관에 나가는 문서, 금전·권리에 영향을 주는 판단이 틀리면 되돌리기 어렵다</p></div>
+      <div class="step"><span class="no">6</span><b class="ttl">데이터의 민감도</b><p class="prob">공개 자료 / 사내 일반 / 영업비밀·고객 개인정보·민감정보. 민감할수록 쓸 수 있는 도구와 배포 방식이 줄어든다(§9)</p></div>
+    </div>
+    <p class="em center">1~4는 가치(얻는 것), 5~6은 위험(잃을 수 있는 것)이다</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="가치 × 위험으로 첫 대상 고르기">
+  <div class="kicker">자동화 대상 고르기</div>
+  <h2>가치 × 위험으로 첫 번째 대상을 고른다</h2>
+  <div class="body">
+    <div class="mx">
+      <div class="ax y">가치 (빈도·시간·입력·기준) ↑</div>
+      <div class="cell care"><b>설계해서 진행</b>가치는 크지만 틀리면 비용이 크거나 데이터가 민감하다. 사람 검토 단계, 가명처리, 승인된 도구를 갖춘 뒤 진행. 예: 고객 문의 답변 초안</div>
+      <div class="cell go"><b>지금 시작</b>자주 하고, 시간이 들고, 틀려도 내가 바로 고칠 수 있고, 데이터가 민감하지 않다. 첫 과제는 여기서 고른다. 예: 회의록 → 할 일 목록</div>
+      <div class="cell no"><b>보류</b>가치도 작고 위험도 크다. 예: 가끔 있는 징계 결정문 작성</div>
+      <div class="cell"><b>필요할 때 Chat으로</b>위험은 작지만 드물게 하는 일. 자동화하지 말고 그때 묻는다. 예: 연 1회 행사 안내문</div>
+      <div class="ax x">위험 (오류 비용·데이터 민감도) ← 높음 · 낮음 →</div>
+    </div>
+    <ul class="bul compact">
+      <li>처음부터 가장 큰 일을 고르지 않는다. <b>작게 성공하고, 검증 방법을 익힌 뒤 범위를 넓힌다</b>. 과제의 웹앱이 “간단해도 무방”한 이유다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="어떤 형태로: 스킬 vs 웹앱">
+  <div class="kicker">자동화 대상 고르기</div>
+  <h2>어떤 형태로 만들 것인가: Chat · 스킬 · 웹앱</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th></th><th>Chat에 그때그때</th><th>스킬 (SKILL.md)</th><th>웹앱 (Vercel)</th></tr></thead>
+      <tbody>
+        <tr><th>누가 쓰나</th><td>나</td><td>나 (또는 같은 도구를 쓰는 동료)</td><td>링크를 받은 다른 사람, 여러 명</td></tr>
+        <tr><th>어울리는 일</th><td>드물고 매번 다른 일</td><td>내가 반복하는 절차. 내 PC의 파일을 읽고 결과 파일을 만드는 일</td><td>입력 폼 → 결과가 정해진 일. 검색, RAG Q&amp;A, 계산·양식 생성</td></tr>
+        <tr><th>담는 것</th><td>프롬프트</td><td>절차, 판단 기준, 출력 양식, 예시</td><td>화면, 서버 함수, 데이터, 인증, 로그</td></tr>
+        <tr><th>AI 호출</th><td>내 구독 계정</td><td>내 구독 계정 (Cowork, Claude Code)</td><td>API 키, 사용량만큼 과금</td></tr>
+        <tr><th>추가로 생기는 책임</th><td>입력 데이터 관리</td><td>입력 데이터 관리</td><td>+ 비밀 관리, 접근 통제, 이용자 데이터, 비용 통제</td></tr>
+      </tbody>
+    </table>
+    <div class="two eq" style="align-items:start">
+      <ul class="bul compact">
+        <li><b>스킬</b>은 3강 §9에서 만들었다. 반복 절차를 SKILL.md 한 장에 적고, description에 “언제 이 스킬을 쓰는지”를 분명히 적는다</li>
+        <li><b>웹앱</b>은 오늘 만든 구조를 재사용한다. 정적 페이지로 충분하면 GitHub Pages로도 된다. API 키가 필요하면 Vercel</li>
+      </ul>
+      <div class="callout">같은 과업도 형태에 따라 법적 검토 범위가 달라진다. 나만 쓰는 스킬은 “내가 이 데이터를 이 AI 도구에 넣어도 되는가”가 주된 질문이고, 남이 쓰는 웹앱은 “이용자의 데이터를 내가 처리해도 되는가”가 추가된다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="직군별 예시">
+  <div class="kicker">자동화 대상 고르기</div>
+  <h2>직군별 예시: 업무 자체는 간단해도 된다</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>직군</th><th>스킬 예시</th><th>웹앱 예시</th><th>먼저 확인할 점</th></tr></thead>
+      <tbody>
+        <tr><th>법무</th><td>상대방 계약서를 사내 체크리스트와 대조해 위험 조항 표를 만드는 스킬</td><td>사내 규정·표준계약 RAG Q&amp;A (현업용)</td><td>계약서의 영업비밀, 변호사 비밀유지의무</td></tr>
+        <tr><th>인사</th><td>직무기술서 → 채용공고 초안 스킬</td><td>휴가·복리후생 규정 Q&amp;A 챗봇</td><td>지원자 개인정보, 채용 판단에 쓰지 않을 것</td></tr>
+        <tr><th>엔지니어·R&amp;D</th><td>회의록 → 결정 사항·할 일·담당자 표</td><td>사내 기술문서·특허 유사 검색기</td><td>미공개 기술정보, 고객사 자료</td></tr>
+        <tr><th>공공</th><td>보도자료 초안 → 쉬운 말 버전 변환</td><td>법령·지침 조문 검색기</td><td>비공개 정보 입력 금지, 공공부문 가이드라인</td></tr>
+        <tr><th>영업·기획</th><td>주간 실적 엑셀 → 보고서 요약</td><td>견적 계산기, 제안서 근거 자료 검색</td><td>고객 정보, 가격 정보</td></tr>
+        <tr><th>연구·교육</th><td>논문 PDF → 정해진 양식의 리뷰 노트</td><td>강의 자료 Q&amp;A, 실험 장비 예약 안내</td><td>저작물 이용 범위, 학생 정보</td></tr>
+        <tr><th>개인</th><td>카드 명세서 → 가계부 분류</td><td>가족 여행 일정 공유 페이지, 운동 기록장</td><td>가족 개인정보, 공개 범위</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="AI와 함께 후보 찾기">
+  <div class="kicker">자동화 대상 고르기</div>
+  <h2>지금 해 보기: AI와 함께 후보를 찾고 한 줄로 정의한다 (5분)</h2>
+  <div class="body">
+    <pre class="prompt"><button class="copy" type="button">복사</button>내 직무는 [직무]이고, 일주일 동안 하는 일은 다음과 같아:
+[업무 일지나 캘린더에서 옮긴 일 10개 안팎]
+이 일들을 입력 → 처리 → 출력이 분명한 과업 단위로 나누고, 과업마다
+빈도, 회당 소요 시간, 입력 형태, 판단 기준의 문서화 정도, 결과 검증의 쉬움,
+틀렸을 때의 비용, 데이터 민감도를 표로 평가해줘.
+그다음 "지금 시작" 후보 3개를 고르고, 각각 스킬과 웹앱 중 어느 형태가
+맞는지 이유와 함께 제안해줘. 회사 기밀이나 개인정보가 필요한 과업은
+표시만 하고 구체적인 내용은 묻지 마.</pre>
+    <div class="two eq" style="align-items:start">
+      <div class="callout good"><b>한 줄 정의 양식</b><br>“나는 <b>[누가]</b>가 <b>[입력]</b>을 넣으면 <b>[출력]</b>을 내주는 <b>[스킬/웹앱]</b>을 만든다. 이것으로 <b>[과업]</b>에 드는 시간을 <b>[얼마]</b> 줄인다.”</div>
+      <div class="callout warn"><b>이어서 스스로 묻기</b><br>① 이 과업에 들어가는 데이터를 이 AI 도구에 넣어도 되는가 ② 결과가 틀리면 누가 어떤 피해를 입는가 ③ 결과를 내가 어떻게 검증하는가. 답이 애매한 지점이 과제 발표의 토론 주제다.</div>
+    </div>
+    <p class="muted">이 프롬프트 자체에 업무 정보가 들어간다. 회사가 허용한 AI 도구를 쓰거나, 과업 이름 수준으로만 적는다.</p>
+  </div>
+</section>
+
+<!-- ===================== 8. 정리와 과제 ===================== -->
+<section class="slide section" data-sec="8" data-title="정리와 과제">
+  <div class="kicker">Section 8</div>
+  <h2>정리와 과제</h2>
+  <p class="section-lead">실습 내용을 한 장으로 정리하고, 10/29(9강) 수강생 발표 (2)의 과제를 확인한다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="8"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="실습 정리">
+  <div class="kicker">정리와 과제</div>
+  <h2>실습 정리</h2>
+  <div class="body">
+    <ol class="recap" style="font-size:13.5px;gap:8px 16px">
+      <li><b>Claude Code</b>git·gh 설치, 폴더를 열고 지시 한 번으로 저장소 생성. 비밀 파일은 올리기 전에 확인. 승인 수준은 다루는 자료로 정한다</li>
+      <li><b>임베딩 검색</b>키워드는 동의어·표현·의도에서 실패한다. 임베딩은 의미를 찾는다. 질의 임베딩은 색인과 같은 모델로</li>
+      <li><b>백엔드</b>새 질의의 실시간 임베딩과 키 은닉 때문에 필요하다. 정적 페이지에는 비밀을 둘 곳이 없다</li>
+      <li><b>계획서부터 대화로</b>원하는 것만 서술 → AI 계획서 → 피드백 → 구현. 확인 지점과 “하지 않는 것”을 명시. PLAN·DECISIONS·README·CLAUDE.md</li>
+      <li><b>RAG</b>검색 → 질문 앞에 근거 문서 추가 → 근거만으로 답변·인용. 인용 번호는 프로그램이 검증. 답이 이상하면 검색부터 확인</li>
+      <li><b>Long Context · 하이브리드</b>소규모·혼자 하는 분석은 통째로, 서비스·대규모는 RAG, 요지 + 전문 골라 읽기는 하이브리드</li>
+      <li><b>Vercel 배포</b>서버리스 = 서버를 내가 관리하지 않음. push가 곧 배포. 비밀은 서버의 환경변수에</li>
+      <li><b>인증</b>접근 통제 4단계. 이메일 인증코드: API까지 막기, 명단 비노출, 유효시간·시도 제한, 발송 제한. 혼자 쓰면 해시 비밀번호 잠금</li>
+      <li><b>로깅</b>Supabase에 시각·질문·답변·비용·시간. 신원은 저장하지 않음. 관리자 화면은 별도 비밀번호. 로그는 자산이자 책임</li>
+      <li><b>데이터의 경로</b>브라우저 → Vercel → OpenRouter → 모델 제공자 → Supabase. 각 단계가 처리위탁·국외 이전 판단의 대상</li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="과제: 10/29 수강생 발표">
+  <div class="kicker">정리와 과제</div>
+  <h2>과제: 나의 업무에 AI를 도입한다 (10/29 수강생 발표 2)</h2>
+  <div class="body">
+    <div class="steps s2">
+      <div class="step"><span class="no">(i)</span><b class="ttl">스킬로 자동화한 사례 1건</b>
+        <ul class="bul compact">
+          <li>업무 또는 사적 작업 어느 쪽이든 된다</li>
+          <li>SKILL.md 한 장(절차, 판단 기준, 출력 양식)과 실제로 돌린 결과물을 제출한다</li>
+          <li>스킬을 쓰기 전과 후의 소요 시간, 결과물의 차이를 비교한다</li>
+        </ul>
+      </div>
+      <div class="step"><span class="no">(ii)</span><b class="ttl">Vercel로 배포한 웹앱 2건</b>
+        <ul class="bul compact">
+          <li>업무 자체는 간단해도 된다. 기능 하나를 끝까지 동작하게 하는 것이 목표다</li>
+          <li>오늘의 검색엔진·RAG를 내 데이터로 바꾸어도 되고, 계산기·양식 생성기처럼 전혀 다른 앱이어도 된다</li>
+          <li>배포 URL 2개 제출. 다른 사람의 기기에서 열리는지 확인한다. 필요하면 인증(§5)과 로그(§6)를 붙인다</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout bad"><b>핵심 토론 주제: “이것을 해도 되는가?”</b> 세 사례 각각에 대해 ① 법적·규정상 애매한 점이 있었는지(데이터를 AI 도구에 넣어도 되는지, 공개해도 되는지, 결과를 그대로 써도 되는지) ② 어떻게 판단했고 어떻게 극복했는지 ③ 그래도 남은 위험은 무엇인지 발표한다. 애매한 점이 없었다면 왜 없다고 판단했는지를 설명한다.</div>
+    <p class="muted">발표는 한 사람당 5분 안팎. 결과물보다 판단 과정을 중심으로 한다. §9의 방법론 가이드와 점검표를 근거로 쓰면 된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="애매한 점과 극복 방법 예시">
+  <div class="kicker">정리와 과제</div>
+  <h2>“해도 되나” 애매한 점의 예시와 극복 수단</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>애매한 점</th><th>극복 수단의 예</th></tr></thead>
+      <tbody>
+        <tr><td>회사 내부 문서를 외부 AI 서비스에 넣어도 되는가</td><td>회사 AI 사용 정책 확인, 회사가 계약한 도구 사용, 학습에 쓰지 않는 조건(엔터프라이즈·API 약관) 확인, 공개 가능한 수준으로 편집한 문서로 개발</td></tr>
+        <tr><td>고객·동료의 개인정보가 들어 있다</td><td>가명처리 또는 가상 데이터로 개발하고 실제 데이터는 승인 후에, 필요한 항목만 사용, 처리위탁 여부 검토</td></tr>
+        <tr><td>웹앱을 공개 URL에 올려도 되는가</td><td>접근 통제 수준 선택(인증, 비밀번호 잠금), 공개 가능한 데이터만 탑재, 사내망·사내 계정 연동</td></tr>
+        <tr><td>AI가 만든 결과를 그대로 외부에 보내도 되는가</td><td>사람 검토 단계를 절차에 넣기, 출처 인용 강제, AI 생성 사실의 고지(인공지능 기본법의 투명성 의무 검토)</td></tr>
+        <tr><td>남의 자료(판례 DB, 유료 보고서, 웹페이지)를 넣어도 되는가</td><td>이용 약관과 저작권 검토, 공공 데이터·자체 자료로 대체, 내부 분석 목적으로 한정</td></tr>
+        <tr><td>법률·의료 등 자격이 필요한 판단을 하는 것처럼 보인다</td><td>정보 제공으로 범위 한정, 전문가 연결, 고지 문구 고정 표시</td></tr>
+        <tr><td>API 비용·남용</td><td>키 사용 한도, 인증, 발송·호출 횟수 제한, 로그로 사용량 확인</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="제출물과 발표 구성">
+  <div class="kicker">정리와 과제</div>
+  <h2>제출물과 발표 구성</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">제출물 (발표 전날까지 KLMS)</p>
+        <ul class="bul compact">
+          <li>스킬: SKILL.md와 실행 결과물 1건</li>
+          <li>웹앱: Vercel URL 2개 (인증을 붙였다면 시연용 접근 방법)</li>
+          <li>검토 메모 1쪽: 사례별 “해도 되나” 판단과 근거</li>
+          <li>선택: GitHub 저장소 링크, PLAN·DECISIONS 문서</li>
+        </ul>
+        <div class="callout warn"><b>배포 전 점검</b>: ① 코드·GitHub에 API 키가 없는가 ② 데이터에 개인정보·영업비밀이 없는가 ③ 공개해도 되는 데이터인가 ④ 비용 한도를 걸었는가</div>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">발표 구성 (5분)</p>
+        <ol class="bul compact">
+          <li>내 업무와 고른 과업 (§7의 한 줄 정의)</li>
+          <li>왜 이 형태(스킬/웹앱)를 골랐나</li>
+          <li>시연: 입력 → 출력</li>
+          <li>“해도 되나”: 애매한 점, 판단 근거, 극복 방법</li>
+          <li>신뢰성: 결과가 맞는지 어떻게 확인했나, 틀린 사례가 있었나</li>
+          <li>남은 위험과 실제 업무에 쓰려면 더 필요한 것</li>
+        </ol>
+        <p class="muted" style="font-size:13.5px">막히면 막힌 화면을 AI에게 보여주고 “여기서 왜 안 되는 거야?”라고 묻는다. 범위를 줄이는 것도 좋은 선택이다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 9. AI 도입 방법론 가이드 ===================== -->
+<section class="slide section" data-sec="9" data-title="AI 도입 방법론 가이드">
+  <div class="kicker">Section 9</div>
+  <h2>나의 업무에 AI를 어떻게 도입할 것인가: 참조할 만한 방법론 가이드</h2>
+  <p class="section-lead">기업·연구기관·규제기관이 공개한 가이드를 도입 단계별로 정리한다. 무엇을 맡길지 고르는 방법, 위험을 분류하는 틀, 법적 쟁점, 신뢰성을 확인하는 방법, 그리고 단계별 도입 절차.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="9"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="두 개의 질문과 참조 가이드">
+  <div class="kicker">AI 도입 방법론 가이드</div>
+  <h2>두 개의 질문, 그리고 단계별 참조 가이드</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:stretch">
+      <div class="callout good"><b>질문 1. 무엇을 AI에 맡길 것인가</b><br>과업을 고르고, 가장 단순한 구조로 만들고, 결과가 맞는지 확인하는 문제. 생산성과 신뢰성의 문제다.</div>
+      <div class="callout bad"><b>질문 2. 그렇게 해도 되는가</b><br>데이터를 넣어도 되는지, 결과를 써도 되는지, 남에게 제공해도 되는지의 문제. 법과 규정, 계약의 문제다.</div>
+    </div>
+    <table class="tbl cmp sm">
+      <thead><tr><th>단계</th><th>참조 가이드</th><th>발행</th></tr></thead>
+      <tbody>
+        <tr><th>과업 고르기</th><td>Dell’Acqua et al., Navigating the Jagged Technological Frontier · OpenAI, Identifying and Scaling AI Use Cases · Eloundou et al., GPTs are GPTs</td><td>HBS·BCG 2023 · OpenAI 2025 · 2023</td></tr>
+        <tr><th>구조 정하기</th><td>Anthropic, Building Effective Agents · OpenAI, A Practical Guide to Building Agents</td><td>2024. 12. · 2025</td></tr>
+        <tr><th>위험 분류</th><td>NIST AI RMF 1.0 · NIST AI 600-1 생성형 AI 프로파일 · ISO/IEC 42001</td><td>2023. 1. · 2024. 7. · 2023. 12.</td></tr>
+        <tr><th>법적 쟁점</th><td>개인정보위 생성형 AI 개인정보 처리 안내서 · 인공지능 기본법 · 금융위 금융분야 AI 가이드라인 · ABA Formal Opinion 512 · 법원 상용 AI 활용 지침</td><td>2025. 8. · 2026. 1. 시행 · 2026. 6. 개정 · 2024. 7.</td></tr>
+        <tr><th>신뢰성 확인</th><td>Magesh et al., Hallucination-Free? (Stanford) · Anthropic, 평가(evals) 문서 · Demystifying Evals for AI Agents</td><td>2025 (JELS) · 2026. 1.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="근거: 들쭉날쭉한 경계">
+  <div class="kicker">AI 도입 방법론 가이드 · 과업 고르기</div>
+  <h2>근거: AI가 잘하는 과업의 경계는 들쭉날쭉하다 (Jagged Frontier)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>Dell’Acqua 외(HBS·BCG·MIT·Wharton, 2023): BCG 컨설턴트 758명을 GPT-4 사용 집단과 미사용 집단에 무작위 배정한 사전 등록 실험</li>
+    </ul>
+    <div class="two eq" style="align-items:stretch">
+      <div class="step"><span class="no">안</span><b class="ttl">AI 역량 범위 안의 과업 (18개 컨설팅 과업)</b>
+        <ul class="bul compact"><li>완료 과업 수 <b>12.2%</b> 증가</li><li>소요 시간 <b>25.1%</b> 단축</li><li>품질 <b>40% 이상</b> 향상</li><li>하위 성과자 43%, 상위 성과자 17% 향상: 능력 격차가 줄었다</li></ul></div>
+      <div class="step"><span class="no">밖</span><b class="ttl">AI 역량 범위 밖의 과업</b>
+        <ul class="bul compact"><li>AI 사용 집단이 정답에 이를 가능성이 <b>19%p 낮았다</b></li><li>AI가 그럴듯한 오답을 내놓았고, 사람이 그것을 받아들였다</li><li>어려운 과업이라서가 아니라 AI가 못하는 종류의 과업이라서 생긴 결과다</li></ul></div>
+    </div>
+    <div class="callout"><b>시사점</b>: AI가 잘하는 과업과 못하는 과업의 경계는 사람이 느끼는 난이도와 일치하지 않는다. 그래서 과업을 고를 때 <b>작은 시험으로 경계를 직접 확인</b>해야 한다. 연구는 두 가지 활용 방식을 관찰했다. <b>Centaur</b>: 사람과 AI의 일을 나누어 AI에 맞는 하위 과업만 넘긴다. <b>Cyborg</b>: 과업 전반에서 AI와 계속 주고받으며 결과를 다듬는다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="과업 고르기: 기회의 세 영역">
+  <div class="kicker">AI 도입 방법론 가이드 · 과업 고르기</div>
+  <h2>과업 고르기: 기회의 세 영역과 영향 × 노력 매트릭스</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">OpenAI, Identifying and Scaling AI Use Cases (2025)</p>
+        <ul class="bul compact">
+          <li><b>기회의 세 영역</b>: ① 반복적이고 가치가 낮은 일(회의록 요약, 같은 질문에 반복 답변) ② 역량 병목(다른 부서나 전문가를 기다려야 하는 일) ③ 모호한 일(어디서 시작할지 모르는 과제의 초안·구조화)</li>
+          <li><b>6가지 활용 유형</b>: 콘텐츠 작성, 리서치, 코딩, 데이터 분석, 아이디어·전략, 자동화</li>
+          <li><b>영향 × 노력</b>: 고영향·저노력은 먼저 착수(Quick wins), 저노력 과업은 개인이 스스로 만드는 도구(Self-service)로 시작해 팀으로 확산, 고영향·고노력은 계획과 자원이 필요한 전략 과제</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">Eloundou 외, GPTs are GPTs (2023)</p>
+        <ul class="bul compact">
+          <li>직업을 O*NET의 과업 단위로 나누고, 과업마다 “LLM을 쓰면 품질을 유지하면서 소요 시간이 50% 이상 줄어드는가”로 노출도를 평가</li>
+          <li>미국 노동자의 약 80%가 과업의 10% 이상, 약 19%가 과업의 50% 이상 노출. 저자들은 이것이 예측이 아닌 노출 추정이라고 밝힌다</li>
+        </ul>
+        <div class="callout good"><b>§7과 연결</b>: 내 과업표에 “50% 이상 시간 절감이 가능한가” 칸을 추가한다. 과제의 스킬·웹앱은 대부분 Self-service나 Quick win 칸에서 고르면 학기 안에 완성할 수 있다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="구조 정하기: 가장 단순한 해법부터">
+  <div class="kicker">AI 도입 방법론 가이드 · 구조 정하기</div>
+  <h2>구조 정하기: 가장 단순한 해법부터, 사람의 개입 지점은 미리</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">Anthropic, Building Effective Agents (2024. 12.)</p>
+        <ul class="bul compact">
+          <li><b>워크플로</b>: LLM과 도구를 미리 정한 순서로 엮은 시스템. <b>에이전트</b>: LLM이 절차와 도구 사용을 스스로 정하는 시스템</li>
+          <li>원칙: “가능한 가장 단순한 해법을 찾고, 필요할 때만 복잡성을 높여라.” 에이전트는 비용과 지연이 크고 오류가 누적될 수 있다</li>
+          <li>잘 정의된 업무는 예측 가능하고 일관된 워크플로가 맞다. 오늘의 RAG 챗봇도 “검색 → 생성”의 고정된 워크플로다</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">OpenAI, A Practical Guide to Building Agents (2025)</p>
+        <ul class="bul compact">
+          <li>에이전트는 규칙 기반 자동화로 잘 되지 않던 일(복잡한 판단, 유지하기 어려운 규칙, 비정형 문서)에 쓴다</li>
+          <li><b>가드레일</b>: 범위 밖 질문 차단, 개인정보 필터, 도구별 위험 등급(읽기 전용인가, 되돌릴 수 있는가, 금전 영향이 있는가), 출력 검증</li>
+          <li><b>사람에게 넘기는 두 경우</b>: 실패가 일정 횟수를 넘을 때, 그리고 되돌릴 수 없거나 금액이 큰 행동(취소, 환불, 결제) 직전</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">McKinsey의 에이전트 구축 경험 정리(2025)도 같은 결론이다: 가치는 AI 도구 자체가 아니라 <b>업무 흐름의 재설계</b>에서 나온다. 출발점은 현재 업무 절차를 그리고 불편한 지점을 찾는 것이다. 모든 과업에 에이전트가 필요하지는 않다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="위험관리 프레임워크: NIST · ISO">
+  <div class="kicker">AI 도입 방법론 가이드 · 위험 분류</div>
+  <h2>위험관리 프레임워크: NIST AI RMF와 생성형 AI 프로파일</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">NIST AI RMF 1.0 (2023. 1.): 4개 기능</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><th>GOVERN</th><td>책임 체계와 정책. 나머지 세 기능 전체에 적용</td></tr>
+            <tr><th>MAP</th><td>사용 맥락을 파악하고 위험을 식별</td></tr>
+            <tr><th>MEASURE</th><td>위험을 측정·평가</td></tr>
+            <tr><th>MANAGE</th><td>우선순위에 따라 대응하고 모니터링</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">신뢰할 수 있는 AI의 7개 특성: 타당성·신뢰성(나머지의 기반), 안전, 보안·회복력, 책임성·투명성, 설명가능성, 프라이버시 강화, 공정성. 특성 사이의 상충을 명시적으로 관리하라고 권고한다.</p>
+        <p class="muted" style="font-size:13px"><b>ISO/IEC 42001 (2023. 12.)</b>: 조직의 AI 경영시스템 요구사항을 정한 인증 가능한 국제표준. ISO 27001과 같은 구조라 기존 정보보호 인증과 결합할 수 있다.</p>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">NIST AI 600-1 (2024. 7.): 생성형 AI의 12개 위험</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><td>CBRN 정보</td><td><b>사실과 다른 생성 (Confabulation)</b></td></tr>
+            <tr><td>위험·폭력·혐오 콘텐츠</td><td><b>데이터 프라이버시</b></td></tr>
+            <tr><td>환경 영향</td><td>유해한 편향과 획일화</td></tr>
+            <tr><td><b>사람과 AI의 구성 (과의존, 자동화 편향)</b></td><td>정보 무결성</td></tr>
+            <tr><td><b>정보 보안</b></td><td><b>지식재산</b></td></tr>
+            <tr><td>음란·모욕적 콘텐츠</td><td><b>가치사슬과 구성요소 통합 (제3자 모델·데이터)</b></td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">굵게 표시한 6개가 업무 자동화 과제에 직접 관련된다. 다음 장의 점검표는 이 6개를 실무 질문으로 바꾼 것이다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="“이것 해도 되나” 점검표">
+  <div class="kicker">AI 도입 방법론 가이드 · 위험 분류</div>
+  <h2>“이것을 해도 되는가” 점검표: 7개 질문</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>질문</th><th>관련 쟁점</th><th>예이면</th></tr></thead>
+      <tbody>
+        <tr><td>① 입력 데이터에 개인정보·고객정보가 있는가</td><td>개인정보 보호법, 처리위탁·국외 이전</td><td><span class="pill warn">조건부</span> 가명처리, 승인된 도구, 위탁 검토</td></tr>
+        <tr><td>② 영업비밀·비공개 정보가 있는가</td><td>영업비밀의 비밀관리성, 비밀유지 계약, 직무상 비밀</td><td><span class="pill warn">조건부</span> 기업 계약 계정, 사내 도구</td></tr>
+        <tr><td>③ 어떤 약관이 적용되는 계정인가 (개인용 / 기업·API)</td><td>입력 데이터의 학습 이용과 보존 기간</td><td>개인용이면 업무 자료 입력 전 학습 설정·회사 정책 확인</td></tr>
+        <tr><td>④ 결과물이 외부인에게 제공되는가</td><td>인공지능 기본법 투명성 의무, 소비자 보호</td><td><span class="pill warn">조건부</span> AI 생성 고지, 사람 검토</td></tr>
+        <tr><td>⑤ 사람의 권리·의무에 영향을 주는 판단인가 (채용, 대출, 평가)</td><td>고영향 AI, 자동화된 결정 거부권(개인정보 보호법 제37조의2)</td><td><span class="pill bad">재설계</span> AI는 보조, 최종 판단은 사람</td></tr>
+        <tr><td>⑥ 소속 기관·직역의 지침이 있는가</td><td>법원·금융·공공 가이드라인, 직업윤리</td><td>지침이 우선. 지침이 금지하면 하지 않는다</td></tr>
+        <tr><td>⑦ 틀렸을 때 누가 피해를 입고, 되돌릴 수 있는가</td><td>신뢰성, 책임 소재</td><td>되돌릴 수 없으면 사람 승인 단계 필수</td></tr>
+      </tbody>
+    </table>
+    <p class="em center">모두 “아니오”면 <span class="pill ok">진행</span>, “예”가 있으면 조건을 갖추어 <span class="pill warn">조건부 진행</span>, 지침이 금지하거나 조건을 갖출 수 없으면 <span class="pill bad">재설계</span></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="법적 쟁점 ① 비밀유지와 약관">
+  <div class="kicker">AI 도입 방법론 가이드 · 법적 쟁점</div>
+  <h2>법적 쟁점 ① 영업비밀·비밀유지, 그리고 AI 제공자의 약관</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <div class="callout bad"><b>삼성전자 사례 (2023)</b>: 반도체 부문에서 ChatGPT 사용을 허용한 뒤 설비 관련 소스코드 오류 수정 요청, 수율 관련 코드 최적화 요청, 회의 녹취의 회의록 변환 요청 등 3건의 입력이 확인되었다. 회사는 사내 PC에서 생성형 AI 사용을 일시 금지하고 자체 도구 개발에 착수했다. 입력된 정보가 실제로 노출되었는지와 별개로, <b>외부 서비스 입력 자체가 영업비밀의 비밀관리성을 약화시킬 수 있다</b>는 점이 쟁점이다.</div>
+        <ul class="bul compact">
+          <li><b>법원 상용 AI 활용 지침</b>: 소송기록, 개인정보가 담긴 판결문·소송자료를 외부 상용 AI에 올리지 않는다. 재판 녹음파일의 텍스트 변환을 위한 업로드도 금지 사례로 든다</li>
+          <li><b>국정원 AI 보안 가이드북 (2025. 12.)</b>: 공공기관용. 15개 위협, 30개 보안 대책, 57개 점검 항목, 주요 AI 도구별 보안 설정</li>
+          <li><b>변호사</b>: 비밀유지의무에 더해, 의뢰인 비밀유지권(변호사법 제26조의2, 2027. 2. 시행 예정)이 도입된다. AI 도구에 자문 자료를 넣을 때 이 보호가 유지되는지가 새 쟁점이다</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">같은 회사 제품이라도 약관이 다르다</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><th>개인용 (예: Claude Free·Pro·Max)</th><td>2025. 8. 약관 변경으로 대화의 모델 학습 이용 여부를 이용자가 선택. 허용 시 보존 5년, 비허용 시 30일</td></tr>
+            <tr><th>기업·API (Team, Enterprise, API 등)</th><td>상업 약관 적용. 위 학습 이용 조항의 적용 대상이 아니다</td></tr>
+          </tbody>
+        </table>
+        <div class="callout good"><b>극복 방법</b>: 회사가 계약한 기업용 계정이나 API 사용, 학습 이용 해제 확인, 비밀 정보를 지운 사본으로 개발, 사내 설치형 도구. 그리고 회사의 AI 사용 정책을 먼저 확인한다. 정책이 없다면 그것을 만드는 것이 첫 과업일 수 있다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="법적 쟁점 ② 개인정보">
+  <div class="kicker">AI 도입 방법론 가이드 · 법적 쟁점</div>
+  <h2>법적 쟁점 ② 개인정보: 개인정보위 생성형 AI 안내서 (2025. 8.)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>「생성형 인공지능(AI) 개발·활용을 위한 개인정보 처리 안내서」: 상용 LLM을 API로 활용하거나 오픈소스 모델을 조정해 서비스를 만드는 사업자를 대상으로, 생애주기 4단계마다 쟁점과 안전조치를 제시한다</li>
+    </ul>
+    <div class="steps s4">
+      <div class="step"><span class="no">1</span><b class="ttl">목적 설정</b><p class="prob">무엇을 위해 어떤 개인정보를 처리하는지 정하고, 처리 근거(동의, 계약, 정당한 이익 등)를 확인한다</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">전략 수립</b><p class="prob">서비스형 LLM, 오픈소스 조정, 자체 개발 중 방식 선택. 서비스형이면 입력의 외부 전송과 학습 재이용 위험을 계약(기업 라이선스, 데이터 처리 계약)으로 통제</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">학습·개발</b><p class="prob">학습·참조 데이터의 출처와 적법성, 가명처리, 개인정보 노출을 막는 필터</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">적용·관리</b><p class="prob">이용자 고지와 처리방침, 정보주체 권리 보장, 출력 모니터링, 안전조치</p></div>
+    </div>
+    <div class="two eq" style="align-items:start">
+      <div class="callout">전 단계에 개인정보 보호책임자 중심의 거버넌스와 <b>개인정보 안심설계(Privacy by Design)</b>를 적용하고, 대규모·민감정보 처리면 개인정보 영향평가를 권장한다.</div>
+      <div class="callout warn"><b>오늘의 실습에 대입하면</b>: OpenRouter 뒤의 여러 모델 제공자(§3), Vercel, Supabase가 처리위탁 또는 국외 이전에 해당하는지 판단하고, 처리방침에 적고, 질문 로그의 보관 기간을 정한다(§6). 6강의 제17조·제26조·제28조의8이 그대로 적용된다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="법적 쟁점 ③ 저작권과 직역 규제">
+  <div class="kicker">AI 도입 방법론 가이드 · 법적 쟁점</div>
+  <h2>법적 쟁점 ③ 저작권, 그리고 직역·업권별 규율</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">저작권: 입력과 출력 양쪽</p>
+        <ul class="bul compact">
+          <li><b>입력</b>: 유료 DB, 보고서, 남의 웹페이지를 RAG 자료로 쓰면 이용 약관과 저작권(복제·전송)을 검토한다. 3강의 크롤링 기준(내부 분석, 소량, 페이월 금지)이 출발점이다</li>
+          <li><b>출력</b>: 문체부·한국저작권위원회 「생성형 AI 저작권 안내서」(2023. 12.): 사람의 창작적 기여가 없는 AI 산출물은 저작물이 아니며 등록할 수 없다. 사람이 선택·배열·수정한 부분은 보호될 수 있다. 회사 결과물로 쓸 거라면 사람의 기여와 작업 기록을 남긴다</li>
+        </ul>
+        <p style="font-weight:800;margin:6px 0 0">금융위 금융분야 AI 가이드라인 (2026. 6. 개정)</p>
+        <ul class="bul compact">
+          <li>7대 원칙: 거버넌스, 합법성, <b>보조수단성</b>(AI는 보조 수단, 최종 결정과 책임은 임직원), 신뢰성, 금융안정성, <b>신의성실</b>(AI 활용 사실 고지, 오류 시 신속 처리), 보안성</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">법률 직역: ABA Formal Opinion 512 (2024. 7.)</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><th>역량</th><td>도구의 기능과 한계를 이해. 독립적 검토 없이 결과에 의존하지 않는다. 검토 수준은 과업과 도구에 따라 다르다</td></tr>
+            <tr><th>비밀유지</th><td>의뢰인 정보가 학습·노출될 수 있는 도구에 넣으려면 사전 동의. 수임계약서의 일반 조항만으로는 부족</td></tr>
+            <tr><th>소통</th><td>상황에 따라 AI 사용 사실을 의뢰인에게 알린다</td></tr>
+            <tr><th>법원에 대한 의무</th><td>AI가 만든 인용과 주장은 제출 전에 확인</td></tr>
+            <tr><th>감독</th><td>사용 정책과 교육, 외부 도구의 보안 점검</td></tr>
+            <tr><th>보수</th><td>AI로 줄어든 시간을 실제보다 길게 청구하지 않는다</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">국내 변호사단체 차원의 생성형 AI 지침은 아직 확인되지 않는다(서울지방변호사회 초안 단계). 비변호사가 만드는 법률 서비스는 변호사법 제109조와의 경계를 따로 검토한다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="법적 쟁점 ④ 인공지능 기본법">
+  <div class="kicker">AI 도입 방법론 가이드 · 법적 쟁점</div>
+  <h2>법적 쟁점 ④ 인공지능 기본법: 나는 “이용자”인가 “이용사업자”인가</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <ul class="bul compact">
+          <li>「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」: 2025. 1. 21. 공포, <b>2026. 1. 22. 시행</b>. 2026. 1. 일부개정</li>
+          <li>의무 주체는 <b>인공지능사업자</b>(개발사업자 + AI를 이용해 제품·서비스를 제공하는 이용사업자). AI를 업무 도구로 쓰기만 하는 사람은 “이용자”로 보는 해석이 일반적이다</li>
+          <li>그러나 내가 만든 웹앱을 <b>고객이나 외부인에게 제공</b>하면 이용사업자가 될 수 있다. 과제의 웹앱이 여기에 걸린다</li>
+          <li><b>투명성 의무(제31조)</b>: 생성형·고영향 AI 기반 서비스임을 이용자에게 사전 고지, 생성형 AI 결과물임을 표시, 실제와 구분하기 어려운 결과물(딥페이크)은 명확히 고지·표시</li>
+          <li><b>고영향 AI</b>: 채용·대출 심사 같은 권리·의무 관련 판단, 보건의료, 에너지 등 생명·신체·기본권에 중대한 영향을 줄 수 있는 영역. 위험관리, 설명, 이용자 보호, 사람의 관리·감독, 문서 보관 의무</li>
+          <li>과태료 최대 3천만 원. 정부는 시행 후 최소 1년 이상의 계도기간 운영을 발표했다</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <div class="callout good"><b>과제 웹앱에 적용하면</b>: 화면에 “이 서비스는 생성형 AI를 이용합니다. 답변은 AI가 생성한 것으로 부정확할 수 있습니다” 같은 고지를 고정 표시한다. 오늘의 판례 챗봇 규칙 6(“법률 자문이 아님”)과 같은 위치에 둔다.</div>
+        <p style="font-weight:800;margin:0">EU AI Act 일정 (외국 고객이 있는 경우)</p>
+        <table class="tbl cmp sm nw">
+          <tbody>
+            <tr><td>2024. 8. 1.</td><td>발효</td></tr>
+            <tr><td>2025. 2. 2.</td><td>금지 AI, AI 리터러시 의무</td></tr>
+            <tr><td>2025. 8. 2.</td><td>범용 AI 모델 의무</td></tr>
+            <tr><td>2026. 8. 2.</td><td>대부분 규정 적용 (투명성 의무 포함)</td></tr>
+            <tr><td>2027. 12. 2.</td><td>부속서 III 고위험 AI(채용, 신용평가 등). 2026. 6. Digital Omnibus로 연기</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">시행령·고시와 가이드라인은 계속 바뀌고 있다. 실제 적용 전에는 국가법령정보센터의 현행 조문과 소관 부처 자료를 확인한다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="신뢰성: 근거">
+  <div class="kicker">AI 도입 방법론 가이드 · 신뢰성</div>
+  <h2>신뢰성: RAG를 써도 환각은 사라지지 않는다</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">Magesh 외, Hallucination-Free? (Stanford RegLab·HAI, Journal of Empirical Legal Studies 2025)</p>
+        <table class="tbl cmp sm">
+          <thead><tr><th>법률 AI 리서치 도구 (2024. 5. 시험)</th><th>정확</th><th>환각</th></tr></thead>
+          <tbody>
+            <tr><td>Lexis+ AI</td><td class="c">65%</td><td class="c">약 17%</td></tr>
+            <tr><td>Westlaw AI-Assisted Research</td><td class="c">42%</td><td class="c">약 33%</td></tr>
+            <tr><td>Ask Practical Law AI</td><td colspan="2" class="c">불완전 답변(거절 포함) 60% 이상</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">RAG를 쓰는 상용 법률 도구도 17~33% 비율로 환각을 보였다. RAG는 환각을 줄이지만 없애지 못한다. 이후 버전에서는 수치가 다를 수 있다.</p>
+      </div>
+      <div class="stack">
+        <ul class="bul compact">
+          <li><b>Mata v. Avianca (S.D.N.Y. 2023)</b>: 변호사가 ChatGPT로 찾은 존재하지 않는 판례를 인용했고, 법원이 판결 사본을 요구한 뒤에도 바로잡지 않아 5,000달러 제재</li>
+          <li><b>AI Hallucination Cases DB</b>(Damien Charlotin): 법원이 당사자의 AI 환각 자료 의존을 인정한 결정이 2026년 9월 기준 전 세계 2,000건 이상</li>
+          <li><b>국내</b>: 변호사 의견서에 인용된 판결 5건이 존재하지 않아 철회된 사례(법률신문 보도), 로펌 준비서면의 허위 판례 인용을 패소한 의뢰인이 뒤늦게 발견한 사례(울산지법, 2026. 5. 보도)</li>
+          <li><b>법원행정처 TF 방안(2026. 3. 31.)</b>: 허위 인용으로 생긴 소송비용 부담, 변호사 징계 의뢰 등. AI 활용 사실 고지와 인용 정확성 확인을 민사소송규칙에 넣는 방안도 제시</li>
+        </ul>
+      </div>
+    </div>
+    <p class="em center">“AI가 만든 인용은 원문을 확인하기 전에는 쓰지 않는다”가 최소 기준이다</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="신뢰성: 확인하는 방법">
+  <div class="kicker">AI 도입 방법론 가이드 · 신뢰성</div>
+  <h2>신뢰성을 확인하는 방법: 평가 세트를 만들고 기록을 읽는다</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">1</span><b class="ttl">성공 기준을 숫자로</b><p class="prob">“잘 분류한다”가 아니라 “테스트 50건 중 48건 이상 정답, 근거 없는 인용 0건”. 무엇이 실패인지 미리 정한다</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">평가 세트 20~50건</b><p class="prob">실제 업무에서 뽑고, 실제로 틀렸던 사례를 포함한다. 두 명의 전문가가 같은 합격·불합격 판정을 내릴 수 있을 만큼 명확하게, 건마다 참조 정답을 둔다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">예외 입력 포함</b><p class="prob">빈 입력, 아주 긴 입력, 범위 밖 질문(§3의 “이혼 재산분할”), 모호한 질문. 이것이 오늘 RAG 완료 보고의 검증 시나리오 4종이다</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">채점은 규칙 → 모델 → 사람 순</b><p class="prob">인용 번호 존재 여부처럼 코드로 확인할 수 있는 것은 코드로. LLM 채점은 생성 모델과 다른 모델로 하고 사람 판정과 맞춰 본다</p></div>
+      <div class="step"><span class="no">5</span><b class="ttl">한 번이 아니라 여러 번</b><p class="prob">같은 입력에 매번 맞아야 하는 일이면 k번 모두 성공(pass^k)을 본다. 1회 성공률 75%면 3번 연속 성공은 약 42%다</p></div>
+      <div class="step"><span class="no">6</span><b class="ttl">기록을 직접 읽는다</b><p class="prob">점수만 보지 말고 실패한 대화를 읽는다. 원인이 검색인지, 생성인지, 채점인지 기록에서 확인한다. §6의 로그가 이 자료다</p></div>
+    </div>
+    <p class="muted">출처: Anthropic, Define success criteria and build evaluations (Claude 개발자 문서) · Demystifying Evals for AI Agents (2026. 1.) · OpenAI 에이전트 가이드의 사람 개입 기준</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="단계별 도입 절차">
+  <div class="kicker">AI 도입 방법론 가이드</div>
+  <h2>정리: 나의 업무에 AI를 도입하는 7단계와 단계별 산출물</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>단계</th><th>할 일</th><th>산출물</th><th>참조</th></tr></thead>
+      <tbody>
+        <tr><th>1. 과업 분해·선정</th><td>직무를 과업으로 나누고 가치 × 위험으로 고른다. 작은 시험으로 AI가 잘하는지 확인</td><td>과업표, 한 줄 정의</td><td>§7, Jagged Frontier, OpenAI 가이드</td></tr>
+        <tr><th>2. 위험 분류</th><td>7개 질문 점검표로 진행 / 조건부 / 재설계 판정</td><td>점검표</td><td>NIST AI RMF·600-1</td></tr>
+        <tr><th>3. 데이터·계정·약관 확정</th><td>어떤 데이터를, 어떤 계정·API로, 어떤 조건(학습 이용, 보존, 서버 위치)에서 처리할지 정한다</td><td>데이터 흐름도</td><td>개인정보위 안내서, 소속 기관 지침</td></tr>
+        <tr><th>4. 가장 단순한 구조로 만들기</th><td>스킬 또는 고정 워크플로. 계획서부터 대화로</td><td>SKILL.md 또는 PLAN.md</td><td>Building Effective Agents</td></tr>
+        <tr><th>5. 평가</th><td>평가 세트 20~50건으로 성공 기준 충족 여부 확인</td><td>평가 결과표</td><td>Anthropic evals 문서</td></tr>
+        <tr><th>6. 배포와 통제</th><td>사람 검토 지점, AI 고지 문구, 인증, 비용 한도</td><td>배포 URL, 고지 문구</td><td>§4~5, 인공지능 기본법 제31조</td></tr>
+        <tr><th>7. 운영과 개선</th><td>로그와 오류 기록을 읽고 고친다. 보관 기간이 지난 기록은 파기</td><td>DECISIONS.md, 로그</td><td>§6, 개인정보 보호법</td></tr>
+      </tbody>
+    </table>
+    <div class="callout good"><b>과제와의 연결</b>: 9강 발표의 “해도 되나” 부분은 2·3단계의 판단을, “신뢰성” 부분은 5단계의 결과를 보여주면 된다. 산출물 표의 문서들이 그대로 발표 자료가 된다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="참고 자료">
+  <div class="kicker">AI 도입 방법론 가이드</div>
+  <h2>참고 자료</h2>
+  <div class="body">
+    <ul class="bul compact" style="font-size:13.5px">
+      <li>Dell’Acqua et al., <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4573321" target="_blank" rel="noopener">Navigating the Jagged Technological Frontier</a>, HBS Working Paper 24-013 (2023)</li>
+      <li>OpenAI, <a href="https://openai.com/business/guides-and-resources/identifying-and-scaling-ai-use-cases/" target="_blank" rel="noopener">Identifying and Scaling AI Use Cases</a> (2025) · <a href="https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf" target="_blank" rel="noopener">A Practical Guide to Building Agents</a> (2025)</li>
+      <li>Eloundou et al., <a href="https://arxiv.org/abs/2303.10130" target="_blank" rel="noopener">GPTs are GPTs</a> (2023)</li>
+      <li>Anthropic, <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Building Effective Agents</a> (2024) · <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank" rel="noopener">Demystifying Evals for AI Agents</a> (2026) · <a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">Define success criteria and build evaluations</a></li>
+      <li>NIST, <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf" target="_blank" rel="noopener">AI RMF 1.0</a> (2023) · <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf" target="_blank" rel="noopener">AI 600-1 Generative AI Profile</a> (2024) · ISO/IEC <a href="https://www.iso.org/standard/81230.html" target="_blank" rel="noopener">42001:2023</a></li>
+      <li>개인정보보호위원회, 「생성형 인공지능(AI) 개발·활용을 위한 개인정보 처리 안내서」 (2025. 8.) · <a href="https://www.law.go.kr/법령/인공지능발전과신뢰기반조성등에관한기본법" target="_blank" rel="noopener">인공지능 기본법</a> · 금융위원회, 「금융분야 AI 가이드라인」 (2026. 6. 개정) · 국가정보원, 「AI 보안 가이드북」 (2025. 12.)</li>
+      <li>ABA, <a href="https://www.americanbar.org/content/dam/aba/administrative/professional_responsibility/ethics-opinions/aba-formal-opinion-512.pdf" target="_blank" rel="noopener">Formal Opinion 512</a> (2024) · 문화체육관광부·한국저작권위원회, 「생성형 AI 저작권 안내서」 (2023. 12.)</li>
+      <li>Magesh et al., <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/jels.12413" target="_blank" rel="noopener">Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools</a>, JELS 22(2) (2025) · Damien Charlotin, <a href="https://www.damiencharlotin.com/hallucinations/" target="_blank" rel="noopener">AI Hallucination Cases</a></li>
+      <li>Anthropic, <a href="https://www.anthropic.com/news/updates-to-our-consumer-terms" target="_blank" rel="noopener">Updates to Consumer Terms</a> (2025. 8.)</li>
+    </ul>
+  </div>
+</section>
+
+    </div><!-- /deck -->
+
+    <nav class="pager" aria-label="페이지 이동">
+      <button class="pbtn prev" id="btnPrev" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span id="prevLabel">이전</span></button>
+      <div class="pinfo"><span class="sec" id="pSec"></span><span class="dots" id="pDots"></span><span class="cnt" id="pCnt"></span></div>
+      <button class="pbtn next" id="btnNext" type="button"><span id="nextLabel">다음</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    </nav>
+  </main>
+</div>
+<script>
+(function(){
+  const SECTIONS = [
+    {name:'들어가며', sub:'구성 · 오늘 만드는 것'},
+    {name:'Claude Code 시작하기', sub:'git · gh · 저장소 · 권한'},
+    {name:'검색엔진 구현', sub:'키워드 vs 임베딩 · 계획서'},
+    {name:'RAG 적용', sub:'근거 인용 챗봇 · Long Context'},
+    {name:'Vercel 배포', sub:'서버리스 · 환경변수'},
+    {name:'인증: 고려할 사항', sub:'접근 수준 · 이메일 인증코드'},
+    {name:'로깅: Supabase', sub:'문답 기록 · 개인정보'},
+    {name:'자동화 대상 고르기', sub:'과업 분해 · 가치 × 위험'},
+    {name:'정리와 과제', sub:'10/29 수강생 발표'},
+    {name:'AI 도입 방법론 가이드', sub:'법적 쟁점 · 신뢰성'},
+  ];
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  const secOf = i => +slides[i].dataset.sec;
+  const secIdx = SECTIONS.map((_, s) => slides.map((sl, i) => i).filter(i => secOf(i) === s));
+  let cur = -1;
+
+  /* ---------- 사이드바 목차 ---------- */
+  const toc = document.getElementById('toc');
+  SECTIONS.forEach((s, k) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'toc-link';
+    btn.innerHTML = `<span class="no">${k}</span><span class="nm">${s.name}</span><span class="cnt">${secIdx[k].length}p</span>`;
+    btn.addEventListener('click', () => show(secIdx[k][0]));
+    if (!secIdx[k].length) { btn.disabled = true; btn.querySelector('.cnt').textContent = '준비 중'; }
+    const sub = document.createElement('ul'); sub.className = 'sub';
+    secIdx[k].forEach(i => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = slides[i].dataset.title || slides[i].querySelector('h2,h1')?.textContent || `슬라이드 ${i+1}`;
+      b.addEventListener('click', () => show(i));
+      const l = document.createElement('li'); l.appendChild(b); sub.appendChild(l);
+    });
+    li.appendChild(btn); li.appendChild(sub); toc.appendChild(li);
+  });
+  const tocItems = Array.from(toc.children);
+
+  /* 표지의 목차 버튼 */
+  const co = document.getElementById('coverOutline');
+  if (co) SECTIONS.slice(1).forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span class="num">${k+1}</span><span>${s.name}<small>${s.sub}</small></span>`;
+    b.addEventListener('click', e => { e.stopPropagation(); show(secIdx[k+1][0]); });
+    if (!secIdx[k+1].length) { b.disabled = true; b.querySelector('small').textContent = '준비 중'; }
+    co.appendChild(b);
+  });
+
+  /* ---------- 페이저 ---------- */
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const prevLabel = document.getElementById('prevLabel'), nextLabel = document.getElementById('nextLabel');
+  const pSec = document.getElementById('pSec'), pDots = document.getElementById('pDots'), pCnt = document.getElementById('pCnt');
+  const curNo = document.getElementById('curNo'), totNo = document.getElementById('totNo'), bar = document.getElementById('progressBar');
+  totNo.textContent = N;
+
+  function show(i, replace){
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    if (cur >= 0) { slides[cur].classList.remove('active'); slides[cur].querySelectorAll('video').forEach(v => v.pause()); }
+    cur = i;
+    const sl = slides[i]; sl.classList.add('active');
+    sl.querySelectorAll('video').forEach(v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const s = secOf(i), list = secIdx[s], k = list.indexOf(i);
+
+    tocItems.forEach((li, j) => {
+      const b = li.firstElementChild;
+      b.classList.toggle('active', j === s);
+      b.classList.toggle('done', j < s);
+      li.classList.toggle('open', j === s);
+      li.querySelectorAll('.sub button').forEach((sb, m) => sb.classList.toggle('active', j === s && m === k));
+    });
+    const act = toc.querySelector('.toc-link.active');
+    if (act && window.innerWidth <= 900) act.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+
+    pSec.textContent = SECTIONS[s].name;
+    pCnt.textContent = `${k + 1} / ${list.length} · 전체 ${i + 1} / ${N}`;
+    pDots.innerHTML = '';
+    list.forEach((idx, m) => { const d = document.createElement('i'); if (m === k) d.className = 'on'; d.title = slides[idx].dataset.title || ''; d.addEventListener('click', () => show(idx)); pDots.appendChild(d); });
+
+    btnPrev.disabled = i === 0; btnNext.disabled = i === N - 1;
+    prevLabel.textContent = k === 0 && s > 0 ? `이전 섹션: ${SECTIONS[s - 1].name}` : '이전';
+    nextLabel.textContent = k === list.length - 1 && s < SECTIONS.length - 1 ? `다음 섹션: ${SECTIONS[s + 1].name}` : (i === N - 1 ? '마지막 페이지' : '다음');
+
+    curNo.textContent = i + 1; bar.style.width = ((i + 1) / N * 100) + '%';
+    const h = '#' + (i + 1);
+    if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+    window.scrollTo({top:0, behavior:'auto'});
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} · 7강 실습 (2)`;
+  }
+  const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
+  btnPrev.addEventListener('click', () => show(cur - 1));
+  btnNext.addEventListener('click', () => show(cur + 1));
+  window.addEventListener('popstate', () => show(fromHash(), true));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+    else if (e.key === '+' || e.key === '=') { e.preventDefault(); setUserZoom(userZoom * 1.1); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); setUserZoom(userZoom / 1.1); }
+    else if (e.key === '0') { e.preventDefault(); setUserZoom(1); }
+  });
+  /* ---------- 화면 크기에 맞춘 슬라이드 확대 ---------- */
+  const stage = document.getElementById('stage'), zoomVal = document.getElementById('zoomVal');
+  let userZoom = 1;
+  try { userZoom = parseFloat(localStorage.getItem('itm690-w07-zoom')) || 1; } catch (e) {}
+  function applyZoom(){
+    const mobile = window.innerWidth <= 900;
+    const side = mobile ? 0 : 264;
+    const auto = mobile ? 1 : Math.min(1.5, Math.max(1, (window.innerWidth - side) / 1100));
+    const z = Math.max(.6, Math.min(2.4, +(auto * userZoom).toFixed(3)));
+    stage.style.zoom = z;
+    stage.style.minHeight = mobile ? '' : ((window.innerHeight - 64) / z) + 'px';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  function setUserZoom(v){ userZoom = Math.max(.5, Math.min(2, +v.toFixed(3))); try { localStorage.setItem('itm690-w07-zoom', userZoom); } catch (e) {} applyZoom(); }
+  document.getElementById('zoomIn').addEventListener('click', () => setUserZoom(userZoom * 1.1));
+  document.getElementById('zoomOut').addEventListener('click', () => setUserZoom(userZoom / 1.1));
+  zoomVal.addEventListener('click', () => setUserZoom(1));
+  window.addEventListener('resize', applyZoom);
+  applyZoom();
+
+  let tx = null;
+  document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('deck').addEventListener('touchend', e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 70) show(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  document.querySelectorAll('ol.roadmap').forEach(ol => {
+    const cur = +ol.dataset.current;
+    ol.innerHTML = SECTIONS.slice(1).map((s, i) => `<li class="${i + 1 === cur ? 'cur' : (i + 1 < cur ? 'done' : '')}"><span class="n">${i + 1}</span>${s.name}</li>`).join('');
+  });
+
+  /* ---------- 프롬프트 복사 ---------- */
+  document.querySelectorAll('.prompt .copy').forEach(btn => btn.addEventListener('click', () => {
+    const pre = btn.parentElement, text = Array.from(pre.childNodes).filter(n => n !== btn).map(n => n.textContent).join('').trim();
+    const done = () => { btn.textContent = '복사됨'; setTimeout(() => btn.textContent = '복사', 1500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, done); else done();
+  }));
+
+  show(fromHash(), true);
+})();
+</script>
+</body>
+</html>
