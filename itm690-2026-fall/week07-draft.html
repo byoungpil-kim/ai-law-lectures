@@ -2823,7 +2823,7 @@ API(백엔드 함수), 데이터·파일 구조, 만들 순서. 내가 검토한
     <table class="tbl cmp sm">
       <thead><tr><th>애매한 점</th><th>극복 수단의 예</th></tr></thead>
       <tbody>
-        <tr><td>회사 내부 문서를 외부 AI 서비스에 넣어도 되는가</td><td>회사 AI 사용 정책 확인, 회사가 계약한 도구 사용, 학습에 쓰지 않는 조건(엔터프라이즈·API 약관) 확인, 공개 가능한 수준으로 편집한 문서로 개발</td></tr>
+        <tr><td>회사 내부 문서를 외부 AI 서비스에 넣어도 되는가</td><td>유사한 형태의 문서를 가상 데이터로 만들어서 사용</td></tr>
         <tr><td>고객·동료의 개인정보가 들어 있다</td><td>가명처리 또는 가상 데이터로 개발하고 실제 데이터는 승인 후에, 필요한 항목만 사용, 처리위탁 여부 검토</td></tr>
         <tr><td>웹앱을 공개 URL에 올려도 되는가</td><td>접근 통제 수준 선택(인증, 비밀번호 잠금), 공개 가능한 데이터만 탑재, 사내망·사내 계정 연동</td></tr>
         <tr><td>AI가 만든 결과를 그대로 외부에 보내도 되는가</td><td>사람 검토 단계를 절차에 넣기, 출처 인용 강제, AI 생성 사실의 고지(인공지능 기본법의 투명성 의무 검토)</td></tr>
@@ -2841,19 +2841,17 @@ API(백엔드 함수), 데이터·파일 구조, 만들 순서. 내가 검토한
   <div class="body">
     <div class="two eq" style="align-items:start">
       <div class="stack">
-        <p style="font-weight:800;margin:0">제출물 (발표 전날까지 KLMS)</p>
-        <ul class="bul compact">
-          <li>스킬: SKILL.md와 실행 결과물 1건</li>
-          <li>웹앱: Vercel URL 2개 (인증을 붙였다면 시연용 접근 방법)</li>
-          <li>검토 메모 1쪽: 사례별 “해도 되나” 판단과 근거</li>
-          <li>선택: GitHub 저장소 링크, PLAN·DECISIONS 문서</li>
-        </ul>
-        <div class="callout warn"><b>배포 전 점검</b>: ① 코드·GitHub에 API 키가 없는가 ② 데이터에 개인정보·영업비밀이 없는가 ③ 공개해도 되는 데이터인가 ④ 비용 한도를 걸었는가</div>
+        <p style="font-weight:800;margin:0">제출물 (발표 전까지 KLMS)</p>
+        <ol class="bul compact">
+          <li>스킬: SKILL.md 내용을 소개하고 실행 예시를 보여주는 HTML 페이지 (1페이지)</li>
+          <li>웹앱: Vercel URL 1개</li>
+        </ol>
+        <div class="callout warn"><b>배포 전 점검</b>: ① 데이터에 개인정보·영업비밀이 없는가 ② 공개해도 되는 데이터인가 ③ 비용 한도를 걸었는가</div>
       </div>
       <div class="stack">
         <p style="font-weight:800;margin:0">발표 구성 (5분)</p>
         <ol class="bul compact">
-          <li>내 업무와 고른 과업 (§8의 한 줄 정의)</li>
+          <li>내 업무와 고른 과업</li>
           <li>왜 이 형태(스킬/웹앱)를 골랐나</li>
           <li>시연: 입력 → 출력</li>
           <li>“해도 되나”: 애매한 점, 판단 근거, 극복 방법</li>
