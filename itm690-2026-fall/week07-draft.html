@@ -1944,7 +1944,7 @@ Authorization: Bearer sk-or-v1-•••(비밀키)
       <div class="step"><span class="no">↪</span><b class="ttl">간접 프롬프트 주입</b><p class="prob">Greshake 외, AISec 2023. 공격자가 LLM이 나중에 읽을 웹페이지·문서·이메일에 지시문을 숨겨 두면, 사용자가 아닌 제3자가 모델의 행동을 바꿀 수 있다. Bing Chat 등 실제 시스템에서 시연했다. RAG에서 검색된 문서는 “데이터”이지만 모델에게는 “지시”로도 읽힌다. 데이터와 명령의 경계가 구조적으로 없다</p></div>
       <div class="step"><span class="no">⟲</span><b class="ttl">임베딩 역추적</b><p class="prob">Morris 외, <i>Text Embeddings Reveal (Almost) As Much As Text</i>, EMNLP 2023. 임베딩만 보고 원문을 반복 수정하며 복원하는 방법으로 32토큰 입력의 <b>92%를 정확히 그대로</b> 복원했다. 임상 기록 임베딩에서 환자 성명 같은 개인정보도 복원할 수 있음을 보였다</p></div>
     </div>
-    <div class="callout bad"><b>법적 질문 (6강과 연결)</b>: 개인정보가 담긴 문서를 임베딩한 벡터 DB는 개인정보인가? 원문만 지우고 벡터를 남기면 파기한 것인가? 위 연구에 비추면 임베딩도 원문을 상당 부분 복원할 수 있는 정보다. 벡터 DB에도 접근 통제, 안전조치, 파기 의무를 같이 적용하는 것이 안전한 해석이다개인정보를 외부 임베딩 API로 보내는 것 자체도 처리위탁·국외 이전 검토 대상이다.</div>
+    <div class="callout bad"><b>법적 질문 (6강과 연결)</b>: 개인정보가 담긴 문서를 임베딩한 벡터 DB는 개인정보인가? 원문만 지우고 벡터를 남기면 파기한 것인가? 위 연구에 비추면 임베딩도 원문을 상당 부분 복원할 수 있는 정보다. 벡터 DB에도 접근 통제, 안전조치, 파기 의무를 같이 적용하는 것이 안전한 해석이다.</div>
   </div>
 </section>
 
