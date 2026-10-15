@@ -1190,17 +1190,9 @@ Press Enter to open https://github.com/login/device in your browser...
     <div class="two eq" style="align-items:start">
       <div class="stack">
         <div class="callout"><b>계획서 v1 (요약)</b>: 작은 웹서버 + 검색 화면. 데이터 통합 → 검색 엔진(화면 없이 먼저 검증) → 웹 화면 → 실행 방법. 질문 3가지: (a) 본문 임베딩만 쓸까, 요약 임베딩과 조합할까 (b) 법원·연도 필터를 넣을까 (c) 질의 임베딩 모델을 지정해 줄 수 있나</div>
-        <pre class="prompt sm"><button class="copy" type="button">복사</button>계획 좋아. 질문에 답할게.
-(a) 본문 임베딩과 요약 임베딩 둘 다 비교해서 높은 쪽으로 순위를 정해줘
-(b) 필터는 빼고 검색창만 있는 단순 버전으로 하자
-(c) 임베딩 모델은 347건을 만들 때 쓴 qwen/qwen3-embedding-8b를
-    그대로 써야 해. 왜 같은 모델이어야 하는지도 계획서에 한 줄 적어줘
-추가 요구 두 가지:
-- 키는 openrouterkey.txt 파일에서만 읽고, 화면·로그·코드
-  어디에도 키 값을 출력하거나 복사해 넣지 마
-- 서버에 문제가 생기면 비개발자인 내가 읽을 수 있는
-  한국어 안내를 보여줘
-이 내용 반영해서 계획서 v2로 확정해줘.</pre>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>(a) 본문 요약 임베딩 조합
+(b) 검색창만 있는 단순 버전
+(c) qwen/qwen3-embedding-8b</pre>
       </div>
       <div class="stack">
         <p style="font-weight:800;margin:0">확정된 계획서(PLAN.md)의 구성</p>
