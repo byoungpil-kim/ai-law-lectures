@@ -2385,7 +2385,7 @@ OPENROUTER_API_KEY=sk-or-v1-...</pre>
     <table class="tbl cmp sm">
       <thead><tr><th>방식</th><th>원리</th><th>장점</th><th>단점·주의</th><th>구현 난이도</th></tr></thead>
       <tbody>
-        <tr><th>공용 비밀번호 + 해시</th><td>비밀번호 하나를 아는 사람은 통과</td><td>가장 간단. 외부 서비스 불필요</td><td>사람을 구분하지 못함. 공유되면 통제 불가</td><td class="c">하</td></tr>
+        <tr><th>공용 비밀번호 + 해시 (오늘)</th><td>비밀번호 하나를 아는 사람은 통과</td><td>가장 간단. 외부 서비스 불필요</td><td>사람을 구분하지 못함. 공유되면 통제 불가</td><td class="c">하</td></tr>
         <tr><th>이메일 인증코드 (오늘)</th><td>명단의 이메일로 6자리 코드를 보내고 확인</td><td>비밀번호를 저장하지 않음. 사람별 식별, 명단으로 관리</td><td>메일 발송 수단 필요, 메일 계정 보안에 의존</td><td class="c">중하</td></tr>
         <tr><th>매직 링크</th><td>코드 대신 일회용 로그인 링크를 메일로 보냄</td><td>입력할 것이 없음</td><td>메일 앱과 브라우저가 다르면 불편, 링크 전달 위험</td><td class="c">중하</td></tr>
         <tr><th>소셜 로그인 (OAuth 2.0 / OpenID Connect)</th><td>구글·카카오 등이 본인 확인을 하고 결과(신원 정보)를 내 서비스에 전달</td><td>비밀번호 관리를 대형 사업자에 맡김. 가입이 쉬움</td><td>제공자 앱 등록, 받는 개인정보 범위 결정 필요</td><td class="c">중</td></tr>
