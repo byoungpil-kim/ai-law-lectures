@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI 도입 방법론 가이드 (7강 보충 자료) · 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 7강 실습: 임베딩 검색엔진, RAG 챗봇과 그 한계, Vercel 배포, 인증과 권한, Supabase 로깅, 업무 자동화 대상 선정과 과제" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6fa6" />
+<style>
+/* 2026 에이전틱 AI 부트캠프(aibootcamp2026) 디자인 토큰을 따른다 */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --ink-soft:#3a3f3b; --muted:#626a64; --line:#d5ddd3; --line-soft:#e9ede6;
+  --brand:#2e9bdb; --brand-dark:#1b6fa6; --brand-deep:#124d78; --sky-light:#e3f1fb;
+  --green:#2f765b; --green-light:#e6f2ec; --amber:#b8792e; --amber-light:#fbf1de; --red:#b0483f; --red-light:#fbe9e7; --navy:#132436;
+  --shadow:0 16px 45px rgba(54,42,31,.12); --shadow-sm:0 2px 10px rgba(21,29,23,.05);
+  --radius:14px; --sidebar-width:264px; --topbar-h:64px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-dark);}
+img,video,svg{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;} }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 clamp(16px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topbar-left{display:flex;align-items:center;gap:18px;min-width:0;}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:0 0 auto;}
+.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:9px;color:#fff;background:var(--brand);font-size:15px;font-weight:800;}
+.brand-text{display:block;line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;}
+.brand-text small{display:block;margin-top:1px;color:var(--muted);font-size:11.5px;font-weight:600;}
+.week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
+.week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.zoom-ctl{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;}
+.zoom-ctl button{border:0;background:transparent;padding:6px 10px;font-size:13px;font-weight:800;color:var(--brand-dark);cursor:pointer;line-height:1;}
+.zoom-ctl button:hover{background:var(--sky-light);}
+.zoom-ctl .zv{min-width:44px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);border-right:1px solid var(--line);padding:6px 4px;cursor:pointer;}
+.progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
+.progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
+.progress-label b{color:var(--ink);}
+.progress-track{overflow:hidden;height:7px;border-radius:999px;background:#e1e8df;}
+.progress-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-dark),var(--brand));transition:width 220ms ease;}
+
+/* ---------- layout ---------- */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{
+  position:sticky;top:var(--topbar-h);width:var(--sidebar-width);flex:0 0 auto;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:22px 14px 28px;
+  border-right:1px solid var(--line);background:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sidebar-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 8px;}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.toc-link{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:9px;border:0;background:transparent;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.toc-link .no{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;color:var(--muted);font-size:11px;font-weight:900;flex:0 0 auto;}
+.toc-link .nm{flex:1 1 auto;min-width:0;}
+.toc-link .cnt{font-size:11px;font-weight:600;color:var(--muted);opacity:.8;}
+.toc-link:hover{background:var(--sky-light);color:var(--brand-dark);}
+.toc-link.active{background:var(--brand);color:#fff;}
+.toc-link.active .no{background:rgba(255,255,255,.22);color:#fff;}
+.toc-link.active .cnt{color:#fff;opacity:.85;}
+.toc-link.done .no{background:var(--green-light);color:var(--green);}
+.sub{list-style:none;margin:2px 0 6px 22px;padding:0 0 0 12px;display:none;border-left:2px solid var(--line-soft);}
+.toc li.open .sub{display:block;}
+.sub button{
+  display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 10px;border-radius:6px;
+  color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sub button:hover{background:var(--sky-light);color:var(--brand-dark);}
+.sub button.active{color:var(--brand-dark);font-weight:800;}
+.side-hint{margin-top:auto;padding:14px 12px 0;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line-soft);}
+.side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
+
+.stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
+.deck{flex:1 1 auto;display:flex;flex-direction:column;}
+.slide{
+  display:none;position:relative;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
+}
+.slide.active{display:flex;flex:1 1 auto;animation:fadein .22s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
+.slide h2{margin:0 0 20px;font-size:clamp(22px,2.5vw,30px);line-height:1.3;letter-spacing:-.01em;font-weight:800;}
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0;}
+.slide.top .body{justify-content:flex-start;}
+.body p{margin:0;}
+
+/* ---------- pager ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.pbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brand-dark);font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;max-width:44%;
+}
+.pbtn span{overflow:hidden;text-overflow:ellipsis;}
+.pbtn svg{width:16px;height:16px;flex:0 0 auto;}
+.pbtn:hover{border-color:var(--brand);background:var(--sky-light);transform:translateY(-1px);}
+.pbtn.next{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.pbtn.next:hover{background:var(--brand);border-color:var(--brand);}
+.pbtn:disabled{opacity:.35;cursor:default;transform:none;}
+.pinfo{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;text-align:center;}
+.pinfo .sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-dark);}
+.pinfo .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:360px;}
+.pinfo .dots i{width:8px;height:8px;border-radius:999px;background:#d9e1d6;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.pinfo .dots i:hover{background:var(--brand);}
+.pinfo .dots i.on{background:var(--brand-dark);transform:scale(1.25);}
+.pinfo .cnt{font-size:12px;color:var(--muted);}
+
+/* ---------- cover / section slides ---------- */
+.slide.cover{
+  color:#eef3f7;border-color:transparent;
+  background:radial-gradient(1000px 460px at 85% -10%,rgba(46,155,219,.18),transparent 60%),linear-gradient(180deg,#101f30 0%,var(--navy) 55%,#17293b 100%);
+}
+.slide.cover .kicker{color:#7cc4ee;}
+.slide.cover .kicker .n{color:#9fb4c4;}
+.cover-body{display:flex;flex-direction:column;justify-content:center;gap:18px;flex:1;}
+.cover-kicker{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9d7ec;background:rgba(46,155,219,.15);border:1px solid rgba(46,155,219,.35);padding:7px 14px;border-radius:999px;}
+.cover h1{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.22;letter-spacing:-.02em;color:#fff;}
+.cover h1 em{color:#7cc4ee;font-style:normal;}
+.cover .lead{color:#c9d6e0;font-size:clamp(15px,1.4vw,18px);max-width:640px;}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#dbe7ef;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;}
+.cover .outline{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.cover .outline button{
+  display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:13.5px;
+}
+.cover .outline button:hover{background:rgba(255,255,255,.1);}
+.cover .outline .num{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(124,196,238,.16);color:#7cc4ee;font-size:12px;font-weight:900;display:grid;place-items:center;}
+.cover .outline small{display:block;font-weight:600;color:#a9bdcb;font-size:11.5px;}
+
+.slide.section .body{align-items:center;}
+.slide.section h2{text-align:center;}
+.section-lead{text-align:center;color:var(--muted);max-width:640px;margin:-8px auto 0;}
+
+/* 인공지능 ⊃ 머신러닝 ⊃ 인공신경망 ⊃ 딥 러닝 포함 관계 도식 */
+.nest{position:relative;width:min(100%,720px);aspect-ratio:16/10;margin:0 auto;}
+.nest .lv{position:absolute;border-radius:26px;transition:box-shadow .2s ease;}
+.nest .lv>span{position:absolute;top:16px;left:22px;font-weight:800;font-size:clamp(14px,1.7vw,19px);}
+.nest .l1{inset:0;background:#dbeefb;color:var(--brand-deep);}
+.nest .l2{left:26%;top:19%;right:4%;bottom:4%;background:#a9d5f1;color:var(--brand-deep);}
+.nest .l3{left:44%;top:37%;right:7%;bottom:8%;background:#3f9fd8;color:#fff;}
+.nest .l4{left:58%;top:54%;right:11%;bottom:14%;background:var(--brand-deep);color:#fff;display:grid;place-items:center;}
+.nest .l4>span{position:static;}
+.nest .lv.hi{box-shadow:0 0 0 4px var(--red),0 10px 30px rgba(176,72,63,.25);}
+
+/* ---------- content components ---------- */
+.bul{margin:0;padding-left:1.25em;font-size:clamp(15px,1.25vw,17px);line-height:1.72;}
+.bul>li{margin:0 0 9px;}
+.bul>li:last-child{margin-bottom:0;}
+.bul li::marker{color:var(--brand-dark);}
+.bul ul{list-style:none;margin:5px 0 0;padding-left:1.15em;}
+.bul ul li{position:relative;margin:0 0 4px;color:var(--ink-soft);}
+.bul ul li::before{content:"–";position:absolute;left:-1.1em;color:var(--muted);}
+.bul ul ul li::before{content:"·";}
+.bul ul ul li{font-size:.94em;}
+.bul b{font-weight:800;}
+.bul .arrow{color:var(--red);font-weight:800;}
+.bul .arrow::before{content:"➜ ";}
+.compact{font-size:clamp(14px,1.15vw,16px);}
+.compact>li{margin-bottom:5px;}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+.two.eq{grid-template-columns:1fr 1fr;}
+.two.wide-r{grid-template-columns:.85fr 1.15fr;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.figrow{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+figure{margin:0;text-align:center;min-width:0;}
+figure img,figure video{display:block;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);}
+figure.plain img{border:0;border-radius:0;}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
+.src{font-size:11.5px;color:var(--muted);word-break:break-all;margin-top:auto;padding-top:14px;line-height:1.6;}
+.src a{color:var(--brand-dark);text-decoration:none;}
+.src a:hover{text-decoration:underline;}
+.em{color:var(--red);font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.5;}
+.em.center{text-align:center;}
+.em .arrow::before{content:"➜ ";}
+.callout{border-left:4px solid var(--brand);background:var(--sky-light);padding:12px 16px;border-radius:8px;font-size:15px;}
+.callout.warn{border-color:var(--amber);background:var(--amber-light);}
+.callout.bad{border-color:var(--red);background:var(--red-light);}
+.callout.good{border-color:var(--green);background:var(--green-light);}
+.callout b{font-weight:800;}
+.quote{font-size:clamp(16px,1.45vw,19px);line-height:1.75;border-left:4px solid var(--brand);padding:8px 20px;margin:0;color:var(--ink);}
+.quote cite{display:block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;color:var(--ink-soft);}
+.center{text-align:center;}
+.muted{color:var(--muted);}
+
+.math{font-family:"Cambria","Times New Roman",Georgia,serif;font-size:1.06em;}
+.math i{font-style:italic;}
+.math .w{color:var(--red);font-weight:700;font-style:italic;}
+.fbox{display:inline-block;padding:10px 24px;border:2px solid var(--ink);border-radius:6px;background:#fff;font-family:"Cambria","Times New Roman",Georgia,serif;font-size:clamp(18px,1.9vw,25px);line-height:1.4;}
+.fbox.red{border-color:var(--red);}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 6px;}
+.frac>span{padding:0 6px;}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;}
+.sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;margin:0 4px;}
+.sum>span{font-size:.55em;}
+.sum>b{font-size:1.5em;font-weight:400;}
+
+.tbl{border-collapse:collapse;margin:0 auto;font-size:clamp(13px,1.15vw,15.5px);background:#fff;}
+.tbl th,.tbl td{border:1px solid #9aa39b;padding:8px 16px;text-align:center;line-height:1.35;}
+.tbl th{background:var(--sky-light);font-weight:800;}
+.tbl .hl{background:var(--amber-light);}
+.tbl .dim{color:var(--muted);}
+
+/* f( ) = 함수 표기 */
+.fn{
+  display:flex;align-items:center;justify-content:center;gap:clamp(6px,1.4vw,16px);flex-wrap:nowrap;
+  font-family:"Cambria","Times New Roman",Georgia,serif;padding:6px 0 62px;
+}
+.fn.nolbl{padding-bottom:6px;}
+.fn .f{font-style:italic;font-size:clamp(54px,7vw,92px);line-height:1;}
+.fn .par{font-size:clamp(62px,8.2vw,112px);line-height:1;font-weight:300;color:var(--ink);}
+.fn .eq{font-size:clamp(40px,5.2vw,70px);line-height:1;margin:0 4px;}
+.fn .part{position:relative;display:flex;flex-direction:column;align-items:center;}
+.fn .slot{min-width:clamp(80px,11vw,140px);min-height:56px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(16px,1.6vw,22px);font-weight:700;font-family:"Inter","Noto Sans KR",sans-serif;}
+.fn .slot.blank{border-bottom:3px solid var(--red);}
+.fn .slot img{max-height:clamp(90px,14vw,150px);width:auto;border-radius:6px;}
+.fn .slot.col{flex-direction:column;gap:4px;}
+.fn .slot.col img{max-height:56px;}
+.fn .lbl{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;
+  font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(13px,1.15vw,15.5px);font-weight:800;color:var(--red);
+  border-top:3px solid var(--red);padding-top:6px;text-align:center;line-height:1.35;white-space:nowrap;min-width:100%;
+}
+.fn.sm{padding-bottom:50px;}
+.fn.sm .f{font-size:clamp(40px,4.6vw,60px);}
+.fn.sm .par{font-size:clamp(46px,5.4vw,72px);}
+.fn.sm .eq{font-size:clamp(30px,3.4vw,44px);}
+.fn.sm .slot{min-height:44px;font-size:clamp(14px,1.3vw,17px);}
+.fn.sm .slot img{max-height:clamp(64px,9vw,96px);}
+.fn.sm .lbl{font-size:12.5px;}
+.fn.xs{padding-bottom:0;}
+.fn.xs .f{font-size:36px;} .fn.xs .par{font-size:40px;} .fn.xs .eq{font-size:26px;} .fn.xs .slot{min-height:36px;min-width:60px;font-size:14px;}
+.fn-list{display:flex;flex-direction:column;gap:18px;}
+.fn-list .fn{padding:0;justify-content:flex-start;}
+.fn-list .fn .out{font-family:"Inter","Noto Sans KR",sans-serif;font-size:clamp(20px,2.4vw,30px);font-weight:700;margin-left:10px;}
+.fn .cjk{font-family:"Noto Sans KR",sans-serif;font-size:clamp(30px,3.6vw,46px);font-weight:800;}
+
+/* 트리 도식 */
+.tree{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;}
+.tnode{padding:10px 20px;border:2px solid var(--ink);border-radius:8px;background:#fff;font-weight:800;font-size:clamp(13px,1.2vw,16px);text-align:center;position:relative;}
+.tnode.hi{border-color:var(--red);background:var(--red-light);color:var(--red);}
+.tnode.dots{border:0;background:transparent;font-size:1.6em;padding:4px 0;letter-spacing:.1em;}
+.tnode small{display:block;font-weight:600;color:var(--muted);font-size:.85em;}
+.tree .stem{width:2px;height:26px;background:var(--ink);}
+.tree .row{position:relative;display:grid;gap:12px;width:100%;padding-top:26px;}
+.tree .row::before{content:"";position:absolute;top:0;left:calc(100% / var(--n) / 2);right:calc(100% / var(--n) / 2);height:2px;background:var(--ink);}
+.tree .row>div{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.tree .row>div::before{content:"";position:absolute;top:-26px;width:2px;height:26px;background:var(--ink);}
+.tree .row .desc{font-size:clamp(13px,1.1vw,15px);color:var(--ink-soft);text-align:left;margin:0;padding-left:1.1em;line-height:1.55;}
+.tree .row .desc li{margin-bottom:3px;}
+.hl-note{display:flex;align-items:center;gap:12px;justify-content:center;font-size:13.5px;color:var(--muted);font-weight:600;}
+.hl-note img{height:44px;width:auto;border-radius:6px;}
+.hl-note .ar{color:var(--red);font-size:22px;font-weight:900;}
+
+/* 신경망·뉴런 SVG */
+.nn{width:100%;max-width:680px;height:auto;display:block;margin:0 auto;}
+.nn .in{fill:#fff;stroke:var(--brand-dark);stroke-width:2.2;}
+.nn .hid{fill:#fff;stroke:var(--amber);stroke-width:2.2;}
+.nn .out{fill:#fff;stroke:var(--green);stroke-width:2.2;}
+.nn .e{stroke:#22201d;stroke-width:1.1;opacity:.72;}
+.nn .nl{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:15px;fill:var(--ink);}
+.nn .ol{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:17px;fill:var(--ink);}
+.nn .dots{font-size:22px;font-weight:800;fill:var(--ink);}
+.nn .box{fill:none;stroke:var(--red);stroke-dasharray:7 5;stroke-width:2.2;}
+.nn-wrap{position:relative;}
+.nn-wrap .overlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border:1.5px solid var(--ink);padding:8px 22px;font-weight:800;font-size:clamp(14px,1.4vw,18px);border-radius:6px;white-space:nowrap;}
+.neuron{width:100%;max-width:640px;height:auto;display:block;margin:0 auto;}
+.neuron .nb{fill:#fff;stroke:var(--brand-dark);stroke-width:2.4;}
+.neuron .ln{stroke:var(--brand-dark);stroke-width:2;fill:none;}
+.neuron .lab{font-family:"Cambria","Times New Roman",serif;font-size:17px;font-weight:700;fill:var(--ink);}
+.neuron .w{fill:var(--red);}
+.neuron .z{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:19px;fill:var(--red);font-weight:700;}
+.neuron .act{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--red);}
+.io-flow{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;}
+.io-flow .io{text-align:center;font-weight:800;color:var(--red);font-size:clamp(14px,1.3vw,17px);line-height:1.4;}
+.io-flow .io img{width:clamp(96px,12vw,150px);height:auto;border-radius:8px;border:1px solid var(--line);display:block;margin:0 auto 8px;}
+.io-flow .io .ink{color:var(--ink);font-weight:700;font-size:.9em;}
+.io-flow .outs{list-style:none;margin:0 0 8px;padding:0;font-weight:700;color:var(--ink);font-size:clamp(14px,1.3vw,17px);text-align:left;line-height:1.9;}
+.io-flow .outs li.first{color:var(--green);font-weight:900;}
+
+/* 기타 */
+.media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;}
+.media-grid img,.media-grid video{width:100%;aspect-ratio:16/9;max-height:250px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;background:#000;}
+.media-grid figcaption{font-size:12.5px;}
+.poster-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.poster-grid img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;}
+.cross{position:relative;display:inline-block;}
+.cross::before,.cross::after{content:"";position:absolute;left:50%;top:50%;width:112%;height:8px;background:var(--red);border-radius:4px;transform:translate(-50%,-50%) rotate(45deg);opacity:.92;}
+.cross::after{transform:translate(-50%,-50%) rotate(-45deg);}
+.stackpile{position:relative;height:190px;width:200px;margin:0 auto;}
+.stackpile img{position:absolute;width:120px;height:auto;border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-sm);background:#fff;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
+.step .no{min-width:30px;height:30px;padding:0 8px;align-self:flex-start;white-space:nowrap;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
+.step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
+.step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
+.step .sol::before{content:"➜ ";}
+.cycle{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;}
+.cycle .node{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;min-height:150px;justify-content:center;}
+.cycle .node img{height:46px;width:auto;}
+.cycle .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.cycle .node p b{display:block;color:var(--red);font-weight:800;}
+.cycle .ar{font-size:30px;color:var(--brand-dark);font-weight:900;}
+.tri{position:relative;width:min(100%,780px);aspect-ratio:780/480;margin:0 auto;}
+.tri-arrows{position:absolute;inset:0;width:100%;height:100%;}
+.tri-arrows path{fill:none;stroke:var(--brand-dark);stroke-width:3;}
+.tri .node{position:absolute;width:32%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:center;}
+.tri .node img{height:44px;width:auto;}
+.tri .node p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.tri .node p b{display:block;color:var(--red);font-weight:800;}
+.tri .n1{left:1%;top:3%;}
+.tri .n2{right:1%;top:3%;}
+.tri .n3{left:34%;bottom:2%;}
+.cycle-back{text-align:center;color:var(--muted);font-size:13.5px;font-weight:700;margin-top:-6px;}
+.cycle-back::before{content:"↺ ";color:var(--brand-dark);font-size:18px;}
+.pyr{display:grid;grid-template-columns:150px 1fr 150px;gap:14px;align-items:center;max-width:820px;margin:0 auto;width:100%;}
+.pyr svg{width:100%;height:auto;display:block;}
+.pyr .side{text-align:center;font-weight:800;font-size:14px;line-height:1.5;}
+.pyr .side .ar{display:block;font-size:44px;line-height:1;color:var(--brand-dark);}
+.pyr .side.left .ar{color:var(--muted);}
+.chart-box{width:100%;max-width:760px;margin:0 auto;}
+.chart-box svg{width:100%;height:auto;display:block;}
+.chart-box .axis{stroke:#7b857d;stroke-width:1;}
+.chart-box .grid{stroke:#e1e8df;stroke-width:1;}
+.chart-box .tick{font-size:12px;fill:var(--muted);}
+.chart-box .lbl{font-size:12.5px;font-weight:700;fill:var(--ink);}
+.chart-box .pct{font-size:12px;font-weight:800;fill:var(--ink);}
+.chart-box .ln{fill:none;stroke:var(--brand-dark);stroke-width:2.4;}
+.chart-box .pt{fill:var(--brand-dark);}
+.chart-box .target{stroke:var(--red);stroke-width:2;stroke-dasharray:7 5;}
+.chart-box .ttl{font-size:13px;font-weight:800;fill:var(--muted);}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);}
+.logo-title{display:flex;align-items:center;gap:14px;}
+.logo-title img{height:34px;width:auto;}
+.cover-img{position:absolute;inset:0;border-radius:inherit;overflow:hidden;}
+.cover-img img{width:100%;height:100%;object-fit:cover;object-position:left center;filter:grayscale(1) brightness(.55);}
+.cover .over{position:relative;z-index:1;}
+
+@media (max-width:1100px){ .two,.two.eq,.two.wide-r{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;} }
+@media (max-width:900px){
+  .layout{display:block;}
+  .sidebar{position:sticky;top:var(--topbar-h);width:auto;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:10px 12px;background:rgba(243,246,242,.96);backdrop-filter:blur(8px);z-index:20;flex-direction:row;}
+  .sidebar-title,.sub,.side-hint{display:none!important;}
+  .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
+  .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
+  .toc-link .cnt{display:none;}
+  .stage{min-height:auto;}
+}
+@media (max-width:640px){
+  .topbar{gap:10px;}
+  .week-title{display:none;}
+  .zoom-ctl{display:none;}
+  .progress-wrap{width:110px;}
+  .pbtn{padding:10px 12px;font-size:13px;}
+  .pbtn span{display:none;}
+  .pbtn svg{width:18px;height:18px;}
+  .poster-grid{grid-template-columns:repeat(2,1fr);}
+  .tri{aspect-ratio:auto;display:flex;flex-direction:column;gap:10px;}
+  .tri-arrows{display:none;}
+  .tri .node{position:static;width:100%;}
+  .pyr{grid-template-columns:1fr;}
+  .io-flow{grid-template-columns:1fr;}
+  .slide{overflow-x:auto;}
+  .fn{flex-wrap:wrap;gap:4px;padding-bottom:70px;}
+  .fn .f{font-size:44px;} .fn .par{font-size:52px;} .fn .eq{font-size:34px;flex-basis:100%;text-align:center;margin:6px 0;}
+  .fn .slot{min-width:56px;min-height:40px;font-size:14px;}
+  .fn .slot img{max-height:84px;}
+  .fn .slot.col img{max-height:40px;}
+  .fn .lbl{white-space:normal;font-size:12px;min-width:0;width:max-content;max-width:150px;}
+  .fn .part{margin-bottom:8px;}
+  .fn.sm,.fn.xs{padding-bottom:60px;}
+  .fn.nolbl,.fn-list .fn{padding-bottom:0;}
+  .fn.nolbl .eq,.fn-list .fn .eq{flex-basis:auto;}
+  .tbl th,.tbl td{padding:6px 8px;font-size:12.5px;}
+  .nest{aspect-ratio:4/3;}
+  .nest .lv>span{font-size:13px;top:10px;left:12px;}
+}
+/* ---------- 2강 추가 컴포넌트 ---------- */
+.roadmap{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px;}
+.roadmap li{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:700;color:var(--muted);}
+.roadmap li .n{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;font-size:11px;font-weight:900;}
+.roadmap li.cur{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;transform:scale(1.06);box-shadow:0 8px 20px rgba(27,111,166,.25);}
+.roadmap li.cur .n{background:rgba(255,255,255,.22);color:#fff;}
+.roadmap li.done{background:var(--green-light);border-color:#cfe3d8;color:var(--green);}
+.roadmap li.done .n{background:#fff;color:var(--green);}
+.step .ttl{display:block;font-size:16px;font-weight:800;color:var(--ink);}
+.step .bul{padding-left:1.1em;}
+.tbl.mini{font-size:12px;margin:0;}
+.tbl.mini th{padding:3px 10px;font-size:11px;}
+.tbl.mini tr.dim td{padding:0 10px;line-height:1;}
+.tbl.mini td{padding:3px 10px;text-align:left;}
+.tbl.mini td:last-child{text-align:center;font-weight:700;}
+.toc-link:disabled{opacity:.5;cursor:default;}
+.toc-link:disabled:hover{background:transparent;color:var(--muted);}
+.cover .outline button:disabled{opacity:.45;cursor:default;}
+.cover .outline button:disabled:hover{background:rgba(255,255,255,.045);}
+
+/* ---------- 섹션 2: RNN 도식, seq2seq, 영상 카드 ---------- */
+.lat{width:100%;max-width:560px;height:auto;display:block;margin:0 auto;}
+.lat .pred{fill:#e3f1fb;stroke:#1b6fa6;stroke-width:1.8;} .lat .hid{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;stroke-dasharray:6 4;} .lat .obs{fill:#fbe9e7;stroke:#b0483f;stroke-width:1.8;}
+.lat .a{stroke:#22201d;stroke-width:1.8;} .lat .t{font-family:"Inter","Noto Sans KR",sans-serif;font-size:13px;font-weight:800;fill:var(--ink);} .lat .v{font-family:"Cambria","Times New Roman",serif;font-size:13px;fill:var(--ink-soft);} .lat .tm{font-family:"Inter",sans-serif;font-size:13px;font-weight:700;fill:var(--muted);}
+.rnn{width:100%;max-width:800px;height:auto;display:block;margin:0 auto;}
+.rnn .enc{fill:#fbf1de;stroke:#b8792e;stroke-width:1.8;}
+.rnn .dec{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;}
+.rnn .ctx{fill:#fff;stroke:#b0483f;stroke-width:2.2;}
+.rnn .ctxt{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:800;fill:var(--brand-dark);letter-spacing:.06em;}
+.rnn .ctxv{font-family:"Cambria","Times New Roman",serif;font-size:13px;fill:var(--ink);}
+.rnn .in{fill:#fbe9e7;stroke:#b0483f;stroke-width:1.8;}
+.rnn .hid{fill:#e6f2ec;stroke:#2f765b;stroke-width:1.8;}
+.rnn .out{fill:#e3f1fb;stroke:#1b6fa6;stroke-width:1.8;}
+.rnn .ar{stroke:#22201d;stroke-width:1.6;fill:none;}
+.rnn .fb{stroke:#b0483f;stroke-width:2;fill:none;}
+.rnn .w{font-family:"Inter","Noto Sans KR",sans-serif;font-size:14px;font-weight:700;fill:var(--ink);}
+.rnn .lab{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:13px;fill:var(--ink-soft);}
+.rnn .tag{font-family:"Inter","Noto Sans KR",sans-serif;font-size:11.5px;font-weight:700;fill:var(--muted);}
+.rnn .big{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;fill:var(--brand-dark);}
+.onehot{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
+.oh{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.oh b{font-family:"Cambria","Times New Roman",serif;font-size:15px;font-weight:700;}
+.oh .v{display:flex;flex-direction:column;align-items:center;padding:4px 10px;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:8px;font-family:"Cambria","Times New Roman",serif;font-size:15px;line-height:1.35;}
+.oh .v span{min-width:1em;text-align:center;}
+.oh.dots{align-self:center;font-size:22px;font-weight:800;color:var(--muted);}
+.oh-note{align-self:center;font-size:12.5px;color:var(--muted);line-height:1.5;max-width:150px;}
+.s2s{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;}
+.s2s-txt{font-family:"Cambria","Times New Roman",serif;font-style:italic;font-size:15px;font-weight:700;white-space:nowrap;}
+.s2s-ar{color:var(--brand-dark);font-size:20px;font-weight:900;}
+.s2s-box{display:flex;flex-direction:column;align-items:center;justify-content:center;width:74px;height:60px;border-radius:10px;color:#fff;font-weight:800;font-size:14px;line-height:1.2;}
+.s2s-box small{font-weight:600;font-size:10.5px;opacity:.85;}
+.s2s-box.enc{background:#d97706;} .s2s-box.dec{background:#2f765b;}
+.s2s-ctx{display:flex;flex-direction:column;align-items:stretch;border:2px solid var(--red);border-radius:8px;padding:3px 5px;background:#fff;font-size:11.5px;font-weight:700;text-align:center;min-width:56px;}
+.s2s-ctx b{font-size:10.5px;color:var(--brand-dark);letter-spacing:.04em;margin-bottom:2px;}
+.s2s-ctx span{background:var(--sky-light);margin:1px 0;padding:1px 4px;border-radius:3px;}
+.vid-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.vid{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;transition:transform .15s ease,box-shadow .15s ease;}
+.vid:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);border-color:var(--brand);}
+.vid img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;display:block;background:#000;}
+.vid span{font-size:12.5px;font-weight:700;line-height:1.4;}
+.vid span::before{content:"▶ ";color:var(--red);}
+
+/* ---------- 섹션 3 ---------- */
+.tbl.lm{font-size:clamp(15px,1.4vw,19px);}
+.tbl.lm td.s{text-align:left;font-family:"Cambria","Times New Roman",serif;padding:8px 22px;}
+.tbl.lm td.ok{color:var(--green);font-weight:900;} .tbl.lm td.no{color:var(--red);font-weight:900;}
+.tbl.lm td.why{font-size:.85em;font-weight:800;color:var(--brand-dark);background:var(--sky-light);}
+.guess{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;}
+.guess .g{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 26px;border-radius:12px;border:1px solid var(--line);background:var(--bg);min-width:160px;}
+.guess .g b{font-size:clamp(18px,1.8vw,24px);font-family:"Cambria","Times New Roman",serif;}
+.guess .g span{font-size:14px;font-weight:800;}
+.guess .up2{border-color:var(--green);background:var(--green-light);} .guess .up2 span{color:var(--green);}
+.guess .up{border-color:#cfe3d8;} .guess .up span{color:var(--green);}
+.guess .down{border-color:var(--red);background:var(--red-light);} .guess .down span{color:var(--red);}
+
+/* ---------- 섹션 5: 그림 위 강조 상자 ---------- */
+.hl-img{position:relative;display:block;margin:0 auto;width:100%;}
+.hl-img img{display:block;width:100%;height:auto;border-radius:8px;}
+.hl-img .hl-box{position:absolute;border:3px solid var(--red);border-radius:8px;box-shadow:0 0 0 2px rgba(255,255,255,.6);pointer-events:none;}
+
+/* ---------- 섹션 7: 정리 목록 ---------- */
+.recap{margin:0;padding:0;list-style:none;counter-reset:rc;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;}
+.recap li{counter-increment:rc;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:14.5px;line-height:1.55;}
+.recap li::before{content:counter(rc);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:7px;background:var(--brand-dark);color:#fff;font-weight:900;font-size:12px;display:grid;place-items:center;}
+.recap li b{display:block;color:var(--brand-dark);}
+@media (max-width:760px){.recap{grid-template-columns:1fr;}}
+
+/* ---------- 3강 컴포넌트 ---------- */
+.prompt{position:relative;margin:0;padding:14px 84px 14px 18px;border-radius:12px;background:var(--navy);color:#eef3f7;font-family:"Inter","Noto Sans KR",sans-serif;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-all;}
+.prompt::before{content:"💬 프롬프트";position:absolute;top:-10px;left:14px;font-size:11px;font-weight:800;background:var(--brand);color:#fff;padding:2px 9px;border-radius:999px;}
+.prompt .copy{position:absolute;top:10px;right:10px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:12px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;}
+.prompt .copy:hover{background:rgba(255,255,255,.18);}
+.prompt.sm{font-size:13px;padding:12px 78px 12px 14px;}
+.code{margin:0;padding:10px 14px;border-radius:10px;background:#f4f6f3;border:1px solid var(--line);font-family:ui-monospace,Consolas,Menlo,monospace;font-size:12.5px;line-height:1.45;white-space:pre-wrap;word-break:break-all;color:var(--ink);}
+.follow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px;}
+.follow b{color:var(--muted);font-weight:700;margin-right:4px;}
+.follow span{background:var(--sky-light);color:var(--brand-dark);border:1px solid #cfe6f6;border-radius:999px;padding:4px 10px;font-weight:700;}
+.follow span::before{content:"↩ ";}
+code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(--brand-dark);font-family:ui-monospace,Consolas,Menlo,monospace;font-size:.92em;}
+.harness{display:flex;justify-content:center;}
+.hbox{border:1.5px dashed var(--amber);background:var(--amber-light);border-radius:14px;padding:14px 18px 12px;width:100%;max-width:420px;}
+.hlabel{font-size:12px;font-weight:800;color:#8a5a1e;margin-bottom:10px;}
+.engine{border:1.5px solid var(--brand);background:var(--sky-light);border-radius:10px;padding:12px;text-align:center;font-weight:800;}
+.engine small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:3px;}
+.harr{text-align:center;font-size:12px;color:var(--muted);padding:8px 0;}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tools span{border:1.5px solid var(--green);background:var(--green-light);border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;}
+.ctxbar{display:flex;align-items:flex-end;justify-content:center;gap:28px;height:220px;padding:0 20px;}
+.ctxbar div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:90px;font-size:12.5px;color:var(--muted);}
+.ctxbar span{display:block;width:100%;background:linear-gradient(180deg,var(--brand),var(--brand-dark));border-radius:8px 8px 0 0;}
+.ctxbar b{margin-top:6px;color:var(--ink);}
+.loop{display:grid;grid-template-columns:repeat(9,auto);gap:8px;align-items:center;justify-content:center;}
+.lnode{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center;font-weight:800;font-size:14px;min-width:120px;}
+.lnode.user{background:var(--sky-light);border-color:#cfe6f6;}
+.lnode small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:3px;}
+.lar{color:var(--brand-dark);font-size:22px;font-weight:900;}
+.tbl.cmp{width:100%;font-size:14px;}
+.tbl.cmp th small{display:block;font-weight:600;color:var(--muted);font-size:11px;}
+.tbl.cmp td{text-align:left;}
+@media (max-width:900px){.loop{grid-template-columns:1fr;} .lar{transform:rotate(90deg);}}
+
+/* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
+@page{size:320mm 180mm;margin:0;}
+.step.link{text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;}
+.step.link:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--brand);}
+.step.link .ttl::after{content:" ↗";color:var(--brand);font-size:13px;}
+.step .pp{font-size:12.5px;color:var(--brand-dark);background:var(--sky-light);border-radius:8px;padding:6px 10px;margin-top:auto;line-height:1.5;}
+.step .bul{margin:0;}
+@media print{
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .topbar,.sidebar,.pager{display:none!important;}
+  .layout{display:block;}
+  .stage{zoom:1!important;min-height:0!important;padding:0!important;display:block;}
+  .deck{display:block;}
+  .slide{display:flex!important;flex-direction:column;zoom:.85;width:calc(320mm / .85);height:calc(180mm / .85);overflow:hidden;box-sizing:border-box;
+    margin:0;border:0;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;animation:none!important;
+    padding:14mm 18mm 12mm;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .two{grid-template-columns:1.1fr .9fr;} .two.eq{grid-template-columns:1fr 1fr;} .two.wide-r{grid-template-columns:.85fr 1.15fr;}
+  .steps{grid-template-columns:repeat(3,1fr);} .io-flow{grid-template-columns:auto 1fr auto;} .pyr{grid-template-columns:150px 1fr 150px;}
+  .poster-grid{grid-template-columns:repeat(4,1fr);} .fn{flex-wrap:nowrap;}
+  .slide.cover{border-radius:0;}
+  .cover-img{border-radius:0;}
+  video{background:#000;}
+  a{text-decoration:none;color:inherit;}
+}
+
+/* ---------- 7강 컴포넌트 ---------- */
+.dia{width:100%;max-width:760px;margin:0 auto;}
+.dia svg{width:100%;height:auto;display:block;}
+.dia.tall svg{max-height:540px;}
+.dia.mid svg{max-height:400px;}
+.dia-cap{font-size:12.5px;color:var(--muted);text-align:center;margin-top:6px;}
+.code .k{color:var(--brand-dark);font-weight:700;}
+.code .c{color:var(--muted);}
+.code .sys{color:#8a5a1e;}
+.code .doc{color:var(--brand-dark);}
+.code .q{color:var(--green);font-weight:700;}
+.mock{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;box-shadow:var(--shadow-sm);}
+.mock .mbar{display:flex;align-items:center;gap:6px;background:#eef2ee;border-bottom:1px solid var(--line);padding:6px 12px;font-size:11.5px;color:var(--muted);}
+.mock .mbar::before{content:"● ● ●";letter-spacing:2px;color:#c3cbc2;font-size:9px;margin-right:6px;}
+.mock .min{padding:12px 16px;font-size:13px;line-height:1.55;display:flex;flex-direction:column;gap:8px;}
+.mock .min h4{margin:0;font-size:15px;}
+.mock .qbox{border:1.5px solid var(--brand);border-radius:8px;padding:6px 10px;font-weight:700;}
+.mock .res{border-top:1px solid var(--line-soft);padding-top:8px;}
+.mock .res b{color:var(--brand-dark);}
+.mock .res .sc{float:right;font-size:11.5px;font-weight:800;color:var(--green);}
+.mock .res small{display:block;color:var(--muted);font-size:11.5px;}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);white-space:nowrap;}
+.pill.ok{background:var(--green-light);color:var(--green);}
+.pill.warn{background:var(--amber-light);color:#8a5a1e;}
+.pill.bad{background:var(--red-light);color:var(--red);}
+.mx{display:grid;grid-template-columns:34px 1fr 1fr;grid-template-rows:minmax(130px,auto) minmax(130px,auto) 30px;gap:10px;max-width:760px;margin:0 auto;width:100%;}
+.mx .ax{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--muted);}
+.mx .ax.y{writing-mode:vertical-rl;transform:rotate(180deg);grid-row:1 / span 2;}
+.mx .ax.x{grid-column:2 / span 2;}
+.mx .cell{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg);font-size:13.5px;line-height:1.5;}
+.mx .cell b{display:block;font-size:14.5px;margin-bottom:3px;}
+.mx .cell.go{background:var(--green-light);border-color:#bfe0c9;} .mx .cell.go b{color:var(--green);}
+.mx .cell.care{background:var(--amber-light);border-color:#efdcb8;} .mx .cell.care b{color:#8a5a1e;}
+.mx .cell.no{background:var(--red-light);border-color:#efc9c4;} .mx .cell.no b{color:var(--red);}
+.tbl.cmp td,.tbl.cmp th{font-size:13.5px;}
+.tbl.cmp.sm td,.tbl.cmp.sm th{font-size:12.5px;padding:6px 10px;}
+.tbl.cmp td.c{text-align:center;}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;margin:0;}
+.kv dt{font-weight:800;color:var(--brand-dark);}
+.kv dd{margin:0;color:var(--ink-soft);}
+.steps.s4{grid-template-columns:repeat(4,1fr);}
+.steps.s2{grid-template-columns:1fr 1fr;}
+.step .prob b{color:var(--ink);}
+@media (max-width:1100px){ .steps.s4,.steps.s2{grid-template-columns:1fr;} }
+@media print{ .steps.s4{grid-template-columns:repeat(4,1fr);} .steps.s2{grid-template-columns:1fr 1fr;} }
+.code.pre{white-space:pre;word-break:normal;overflow-x:auto;font-size:12px;}
+.tbl.cmp.sm tbody th{white-space:nowrap;}
+.code.kr{word-break:keep-all;}
+.tbl.nw td:first-child{white-space:nowrap;}
+@media print{ .loop{grid-template-columns:repeat(9,auto);} .lar{transform:none;} .mx{grid-template-columns:34px 1fr 1fr;} }
+/* 검색 데모 (부트캠프 3주차 ②) */
+.demo-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;}
+.demo-wrap h4{margin:0 0 6px;}
+.demo-results{max-height:250px;overflow-y:auto;}
+.search-box{display:flex;gap:8px;margin:10px 0;}
+.search-box input{flex:1;border:2px solid var(--line);border-radius:11px;padding:10px 14px;font-size:14.5px;font-family:inherit;outline:none;}
+.search-box input:focus{border-color:var(--brand);}
+.search-box button{border:none;background:var(--brand-dark);color:#fff;font-weight:800;font-size:14px;border-radius:11px;padding:0 22px;cursor:pointer;}
+.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin:6px 0 4px;}
+.q-chip{border:1px solid var(--line);background:#fafcf9;border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:700;color:var(--brand-dark);cursor:pointer;}
+.q-chip:hover{background:var(--sky-light);border-color:var(--brand);}
+.result-meta{font-size:12.5px;color:var(--muted);margin:8px 0 6px;}
+.result-card{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 14px;margin:7px 0;}
+.result-card .head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;margin-bottom:3px;}
+.result-card .rbody{font-size:13px;color:var(--muted);line-height:1.6;}
+.result-card mark{background:#ffe9a8;border-radius:3px;padding:0 2px;}
+.res-badge{font-size:11px;font-weight:900;border-radius:999px;padding:2px 9px;}
+.res-badge.win{color:var(--green);background:#edf4ef;}
+.res-badge.lose{color:var(--red);background:#faeeec;}
+.cl-badge{font-size:11px;font-weight:800;border-radius:999px;padding:2px 9px;color:#fff;}
+.score-pill{margin-left:auto;font-size:11.5px;font-weight:800;color:var(--brand-dark);background:var(--sky-light);border-radius:999px;padding:2px 10px;font-variant-numeric:tabular-nums;}
+.sim-select{width:100%;border:2px solid var(--line);border-radius:11px;padding:9px 12px;font-size:13.5px;font-family:inherit;background:#fff;}
+.rand-btn{border:1px solid var(--brand);color:var(--brand-dark);background:var(--sky-light);font-weight:800;font-size:13px;border-radius:9px;padding:7px 14px;cursor:pointer;margin-top:8px;}
+.empty-note{font-size:13px;color:var(--muted);padding:10px 0;}
+/* 화면 재현용 */
+.sum-card{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fafcf9;display:flex;flex-direction:column;gap:6px;}
+.stack-bar{display:flex;height:20px;border-radius:6px;overflow:hidden;font-size:11px;font-weight:800;color:#fff;}
+.stack-bar div{display:flex;align-items:center;justify-content:center;}
+.stack-legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;color:var(--muted);}
+.stack-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;}
+.hist{display:flex;align-items:flex-end;gap:8px;border-bottom:1px solid #e3ded7;}
+.hist .col{flex:1;text-align:center;}
+.hist .col .n{font-size:11px;font-weight:800;margin-bottom:2px;}
+.hist .col .bar{border-radius:4px 4px 0 0;background:#3b82d6;width:100%;}
+.hist .col .bar.z{background:#9a9a98;}
+.hist-labs{display:flex;gap:8px;}
+.hist-labs div{flex:1;text-align:center;font-size:10px;color:#8a857e;line-height:1.3;}
+.cite{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 4px;border-radius:5px;background:var(--sky-light);color:var(--brand-dark);font-size:11px;font-weight:800;}
+@media print{ .demo-results{max-height:180px!important;overflow:hidden;} }
+.recap.tight li{padding:8px 10px 8px 42px;} .recap.tight li::before{left:10px;top:9px;width:24px;height:24px;}
+.code mark.hl-line{background:#ffe9a8;color:var(--ink);border-radius:4px;padding:1px 4px;font-weight:700;} .code mark.hl-line b{color:var(--red);}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="brand" title="강의 일정으로">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
+    </a>
+    <div class="week-tag"><span class="week-num">보충</span><span class="week-title">AI 도입 방법론 가이드</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="zoom-ctl" role="group" aria-label="슬라이드 크기">
+      <button type="button" id="zoomOut" title="작게 (−)">A−</button>
+      <span class="zv" id="zoomVal" title="자동 크기로 되돌리기 (0)">100%</span>
+      <button type="button" id="zoomIn" title="크게 (+)">A+</button>
+    </div>
+    <div class="progress-wrap" aria-label="진행률">
+      <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">0</span></span>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="목차">
+    <div class="sidebar-title">목차</div>
+    <ol class="toc" id="toc"></ol>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · <kbd>+</kbd> <kbd>−</kbd> 크기 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="deck" id="deck">
+
+<!-- ===================== 0. 표지 ===================== -->
+<section class="slide cover" data-sec="0" data-title="표지">
+  <div class="cover-body">
+    <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 보충 자료</span>
+    <h1>나의 업무에 AI를 어떻게 도입할 것인가: <em>참조할 만한 방법론 가이드</em></h1>
+    <p class="lead">기업·연구기관·규제기관이 공개한 가이드를 도입 단계별로 정리한다. 무엇을 맡길지 고르는 방법, 위험을 분류하는 틀, 법적 쟁점, 신뢰성을 확인하는 방법, 그리고 단계별 도입 절차. 7강에서 분리한 보충 자료다.</p>
+    <div class="meta">
+      <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
+      <span class="meta-chip">7강 보충 자료 (2026. 10. 백업)</span>
+    </div>
+    <div class="outline" id="coverOutline"></div>
+  </div>
+</section>
+
+<!-- ===================== 9. AI 도입 방법론 가이드 ===================== -->
+<section class="slide section" data-sec="1" data-title="AI 도입 방법론 가이드">
+  <div class="kicker">Section 1</div>
+  <h2>나의 업무에 AI를 어떻게 도입할 것인가: 참조할 만한 방법론 가이드</h2>
+  <p class="section-lead">기업·연구기관·규제기관이 공개한 가이드를 도입 단계별로 정리한다. 무엇을 맡길지 고르는 방법, 위험을 분류하는 틀, 법적 쟁점, 신뢰성을 확인하는 방법, 그리고 단계별 도입 절차.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="1"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="두 개의 질문과 참조 가이드">
+  <div class="kicker">AI 도입 방법론 가이드</div>
+  <h2>두 개의 질문, 그리고 단계별 참조 가이드</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:stretch">
+      <div class="callout good"><b>질문 1. 무엇을 AI에 맡길 것인가</b><br>과업을 고르고, 가장 단순한 구조로 만들고, 결과가 맞는지 확인하는 문제. 생산성과 신뢰성의 문제다.</div>
+      <div class="callout bad"><b>질문 2. 그렇게 해도 되는가</b><br>데이터를 넣어도 되는지, 결과를 써도 되는지, 남에게 제공해도 되는지의 문제. 법과 규정, 계약의 문제다.</div>
+    </div>
+    <table class="tbl cmp sm">
+      <thead><tr><th>단계</th><th>참조 가이드</th><th>발행</th></tr></thead>
+      <tbody>
+        <tr><th>과업 고르기</th><td>Dell’Acqua et al., Navigating the Jagged Technological Frontier · OpenAI, Identifying and Scaling AI Use Cases · Eloundou et al., GPTs are GPTs</td><td>HBS·BCG 2023 · OpenAI 2025 · 2023</td></tr>
+        <tr><th>구조 정하기</th><td>Anthropic, Building Effective Agents · OpenAI, A Practical Guide to Building Agents</td><td>2024. 12. · 2025</td></tr>
+        <tr><th>위험 분류</th><td>NIST AI RMF 1.0 · NIST AI 600-1 생성형 AI 프로파일 · ISO/IEC 42001</td><td>2023. 1. · 2024. 7. · 2023. 12.</td></tr>
+        <tr><th>법적 쟁점</th><td>개인정보위 생성형 AI 개인정보 처리 안내서 · 인공지능 기본법 · 금융위 금융분야 AI 가이드라인 · ABA Formal Opinion 512 · 법원 상용 AI 활용 지침</td><td>2025. 8. · 2026. 1. 시행 · 2026. 6. 개정 · 2024. 7.</td></tr>
+        <tr><th>신뢰성 확인</th><td>Magesh et al., Hallucination-Free? (Stanford) · Anthropic, 평가(evals) 문서 · Demystifying Evals for AI Agents</td><td>2025 (JELS) · 2026. 1.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="근거: 들쭉날쭉한 경계">
+  <div class="kicker">AI 도입 방법론 가이드 · 과업 고르기</div>
+  <h2>근거: AI가 잘하는 과업의 경계는 들쭉날쭉하다 (Jagged Frontier)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>Dell’Acqua 외(HBS·BCG·MIT·Wharton, 2023): BCG 컨설턴트 758명을 GPT-4 사용 집단과 미사용 집단에 무작위 배정한 사전 등록 실험</li>
+    </ul>
+    <div class="two eq" style="align-items:stretch">
+      <div class="step"><span class="no">안</span><b class="ttl">AI 역량 범위 안의 과업 (18개 컨설팅 과업)</b>
+        <ul class="bul compact"><li>완료 과업 수 <b>12.2%</b> 증가</li><li>소요 시간 <b>25.1%</b> 단축</li><li>품질 <b>40% 이상</b> 향상</li><li>하위 성과자 43%, 상위 성과자 17% 향상: 능력 격차가 줄었다</li></ul></div>
+      <div class="step"><span class="no">밖</span><b class="ttl">AI 역량 범위 밖의 과업</b>
+        <ul class="bul compact"><li>AI 사용 집단이 정답에 이를 가능성이 <b>19%p 낮았다</b></li><li>AI가 그럴듯한 오답을 내놓았고, 사람이 그것을 받아들였다</li><li>어려운 과업이라서가 아니라 AI가 못하는 종류의 과업이라서 생긴 결과다</li></ul></div>
+    </div>
+    <div class="callout"><b>시사점</b>: AI가 잘하는 과업과 못하는 과업의 경계는 사람이 느끼는 난이도와 일치하지 않는다. 그래서 과업을 고를 때 <b>작은 시험으로 경계를 직접 확인</b>해야 한다. 연구는 두 가지 활용 방식을 관찰했다. <b>Centaur</b>: 사람과 AI의 일을 나누어 AI에 맞는 하위 과업만 넘긴다. <b>Cyborg</b>: 과업 전반에서 AI와 계속 주고받으며 결과를 다듬는다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="과업 고르기: 기회의 세 영역">
+  <div class="kicker">AI 도입 방법론 가이드 · 과업 고르기</div>
+  <h2>과업 고르기: 기회의 세 영역과 영향 × 노력 매트릭스</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">OpenAI, Identifying and Scaling AI Use Cases (2025)</p>
+        <ul class="bul compact">
+          <li><b>기회의 세 영역</b>: ① 반복적이고 가치가 낮은 일(회의록 요약, 같은 질문에 반복 답변) ② 역량 병목(다른 부서나 전문가를 기다려야 하는 일) ③ 모호한 일(어디서 시작할지 모르는 과제의 초안·구조화)</li>
+          <li><b>6가지 활용 유형</b>: 콘텐츠 작성, 리서치, 코딩, 데이터 분석, 아이디어·전략, 자동화</li>
+          <li><b>영향 × 노력</b>: 고영향·저노력은 먼저 착수(Quick wins), 저노력 과업은 개인이 스스로 만드는 도구(Self-service)로 시작해 팀으로 확산, 고영향·고노력은 계획과 자원이 필요한 전략 과제</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">Eloundou 외, GPTs are GPTs (2023)</p>
+        <ul class="bul compact">
+          <li>직업을 O*NET의 과업 단위로 나누고, 과업마다 “LLM을 쓰면 품질을 유지하면서 소요 시간이 50% 이상 줄어드는가”로 노출도를 평가</li>
+          <li>미국 노동자의 약 80%가 과업의 10% 이상, 약 19%가 과업의 50% 이상 노출. 저자들은 이것이 예측이 아닌 노출 추정이라고 밝힌다</li>
+        </ul>
+        <div class="callout good"><b>7강 §8과 연결</b>: 내 과업표에 “50% 이상 시간 절감이 가능한가” 칸을 추가한다. 과제의 스킬·웹앱은 대부분 Self-service나 Quick win 칸에서 고르면 학기 안에 완성할 수 있다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="구조 정하기: 가장 단순한 해법부터">
+  <div class="kicker">AI 도입 방법론 가이드 · 구조 정하기</div>
+  <h2>구조 정하기: 가장 단순한 해법부터, 사람의 개입 지점은 미리</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">Anthropic, Building Effective Agents (2024. 12.)</p>
+        <ul class="bul compact">
+          <li><b>워크플로</b>: LLM과 도구를 미리 정한 순서로 엮은 시스템. <b>에이전트</b>: LLM이 절차와 도구 사용을 스스로 정하는 시스템</li>
+          <li>원칙: “가능한 가장 단순한 해법을 찾고, 필요할 때만 복잡성을 높여라.” 에이전트는 비용과 지연이 크고 오류가 누적될 수 있다</li>
+          <li>잘 정의된 업무는 예측 가능하고 일관된 워크플로가 맞다. 오늘의 RAG 챗봇도 “검색 → 생성”의 고정된 워크플로다</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">OpenAI, A Practical Guide to Building Agents (2025)</p>
+        <ul class="bul compact">
+          <li>에이전트는 규칙 기반 자동화로 잘 되지 않던 일(복잡한 판단, 유지하기 어려운 규칙, 비정형 문서)에 쓴다</li>
+          <li><b>가드레일</b>: 범위 밖 질문 차단, 개인정보 필터, 도구별 위험 등급(읽기 전용인가, 되돌릴 수 있는가, 금전 영향이 있는가), 출력 검증</li>
+          <li><b>사람에게 넘기는 두 경우</b>: 실패가 일정 횟수를 넘을 때, 그리고 되돌릴 수 없거나 금액이 큰 행동(취소, 환불, 결제) 직전</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">McKinsey의 에이전트 구축 경험 정리(2025)도 같은 결론이다: 가치는 AI 도구 자체가 아니라 <b>업무 흐름의 재설계</b>에서 나온다. 출발점은 현재 업무 절차를 그리고 불편한 지점을 찾는 것이다. 모든 과업에 에이전트가 필요하지는 않다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="위험관리 프레임워크: NIST · ISO">
+  <div class="kicker">AI 도입 방법론 가이드 · 위험 분류</div>
+  <h2>위험관리 프레임워크: NIST AI RMF와 생성형 AI 프로파일</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">NIST AI RMF 1.0 (2023. 1.): 4개 기능</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><th>GOVERN</th><td>책임 체계와 정책. 나머지 세 기능 전체에 적용</td></tr>
+            <tr><th>MAP</th><td>사용 맥락을 파악하고 위험을 식별</td></tr>
+            <tr><th>MEASURE</th><td>위험을 측정·평가</td></tr>
+            <tr><th>MANAGE</th><td>우선순위에 따라 대응하고 모니터링</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">신뢰할 수 있는 AI의 7개 특성: 타당성·신뢰성(나머지의 기반), 안전, 보안·회복력, 책임성·투명성, 설명가능성, 프라이버시 강화, 공정성. 특성 사이의 상충을 명시적으로 관리하라고 권고한다.</p>
+        <p class="muted" style="font-size:13px"><b>ISO/IEC 42001 (2023. 12.)</b>: 조직의 AI 경영시스템 요구사항을 정한 인증 가능한 국제표준. ISO 27001과 같은 구조라 기존 정보보호 인증과 결합할 수 있다.</p>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">NIST AI 600-1 (2024. 7.): 생성형 AI의 12개 위험</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><td>CBRN 정보</td><td><b>사실과 다른 생성 (Confabulation)</b></td></tr>
+            <tr><td>위험·폭력·혐오 콘텐츠</td><td><b>데이터 프라이버시</b></td></tr>
+            <tr><td>환경 영향</td><td>유해한 편향과 획일화</td></tr>
+            <tr><td><b>사람과 AI의 구성 (과의존, 자동화 편향)</b></td><td>정보 무결성</td></tr>
+            <tr><td><b>정보 보안</b></td><td><b>지식재산</b></td></tr>
+            <tr><td>음란·모욕적 콘텐츠</td><td><b>가치사슬과 구성요소 통합 (제3자 모델·데이터)</b></td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">굵게 표시한 6개가 업무 자동화 과제에 직접 관련된다. 다음 장의 점검표는 이 6개를 실무 질문으로 바꾼 것이다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="“이것 해도 되나” 점검표">
+  <div class="kicker">AI 도입 방법론 가이드 · 위험 분류</div>
+  <h2>“이것을 해도 되는가” 점검표: 7개 질문</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>질문</th><th>관련 쟁점</th><th>예이면</th></tr></thead>
+      <tbody>
+        <tr><td>① 입력 데이터에 개인정보·고객정보가 있는가</td><td>개인정보 보호법, 처리위탁·국외 이전</td><td><span class="pill warn">조건부</span> 가명처리, 승인된 도구, 위탁 검토</td></tr>
+        <tr><td>② 영업비밀·비공개 정보가 있는가</td><td>영업비밀의 비밀관리성, 비밀유지 계약, 직무상 비밀</td><td><span class="pill warn">조건부</span> 기업 계약 계정, 사내 도구</td></tr>
+        <tr><td>③ 어떤 약관이 적용되는 계정인가 (개인용 / 기업·API)</td><td>입력 데이터의 학습 이용과 보존 기간</td><td>개인용이면 업무 자료 입력 전 학습 설정·회사 정책 확인</td></tr>
+        <tr><td>④ 결과물이 외부인에게 제공되는가</td><td>인공지능 기본법 투명성 의무, 소비자 보호</td><td><span class="pill warn">조건부</span> AI 생성 고지, 사람 검토</td></tr>
+        <tr><td>⑤ 사람의 권리·의무에 영향을 주는 판단인가 (채용, 대출, 평가)</td><td>고영향 AI, 자동화된 결정 거부권(개인정보 보호법 제37조의2)</td><td><span class="pill bad">재설계</span> AI는 보조, 최종 판단은 사람</td></tr>
+        <tr><td>⑥ 소속 기관·직역의 지침이 있는가</td><td>법원·금융·공공 가이드라인, 직업윤리</td><td>지침이 우선. 지침이 금지하면 하지 않는다</td></tr>
+        <tr><td>⑦ 틀렸을 때 누가 피해를 입고, 되돌릴 수 있는가</td><td>신뢰성, 책임 소재</td><td>되돌릴 수 없으면 사람 승인 단계 필수</td></tr>
+      </tbody>
+    </table>
+    <p class="em center">모두 “아니오”면 <span class="pill ok">진행</span>, “예”가 있으면 조건을 갖추어 <span class="pill warn">조건부 진행</span>, 지침이 금지하거나 조건을 갖출 수 없으면 <span class="pill bad">재설계</span></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="법적 쟁점 ① 비밀유지와 약관">
+  <div class="kicker">AI 도입 방법론 가이드 · 법적 쟁점</div>
+  <h2>법적 쟁점 ① 영업비밀·비밀유지, 그리고 AI 제공자의 약관</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <div class="callout bad"><b>삼성전자 사례 (2023)</b>: 반도체 부문에서 ChatGPT 사용을 허용한 뒤 설비 관련 소스코드 오류 수정 요청, 수율 관련 코드 최적화 요청, 회의 녹취의 회의록 변환 요청 등 3건의 입력이 확인되었다. 회사는 사내 PC에서 생성형 AI 사용을 일시 금지하고 자체 도구 개발에 착수했다. 입력된 정보가 실제로 노출되었는지와 별개로, <b>외부 서비스 입력 자체가 영업비밀의 비밀관리성을 약화시킬 수 있다</b>는 점이 쟁점이다.</div>
+        <ul class="bul compact">
+          <li><b>법원 상용 AI 활용 지침</b>: 소송기록, 개인정보가 담긴 판결문·소송자료를 외부 상용 AI에 올리지 않는다. 재판 녹음파일의 텍스트 변환을 위한 업로드도 금지 사례로 든다</li>
+          <li><b>국정원 AI 보안 가이드북 (2025. 12.)</b>: 공공기관용. 15개 위협, 30개 보안 대책, 57개 점검 항목, 주요 AI 도구별 보안 설정</li>
+          <li><b>변호사</b>: 비밀유지의무에 더해, 의뢰인 비밀유지권(변호사법 제26조의2, 2027. 2. 시행 예정)이 도입된다. AI 도구에 자문 자료를 넣을 때 이 보호가 유지되는지가 새 쟁점이다</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">같은 회사 제품이라도 약관이 다르다</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><th>개인용 (예: Claude Free·Pro·Max)</th><td>2025. 8. 약관 변경으로 대화의 모델 학습 이용 여부를 이용자가 선택. 허용 시 보존 5년, 비허용 시 30일</td></tr>
+            <tr><th>기업·API (Team, Enterprise, API 등)</th><td>상업 약관 적용. 위 학습 이용 조항의 적용 대상이 아니다</td></tr>
+          </tbody>
+        </table>
+        <div class="callout good"><b>극복 방법</b>: 회사가 계약한 기업용 계정이나 API 사용, 학습 이용 해제 확인, 비밀 정보를 지운 사본으로 개발, 사내 설치형 도구. 그리고 회사의 AI 사용 정책을 먼저 확인한다. 정책이 없다면 그것을 만드는 것이 첫 과업일 수 있다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="법적 쟁점 ② 개인정보">
+  <div class="kicker">AI 도입 방법론 가이드 · 법적 쟁점</div>
+  <h2>법적 쟁점 ② 개인정보: 개인정보위 생성형 AI 안내서 (2025. 8.)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>「생성형 인공지능(AI) 개발·활용을 위한 개인정보 처리 안내서」: 상용 LLM을 API로 활용하거나 오픈소스 모델을 조정해 서비스를 만드는 사업자를 대상으로, 생애주기 4단계마다 쟁점과 안전조치를 제시한다</li>
+    </ul>
+    <div class="steps s4">
+      <div class="step"><span class="no">1</span><b class="ttl">목적 설정</b><p class="prob">무엇을 위해 어떤 개인정보를 처리하는지 정하고, 처리 근거(동의, 계약, 정당한 이익 등)를 확인한다</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">전략 수립</b><p class="prob">서비스형 LLM, 오픈소스 조정, 자체 개발 중 방식 선택. 서비스형이면 입력의 외부 전송과 학습 재이용 위험을 계약(기업 라이선스, 데이터 처리 계약)으로 통제</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">학습·개발</b><p class="prob">학습·참조 데이터의 출처와 적법성, 가명처리, 개인정보 노출을 막는 필터</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">적용·관리</b><p class="prob">이용자 고지와 처리방침, 정보주체 권리 보장, 출력 모니터링, 안전조치</p></div>
+    </div>
+    <div class="two eq" style="align-items:start">
+      <div class="callout">전 단계에 개인정보 보호책임자 중심의 거버넌스와 <b>개인정보 안심설계(Privacy by Design)</b>를 적용하고, 대규모·민감정보 처리면 개인정보 영향평가를 권장한다.</div>
+      <div class="callout warn"><b>오늘의 실습에 대입하면</b>: OpenRouter 뒤의 여러 모델 제공자(7강 §3), Vercel, Supabase가 처리위탁 또는 국외 이전에 해당하는지 판단하고, 처리방침에 적고, 질문 로그의 보관 기간을 정한다(7강 §7). 6강의 제17조·제26조·제28조의8이 그대로 적용된다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="법적 쟁점 ③ 저작권과 직역 규제">
+  <div class="kicker">AI 도입 방법론 가이드 · 법적 쟁점</div>
+  <h2>법적 쟁점 ③ 저작권, 그리고 직역·업권별 규율</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">저작권: 입력과 출력 양쪽</p>
+        <ul class="bul compact">
+          <li><b>입력</b>: 유료 DB, 보고서, 남의 웹페이지를 RAG 자료로 쓰면 이용 약관과 저작권(복제·전송)을 검토한다. 3강의 크롤링 기준(내부 분석, 소량, 페이월 금지)이 출발점이다</li>
+          <li><b>출력</b>: 문체부·한국저작권위원회 「생성형 AI 저작권 안내서」(2023. 12.): 사람의 창작적 기여가 없는 AI 산출물은 저작물이 아니며 등록할 수 없다. 사람이 선택·배열·수정한 부분은 보호될 수 있다. 회사 결과물로 쓸 거라면 사람의 기여와 작업 기록을 남긴다</li>
+        </ul>
+        <p style="font-weight:800;margin:6px 0 0">금융위 금융분야 AI 가이드라인 (2026. 6. 개정)</p>
+        <ul class="bul compact">
+          <li>7대 원칙: 거버넌스, 합법성, <b>보조수단성</b>(AI는 보조 수단, 최종 결정과 책임은 임직원), 신뢰성, 금융안정성, <b>신의성실</b>(AI 활용 사실 고지, 오류 시 신속 처리), 보안성</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <p style="font-weight:800;margin:0">법률 직역: ABA Formal Opinion 512 (2024. 7.)</p>
+        <table class="tbl cmp sm">
+          <tbody>
+            <tr><th>역량</th><td>도구의 기능과 한계를 이해. 독립적 검토 없이 결과에 의존하지 않는다. 검토 수준은 과업과 도구에 따라 다르다</td></tr>
+            <tr><th>비밀유지</th><td>의뢰인 정보가 학습·노출될 수 있는 도구에 넣으려면 사전 동의. 수임계약서의 일반 조항만으로는 부족</td></tr>
+            <tr><th>소통</th><td>상황에 따라 AI 사용 사실을 의뢰인에게 알린다</td></tr>
+            <tr><th>법원에 대한 의무</th><td>AI가 만든 인용과 주장은 제출 전에 확인</td></tr>
+            <tr><th>감독</th><td>사용 정책과 교육, 외부 도구의 보안 점검</td></tr>
+            <tr><th>보수</th><td>AI로 줄어든 시간을 실제보다 길게 청구하지 않는다</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">국내 변호사단체 차원의 생성형 AI 지침은 아직 확인되지 않는다(서울지방변호사회 초안 단계). 비변호사가 만드는 법률 서비스는 변호사법 제109조와의 경계를 따로 검토한다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="법적 쟁점 ④ 인공지능 기본법">
+  <div class="kicker">AI 도입 방법론 가이드 · 법적 쟁점</div>
+  <h2>법적 쟁점 ④ 인공지능 기본법: 나는 “이용자”인가 “이용사업자”인가</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <ul class="bul compact">
+          <li>「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」: 2025. 1. 21. 공포, <b>2026. 1. 22. 시행</b>. 2026. 1. 일부개정</li>
+          <li>의무 주체는 <b>인공지능사업자</b>(개발사업자 + AI를 이용해 제품·서비스를 제공하는 이용사업자). AI를 업무 도구로 쓰기만 하는 사람은 “이용자”로 보는 해석이 일반적이다</li>
+          <li>그러나 내가 만든 웹앱을 <b>고객이나 외부인에게 제공</b>하면 이용사업자가 될 수 있다. 과제의 웹앱이 여기에 걸린다</li>
+          <li><b>투명성 의무(제31조)</b>: 생성형·고영향 AI 기반 서비스임을 이용자에게 사전 고지, 생성형 AI 결과물임을 표시, 실제와 구분하기 어려운 결과물(딥페이크)은 명확히 고지·표시</li>
+          <li><b>고영향 AI</b>: 채용·대출 심사 같은 권리·의무 관련 판단, 보건의료, 에너지 등 생명·신체·기본권에 중대한 영향을 줄 수 있는 영역. 위험관리, 설명, 이용자 보호, 사람의 관리·감독, 문서 보관 의무</li>
+          <li>과태료 최대 3천만 원. 정부는 시행 후 최소 1년 이상의 계도기간 운영을 발표했다</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <div class="callout good"><b>과제 웹앱에 적용하면</b>: 화면에 “이 서비스는 생성형 AI를 이용합니다. 답변은 AI가 생성한 것으로 부정확할 수 있습니다” 같은 고지를 고정 표시한다. 오늘의 판례 챗봇 규칙 6(“법률 자문이 아님”)과 같은 위치에 둔다.</div>
+        <p style="font-weight:800;margin:0">EU AI Act 일정 (외국 고객이 있는 경우)</p>
+        <table class="tbl cmp sm nw">
+          <tbody>
+            <tr><td>2024. 8. 1.</td><td>발효</td></tr>
+            <tr><td>2025. 2. 2.</td><td>금지 AI, AI 리터러시 의무</td></tr>
+            <tr><td>2025. 8. 2.</td><td>범용 AI 모델 의무</td></tr>
+            <tr><td>2026. 8. 2.</td><td>대부분 규정 적용 (투명성 의무 포함)</td></tr>
+            <tr><td>2027. 12. 2.</td><td>부속서 III 고위험 AI(채용, 신용평가 등). 2026. 6. Digital Omnibus로 연기</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">시행령·고시와 가이드라인은 계속 바뀌고 있다. 실제 적용 전에는 국가법령정보센터의 현행 조문과 소관 부처 자료를 확인한다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="신뢰성: 근거">
+  <div class="kicker">AI 도입 방법론 가이드 · 신뢰성</div>
+  <h2>신뢰성: RAG를 써도 환각은 사라지지 않는다</h2>
+  <div class="body">
+    <div class="two eq" style="align-items:start">
+      <div class="stack">
+        <p style="font-weight:800;margin:0">Magesh 외, Hallucination-Free? (Stanford RegLab·HAI, Journal of Empirical Legal Studies 2025)</p>
+        <table class="tbl cmp sm">
+          <thead><tr><th>법률 AI 리서치 도구 (2024. 5. 시험)</th><th>정확</th><th>환각</th></tr></thead>
+          <tbody>
+            <tr><td>Lexis+ AI</td><td class="c">65%</td><td class="c">약 17%</td></tr>
+            <tr><td>Westlaw AI-Assisted Research</td><td class="c">42%</td><td class="c">약 33%</td></tr>
+            <tr><td>Ask Practical Law AI</td><td colspan="2" class="c">불완전 답변(거절 포함) 60% 이상</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:13px">RAG를 쓰는 상용 법률 도구도 17~33% 비율로 환각을 보였다. RAG는 환각을 줄이지만 없애지 못한다. 이후 버전에서는 수치가 다를 수 있다.</p>
+      </div>
+      <div class="stack">
+        <ul class="bul compact">
+          <li><b>Mata v. Avianca (S.D.N.Y. 2023)</b>: 변호사가 ChatGPT로 찾은 존재하지 않는 판례를 인용했고, 법원이 판결 사본을 요구한 뒤에도 바로잡지 않아 5,000달러 제재</li>
+          <li><b>AI Hallucination Cases DB</b>(Damien Charlotin): 법원이 당사자의 AI 환각 자료 의존을 인정한 결정이 2026년 9월 기준 전 세계 2,000건 이상</li>
+          <li><b>국내</b>: 변호사 의견서에 인용된 판결 5건이 존재하지 않아 철회된 사례(법률신문 보도), 로펌 준비서면의 허위 판례 인용을 패소한 의뢰인이 뒤늦게 발견한 사례(울산지법, 2026. 5. 보도)</li>
+          <li><b>법원행정처 TF 방안(2026. 3. 31.)</b>: 허위 인용으로 생긴 소송비용 부담, 변호사 징계 의뢰 등. AI 활용 사실 고지와 인용 정확성 확인을 민사소송규칙에 넣는 방안도 제시</li>
+        </ul>
+      </div>
+    </div>
+    <p class="em center">“AI가 만든 인용은 원문을 확인하기 전에는 쓰지 않는다”가 최소 기준이다</p>
+    <p class="muted">RAG 단계별 실패 원인과 관련 연구는 7강 §4 “RAG의 한계”에서 자세히 다루었다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="신뢰성: 확인하는 방법">
+  <div class="kicker">AI 도입 방법론 가이드 · 신뢰성</div>
+  <h2>신뢰성을 확인하는 방법: 평가 세트를 만들고 기록을 읽는다</h2>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><span class="no">1</span><b class="ttl">성공 기준을 숫자로</b><p class="prob">“잘 분류한다”가 아니라 “테스트 50건 중 48건 이상 정답, 근거 없는 인용 0건”. 무엇이 실패인지 미리 정한다</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl">평가 세트 20~50건</b><p class="prob">실제 업무에서 뽑고, 실제로 틀렸던 사례를 포함한다. 두 명의 전문가가 같은 합격·불합격 판정을 내릴 수 있을 만큼 명확하게, 건마다 참조 정답을 둔다</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl">예외 입력 포함</b><p class="prob">빈 입력, 아주 긴 입력, 범위 밖 질문(7강 §3의 “이혼 재산분할”), 모호한 질문. 이것이 오늘 RAG 완료 보고의 검증 시나리오 4종이다</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl">채점은 규칙 → 모델 → 사람 순</b><p class="prob">인용 번호 존재 여부처럼 코드로 확인할 수 있는 것은 코드로. LLM 채점은 생성 모델과 다른 모델로 하고 사람 판정과 맞춰 본다</p></div>
+      <div class="step"><span class="no">5</span><b class="ttl">한 번이 아니라 여러 번</b><p class="prob">같은 입력에 매번 맞아야 하는 일이면 k번 모두 성공(pass^k)을 본다. 1회 성공률 75%면 3번 연속 성공은 약 42%다</p></div>
+      <div class="step"><span class="no">6</span><b class="ttl">기록을 직접 읽는다</b><p class="prob">점수만 보지 말고 실패한 대화를 읽는다. 원인이 검색인지, 생성인지, 채점인지 기록에서 확인한다. 7강 §7의 로그가 이 자료다</p></div>
+    </div>
+    <p class="muted">출처: Anthropic, Define success criteria and build evaluations (Claude 개발자 문서) · Demystifying Evals for AI Agents (2026. 1.) · OpenAI 에이전트 가이드의 사람 개입 기준</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="단계별 도입 절차">
+  <div class="kicker">AI 도입 방법론 가이드</div>
+  <h2>정리: 나의 업무에 AI를 도입하는 7단계와 단계별 산출물</h2>
+  <div class="body">
+    <table class="tbl cmp sm">
+      <thead><tr><th>단계</th><th>할 일</th><th>산출물</th><th>참조</th></tr></thead>
+      <tbody>
+        <tr><th>1. 과업 분해·선정</th><td>직무를 과업으로 나누고 가치 × 위험으로 고른다. 작은 시험으로 AI가 잘하는지 확인</td><td>과업표, 한 줄 정의</td><td>7강 §8, Jagged Frontier, OpenAI 가이드</td></tr>
+        <tr><th>2. 위험 분류</th><td>7개 질문 점검표로 진행 / 조건부 / 재설계 판정</td><td>점검표</td><td>NIST AI RMF·600-1</td></tr>
+        <tr><th>3. 데이터·계정·약관 확정</th><td>어떤 데이터를, 어떤 계정·API로, 어떤 조건(학습 이용, 보존, 서버 위치)에서 처리할지 정한다</td><td>데이터 흐름도</td><td>개인정보위 안내서, 소속 기관 지침</td></tr>
+        <tr><th>4. 가장 단순한 구조로 만들기</th><td>스킬 또는 고정 워크플로. 계획서부터 대화로</td><td>SKILL.md 또는 PLAN.md</td><td>Building Effective Agents</td></tr>
+        <tr><th>5. 평가</th><td>평가 세트 20~50건으로 성공 기준 충족 여부 확인</td><td>평가 결과표</td><td>Anthropic evals 문서</td></tr>
+        <tr><th>6. 배포와 통제</th><td>사람 검토 지점, AI 고지 문구, 인증, 비용 한도</td><td>배포 URL, 고지 문구</td><td>7강 §5~6, 인공지능 기본법 제31조</td></tr>
+        <tr><th>7. 운영과 개선</th><td>로그와 오류 기록을 읽고 고친다. 보관 기간이 지난 기록은 파기</td><td>DECISIONS.md, 로그</td><td>7강 §7, 개인정보 보호법</td></tr>
+      </tbody>
+    </table>
+    <div class="callout good"><b>과제와의 연결</b>: 9강 발표의 “해도 되나” 부분은 2·3단계의 판단을, “신뢰성” 부분은 5단계의 결과를 보여주면 된다. 산출물 표의 문서들이 그대로 발표 자료가 된다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="참고 자료">
+  <div class="kicker">AI 도입 방법론 가이드</div>
+  <h2>참고 자료</h2>
+  <div class="body">
+    <ul class="bul compact" style="font-size:13.5px">
+      <li>Dell’Acqua et al., <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4573321" target="_blank" rel="noopener">Navigating the Jagged Technological Frontier</a>, HBS Working Paper 24-013 (2023)</li>
+      <li>OpenAI, <a href="https://openai.com/business/guides-and-resources/identifying-and-scaling-ai-use-cases/" target="_blank" rel="noopener">Identifying and Scaling AI Use Cases</a> (2025) · <a href="https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf" target="_blank" rel="noopener">A Practical Guide to Building Agents</a> (2025)</li>
+      <li>Eloundou et al., <a href="https://arxiv.org/abs/2303.10130" target="_blank" rel="noopener">GPTs are GPTs</a> (2023)</li>
+      <li>Anthropic, <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Building Effective Agents</a> (2024) · <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank" rel="noopener">Demystifying Evals for AI Agents</a> (2026) · <a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">Define success criteria and build evaluations</a></li>
+      <li>NIST, <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf" target="_blank" rel="noopener">AI RMF 1.0</a> (2023) · <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf" target="_blank" rel="noopener">AI 600-1 Generative AI Profile</a> (2024) · ISO/IEC <a href="https://www.iso.org/standard/81230.html" target="_blank" rel="noopener">42001:2023</a></li>
+      <li>개인정보보호위원회, 「생성형 인공지능(AI) 개발·활용을 위한 개인정보 처리 안내서」 (2025. 8.) · <a href="https://www.law.go.kr/법령/인공지능발전과신뢰기반조성등에관한기본법" target="_blank" rel="noopener">인공지능 기본법</a> · 금융위원회, 「금융분야 AI 가이드라인」 (2026. 6. 개정) · 국가정보원, 「AI 보안 가이드북」 (2025. 12.)</li>
+      <li>ABA, <a href="https://www.americanbar.org/content/dam/aba/administrative/professional_responsibility/ethics-opinions/aba-formal-opinion-512.pdf" target="_blank" rel="noopener">Formal Opinion 512</a> (2024) · 문화체육관광부·한국저작권위원회, 「생성형 AI 저작권 안내서」 (2023. 12.)</li>
+      <li>Magesh et al., <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/jels.12413" target="_blank" rel="noopener">Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools</a>, JELS 22(2) (2025) · Damien Charlotin, <a href="https://www.damiencharlotin.com/hallucinations/" target="_blank" rel="noopener">AI Hallucination Cases</a></li>
+      <li>Anthropic, <a href="https://www.anthropic.com/news/updates-to-our-consumer-terms" target="_blank" rel="noopener">Updates to Consumer Terms</a> (2025. 8.)</li>
+    </ul>
+  </div>
+</section>
+
+    </div><!-- /deck -->
+
+    <nav class="pager" aria-label="페이지 이동">
+      <button class="pbtn prev" id="btnPrev" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span id="prevLabel">이전</span></button>
+      <div class="pinfo"><span class="sec" id="pSec"></span><span class="dots" id="pDots"></span><span class="cnt" id="pCnt"></span></div>
+      <button class="pbtn next" id="btnNext" type="button"><span id="nextLabel">다음</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    </nav>
+  </main>
+</div>
+<script>
+(function(){
+  const SECTIONS = [
+    {name:'표지', sub:''},
+    {name:'AI 도입 방법론 가이드', sub:'법적 쟁점 · 신뢰성'},
+  ];
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  const secOf = i => +slides[i].dataset.sec;
+  const secIdx = SECTIONS.map((_, s) => slides.map((sl, i) => i).filter(i => secOf(i) === s));
+  let cur = -1;
+
+  /* ---------- 사이드바 목차 ---------- */
+  const toc = document.getElementById('toc');
+  SECTIONS.forEach((s, k) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'toc-link';
+    btn.innerHTML = `<span class="no">${k}</span><span class="nm">${s.name}</span><span class="cnt">${secIdx[k].length}p</span>`;
+    btn.addEventListener('click', () => show(secIdx[k][0]));
+    if (!secIdx[k].length) { btn.disabled = true; btn.querySelector('.cnt').textContent = '준비 중'; }
+    const sub = document.createElement('ul'); sub.className = 'sub';
+    secIdx[k].forEach(i => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = slides[i].dataset.title || slides[i].querySelector('h2,h1')?.textContent || `슬라이드 ${i+1}`;
+      b.addEventListener('click', () => show(i));
+      const l = document.createElement('li'); l.appendChild(b); sub.appendChild(l);
+    });
+    li.appendChild(btn); li.appendChild(sub); toc.appendChild(li);
+  });
+  const tocItems = Array.from(toc.children);
+
+  /* 표지의 목차 버튼 */
+  const co = document.getElementById('coverOutline');
+  if (co) SECTIONS.slice(1).forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span class="num">${k+1}</span><span>${s.name}<small>${s.sub}</small></span>`;
+    b.addEventListener('click', e => { e.stopPropagation(); show(secIdx[k+1][0]); });
+    if (!secIdx[k+1].length) { b.disabled = true; b.querySelector('small').textContent = '준비 중'; }
+    co.appendChild(b);
+  });
+
+  /* ---------- 페이저 ---------- */
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const prevLabel = document.getElementById('prevLabel'), nextLabel = document.getElementById('nextLabel');
+  const pSec = document.getElementById('pSec'), pDots = document.getElementById('pDots'), pCnt = document.getElementById('pCnt');
+  const curNo = document.getElementById('curNo'), totNo = document.getElementById('totNo'), bar = document.getElementById('progressBar');
+  totNo.textContent = N;
+
+  function show(i, replace){
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    if (cur >= 0) { slides[cur].classList.remove('active'); slides[cur].querySelectorAll('video').forEach(v => v.pause()); }
+    cur = i;
+    const sl = slides[i]; sl.classList.add('active');
+    sl.querySelectorAll('video').forEach(v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const s = secOf(i), list = secIdx[s], k = list.indexOf(i);
+
+    tocItems.forEach((li, j) => {
+      const b = li.firstElementChild;
+      b.classList.toggle('active', j === s);
+      b.classList.toggle('done', j < s);
+      li.classList.toggle('open', j === s);
+      li.querySelectorAll('.sub button').forEach((sb, m) => sb.classList.toggle('active', j === s && m === k));
+    });
+    const act = toc.querySelector('.toc-link.active');
+    if (act && window.innerWidth <= 900) act.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+
+    pSec.textContent = SECTIONS[s].name;
+    pCnt.textContent = `${k + 1} / ${list.length} · 전체 ${i + 1} / ${N}`;
+    pDots.innerHTML = '';
+    list.forEach((idx, m) => { const d = document.createElement('i'); if (m === k) d.className = 'on'; d.title = slides[idx].dataset.title || ''; d.addEventListener('click', () => show(idx)); pDots.appendChild(d); });
+
+    btnPrev.disabled = i === 0; btnNext.disabled = i === N - 1;
+    prevLabel.textContent = k === 0 && s > 0 ? `이전 섹션: ${SECTIONS[s - 1].name}` : '이전';
+    nextLabel.textContent = k === list.length - 1 && s < SECTIONS.length - 1 ? `다음 섹션: ${SECTIONS[s + 1].name}` : (i === N - 1 ? '마지막 페이지' : '다음');
+
+    curNo.textContent = i + 1; bar.style.width = ((i + 1) / N * 100) + '%';
+    const h = '#' + (i + 1);
+    if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+    window.scrollTo({top:0, behavior:'auto'});
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} · AI 도입 방법론 가이드`;
+  }
+  const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
+  btnPrev.addEventListener('click', () => show(cur - 1));
+  btnNext.addEventListener('click', () => show(cur + 1));
+  window.addEventListener('popstate', () => show(fromHash(), true));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+    else if (e.key === '+' || e.key === '=') { e.preventDefault(); setUserZoom(userZoom * 1.1); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); setUserZoom(userZoom / 1.1); }
+    else if (e.key === '0') { e.preventDefault(); setUserZoom(1); }
+  });
+  /* ---------- 화면 크기에 맞춘 슬라이드 확대 ---------- */
+  const stage = document.getElementById('stage'), zoomVal = document.getElementById('zoomVal');
+  let userZoom = 1;
+  try { userZoom = parseFloat(localStorage.getItem('itm690-guide-zoom')) || 1; } catch (e) {}
+  function applyZoom(){
+    const mobile = window.innerWidth <= 900;
+    const side = mobile ? 0 : 264;
+    const auto = mobile ? 1 : Math.min(1.5, Math.max(1, (window.innerWidth - side) / 1100));
+    const z = Math.max(.6, Math.min(2.4, +(auto * userZoom).toFixed(3)));
+    stage.style.zoom = z;
+    stage.style.minHeight = mobile ? '' : ((window.innerHeight - 64) / z) + 'px';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  function setUserZoom(v){ userZoom = Math.max(.5, Math.min(2, +v.toFixed(3))); try { localStorage.setItem('itm690-guide-zoom', userZoom); } catch (e) {} applyZoom(); }
+  document.getElementById('zoomIn').addEventListener('click', () => setUserZoom(userZoom * 1.1));
+  document.getElementById('zoomOut').addEventListener('click', () => setUserZoom(userZoom / 1.1));
+  zoomVal.addEventListener('click', () => setUserZoom(1));
+  window.addEventListener('resize', applyZoom);
+  applyZoom();
+
+  let tx = null;
+  document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('deck').addEventListener('touchend', e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 70) show(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  document.querySelectorAll('ol.roadmap').forEach(ol => {
+    const cur = +ol.dataset.current;
+    ol.innerHTML = SECTIONS.slice(1).map((s, i) => `<li class="${i + 1 === cur ? 'cur' : (i + 1 < cur ? 'done' : '')}"><span class="n">${i + 1}</span>${s.name}</li>`).join('');
+  });
+
+  /* ---------- 프롬프트 복사 ---------- */
+  document.querySelectorAll('.prompt .copy').forEach(btn => btn.addEventListener('click', () => {
+    const pre = btn.parentElement, text = Array.from(pre.childNodes).filter(n => n !== btn).map(n => n.textContent).join('').trim();
+    const done = () => { btn.textContent = '복사됨'; setTimeout(() => btn.textContent = '복사', 1500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, done); else done();
+  }));
+
+  show(fromHash(), true);
+})();
+</script>
+</body>
+</html>
