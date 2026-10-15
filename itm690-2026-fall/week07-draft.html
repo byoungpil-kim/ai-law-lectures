@@ -2446,27 +2446,6 @@ OPENROUTER_API_KEY=sk-or-v1-...</pre>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="어떤 방식을 고를까">
-  <div class="kicker">인증과 권한</div>
-  <h2>어떤 방식을 고를까: 대부분의 업무 웹앱에는 이메일 인증코드가 가장 간명하다</h2>
-  <div class="body">
-    <table class="tbl cmp sm">
-      <thead><tr><th>누가 쓰나</th><th>권장 방식</th><th>이유</th></tr></thead>
-      <tbody>
-        <tr><td>나 혼자, 또는 신뢰하는 2~3명</td><td><b>공용 비밀번호 + 해시</b></td><td>설정 5분. 외부 서비스 불필요</td></tr>
-        <tr><td>명단으로 관리할 수 있는 팀·고객 수십 명</td><td><b>이메일 인증코드</b> <span class="pill ok">권장</span></td><td>비밀번호를 저장하지 않으므로 해시·재설정·유출 대응이 필요 없다. 명단 한 줄로 추가·삭제. 사람별로 누가 들어왔는지 구분된다</td></tr>
-        <tr><td>회사 전 직원</td><td>사내 SSO</td><td>입사·퇴사가 자동 반영. 회사 IT 정책과 맞음</td></tr>
-        <tr><td>불특정 다수 회원</td><td>인증 서비스 + 소셜 로그인, 필요하면 2단계 인증·패스키</td><td>가입·재설정·보안 사고 대응을 직접 감당하기 어렵다</td></tr>
-      </tbody>
-    </table>
-    <ul class="bul compact">
-      <li>이메일 인증코드가 간명한 이유: 내 서비스가 <b>비밀번호를 보관하지 않는다</b>. 보관하지 않는 비밀은 유출될 수 없다. 본인 확인은 이미 보안 체계를 갖춘 메일 서비스에 맡긴다</li>
-      <li>남는 위험은 메일 계정 자체의 보안이다. 이용자가 메일 계정에 2단계 인증을 켜 두면 그 보호를 그대로 이어받는다</li>
-      <li>과제의 웹앱: 혼자 쓰면 비밀번호 잠금, 동료·고객이 쓰면 이메일 인증코드로 시작한다</li>
-    </ul>
-  </div>
-</section>
-
 <section class="slide" data-sec="6" data-title="비밀 총정리와 기성 서비스">
   <div class="kicker">인증과 권한</div>
   <h2>비밀 총정리, 그리고 인증은 직접 만들지 않는 선택지</h2>
