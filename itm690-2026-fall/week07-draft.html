@@ -1886,25 +1886,6 @@ Authorization: Bearer sk-or-v1-•••(비밀키)
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="생성 단계 실패: 인용과 문맥">
-  <div class="kicker">RAG의 한계 · 생성 단계</div>
-  <h2>생성 단계 실패 (계속): 인용이 문장을 뒷받침하지 않고, 문맥을 줘도 환각한다</h2>
-  <div class="body">
-    <div class="steps s2">
-      <div class="step"><span class="no">3</span><b class="ttl">인용이 문장을 뒷받침하지 않는다</b>
-        <ul class="bul compact">
-          <li><b>Evaluating Verifiability in Generative Search Engines</b> (Liu·Zhang·Liang, EMNLP Findings 2023): Bing Chat, perplexity.ai 등 4개 생성형 검색엔진. 인용으로 완전히 뒷받침되는 문장은 <b>51.5%</b>, 실제로 문장을 뒷받침하는 인용은 <b>74.5%</b>. 유창하고 유용해 보이는 답일수록 인용 정확도가 낮았다</li>
-          <li><b>Tow Center (Columbia Journalism Review, 2025)</b>: AI 검색 도구 8종에 기사 인용문을 주고 출처를 찾게 한 1,600회 질의에서 전체 <b>60% 이상</b> 오답(Perplexity 37%, Grok 3 94%)</li>
-        </ul></div>
-      <div class="step"><span class="no">4</span><b class="ttl">문맥을 줘도 모든 모델이 환각한다</b>
-        <ul class="bul compact">
-          <li><b>RAGTruth</b> (Niu 외, ACL 2024): 표준 RAG 설정에서 여러 모델이 생성한 응답 약 18,000건을 사람이 단어 단위로 주석. 검색 결과를 주고 생성하게 해도 <b>모든 모델에서 환각</b>이 발생했고, 모델 간 차이가 컸다</li>
-          <li>이 데이터로 훈련한 작은 탐지 모델이 환각 탐지에 쓸 만한 성능을 냈다. “답변을 검사하는 별도 장치”가 완화책이 되는 근거다</li>
-        </ul></div>
-    </div>
-  </div>
-</section>
-
 <section class="slide" data-sec="4" data-title="검색 실패 1: 청크와 임베딩의 한계">
   <div class="kicker">RAG의 한계 · 검색 단계</div>
   <h2>검색 단계 실패 (1): 조각은 맥락을 잃고, 임베딩에는 이론적 한계가 있다</h2>
@@ -2030,8 +2011,6 @@ Authorization: Bearer sk-or-v1-•••(비밀키)
       <li>Dahl, Magesh, Suzgun, Ho, <a href="https://arxiv.org/abs/2401.01301" target="_blank" rel="noopener">Large Legal Fictions: Profiling Legal Hallucinations in Large Language Models</a>, Journal of Legal Analysis 16(1) (2024)</li>
       <li>Magesh et al., <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/jels.12413" target="_blank" rel="noopener">Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools</a>, JELS 22(2) (2025)</li>
       <li>Wu, Wu, Zou, <a href="https://arxiv.org/abs/2404.10198" target="_blank" rel="noopener">ClashEval</a>, NeurIPS 2024 · Xie et al., <a href="https://arxiv.org/abs/2305.13300" target="_blank" rel="noopener">Adaptive Chameleon or Stubborn Sloth</a>, ICLR 2024</li>
-      <li>Liu, Zhang, Liang, <a href="https://arxiv.org/abs/2304.09848" target="_blank" rel="noopener">Evaluating Verifiability in Generative Search Engines</a>, Findings of EMNLP 2023 · Tow Center, <a href="https://www.niemanlab.org/2025/03/ai-search-engines-fail-to-produce-accurate-citations-in-over-60-of-tests-according-to-new-tow-center-study/" target="_blank" rel="noopener">AI 검색 인용 정확도 연구</a> (2025)</li>
-      <li>Niu et al., <a href="https://aclanthology.org/2024.acl-long.585" target="_blank" rel="noopener">RAGTruth</a>, ACL 2024</li>
       <li>Anthropic, <a href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener">Introducing Contextual Retrieval</a> (2024)</li>
       <li>Weller et al., <a href="https://arxiv.org/abs/2508.21038" target="_blank" rel="noopener">On the Theoretical Limitations of Embedding-Based Retrieval</a> (2025) · Weller, Lawrie, Van Durme, <a href="https://aclanthology.org/2024.eacl-long.139" target="_blank" rel="noopener">NevIR</a>, EACL 2024</li>
       <li>Liu et al., <a href="https://aclanthology.org/2024.tacl-1.9" target="_blank" rel="noopener">Lost in the Middle</a>, TACL 2024 · Chroma, <a href="https://research.trychroma.com/context-rot" target="_blank" rel="noopener">Context Rot</a> (2025)</li>
