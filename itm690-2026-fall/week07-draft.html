@@ -2508,18 +2508,22 @@ OPENROUTER_API_KEY=sk-or-v1-...</pre>
 
 <section class="slide" data-sec="7" data-title="지시와 관리자 화면">
   <div class="kicker">로깅: Supabase</div>
-  <h2>지시 한 번, 그리고 관리자만 여는 기록 화면</h2>
+  <h2>한 줄 지시로 시작해 대화로 정한다: 문답 로그와 관리자 화면</h2>
   <div class="body">
     <div class="two eq" style="align-items:start">
-      <pre class="prompt sm"><button class="copy" type="button">복사</button>배포된 판례 챗봇에 문답 로그 기능을 추가한다.
-- 이용자가 챗봇에 질문할 때마다 시각, 질문, 답변, 비용(원화 환산),
-  소요 시간을 Supabase의 chat_logs 표에 기록해줘.
-  접속 정보는 Vercel 환경변수 SUPABASE_URL, SUPABASE_KEY에 있어.
-- 화면 우측 상단에 작은 톱니바퀴 아이콘을 추가해줘. 누르면 관리자
-  화면이 열리고, 비밀번호를 맞게 넣어야 기록을 볼 수 있어.
-- 관리자 비밀번호는 입력값을 해시해서 환경변수 ADMIN_PASSWORD_HASH와
-  비교해줘. 비밀번호 원문은 어디에도 저장하지 마.
-- 기록 화면은 최근 순서로 시각·질문·답변·비용·소요 시간을 표로 보여줘.</pre>
+      <div class="stack">
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>챗봇에 문답 로그 기능을 추가해줘.</pre>
+        <p style="font-weight:800;margin:0">이후 AI와 대화하며 정한 것</p>
+        <table class="tbl cmp sm">
+          <thead><tr><th>AI의 질문</th><th>내 답</th></tr></thead>
+          <tbody>
+            <tr><td>무엇을 기록할까요?</td><td>시각, 질문, 답변, 비용(원화 환산), 소요 시간. 이용자 신원은 기록하지 않음</td></tr>
+            <tr><td>어디에 저장할까요? (서버리스 함수에는 파일이 남지 않음)</td><td>Supabase의 chat_logs 표. 접속 정보는 환경변수 SUPABASE_URL, SUPABASE_KEY에</td></tr>
+            <tr><td>기록은 어디서 보시겠어요?</td><td>화면 우측 상단 톱니바퀴 → 관리자 화면, 최근 순 표</td></tr>
+            <tr><td>관리자 화면은 어떻게 보호할까요?</td><td>입력한 비밀번호를 해시해 환경변수 ADMIN_PASSWORD_HASH와 비교. 원문은 어디에도 저장하지 않음</td></tr>
+          </tbody>
+        </table>
+      </div>
       <ul class="bul compact">
         <li><b>관문을 둘로</b>: 접속 비밀번호(또는 이메일 인증)는 이용자와 공유하지만, 기록은 관리자만 본다.</li>
         <li><b>비용은 실제 청구액</b>: OpenRouter가 응답에 그 요청의 실제 달러 비용을 알려준다. 질문 한 번에 최대 3회 호출(임베딩 + 이어지는 대화의 검색문 재작성 + 답변)을 더해 저장. 실측 질문당 1.2~1.5원</li>
