@@ -2327,7 +2327,6 @@ Kaist2026  →  9dce81ff753e1363ad924a7a7ecceaf5508258cf322aa8702f71a00171676ca9
       <dt>한도</dt><dd>개인 Gmail 기준 하루 수백 통 수준. 인증코드 용도로는 충분하다</dd>
     </dl>
     <div class="callout"><b>직접 메일 서버를 운영하지 않는 이유</b>: 수신 측(Gmail, 네이버)은 평판이 없는 발신 서버의 메일을 스팸으로 분류하거나 거부한다. SPF·DKIM 설정을 갖추어도 신규 서버는 배달이 불안정하다. Gmail을 이용하면 구글 발신 서버의 평판으로 발송된다. 발송량이 늘면 Resend 같은 발송 서비스와 자기 도메인으로 옮긴다.</div>
-    <div class="callout warn"><b>업무에 쓸 때</b>: 개인 Gmail 계정으로 회사 업무 메일(인증코드 포함)을 보내도 되는지는 회사 정보보호 규정을 먼저 확인한다. 회사 메일 시스템이나 공식 발송 서비스를 쓰는 것이 원칙이다.</div>
   </div>
 </section>
 
@@ -2336,20 +2335,12 @@ Kaist2026  →  9dce81ff753e1363ad924a7a7ecceaf5508258cf322aa8702f71a00171676ca9
   <h2>구현 프롬프트와 환경변수</h2>
   <div class="body">
     <div class="two" style="grid-template-columns:1.2fr .8fr;align-items:start">
-      <pre class="prompt sm"><button class="copy" type="button">복사</button>이 판결문 챗봇 웹앱에 이메일 인증코드 로그인을 추가해줘.
-Vercel에 배포되어 있는 프로젝트야.
-흐름:
-1. 첫 화면은 이메일 입력 폼. 인증 전에는 챗봇 화면도, 검색·챗봇 API도
-   절대 동작하면 안 돼.
-2. /api/send-code : 입력된 이메일이 허용 명단(환경변수 ALLOWED_EMAILS,
-   쉼표 구분)에 있으면 6자리 코드를 생성해 Gmail SMTP로 발송.
-   명단에 없으면 "발송되지 않았습니다"라고만 답하고 이유는 알려주지 마.
-3. 코드는 서버 측에 5분간만 유효하게 보관하고, 검증 3회 실패 시 폐기해줘.
-4. /api/verify-code : 코드가 맞으면 세션(서명된 쿠키)을 발급.
-   이후 /api/chat과 /api/search는 유효한 세션이 있을 때만 동작하게 해줘.
-5. SMTP 설정은 환경변수로: SMTP_USER(내 지메일 주소), SMTP_APP_PASSWORD(앱
-   비밀번호). smtp.gmail.com 587 포트 사용. 자격증명을 코드에 넣지 마.
-6. 메일 제목은 "[판결문 챗봇] 인증코드 안내", 본문에 코드와 유효시간을 담아줘.</pre>
+      <div class="stack">
+      <pre class="prompt sm"><button class="copy" type="button">복사</button>이메일 인증코드 로그인을 추가해줘.</pre>
+        <p style="font-weight:800;margin:0">구체적인 사항은 대화하면서 하나씩 추가한다</p>
+        <div class="follow"><b>후속 지시 예</b><span>허용 명단은 환경변수 ALLOWED_EMAILS로</span><span>명단에 없으면 이유는 알려주지 마</span><span>코드는 5분만 유효, 3회 틀리면 폐기</span><span>인증 전에는 API도 동작하지 않게</span><span>Gmail SMTP, 자격증명은 환경변수로</span><span>메일 제목은 "[판결문 챗봇] 인증코드 안내"</span></div>
+        <p class="muted" style="font-size:13.5px;margin:0">AI가 먼저 묻는 것(명단은 어디에 둘지, 메일은 무엇으로 보낼지)에 답하다 보면 같은 결과에 이른다. 다음 장의 고려 사항을 빠뜨리지 않았는지 마지막에 확인한다.</p>
+      </div>
       <div class="stack">
         <p style="font-weight:800;margin:0">Vercel → 프로젝트 → Environment Variables</p>
 <pre class="code"><span class="c"># .env 예시 (값은 각자의 것으로)</span>
@@ -2360,7 +2351,6 @@ OPENROUTER_API_KEY=sk-or-v1-...</pre>
         <ul class="bul compact">
           <li>환경변수를 추가·변경한 뒤에는 <b>재배포</b>해야 반영된다</li>
           <li>“Sensitive”로 저장하면 대시보드에서도 값이 가려진다</li>
-          <li>수업에서는 강사가 시연한다. 각자 구현은 과제의 웹앱에서 선택적으로 적용한다</li>
         </ul>
       </div>
     </div>
@@ -2369,17 +2359,17 @@ OPENROUTER_API_KEY=sk-or-v1-...</pre>
 
 <section class="slide" data-sec="6" data-title="인증에서 고려할 사항">
   <div class="kicker">인증과 권한</div>
-  <h2>인증에서 고려할 사항: 프롬프트의 각 줄이 막는 공격</h2>
+  <h2>인증에서 고려할 사항: 각 요구가 막는 공격</h2>
   <div class="body">
     <table class="tbl cmp sm">
       <thead><tr><th>고려 사항</th><th>하지 않으면 생기는 일</th><th>조치</th></tr></thead>
       <tbody>
-        <tr><th>API까지 막기</th><td>화면만 가리고 API를 열어 두면, 화면을 거치지 않고 API를 직접 호출하는 사람에게는 인증이 없는 것과 같다</td><td>모든 API에서 세션을 검사 (프롬프트 1·4번)</td></tr>
-        <tr><th>명단 여부를 알려주지 않기</th><td>“등록되지 않은 이메일입니다”라고 답하면 공격자가 어떤 주소가 명단에 있는지 탐색할 수 있다(계정 열거)</td><td>성공·실패 응답을 같게 (2번)</td></tr>
-        <tr><th>유효시간·시도 횟수 제한</th><td>6자리 코드는 100만 가지뿐이다. 제한이 없으면 무차별 대입으로 맞힐 수 있다</td><td>5분 유효, 3회 실패 시 폐기 (3번)</td></tr>
-        <tr><th>발송 횟수 제한</th><td>같은 주소로 코드를 반복 요청해 상대 메일함을 채우거나 내 Gmail 발송 한도를 소진시킬 수 있다</td><td>주소별·IP별 분당 발송 제한 (추가 지시 필요)</td></tr>
+        <tr><th>API까지 막기</th><td>화면만 가리고 API를 열어 두면, 화면을 거치지 않고 API를 직접 호출하는 사람에게는 인증이 없는 것과 같다</td><td>모든 API에서 세션을 검사</td></tr>
+        <tr><th>명단 여부를 알려주지 않기</th><td>“등록되지 않은 이메일입니다”라고 답하면 공격자가 어떤 주소가 명단에 있는지 탐색할 수 있다(계정 열거)</td><td>성공·실패 응답을 같게</td></tr>
+        <tr><th>유효시간·시도 횟수 제한</th><td>6자리 코드는 100만 가지뿐이다. 제한이 없으면 무차별 대입으로 맞힐 수 있다</td><td>5분 유효, 3회 실패 시 폐기</td></tr>
+        <tr><th>발송 횟수 제한</th><td>같은 주소로 코드를 반복 요청해 상대 메일함을 채우거나 내 Gmail 발송 한도를 소진시킬 수 있다</td><td>주소별·IP별 분당 발송 제한</td></tr>
         <tr><th>세션 보호</th><td>쿠키 서명 키가 약하거나 만료가 없으면 세션을 위조하거나 영구히 쓸 수 있다</td><td>서명 키를 환경변수에, 세션 만료 시간 설정, HttpOnly·Secure 쿠키</td></tr>
-        <tr><th>자격증명 위치</th><td>코드·GitHub에 앱 비밀번호가 남으면 내 이름으로 스팸이 발송된다</td><td>환경변수 + .gitignore 확인 (5번)</td></tr>
+        <tr><th>자격증명 위치</th><td>코드·GitHub에 앱 비밀번호가 남으면 내 이름으로 스팸이 발송된다</td><td>환경변수 + .gitignore 확인</td></tr>
         <tr><th>명단도 개인정보</th><td>허용 명단의 이메일은 타인의 개인정보다. 화면·로그·저장소에 노출되면 유출이다</td><td>필요한 주소만, 화면 비노출, 목적 종료 시 삭제</td></tr>
       </tbody>
     </table>
