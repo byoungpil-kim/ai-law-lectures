@@ -2446,35 +2446,6 @@ OPENROUTER_API_KEY=sk-or-v1-...</pre>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="비밀 총정리와 기성 서비스">
-  <div class="kicker">인증과 권한</div>
-  <h2>비밀 총정리, 그리고 인증은 직접 만들지 않는 선택지</h2>
-  <div class="body">
-    <div class="two eq" style="align-items:start">
-      <table class="tbl cmp sm">
-        <thead><tr><th>비밀</th><th>유출되면</th></tr></thead>
-        <tbody>
-          <tr><td>OpenRouter API 키</td><td>내 계정으로 요금 청구</td></tr>
-          <tr><td>Gmail 앱 비밀번호</td><td>내 이름으로 스팸 발송</td></tr>
-          <tr><td>허용 명단·인증코드</td><td>인증 우회, 명단(개인정보) 노출</td></tr>
-          <tr><td>세션 서명 키</td><td>세션 위조</td></tr>
-          <tr><td>비밀번호 해시</td><td>원문 복원은 불가하나 무차별 대입의 대상</td></tr>
-          <tr><td>Supabase Secret key (§7)</td><td>문답 기록 전체 열람·삭제</td></tr>
-        </tbody>
-      </table>
-      <div class="stack">
-        <p class="em" style="margin:0">보관 위치는 모두 같다: 서버의 환경변수. 브라우저·코드·GitHub 어디에도 없어야 한다</p>
-        <ul class="bul compact">
-          <li><b>소셜 로그인(OAuth)</b>: “구글로 로그인”. 비밀번호 관리를 구글·카카오에 맡긴다. 회사라면 사내 계정(SSO) 연동이 표준이다</li>
-          <li><b>인증 서비스</b>: Supabase Auth, Firebase Auth 등. 가입·로그인·세션·비밀번호 재설정을 통째로 제공한다</li>
-          <li><b>메일 발송 서비스</b>: 발송량이 늘면 Resend 등 발송 API + 자기 도메인</li>
-        </ul>
-        <div class="callout good">판단 기준: 인증이 서비스의 본질이 아니라면 직접 만들지 말고 검증된 서비스를 쓴다. 오늘 직접 만들어 본 것은 그 서비스를 고를 때 무엇을 확인해야 하는지 알기 위해서다.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===================== 6. 로깅 ===================== -->
 <section class="slide section" data-sec="7" data-title="로깅: Supabase">
   <div class="kicker">Section 7</div>
