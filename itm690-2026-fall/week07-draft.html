@@ -638,6 +638,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 .cite{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 4px;border-radius:5px;background:var(--sky-light);color:var(--brand-dark);font-size:11px;font-weight:800;}
 @media print{ .demo-results{max-height:180px!important;overflow:hidden;} }
 .recap.tight li{padding:8px 10px 8px 42px;} .recap.tight li::before{left:10px;top:9px;width:24px;height:24px;}
+.code mark.hl-line{background:#ffe9a8;color:var(--ink);border-radius:4px;padding:1px 4px;font-weight:700;} .code mark.hl-line b{color:var(--red);}
 </style>
 </head>
 <body>
@@ -773,7 +774,7 @@ gh auth login --hostname github.com --git-protocol https --web</pre>
     <p>질문에 Yes로 답하고, 화면에 뜬 일회용 코드를 복사한 뒤 Enter를 누르면 브라우저가 열린다. 브라우저에 코드를 붙여넣고 승인하면 끝난다.</p>
 <pre class="code pre" style="font-size:13px">PS C:\claude\no-bullying&gt; gh auth login --hostname github.com --git-protocol https --web
 ? Authenticate Git with your GitHub credentials? Yes
-! First copy your one-time code: 1BC6-A269
+<mark class="hl-line">! First copy your one-time code: <b>1BC6-A269</b></mark>  <span class="c">← 이 코드를 복사해 브라우저에 붙여넣는다</span>
 Press Enter to open https://github.com/login/device in your browser...
 ✓ Authentication complete.
 - gh config set -h github.com git_protocol https
@@ -782,7 +783,7 @@ Press Enter to open https://github.com/login/device in your browser...
     <ul class="bul compact">
       <li>어느 폴더에서 실행해도 된다. 로그인은 폴더가 아니라 계정 단위다</li>
       <li>잘 되었는지는 <code>gh auth status</code>로 언제든 확인한다. “Logged in as” 뒤의 계정명이 내 계정인지 본다</li>
-      <li>브라우저 기반 일회용 코드 방식(device flow)은 비밀번호를 터미널에 입력하지 않는 인증 방법이다. §6의 고급 인증 기법에서 다시 다룬다</li>
+      <li>브라우저 기반 일회용 코드 방식(device flow)은 비밀번호를 터미널에 입력하지 않는 인증 방법이다</li>
     </ul>
   </div>
 </section>
