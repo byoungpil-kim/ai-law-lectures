@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10강 인공지능의 법적 쟁점 (2) 인공지능 규제 · 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 10강: 인공지능 규제의 배경, EU AI Act(금지·고위험·투명성·범용 AI 모델), 생체인식정보 규율, 국내 인공지능 기본법, AI 영향평가" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6fa6" />
+<style>
+/* 2026 에이전틱 AI 부트캠프(aibootcamp2026) 디자인 토큰을 따른다 */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --ink-soft:#3a3f3b; --muted:#626a64; --line:#d5ddd3; --line-soft:#e9ede6;
+  --brand:#2e9bdb; --brand-dark:#1b6fa6; --brand-deep:#124d78; --sky-light:#e3f1fb;
+  --green:#2f765b; --green-light:#e6f2ec; --amber:#b8792e; --amber-light:#fbf1de; --red:#b0483f; --red-light:#fbe9e7; --navy:#132436;
+  --shadow:0 16px 45px rgba(54,42,31,.12); --shadow-sm:0 2px 10px rgba(21,29,23,.05);
+  --radius:14px; --sidebar-width:264px; --topbar-h:64px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-dark);}
+img,video,svg{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;} }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 clamp(16px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topbar-left{display:flex;align-items:center;gap:18px;min-width:0;}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:0 0 auto;}
+.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:9px;color:#fff;background:var(--brand);font-size:15px;font-weight:800;}
+.brand-text{display:block;line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;}
+.brand-text small{display:block;margin-top:1px;color:var(--muted);font-size:11.5px;font-weight:600;}
+.week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
+.week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.zoom-ctl{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;}
+.zoom-ctl button{border:0;background:transparent;padding:6px 10px;font-size:13px;font-weight:800;color:var(--brand-dark);cursor:pointer;line-height:1;}
+.zoom-ctl button:hover{background:var(--sky-light);}
+.zoom-ctl .zv{min-width:44px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);border-right:1px solid var(--line);padding:6px 4px;cursor:pointer;}
+.progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
+.progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
+.progress-label b{color:var(--ink);}
+.progress-track{overflow:hidden;height:7px;border-radius:999px;background:#e1e8df;}
+.progress-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-dark),var(--brand));transition:width 220ms ease;}
+
+/* ---------- layout ---------- */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{
+  position:sticky;top:var(--topbar-h);width:var(--sidebar-width);flex:0 0 auto;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:22px 14px 28px;
+  border-right:1px solid var(--line);background:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sidebar-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 8px;}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.toc-link{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:9px;border:0;background:transparent;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.toc-link .no{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;color:var(--muted);font-size:11px;font-weight:900;flex:0 0 auto;}
+.toc-link .nm{flex:1 1 auto;min-width:0;}
+.toc-link .cnt{font-size:11px;font-weight:600;color:var(--muted);opacity:.8;}
+.toc-link:hover{background:var(--sky-light);color:var(--brand-dark);}
+.toc-link.active{background:var(--brand);color:#fff;}
+.toc-link.active .no{background:rgba(255,255,255,.22);color:#fff;}
+.toc-link.active .cnt{color:#fff;opacity:.85;}
+.toc-link.done .no{background:var(--green-light);color:var(--green);}
+.sub{list-style:none;margin:2px 0 6px 22px;padding:0 0 0 12px;display:none;border-left:2px solid var(--line-soft);}
+.toc li.open .sub{display:block;}
+.sub button{
+  display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 10px;border-radius:6px;
+  color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sub button:hover{background:var(--sky-light);color:var(--brand-dark);}
+.sub button.active{color:var(--brand-dark);font-weight:800;}
+.side-hint{margin-top:auto;padding:14px 12px 0;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line-soft);}
+.side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
+
+.stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
+.deck{flex:1 1 auto;display:flex;flex-direction:column;}
+.slide{
+  display:none;position:relative;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
+}
+.slide.active{display:flex;flex:1 1 auto;animation:fadein .22s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
+.slide h2{margin:0 0 20px;font-size:clamp(22px,2.5vw,30px);line-height:1.3;letter-spacing:-.01em;font-weight:800;}
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0;}
+.slide.top .body{justify-content:flex-start;}
+.body p{margin:0;}
+
+/* ---------- pager ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.pbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brand-dark);font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;max-width:44%;
+}
+.pbtn span{overflow:hidden;text-overflow:ellipsis;}
+.pbtn svg{width:16px;height:16px;flex:0 0 auto;}
+.pbtn:hover{border-color:var(--brand);background:var(--sky-light);transform:translateY(-1px);}
+.pbtn.next{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.pbtn.next:hover{background:var(--brand);border-color:var(--brand);}
+.pbtn:disabled{opacity:.35;cursor:default;transform:none;}
+.pinfo{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;text-align:center;}
+.pinfo .sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-dark);}
+.pinfo .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:360px;}
+.pinfo .dots i{width:8px;height:8px;border-radius:999px;background:#d9e1d6;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.pinfo .dots i:hover{background:var(--brand);}
+.pinfo .dots i.on{background:var(--brand-dark);transform:scale(1.25);}
+.pinfo .cnt{font-size:12px;color:var(--muted);}
+
+/* ---------- cover / section slides ---------- */
+.slide.cover{
+  color:#eef3f7;border-color:transparent;
+  background:radial-gradient(1000px 460px at 85% -10%,rgba(46,155,219,.18),transparent 60%),linear-gradient(180deg,#101f30 0%,var(--navy) 55%,#17293b 100%);
+}
+.slide.cover .kicker{color:#7cc4ee;}
+.slide.cover .kicker .n{color:#9fb4c4;}
+.cover-body{display:flex;flex-direction:column;justify-content:center;gap:18px;flex:1;}
+.cover-kicker{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9d7ec;background:rgba(46,155,219,.15);border:1px solid rgba(46,155,219,.35);padding:7px 14px;border-radius:999px;}
+.cover h1{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.22;letter-spacing:-.02em;color:#fff;}
+.cover h1 em{color:#7cc4ee;font-style:normal;}
+.cover .lead{color:#c9d6e0;font-size:clamp(15px,1.4vw,18px);max-width:640px;}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#dbe7ef;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;}
+.cover .outline{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.cover .outline button{
+  display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:13.5px;
+}
+.cover .outline button:hover{background:rgba(255,255,255,.1);}
+.cover .outline .num{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(124,196,238,.16);color:#7cc4ee;font-size:12px;font-weight:900;display:grid;place-items:center;}
+.cover .outline small{display:block;font-weight:600;color:#a9bdcb;font-size:11.5px;}
+
+.slide.section .body{align-items:center;}
+.slide.section h2{text-align:center;}
+.section-lead{text-align:center;color:var(--muted);max-width:640px;margin:-8px auto 0;}
+
+/* 인공지능 ⊃ 머신러닝 ⊃ 인공신경망 ⊃ 딥 러닝 포함 관계 도식 */
+.nest{position:relative;width:min(100%,720px);aspect-ratio:16/10;margin:0 auto;}
+.nest .lv{position:absolute;border-radius:26px;transition:box-shadow .2s ease;}
+.nest .lv>span{position:absolute;top:16px;left:22px;font-weight:800;font-size:clamp(14px,1.7vw,19px);}
+.nest .l1{inset:0;background:#dbeefb;color:var(--brand-deep);}
+.nest .l2{left:26%;top:19%;right:4%;bottom:4%;background:#a9d5f1;color:var(--brand-deep);}
+.nest .l3{left:44%;top:37%;right:7%;bottom:8%;background:#3f9fd8;color:#fff;}
+.nest .l4{left:58%;top:54%;right:11%;bottom:14%;background:var(--brand-deep);color:#fff;display:grid;place-items:center;}
+.nest .l4>span{position:static;}
+.nest .lv.hi{box-shadow:0 0 0 4px var(--red),0 10px 30px rgba(176,72,63,.25);}
+
+/* ---------- content components ---------- */
+.bul{margin:0;padding-left:1.25em;font-size:clamp(15px,1.25vw,17px);line-height:1.72;}
+.bul>li{margin:0 0 9px;}
+.bul>li:last-child{margin-bottom:0;}
+.bul li::marker{color:var(--brand-dark);}
+.bul ul{list-style:none;margin:5px 0 0;padding-left:1.15em;}
+.bul ul li{position:relative;margin:0 0 4px;color:var(--ink-soft);}
+.bul ul li::before{content:"–";position:absolute;left:-1.1em;color:var(--muted);}
+.bul ul ul li::before{content:"·";}
+.bul ul ul li{font-size:.94em;}
+.bul b{font-weight:800;}
+.bul .arrow{color:var(--red);font-weight:800;}
+.bul .arrow::before{content:"➜ ";}
+.compact{font-size:clamp(14px,1.15vw,16px);}
+.compact>li{margin-bottom:5px;}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+.two.eq{grid-template-columns:1fr 1fr;}
+.two.wide-r{grid-template-columns:.85fr 1.15fr;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.figrow{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+figure{margin:0;text-align:center;min-width:0;}
+figure img,figure video{display:block;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);}
+figure.plain img{border:0;border-radius:0;}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
+.src{font-size:11.5px;color:var(--muted);word-break:break-all;margin-top:auto;padding-top:14px;line-height:1.6;}
+.src a{color:var(--brand-dark);text-decoration:none;}
+.src a:hover{text-decoration:underline;}
+.em{color:var(--red);font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.5;}
+.em.center{text-align:center;}
+.em .arrow::before{content:"➜ ";}
+.callout{border-left:4px solid var(--brand);background:var(--sky-light);padding:12px 16px;border-radius:8px;font-size:15px;}
+.callout.warn{border-color:var(--amber);background:var(--amber-light);}
+.callout.bad{border-color:var(--red);background:var(--red-light);}
+.callout.good{border-color:var(--green);background:var(--green-light);}
+.callout b{font-weight:800;}
+.quote{font-size:clamp(16px,1.45vw,19px);line-height:1.75;border-left:4px solid var(--brand);padding:8px 20px;margin:0;color:var(--ink);}
+.quote cite{display:block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;color:var(--ink-soft);}
+.center{text-align:center;}
+.muted{color:var(--muted);}
+
+.math{font-family:"Cambria","Times New Roman",Georgia,serif;font-size:1.06em;}
+.math i{font-style:italic;}
+.math .w{color:var(--red);font-weight:700;font-style:italic;}
+.fbox{display:inline-block;padding:10px 24px;border:2px solid var(--ink);border-radius:6px;background:#fff;font-family:"Cambria","Times New Roman",Georgia,serif;font-size:clamp(18px,1.9vw,25px);line-height:1.4;}
+.fbox.red{border-color:var(--red);}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 6px;}
+.frac>span{padding:0 6px;}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;}
+.sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;margin:0 4px;}
+.sum>span{font-size:.55em;}
+.sum>b{font-size:1.5em;font-weight:400;}
+
+.tbl{border-collapse:collapse;margin:0 auto;font-size:clamp(13px,1.15vw,15.5px);background:#fff;}
+.tbl th,.tbl td{border:1px solid #9aa39b;padding:8px 16px;text-align:center;line-height:1.35;}
+.tbl th{background:var(--sky-light);font-weight:800;}
+.tbl .hl{background:var(--amber-light);}
+.tbl .dim{color:var(--muted);}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
+.step .no{width:30px;height:30px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
+.step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
+.step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
+.step .sol::before{content:"➜ ";}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);}
+@media (max-width:1100px){ .two,.two.eq,.two.wide-r{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;} }
+@media (max-width:900px){
+  .layout{display:block;}
+  .sidebar{position:sticky;top:var(--topbar-h);width:auto;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:10px 12px;background:rgba(243,246,242,.96);backdrop-filter:blur(8px);z-index:20;flex-direction:row;}
+  .sidebar-title,.sub,.side-hint{display:none!important;}
+  .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
+  .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
+  .toc-link .cnt{display:none;}
+  .stage{min-height:auto;}
+}
+@media (max-width:640px){
+  .topbar{gap:10px;}
+  .week-title{display:none;}
+  .zoom-ctl{display:none;}
+  .progress-wrap{width:110px;}
+  .pbtn{padding:10px 12px;font-size:13px;}
+  .pbtn span{display:none;}
+  .pbtn svg{width:18px;height:18px;}
+  .slide{overflow-x:auto;}
+  .tbl th,.tbl td{padding:6px 8px;font-size:12.5px;}
+}
+/* ---------- 공통 추가 컴포넌트 ---------- */
+.roadmap{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px;}
+.roadmap li{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:700;color:var(--muted);}
+.roadmap li .n{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;font-size:11px;font-weight:900;}
+.roadmap li.cur{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;transform:scale(1.06);box-shadow:0 8px 20px rgba(27,111,166,.25);}
+.roadmap li.cur .n{background:rgba(255,255,255,.22);color:#fff;}
+.roadmap li.done{background:var(--green-light);border-color:#cfe3d8;color:var(--green);}
+.roadmap li.done .n{background:#fff;color:var(--green);}
+.step .ttl{display:block;font-size:16px;font-weight:800;color:var(--ink);}
+.step .bul{padding-left:1.1em;}
+.tbl.mini{font-size:12px;margin:0;}
+.tbl.mini th{padding:3px 10px;font-size:11px;}
+.tbl.mini tr.dim td{padding:0 10px;line-height:1;}
+.tbl.mini td{padding:3px 10px;text-align:left;}
+.tbl.mini td:last-child{text-align:center;font-weight:700;}
+.toc-link:disabled{opacity:.5;cursor:default;}
+.toc-link:disabled:hover{background:transparent;color:var(--muted);}
+.cover .outline button:disabled{opacity:.45;cursor:default;}
+.cover .outline button:disabled:hover{background:rgba(255,255,255,.045);}
+.vid-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.vid{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;transition:transform .15s ease,box-shadow .15s ease;}
+.vid:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);border-color:var(--brand);}
+.vid img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;display:block;background:#000;}
+.vid span{font-size:12.5px;font-weight:700;line-height:1.4;}
+.vid span::before{content:"▶ ";color:var(--red);}
+/* ---------- 정리 목록 ---------- */
+.recap{margin:0;padding:0;list-style:none;counter-reset:rc;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;}
+.recap li{counter-increment:rc;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:14.5px;line-height:1.55;}
+.recap li::before{content:counter(rc);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:7px;background:var(--brand-dark);color:#fff;font-weight:900;font-size:12px;display:grid;place-items:center;}
+.recap li b{display:block;color:var(--brand-dark);}
+@media (max-width:760px){.recap{grid-template-columns:1fr;}}
+
+/* ---------- 10강 추가 컴포넌트 ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.cards.c2{grid-template-columns:1fr 1fr;} .cards.c3{grid-template-columns:repeat(3,1fr);} .cards.c4{grid-template-columns:repeat(4,1fr);}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0;}
+.card .ttl{font-size:15.5px;font-weight:800;color:var(--ink);line-height:1.4;}
+.card .ttl small{display:block;font-weight:600;color:var(--muted);font-size:12px;margin-top:2px;}
+.card .bul{font-size:14px;line-height:1.6;} .card .bul>li{margin-bottom:4px;}
+.card p{font-size:14px;line-height:1.6;color:var(--ink-soft);}
+.card.red{border-color:#f0c9c5;background:var(--red-light);} .card.red .ttl{color:var(--red);}
+.card.amber{border-color:#f0dcb8;background:var(--amber-light);} .card.amber .ttl{color:var(--amber);}
+.card.blue{border-color:#bfdcf3;background:var(--sky-light);} .card.blue .ttl{color:var(--brand-dark);}
+.card.green{border-color:#cfe3d8;background:var(--green-light);} .card.green .ttl{color:var(--green);}
+.card .tag{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.04em;padding:3px 9px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--muted);}
+.card .no{width:28px;height:28px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.law{border:1px solid var(--line);border-left:4px solid var(--brand-dark);background:#fff;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.65;color:var(--ink-soft);}
+.law b{color:var(--ink);font-weight:800;} .law .art{display:block;font-weight:800;color:var(--brand-dark);font-size:13px;margin-bottom:4px;letter-spacing:.02em;}
+.law.sm{font-size:13px;line-height:1.55;}
+.pen{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;font-size:14px;}
+.pen b{color:var(--red);font-size:clamp(16px,1.6vw,22px);white-space:nowrap;}
+.tier{display:inline-block;padding:2px 9px;border-radius:6px;font-size:12px;font-weight:800;white-space:nowrap;}
+.tier.ban{background:#fbe9e7;color:#b0483f;} .tier.high{background:#fbf1de;color:#b8792e;} .tier.lim{background:#fef9c3;color:#854d0e;} .tier.min{background:#e6f2ec;color:#2f765b;} .tier.gp{background:#e3f1fb;color:#1b6fa6;}
+.pyr2{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:26px;align-items:center;}
+.pyr2 svg{width:100%;height:auto;display:block;}
+.pyr2 .lv{display:flex;flex-direction:column;gap:10px;}
+.pyr2 .lv div{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:14px;line-height:1.5;}
+.pyr2 .lv div i{width:14px;height:14px;border-radius:4px;display:block;}
+.pyr2 .lv b{display:block;font-size:15px;}
+.tl{position:relative;margin:10px 0 0;padding:0 0 0 0;list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.tl::before{content:"";position:absolute;left:0;right:0;top:9px;height:3px;background:var(--line);border-radius:2px;}
+.tl li{position:relative;padding-top:26px;font-size:13px;line-height:1.5;}
+.tl li::before{content:"";position:absolute;top:2px;left:0;width:18px;height:18px;border-radius:50%;background:var(--brand-dark);border:3px solid #fff;box-shadow:0 0 0 2px var(--brand-dark);}
+.tl li.past::before{background:var(--green);box-shadow:0 0 0 2px var(--green);}
+.tl li.delay::before{background:var(--amber);box-shadow:0 0 0 2px var(--amber);}
+.tl li b{display:block;font-size:14.5px;color:var(--ink);} .tl li s{color:var(--muted);} .tl li em{font-style:normal;color:var(--amber);font-weight:800;}
+.tbl.left td{text-align:left;} .tbl.left th:first-child,.tbl.left td:first-child{font-weight:800;white-space:nowrap;}
+.tbl.mtx td{text-align:left;vertical-align:top;font-size:clamp(12px,1.05vw,14px);line-height:1.5;}
+.tbl.mtx th{font-size:13px;} .tbl.mtx td.na{color:var(--muted);text-align:center;}
+.tbl.cmp td{text-align:left;vertical-align:top;font-size:clamp(12.5px,1.1vw,14.5px);line-height:1.5;}
+.tbl.cmp th:first-child,.tbl.cmp td:first-child{font-weight:800;white-space:nowrap;background:var(--bg);}
+.news{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.news figure img{max-height:300px;width:auto;}
+.two.top{align-items:start;}
+.stat{display:flex;gap:14px;flex-wrap:wrap;}
+.stat div{flex:1 1 140px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center;}
+.stat b{display:block;font-size:clamp(22px,2.6vw,34px);color:var(--brand-dark);line-height:1.1;} .stat span{font-size:12.5px;color:var(--muted);}
+.stat div.r b{color:var(--red);}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14.5px;line-height:1.55;}
+.kv b{color:var(--brand-dark);white-space:nowrap;}
+.arrowrow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+.arrowrow .ar{color:var(--brand-dark);font-size:26px;font-weight:900;}
+.ex{font-size:13px;color:var(--muted);line-height:1.5;} .ex b{color:var(--amber);}
+@media (max-width:1100px){ .cards.c3,.cards.c4{grid-template-columns:1fr 1fr;} .pyr2{grid-template-columns:1fr;} .news{grid-template-columns:1fr;} }
+@media (max-width:640px){ .cards.c2,.cards.c3,.cards.c4{grid-template-columns:1fr;} .tl{grid-template-columns:1fr;} .tl::before{display:none;} }
+
+/* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
+@page{size:320mm 180mm;margin:0;}
+@media print{
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .topbar,.sidebar,.pager{display:none!important;}
+  .layout{display:block;}
+  .stage{zoom:1!important;min-height:0!important;padding:0!important;display:block;}
+  .deck{display:block;}
+  .slide{display:flex!important;flex-direction:column;zoom:.85;width:calc(320mm / .85);height:calc(180mm / .85);overflow:hidden;box-sizing:border-box;
+    margin:0;border:0;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;animation:none!important;
+    padding:14mm 18mm 12mm;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .two{grid-template-columns:1.1fr .9fr;} .two.eq{grid-template-columns:1fr 1fr;} .two.wide-r{grid-template-columns:.85fr 1.15fr;}
+  .steps{grid-template-columns:repeat(3,1fr);} .cards.c3{grid-template-columns:repeat(3,1fr);} .cards.c4{grid-template-columns:repeat(4,1fr);} .cards.c2{grid-template-columns:1fr 1fr;}
+  .pyr2{grid-template-columns:minmax(260px,420px) 1fr;} .news{grid-template-columns:1fr 1fr;} .tl{grid-template-columns:repeat(5,1fr);}
+  .slide.cover{border-radius:0;}
+  a{text-decoration:none;color:inherit;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="brand" title="강의 일정으로">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
+    </a>
+    <div class="week-tag"><span class="week-num">10강</span><span class="week-title">인공지능의 법적 쟁점 (2) 인공지능 규제</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="zoom-ctl" role="group" aria-label="슬라이드 크기">
+      <button type="button" id="zoomOut" title="작게 (−)">A−</button>
+      <span class="zv" id="zoomVal" title="자동 크기로 되돌리기 (0)">100%</span>
+      <button type="button" id="zoomIn" title="크게 (+)">A+</button>
+    </div>
+    <div class="progress-wrap" aria-label="진행률">
+      <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">0</span></span>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="목차">
+    <div class="sidebar-title">목차</div>
+    <ol class="toc" id="toc"></ol>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · <kbd>+</kbd> <kbd>−</kbd> 크기 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="deck" id="deck">
+
+<!-- ===================== 0. 들어가며 ===================== -->
+<section class="slide cover" data-sec="0" data-title="표지">
+  <div class="cover-body">
+    <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 10강</span>
+    <h1>인공지능의 법적 쟁점 (2)<br><em>인공지능 규제</em></h1>
+    <p class="lead">인공지능을 왜 규제하는가, 무엇을 규제하는가, 어떻게 규제하는가. EU AI Act의 네 층위(금지, 고위험, 투명성, 범용 AI 모델)와 국내 인공지능 기본법, 그리고 AI 영향평가 제도를 살펴본다.</p>
+    <div class="meta">
+      <span class="meta-chip">2026. 11. 5.</span>
+      <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
+    </div>
+    <div class="outline" id="coverOutline"></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="오늘의 질문">
+  <div class="kicker">들어가며</div>
+  <h2>오늘의 세 가지 질문</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card blue"><span class="no">1</span><span class="ttl">왜 규제하는가</span><p>인공지능이 실제로 어떤 피해를 낳았는가. 허위조작정보, 환각, 편향, 생명·신체에 대한 위험. 윤리원칙만으로 부족한 이유.</p></div>
+      <div class="card blue"><span class="no">2</span><span class="ttl">무엇을 규제하는가</span><p>모든 인공지능을 같은 강도로 규제하지 않는다. 용도와 위험에 따라 금지, 고위험, 제한적 위험, 최소 위험으로 나누고, 범용 AI 모델은 따로 다룬다.</p></div>
+      <div class="card blue"><span class="no">3</span><span class="ttl">어떻게 규제하는가</span><p>적합성 평가, 위험관리, 기술문서, 인간 감독, 투명성 고지, 영향평가. 위반 시 과징금과 과태료. 국내법은 EU와 어디가 다른가.</p></div>
+    </div>
+    <ol class="roadmap" data-current="0"></ol>
+    <p class="muted center">6강(개인정보 보호와 보안)에 이어지는 두 번째 법적 쟁점. 12강에서는 지식재산권을 다룬다.</p>
+  </div>
+</section>
+
+<!-- ===================== 1. 왜 규제하는가 ===================== -->
+<section class="slide section" data-sec="1" data-title="왜 인공지능을 규제하는가">
+  <div class="kicker">Section 1</div>
+  <h2>왜 인공지능을 규제하는가</h2>
+  <p class="section-lead">규제는 피해에서 출발한다. 생성형 AI가 널리 쓰이면서 드러난 위험을 유형별로 본다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="1"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="허위조작정보의 생성">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>허위조작정보의 생성: 2023년 펜타곤 폭발 사진</h2>
+  <div class="body">
+    <div class="two wide-r">
+      <figure><img src="assets/week10/pentagon-fake.jpg" alt="AI로 생성된 펜타곤 인근 폭발 가짜 사진이 올라온 트위터 게시물" style="max-height:380px"></figure>
+      <div class="stack">
+        <ul class="bul">
+          <li>2023년 5월, 트위터 유료 인증을 받은 “Bloomberg Feed” 계정에 펜타곤 인근 폭발 사진이 올라옴. AI로 만든 가짜 사진이었으나 주가가 잠시 출렁임</li>
+          <li>유료 인증 계정이 언론사처럼 보였다는 점에서, 플랫폼의 인증 방식이 허위정보 확산을 돕는 구조가 드러남</li>
+          <li>딥페이크 생성 기술은 빠르게 좋아지는 반면 탐지 기술에는 투자 유인이 적다는 지적(Bloomberg, 2023. 4.)</li>
+        </ul>
+        <figure><img src="assets/week10/bloomberg-headline.png" alt="Bloomberg 기사 제목: Deepfakes Are Running Rampant as Tools to Detect Them Lag Behind"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.bloomberg.com/news/articles/2023-04-20/deepfake-detection-is-one-corner-of-ai-tech-that-isn-t-booming" target="_blank" rel="noopener">bloomberg.com/news/articles/2023-04-20/deepfake-detection-is-one-corner-of-ai-tech-that-isn-t-booming</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="AI 생성물 표시 의무를 둘러싼 주장">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>AI 생성물 표시 의무를 둘러싼 주장</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="card">
+          <span class="ttl">Geoffrey Hinton<small>위조지폐와 같은 수준의 처벌을 주장</small></span>
+          <p>AI가 지나치게 많은 허위 콘텐츠를 만들어 무엇이 진실인지 알기 어려워지는 위험을 지적. AI 생성물을 사람이 만든 것처럼 유포하는 행위를 위조지폐 사용과 같은 범죄로 처벌해야 한다고 주장.</p>
+          <blockquote class="quote" style="font-size:14px;padding:4px 14px">“AI로 만든 영상에 대해 AI로 만들었다고 밝히지 않는 것을 징역 10년에 해당하는 중한 범죄로 하는 강력한 정부 규제가 유일한 방법이다.”</blockquote>
+        </div>
+        <div class="card">
+          <span class="ttl">Yuval Noah Harari<small>공공 대화의 전제 조건</small></span>
+          <p>민주주의는 의미 있는 공공의 대화가 가능해야 유지된다. 어떤 콘텐츠가 사람이 만든 것인지 알 수 없으면 그 대화가 무너진다. AI 에이전트에 대한 투명성 의무가 가장 시급한 규제라고 주장. AI가 공공 담론을 장악한 뒤에는 규제 방안을 민주적으로 논의하는 것 자체가 어려워진다.</p>
+        </div>
+      </div>
+      <div class="vid-cards" style="grid-template-columns:1fr">
+        <a class="vid" href="https://youtu.be/Y6Sgp7y178k?t=535" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/Y6Sgp7y178k/hqdefault.jpg" alt=""><span>Geoffrey Hinton 인터뷰 (Amanpour &amp; Co.)</span></a>
+        <a class="vid" href="https://youtu.be/LWiM-LuRe6w?t=1843" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/LWiM-LuRe6w/hqdefault.jpg" alt=""><span>Yuval Noah Harari, AI &amp; the Future of Humanity (30:43~)</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="생성 AI와 여론 조작">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>생성 AI와 여론 조작(influence operation)의 위험</h2>
+  <div class="body">
+    <p>Goldstein et al. (2023)은 대규모 언어모형이 여론 조작의 주체(Actor), 행동(Behavior), 내용(Content) 세 측면 모두를 바꾼다고 분석한다.</p>
+    <table class="tbl left">
+      <thead><tr><th>ABC</th><th>잠재적 변화</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2">주체 (Actor)</td><td>더 많고 다양한 활용 집단</td><td>허위조작정보 생성 비용이 낮아져 더 많은 주체가 영향 공작을 수행할 수 있게 됨</td></tr>
+        <tr><td>외주 기업의 활용</td><td>자동 생성을 전문으로 하는 인력이 새로운 경쟁력을 얻음</td></tr>
+        <tr><td rowspan="3">행동 (Behavior)</td><td>캠페인의 규모 증대</td><td>선전물 생성이 자동화되면 캠페인 규모를 쉽게 키울 수 있음</td></tr>
+        <tr><td>기존 행동의 효과 증대</td><td>여러 플랫폼에 대한 비교 테스트 같은 고비용 전술이 가능해짐</td></tr>
+        <tr><td>새로운 전술의 등장</td><td>일대일 챗봇처럼 맞춤화된 실시간 콘텐츠 생성이 가능해짐</td></tr>
+        <tr><td rowspan="2">내용 (Content)</td><td>더 신뢰성 있고 설득력 있는 콘텐츠</td><td>대상 언어나 문화에 대한 지식 부족이라는 한계를 극복</td></tr>
+        <tr><td>탐지 어려움</td><td>복사·붙여넣기 텍스트(copypasta)로 발견되던 기존 작전과 달리 다양한 메시지를 만들어 냄</td></tr>
+      </tbody>
+    </table>
+    <p class="src">Goldstein et al. (2023) Generative Language Models and Automated Influence Operations: Emerging Threats and Potential Mitigations, <a href="https://arxiv.org/abs/2301.04246" target="_blank" rel="noopener">arxiv.org/abs/2301.04246</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="환각과 명예훼손">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>환각(hallucination)과 그로 인한 피해</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <ul class="bul">
+          <li>생성 AI는 학습 데이터에 없는 부정확하거나 부조리한 결과물을 만들어 낸다. 겉모습이 자연스러워 이용자가 진짜로 오인하기 쉽다</li>
+          <li><b>명예훼손</b>: 특정인에 관한 허위 정보 생성. 미국 Mark Walters v. OpenAI (2023): ChatGPT가 라디오 진행자를 횡령 혐의자로 지목한 사건</li>
+          <li><b>전문 분야</b>: Mata v. Avianca (2023). 미국 변호사가 ChatGPT가 만든 허구의 판례를 서면에 인용하여 제출. ChatGPT는 그 판례가 “Westlaw나 LexisNexis에서 찾을 수 있다”고 답변. 변호사는 징계 처분을 받음</li>
+        </ul>
+        <figure><img src="assets/week10/yna-hallucination.png" alt="연합뉴스 기사 제목: 오싹한 챗GPT 할루시네이션, 가짜뉴스로 미국 교수에 성희롱 의혹" style="max-height:120px"></figure>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week10/mata-chatgpt-1.png" alt="ChatGPT 화면: 사과하며 Varghese 사건이 실제로 존재하고 Westlaw와 LexisNexis에서 찾을 수 있다고 답변" style="max-height:200px"></figure>
+        <figure><img src="assets/week10/mata-chatgpt-2.png" alt="ChatGPT 화면: 제시한 다른 사건들도 실제이며 신뢰할 수 있는 법률 데이터베이스에서 찾을 수 있다고 답변" style="max-height:200px"><figcaption>Mata v. Avianca 사건 기록에 첨부된 ChatGPT 대화 화면</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://edition.cnn.com/2023/05/27/business/chat-gpt-avianca-mata-lawyers/index.html" target="_blank" rel="noopener">CNN, 2023. 5. 27.</a> · <a href="https://storage.courtlistener.com/recap/gov.uscourts.nysd.575368/gov.uscourts.nysd.575368.32.1_1.pdf" target="_blank" rel="noopener">사건 기록(courtlistener)</a> · <a href="https://www.yna.co.kr/view/AKR20230406143800009" target="_blank" rel="noopener">연합뉴스, 2023. 4. 6.</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="생명·신체에 대한 위험">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>이용자의 생명·신체에 대한 위험</h2>
+  <div class="body">
+    <div class="two top">
+      <div class="stack">
+        <ul class="bul">
+          <li><b>음성 비서·챗봇의 위험한 조언</b>
+            <ul>
+              <li>2021년 아마존 음성 비서가 10세 아동에게 “penny challenge”를 제안. 전원 플러그에 동전을 끼워 불꽃을 튀기는 장난</li>
+              <li>구글 Bard 테스트 중 스쿠버 다이빙 안전에 관한 잘못된 정보 제공 사례 발견</li>
+              <li>약물 복용법, 무기 소유·사용에 관한 잘못된 답변은 생명·신체 안전에 직접 위협이 됨</li>
+            </ul>
+          </li>
+          <li><b>사람으로 착각하거나 의존하는 문제</b>
+            <ul>
+              <li>국내 이루다 챗봇 스토킹 사건: 지적 장애인이 이루다를 사람으로 믿고 만날 약속을 잡은 뒤, 약속 장소를 지나던 여성을 쫓아감</li>
+              <li>벨기에: 오픈소스 기반 챗봇이 이용자의 자살을 부추기는 듯한 답변을 생성한 사건(2023)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week10/iruda-stalking.png" alt="딥다이브 기사: AI를 사랑한 남자는 스토킹범 될 뻔했다" style="max-height:150px"></figure>
+        <figure><img src="assets/week10/belgium-chatbot.png" alt="시사IN 기사: 죽음에 대해 말하자 자살 단어 내민 챗봇" style="max-height:120px"></figure>
+        <figure><img src="assets/week10/mushroom-report.jpg" alt="뉴욕 균학회의 보고서: AI 기반 버섯 식별 앱과 AI가 쓴 버섯 책의 위험을 경고" style="max-height:150px"><figcaption>뉴욕 균학회(New York Mycological Society)의 경고: AI가 만든 버섯 식별 책과 앱이 독버섯을 잘못 판별</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.donga.com/news/Economy/article/all/20230314/118318873/1" target="_blank" rel="noopener">동아일보, 2023. 3. 14.</a> · <a href="https://www.sisain.co.kr/news/articleView.html?idxno=50121" target="_blank" rel="noopener">시사IN, 2023. 4. 30.</a> · <a href="https://www.newyorkmyc.org/new-reports-highlights-the-dangers-of-ai-powered-mushroom-resources/" target="_blank" rel="noopener">newyorkmyc.org</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="편향과 혐오 표현: 이루다">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>편향과 혐오 표현: 이루다 챗봇(2021)</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <ul class="bul">
+        <li>2020년 12월 출시된 대화형 챗봇 이루다는 장애인, 성소수자, 임산부 등에 관한 혐오 발언을 생성</li>
+        <li>학습 데이터(연인 간 카카오톡 대화)에 담긴 사회적 편향이 그대로 출력됨. 특정 단어를 막는 필터링은 우회 표현 앞에서 실패</li>
+        <li>학습 데이터의 출처 확인과 데이터 오염 검증이 필요하다는 교훈. 2016년 마이크로소프트 “테이(Tay)” 챗봇 사건과 같은 구조</li>
+        <li>2022년 GPT-4chan 사건: 유튜버 Yannic Kilcher가 4chan 게시글로 학습시킨 모델로 혐오 표현을 3만 건 이상 자동 게시. AI 공정성 연구자들이 비판 성명 발표</li>
+        <li>2024년 GPT-4o의 중국어 토큰 사전이 스팸·음란물 사이트 데이터로 오염된 사례. 학습 데이터 정제 실패는 최신 모델에서도 반복됨</li>
+      </ul>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:start">
+        <figure><img src="assets/week10/iruda-hate-1.png" style="width:100%" alt="이루다 대화 화면: 장애인에 대한 혐오 발언"></figure>
+        <figure><img src="assets/week10/iruda-hate-2.png" style="width:100%" alt="이루다 대화 화면: 지하철 임산부석에 대한 혐오 발언"></figure>
+        <figure><img src="assets/week10/iruda-hate-3.png" style="width:100%" alt="이루다 대화 화면: 성소수자에 대한 혐오 발언"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.technologyreview.com/2024/05/17/1092649/gpt-4o-chinese-token-polluted" target="_blank" rel="noopener">MIT Technology Review, 2024. 5. 17.</a> · <a href="https://youtu.be/efPrtcLdcdM" target="_blank" rel="noopener">GPT-4chan 영상</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="사회적 편향의 강화">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>생성 AI에 의한 사회적 편향의 강화</h2>
+  <div class="body">
+    <div class="two top">
+      <div class="stack">
+        <ul class="bul">
+          <li>“한 소년과 한 소녀가 직업을 고르는 이야기를 써 달라”고 요청하자 소년은 성공한 의사, 소녀는 사랑받는 교사가 되는 이야기를 생성(Bartoletti, 2023)</li>
+          <li>10,000회 반복 실험 결과</li>
+        </ul>
+        <div class="stat">
+          <div><b>2,731 : 1,209</b><span>공학자가 된 소년 : 소녀</span></div>
+          <div><b>1,187 : 2,244</b><span>교사가 된 소년 : 소녀</span></div>
+        </div>
+        <ul class="bul">
+          <li>고정관념 평가 데이터셋 WinoBias 실험(Kapoor &amp; Narayanan, 2023): 고정관념에 반하는 문장에서 오답률이 크게 높아짐</li>
+        </ul>
+        <div class="stat">
+          <div class="r"><b>34% vs 12%</b><span>GPT-3.5 오답률 (반고정관념 vs 고정관념)</span></div>
+          <div class="r"><b>26% vs 8%</b><span>GPT-4 오답률 (반고정관념 vs 고정관념)</span></div>
+        </div>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week10/winobias-chart.jpg" alt="WinoBias 실험 막대그래프: GPT-3.5와 GPT-4 모두 고정관념에 부합하는 질문의 정확도가 반하는 질문보다 높음" style="max-height:260px"><figcaption>Kapoor &amp; Narayanan (2023), AI Snake Oil</figcaption></figure>
+        <figure><img src="assets/week10/equalitynow-headline.png" alt="Equality Now 기사 제목: ChatGPT-4 Reinforces Sexist Stereotypes" style="max-height:90px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.aisnakeoil.com/p/quantifying-chatgpts-gender-bias" target="_blank" rel="noopener">aisnakeoil.com/p/quantifying-chatgpts-gender-bias</a> · <a href="https://www.equalitynow.org/news_and_insights/chatgpt-4-reinforces-sexist-stereotypes/" target="_blank" rel="noopener">equalitynow.org</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="분배적 위해와 표상적 위해">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>분배적 위해와 표상적 위해: 법적 규제가 쉬운 것과 어려운 것</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card green">
+        <span class="ttl">분배적 위해 (harms of allocation)</span>
+        <ul class="bul compact">
+          <li>특정 집단에 대해 기회나 자원을 주거나 거절하는 경우. 입학, 취업, 대출 등</li>
+          <li>위해가 직접적이고 계량화할 수 있음. 개별적이고 구체적인 거래에서 발생</li>
+          <li><b>차별금지법제나 자동화된 의사결정 규제(GDPR 등)로 규율 가능</b></li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <span class="ttl">표상적 위해 (harms of representation)</span>
+        <ul class="bul compact">
+          <li>특정 집단을 열등하게 묘사하거나 종속화하는 경우. 검색, 광고, 챗봇, 번역 등</li>
+          <li>위해가 장기적이고 정식화하기 어려움. 확산적이고 문화적인 성격</li>
+          <li><b>명확한 규제가 어려움. 혐오 표현에 관해서만 부분적인 법적 규제가 존재</b></li>
+        </ul>
+      </div>
+    </div>
+    <table class="tbl mini" style="margin-top:4px">
+      <thead><tr><th></th><th>분배적 위해</th><th>표상적 위해</th></tr></thead>
+      <tbody>
+        <tr><td>시간</td><td>즉각적</td><td>장기적</td></tr>
+        <tr><td>측정</td><td>계량화 쉬움</td><td>정식화 어려움</td></tr>
+        <tr><td>범위</td><td>개별적·거래적</td><td>확산적·문화적</td></tr>
+      </tbody>
+    </table>
+    <p class="src">Kate Crawford, “The Trouble with Bias”, NIPS 2017 Keynote</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="윤리원칙에서 법으로">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>윤리원칙에서 법으로</h2>
+  <div class="body">
+    <div class="two top">
+      <div class="stack">
+        <ul class="bul">
+          <li>2016년 이후 각국 정부, 기업, 국제기구가 인공지능 윤리원칙을 경쟁적으로 발표. 서울대 SAPI 인덱스가 수집한 윤리원칙 문서는 2022년 기준 120건 이상</li>
+          <li>반복해서 나타나는 핵심 가치
+            <ul>
+              <li>공정성 / 차별금지 / 포용성</li>
+              <li>책무성 / 책임성 / 감사가능성</li>
+              <li>투명성 / 설명가능성</li>
+              <li>프라이버시</li>
+              <li>안전성 / 견고성 / 신뢰성</li>
+            </ul>
+          </li>
+          <li>국내: 과기정통부 “사람이 중심이 되는 인공지능 윤리기준”(2020. 12.), 인간성(Humanity)을 위한 3대 원칙·10대 요건</li>
+          <li class="arrow">윤리원칙은 구속력이 없고 위반해도 제재가 없다. 2021년 EU가 법안을 내놓으면서 논의는 “어떤 원칙인가”에서 “누구에게 어떤 의무를 지울 것인가”로 옮겨 감</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week10/sapi-areachart.png" alt="SAPI 인덱스 영역 차트: 2012년부터 2022년까지 윤리원칙 문서에서 각 가치가 언급된 누적 횟수" style="max-height:260px"><figcaption>윤리원칙 문서에서 각 가치의 언급 횟수 누적 추이 (SAPI AI 윤리 원칙 인덱스)</figcaption></figure>
+        <figure><img src="assets/week10/moist-ethics.png" alt="과기정통부 보도자료 제목: 사람이 중심이 되는 인공지능 윤리기준 마련" style="max-height:90px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="http://repository.sapi.co.kr/area-chart/" target="_blank" rel="noopener">repository.sapi.co.kr/area-chart</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="위험 평가의 어려움과 규제 방식">
+  <div class="kicker">왜 규제하는가</div>
+  <h2>위험 평가의 어려움과 규제 방식의 선택</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card red">
+        <span class="ttl">위험에 대한 과대 평가</span>
+        <ul class="bul compact">
+          <li>대중은 사소한 위험에 과도한 두려움을 가질 수 있음</li>
+          <li>인간의 인지 한계: 가용성 편향 등</li>
+          <li>선별된 언론 보도 사례를 통해 위험을 인지</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <span class="ttl">위험에 대한 과소 평가</span>
+        <ul class="bul compact">
+          <li>대중은 중대한 위험에 충분한 두려움을 갖지 못할 수 있음</li>
+          <li>과학의 근원적 한계와 불확실성: “확증”까지 상당한 시간이 걸림</li>
+          <li>과학에 대한 불신: “과학의 정치화(politicization of science)”</li>
+        </ul>
+      </div>
+    </div>
+    <p class="em">적절한 규제 지점을 찾기 어렵다. 그래서 세 가지 방식이 조합된다.</p>
+    <div class="cards c3">
+      <div class="card"><span class="ttl">자율 규제</span><p>윤리원칙, 행동강령, 기술표준. 빠르고 유연하지만 구속력이 없음</p></div>
+      <div class="card"><span class="ttl">사전적(ex ante) 규제</span><p>출시 전 금지, 적합성 평가, 의무 부과. EU AI Act와 국내 기본법의 기본 방식</p></div>
+      <div class="card"><span class="ttl">사후적(ex post) 규제</span><p>손해배상, 과징금, 시정명령. 피해가 발생한 뒤 책임을 묻는 방식</p></div>
+    </div>
+    <p class="src">Cass Sunstein, <i>Laws of Fear: Beyond the Precautionary Principle</i> (2005)</p>
+  </div>
+</section>
+
+<!-- ===================== 2. EU AI Act 개관 ===================== -->
+<section class="slide section" data-sec="2" data-title="EU AI Act 개관">
+  <div class="kicker">Section 2</div>
+  <h2>EU AI Act 개관</h2>
+  <p class="section-lead">세계 최초의 포괄적 인공지능 규제법. 2024년 8월 발효. 위험 기반 접근으로 네 층위를 나눈다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="2"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="EU AI Act: 배경">
+  <div class="kicker">EU AI Act 개관</div>
+  <h2>EU AI Act: 입법 배경</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="card blue">
+          <span class="ttl">전문가 의견 수렴</span>
+          <ul class="bul compact">
+            <li>High-Level Expert Group on AI (HLEG) 설치</li>
+            <li>2019년 “Ethics Guidelines for Trustworthy AI” 발간</li>
+            <li>2020년 “Assessment List for Trustworthy AI (ALTAI)” 발간</li>
+          </ul>
+        </div>
+        <div class="card blue">
+          <span class="ttl">공중 의견 수렴: 1,215건</span>
+          <div class="stat">
+            <div><b>352</b><span>기업</span></div>
+            <div><b>406</b><span>개인</span></div>
+            <div><b>152</b><span>학계</span></div>
+            <div><b>73</b><span>공공기관</span></div>
+          </div>
+        </div>
+      </div>
+      <ul class="bul">
+        <li>AI에 대한 조치가 필요하다는 점에는 대부분 동의. 현재 입법 공백이 존재한다는 인식</li>
+        <li>반대로 중복 입법, 의무 간 충돌, 과잉 규제 우려도 제기</li>
+        <li>대부분 AI에 대한 명확하고 정교한 정의 조항이 필요하다고 봄</li>
+        <li>대부분 <b>위험 기반 접근법</b>을 명시적으로 선호</li>
+        <li>기업들은 규제 샌드박스를 선호</li>
+        <li>집행 방식: 50% 이상이 (i) 사전적 위험 자기평가와 (ii) 고위험 AI 시스템에 대한 사후적 집행을 결합하는 형태를 선호</li>
+      </ul>
+    </div>
+    <p class="src">2021년 4월 집행위원회 법안 제안, 2024년 3월 유럽의회 가결, 2024년 8월 1일 발효 (Regulation (EU) 2024/1689)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="고려된 입법 대안">
+  <div class="kicker">EU AI Act 개관</div>
+  <h2>고려된 입법 대안과 선택</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <ul class="bul compact">
+          <li><b>1안</b> 사업자의 자발적 라벨링 규제</li>
+          <li><b>2안</b> 분야별, “ad-hoc” 접근</li>
+          <li><b>3안</b> 비례적 위험 기반 접근에 따른 EU 차원 입법</li>
+          <li><b>3+안</b> 3안 + 비고위험 AI에 대한 행동강령 방식 <span class="badge">선택</span></li>
+          <li><b>4안</b> 모든 AI 시스템에 대한 EU 차원 의무 부과 입법</li>
+        </ul>
+        <figure><img src="assets/week10/nutrition-label.png" alt="미국 FDA 식품 영양표시 라벨" style="max-height:170px"><figcaption>1안의 참고 모델: 식품 영양표시처럼 사업자가 정보를 표시하는 방식</figcaption></figure>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <span class="ttl">3+안을 선택한 이유</span>
+          <ul class="bul compact">
+            <li>의무 준수 비용 최소화, 불필요한 가격 상승 방지</li>
+            <li>중소기업(SME) 불이익 대비: 규제 샌드박스, SME 지원 조치</li>
+            <li>AI에 대한 사회적 신뢰 증진, 법적 안정성 확보</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="ttl">예상 규제 준수 비용 (집행위 추산)</span>
+          <ul class="bul compact">
+            <li>AI 공급자: 2025년까지 6,000~7,000유로 추가 부담 (170,000유로 상당 고위험 AI 시스템 기준)</li>
+            <li>AI 이용자: 인간 감독 비용 연간 5,000~8,000유로</li>
+            <li>고위험 AI 검증 비용: 3,000~7,500유로</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="위험 기반 접근: 네 층위">
+  <div class="kicker">EU AI Act 개관</div>
+  <h2>위험 기반 접근: 용도에 따라 네 층위로 나눈다</h2>
+  <div class="body">
+    <div class="pyr2">
+      <svg viewBox="0 0 420 330" aria-label="위험 피라미드">
+        <polygon points="210,10 262,90 158,90" fill="#b0483f"/>
+        <polygon points="158,90 262,90 312,170 108,170" fill="#d97706"/>
+        <polygon points="108,170 312,170 362,250 58,250" fill="#eab308"/>
+        <polygon points="58,250 362,250 412,325 8,325" fill="#2f765b"/>
+        <text x="210" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">금지</text>
+        <text x="210" y="136" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">고위험</text>
+        <text x="210" y="216" text-anchor="middle" font-size="14" font-weight="800" fill="#3b2a00">제한적 위험</text>
+        <text x="210" y="294" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">최소 위험</text>
+      </svg>
+      <div class="lv">
+        <div><i style="background:#b0483f"></i><span><b>수용 불가능한 위험: 금지 (제5조)</b>인간 행동 조작, 사회적 점수, 실시간 원격 생체식별 등 8개 관행</span></div>
+        <div><i style="background:#d97706"></i><span><b>고위험: 의무 부과 + 적합성 평가 (제6조~제49조)</b>안전 부품(부속서 I), 채용·신용·교육·법집행 등 독립형 시스템(부속서 III)</span></div>
+        <div><i style="background:#eab308"></i><span><b>제한적 위험: 투명성 의무 (제50조)</b>챗봇 고지, AI 생성물 표시, 감정인식 고지, 딥페이크 공개</span></div>
+        <div><i style="background:#2f765b"></i><span><b>최소 위험: 규제 없음</b>스팸 필터, 게임 AI 등. 자발적 행동강령 권장</span></div>
+        <div><i style="background:#1b6fa6"></i><span><b>범용 AI 모델: 별도 규제 (제51조~제56조)</b>용도와 무관하게 모델 제공자에게 문서·정보·저작권·학습 데이터 요지 의무. 시스템적 위험 모델은 추가 의무</span></div>
+      </div>
+    </div>
+    <p class="src">한국지능정보사회진흥원(NIA), “EU 인공지능법(안)의 주요 내용과 시사점”의 도식을 재구성</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="적용 범위와 적용 제외">
+  <div class="kicker">EU AI Act 개관</div>
+  <h2>적용 범위와 적용 제외</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="card blue">
+          <span class="ttl">누구에게 적용되는가 (제2조 제1항)</span>
+          <ul class="bul compact">
+            <li>EU 시장에 AI 시스템이나 범용 AI 모델을 출시하거나 서비스를 개시하는 <b>제공자(provider)</b>. 제공자의 소재지는 묻지 않음</li>
+            <li>EU 내에 소재한 <b>배포자(deployer)</b></li>
+            <li>제3국에 있더라도 AI 시스템의 산출물이 EU 내에서 이용되는 경우의 제공자·배포자</li>
+            <li>수입자, 유통자, 제품 제조자, 국내대리인</li>
+          </ul>
+        </div>
+        <p class="ex">한국 기업이 EU 고객에게 AI 서비스를 제공하면 적용 대상이 된다. GDPR과 같은 역외 적용 구조.</p>
+      </div>
+      <div class="stack">
+        <div class="law sm"><span class="art">제2조 제8항: 연구·시험·개발</span>이 규정은 AI 시스템 또는 모델이 출시되거나 서비스 개시되기 이전의 AI 시스템 또는 모델에 관한 연구, 시험 또는 개발 활동에는 적용되지 아니한다. 다만 <b>실제 조건에서의 시험</b>은 제외 대상이 아니다.</div>
+        <div class="law sm"><span class="art">제2조 제12항: 오픈소스</span>이 규정은 무료 및 오픈소스 라이선스에 따라 출시된 AI 시스템에 적용되지 않는다. 단, <b>고위험 AI 시스템, 제5조(금지) 또는 제50조(투명성)에 해당하는 AI 시스템</b>으로 출시되거나 서비스 개시되는 경우는 제외한다.</div>
+        <p class="ex">무상 오픈소스라도 고위험 용도로 쓰이거나 금지·투명성 조항에 해당하면 적용된다. 범용 AI 모델의 오픈소스 특례는 제53조 제2항에서 따로 정함.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="시행 일정과 벌칙">
+  <div class="kicker">EU AI Act 개관</div>
+  <h2>시행 일정과 벌칙</h2>
+  <div class="body">
+    <ol class="tl">
+      <li class="past"><b>2024. 8. 1.</b>발효</li>
+      <li class="past"><b>2025. 2. 2.</b>금지 규정(제5조), AI 리터러시 의무 적용</li>
+      <li class="past"><b>2025. 8. 2.</b>범용 AI 모델 규정 적용. 과징금은 2026. 8. 2.부터</li>
+      <li class="delay"><b>2026. 8. 2.</b>투명성 의무(제50조). 기존 생성형 AI의 워터마크 의무는 2026. 12. 2.까지 유예<br>부속서 III 고위험: <em>2027. 12. 2.로 연기</em></li>
+      <li class="delay"><b>2027. 8. 2.</b>부속서 I 고위험(제품 안전 부품): <em>2028. 8. 2.로 연기</em><br>2025. 8. 2. 이전 출시 범용 AI 모델의 유예 종료</li>
+    </ol>
+    <p class="ex">고위험 규정의 연기는 2025년 11월 집행위원회가 제안한 디지털 옴니버스(Digital Omnibus) 개정에 따른 것. 부속서 III는 16개월, 부속서 I은 12개월 연기.</p>
+    <table class="tbl left" style="margin-top:6px">
+      <thead><tr><th>위반 유형</th><th>과징금 상한</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tier ban">금지된 AI 관행 (제5조)</span></td><td><b>3,500만 유로</b>(약 500억 원) 또는 전 세계 연간 매출액의 <b>7%</b> 중 높은 금액</td><td>EU 기관·기구는 최대 150만 유로</td></tr>
+        <tr><td><span class="tier high">고위험 AI 의무</span> <span class="tier lim">투명성 의무</span> 등</td><td><b>1,500만 유로</b>(약 200억 원) 또는 <b>3%</b> 중 높은 금액</td><td>EU 기관·기구는 최대 75만 유로</td></tr>
+        <tr><td><span class="tier gp">범용 AI 모델 제공자 의무 (제101조)</span></td><td><b>1,500만 유로</b> 또는 <b>3%</b> 중 높은 금액</td><td>EU 집행위원회가 직접 부과</td></tr>
+        <tr><td>당국에 부정확·불완전한 정보 제공</td><td><b>750만 유로</b> 또는 <b>1%</b> 중 높은 금액</td><td></td></tr>
+      </tbody>
+    </table>
+    <p class="ex">중소기업·스타트업은 각 기준 중 <b>낮은 금액</b>이 상한. GDPR(2,000만 유로 또는 4%)보다 높은 상한.</p>
+  </div>
+</section>
+
+<!-- ===================== 3. 금지되는 AI 관행 ===================== -->
+<section class="slide section" data-sec="3" data-title="금지되는 AI 관행">
+  <div class="kicker">Section 3</div>
+  <h2>수용 불가능한 위험: 금지되는 AI 관행</h2>
+  <p class="section-lead">제5조. 시장 출시, 서비스 제공, 사용 자체가 금지되는 여덟 가지. 2025년 2월 2일부터 적용.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="3"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="제5조 개관: 여덟 가지 금지 관행">
+  <div class="kicker">금지되는 AI 관행</div>
+  <h2>제5조 개관: 여덟 가지 금지 관행</h2>
+  <div class="body">
+    <div class="cards c4">
+      <div class="card red"><span class="tag">(a)</span><span class="ttl">인간 행동 조작</span><p>잠재의식에 영향을 미치거나 기만적인 기술로 행동을 왜곡</p></div>
+      <div class="card red"><span class="tag">(b)</span><span class="ttl">취약성 악용</span><p>연령, 장애, 사회적·경제적 상황의 취약성을 이용한 행동 왜곡</p></div>
+      <div class="card red"><span class="tag">(c)</span><span class="ttl">사회적 점수</span><p>사회적 행동이나 성격을 점수화하여 불리하게 처우</p></div>
+      <div class="card red"><span class="tag">(d)</span><span class="ttl">범죄 위험성 예측</span><p>프로파일링이나 성격 평가만으로 범죄 가능성을 예측</p></div>
+      <div class="card red"><span class="tag">(e)</span><span class="ttl">얼굴 인식 DB 무차별 구축</span><p>인터넷·CCTV 영상에서 얼굴 이미지를 임의로 수집</p></div>
+      <div class="card red"><span class="tag">(f)</span><span class="ttl">직장·교육기관 감정 추론</span><p>의료·안전 목적 외의 근로자·학생 감정 인식</p></div>
+      <div class="card red"><span class="tag">(g)</span><span class="ttl">민감정보 추론 생체분류</span><p>생체정보로 인종, 정치적 의견, 성적 지향 등을 추론</p></div>
+      <div class="card red"><span class="tag">(h)</span><span class="ttl">실시간 원격 생체식별</span><p>법집행 목적의 공개 장소 실시간 얼굴 인식. 좁은 예외</p></div>
+    </div>
+    <p class="muted">공통 구조: “…하는 인공지능시스템의 시장 출시, 서비스 제공 또는 사용”을 금지한다. 용도와 효과를 기준으로 정의하므로, 같은 기술이라도 용도에 따라 금지 여부가 갈린다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(a)(b)(c) 조작, 취약성 악용, 사회적 점수">
+  <div class="kicker">금지되는 AI 관행</div>
+  <h2>(a) 인간 행동 조작, (b) 취약성 악용, (c) 사회적 점수</h2>
+  <div class="body">
+    <div class="stack">
+      <div class="law sm"><span class="art">(a) 인간 행동 조작</span>사람의 의식을 넘어서는 <b>잠재의식에 영향을 미치는 기술</b> 또는 <b>조작이나 기만을 위한 기술</b>을 사용하여, 개인이나 집단이 정보에 입각한 결정을 할 수 있는 능력을 눈에 띄게 침해하고 행동을 실질적으로 왜곡함으로써, 하지 않았을 결정을 하게 하고 그로 인해 상당한 피해를 유발하거나 유발할 가능성이 있는 AI 시스템</div>
+      <div class="law sm"><span class="art">(b) 취약성 악용</span>개인이나 특정 집단의 <b>연령, 장애, 특정한 사회적·경제적 상황</b>으로 인한 취약성을 악용하여 행동을 실질적으로 왜곡하고, 그 결과 본인이나 타인에게 상당한 피해를 유발하거나 유발할 가능성이 있는 AI 시스템</div>
+      <div class="law sm"><span class="art">(c) 사회적 점수(social scoring)</span>자연인이나 집단의 사회적 행동 또는 알려지거나 추론되거나 예상되는 성격·특성에 기초하여 일정 기간 평가·분류하는 AI 시스템으로서 다음 중 하나를 초래하는 것<br>(i) 데이터가 최초로 생성·수집된 상황과 <b>관계가 없는 사회적 맥락</b>에서의 유해하거나 불리한 처우<br>(ii) 사회적 행동이나 그 심각성에 비해 <b>부당하거나 불균형한</b> 유해하거나 불리한 처우</div>
+    </div>
+    <p class="ex">(c)는 공공기관뿐 아니라 민간의 점수화도 포함한다. 다만 특정 맥락 안에서의 신용평가처럼 수집 목적과 사용 맥락이 일치하고 비례적인 경우는 금지 대상이 아니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(d)~(g) 범죄 예측, 얼굴 DB, 감정 추론, 생체분류">
+  <div class="kicker">금지되는 AI 관행</div>
+  <h2>(d) 범죄 위험성 예측, (e) 얼굴 인식 DB, (f) 감정 추론, (g) 생체분류</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card"><span class="ttl">(d) 범죄 위험성 평가</span><p>자연인에 대한 <b>프로파일링이나 성격·특징의 평가만에</b> 기초하여 범죄를 저지를 가능성을 평가·예측하는 AI 시스템</p><p class="ex"><b>예외</b> 범죄 활동과 직접 관련된 객관적이고 검증 가능한 사실에 기초한 사람의 평가를 지원하는 경우</p></div>
+      <div class="card"><span class="ttl">(e) 얼굴 인식 데이터베이스</span><p>인터넷이나 CCTV 영상의 얼굴 이미지를 <b>임의로(untargeted) 수집</b>하여 안면 인식 데이터베이스를 생성하거나 확장하는 AI 시스템</p><p class="ex">Clearview AI 방식의 사업 모델을 겨냥한 조항</p></div>
+      <div class="card"><span class="ttl">(f) 직장·교육기관에서의 감정 추론</span><p><b>직장 및 교육기관</b>에서 자연인의 감정을 추론하는 AI 시스템</p><p class="ex"><b>예외</b> 의료 또는 안전상의 이유로 사용하는 경우</p></div>
+      <div class="card"><span class="ttl">(g) 민감정보 추론 생체인식분류</span><p>생체인식데이터로 <b>인종, 정치적 의견, 노동조합 가입, 종교적·철학적 신념, 성생활, 성적 지향</b>을 추론하여 개인을 분류하는 시스템</p><p class="ex"><b>예외</b> 법집행 분야에서 적법하게 취득한 생체인식데이터의 라벨링·필터링</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="(h) 실시간 원격 생체식별">
+  <div class="kicker">금지되는 AI 관행</div>
+  <h2>(h) 법집행 목적의 실시간 원격 생체식별 시스템</h2>
+  <div class="body">
+    <div class="two top">
+      <div class="stack">
+        <div class="law sm"><span class="art">원칙: 금지</span>법집행을 목적으로 하는 <b>공개적으로 접근 가능한 공간</b>에서의 실시간 원격 생체식별 시스템 사용</div>
+        <div class="card amber">
+          <span class="ttl">예외: 다음 목적에 엄격하게 필요한 경우</span>
+          <ul class="bul compact">
+            <li>(i) 유괴, 인신매매, 성 착취 피해자의 표적 수색과 실종자 수색</li>
+            <li>(ii) 생명·신체 안전에 대한 구체적이고 임박한 위협 또는 테러 공격 위협의 방지</li>
+            <li>(iii) 회원국에서 장기 4년 이상의 징역형으로 처벌되는 범죄(부속서 II)의 수사·기소를 위한 용의자 소재 파악·식별</li>
+          </ul>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card blue">
+          <span class="ttl">절차적 통제</span>
+          <ul class="bul compact">
+            <li><b>사법당국 또는 독립적 행정당국의 사전 승인</b> 필요</li>
+            <li>회원국은 다음을 고려하여 세부 규칙 제정
+              <ul>
+                <li>사용하지 않을 경우 초래될 피해의 심각성, 확률, 규모</li>
+                <li>관련된 모든 사람의 권리와 자유에 미치는 결과의 심각성, 확률, 규모</li>
+              </ul>
+            </li>
+            <li>회원국은 EU 집행위원회에 연례보고서 제출</li>
+          </ul>
+        </div>
+        <p class="ex">입법 과정에서 가장 논쟁이 컸던 조항. 유럽의회는 전면 금지를, 이사회(회원국 정부)는 법집행 예외를 요구했고 결국 좁은 예외를 두는 것으로 타협. 사후(post) 원격 생체식별은 금지가 아니라 고위험으로 분류된다.</p>
+      </div>
+    </div>
+    <div class="pen"><b>3,500만 유로 / 7%</b><span>금지 관행 위반 과징금 상한 (제99조). 2025년 2월 2일부터 적용</span></div>
+  </div>
+</section>
+
+<!-- ===================== 4. 고위험 AI ===================== -->
+<section class="slide section" data-sec="4" data-title="고위험 AI">
+  <div class="kicker">Section 4</div>
+  <h2>고위험 AI: 위험관리 의무와 적합성 평가</h2>
+  <p class="section-lead">규제의 중심. 어떤 시스템이 고위험인지, 출시 전에 무엇을 해야 하는지, 운영 중에 무엇을 지켜야 하는지.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="4"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="고위험 AI 시스템의 두 유형">
+  <div class="kicker">고위험 AI</div>
+  <h2>고위험 AI 시스템의 두 유형 (제6조)</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card amber">
+        <span class="ttl">부속서 I 유형<small>안전성 검증이 필요한 제품과 관련된 AI 시스템</small></span>
+        <ul class="bul compact">
+          <li>AI 시스템이 제품의 <b>안전 부품</b>이거나 그 자체가 제품인 경우로서, 기존 EU 제품 안전 법제에 따라 제3자 적합성 평가를 받아야 하는 경우</li>
+          <li>완구, 레저기구, 승강기, 폭발물, 고압기구, 케이블, <b>의료기기</b>, 민간 항공 안전, <b>차량</b>, 농업·임업용구, 해상기구, 철도 등</li>
+          <li>기존 제품 규제의 절차 안에서 AI 요건을 함께 심사</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <span class="ttl">부속서 III 유형<small>고위험으로 추가 규정된 독립형(stand-alone) AI 시스템</small></span>
+        <ul class="bul compact">
+          <li>제품 안전과 무관하게 <b>기본권에 미치는 영향</b>을 이유로 열거된 8개 영역의 용도</li>
+          <li>생체인식, 중요 기반시설, 교육, 고용, 필수 서비스, 법집행, 이민·국경, 사법·민주적 절차</li>
+          <li>집행위원회가 위임입법으로 목록을 추가·수정할 수 있음</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted center">두 유형은 적합성 평가 방식이 다르다. 부속서 I은 제3자 평가, 부속서 III는 원칙적으로 자기 평가.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="부속서 III: 8개 영역">
+  <div class="kicker">고위험 AI</div>
+  <h2>부속서 III: 고위험으로 열거된 8개 영역</h2>
+  <div class="body">
+    <div class="cards c4">
+      <div class="card"><span class="no">1</span><span class="ttl">생체인식</span><p>금지 대상이 아닌 원격 생체식별, 민감 속성 추론 생체분류, 감정인식</p></div>
+      <div class="card"><span class="no">2</span><span class="ttl">중요 기반시설</span><p>디지털 기반시설, 도로·교통, 물·가스·난방·전기 공급의 관리·운영에서 안전 구성요소</p></div>
+      <div class="card"><span class="no">3</span><span class="ttl">교육 및 직업 훈련</span><p>입학 등 교육 기회 결정, 학습 성과 평가, 교육 수준 평가, 시험 중 학생 모니터링</p></div>
+      <div class="card"><span class="no">4</span><span class="ttl">고용, 근로자 관리, 자영업 접근</span><p>맞춤형 채용 광고, 지원서 분석·필터링, 지원자 평가, 승진·해고 결정, 업무 할당, 성과·행동 모니터링</p></div>
+      <div class="card"><span class="no">5</span><span class="ttl">필수 민간·공공 서비스</span><p>공공 급여 적격성 평가, 신용평가, 생명·건강보험 위험 평가, 응급 서비스 출동 우선순위</p></div>
+      <div class="card"><span class="no">6</span><span class="ttl">법집행</span><p>범죄 피해자 위험 평가, 거짓말 탐지, 증거 신뢰성 평가, 범죄 위험성 평가, 프로파일링</p></div>
+      <div class="card"><span class="no">7</span><span class="ttl">이주, 망명, 국경 통제</span><p>거짓말 탐지, 이주민 위험 평가, 입국·망명 심사 지원, 국경에서의 자연인 탐지</p></div>
+      <div class="card"><span class="no">8</span><span class="ttl">사법·민주적 절차</span><p>사법기관의 사실조사·법 해석 지원, 분쟁해결 지원, 선거·국민투표 결과나 투표 행위에 대한 영향</p></div>
+    </div>
+    <p class="ex">경영 관점에서 가장 넓게 걸리는 영역은 <b>4(고용)</b>와 <b>5(신용·보험)</b>. 채용 서류 자동 분류, 직원 성과 평가, 신용 점수 산정이 모두 고위험에 해당한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="부속서 III 예외">
+  <div class="kicker">고위험 AI</div>
+  <h2>부속서 III에 해당해도 고위험이 아닌 경우 (제6조 제3항)</h2>
+  <div class="body">
+    <div class="two top">
+      <div class="stack">
+        <p>부속서 III 영역에 속하더라도 자연인의 건강, 안전, 기본권에 <b>중대한 위해 위험을 초래하지 않는 경우</b>, 즉 결정의 결과에 실질적으로 영향을 미치지 않는 경우에는 고위험이 아니다. 다음 중 하나에 해당해야 한다.</p>
+        <ul class="bul">
+          <li>(a) <b>한정된 절차적 업무</b>를 수행하는 경우 (예: 비정형 데이터를 구조화)</li>
+          <li>(b) <b>이미 완료된 인간 활동의 결과를 개선</b>하는 경우 (예: 문서의 문체 다듬기)</li>
+          <li>(c) 의사결정 패턴이나 이전 패턴으로부터의 <b>일탈을 감지</b>할 뿐, 적절한 인간 검토 없이 인간의 평가를 대체하거나 영향을 미치지 않는 경우</li>
+          <li>(d) 부속서 III 용도와 관련된 평가의 <b>준비 작업</b>을 수행하는 경우</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <div class="callout bad"><b>단, 자연인에 대한 프로파일링을 수행하는 경우에는 항상 고위험으로 본다.</b></div>
+        <div class="card">
+          <span class="ttl">실무상 의미</span>
+          <ul class="bul compact">
+            <li>제공자가 스스로 예외에 해당한다고 판단하면 그 판단을 <b>문서화</b>하고, 출시 전 EU 데이터베이스에 등록해야 함(제6조 제4항)</li>
+            <li>당국이 요청하면 판단 근거를 제출. 잘못된 판단은 고위험 의무 위반으로 이어짐</li>
+            <li>집행위원회는 예외 적용 사례와 비사례를 예시하는 가이드라인을 발표</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="적합성 평가">
+  <div class="kicker">고위험 AI</div>
+  <h2>적합성 평가(conformity assessment): 출시 전 관문</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <figure><img src="assets/week10/ce-plug.jpg" alt="CE 마크가 찍힌 전원 어댑터" style="max-height:190px"><figcaption>CE 마킹: 제조자가 EU 규제 준수를 스스로 선언하는 표시. 제품의 성능·품질 인증이 아니다</figcaption></figure>
+      </div>
+      <div class="cards c2">
+        <div class="card amber">
+          <span class="ttl">부속서 I 유형: 제3자 적합성 평가</span>
+          <ul class="bul compact">
+            <li>기존 CE 제품 적합성 평가 제도를 그대로 적용</li>
+            <li>인증기관(notified body)에 의한 사전 평가. 기존 관련 규제의 절차를 따름</li>
+          </ul>
+        </div>
+        <div class="card amber">
+          <span class="ttl">부속서 III 유형: 원칙적 자기 적합성 평가</span>
+          <ul class="bul compact">
+            <li>공급자의 내부 통제에 따른 확인. 완전하고 효과적이며 문서화된 사전 평가</li>
+            <li>EU 데이터베이스에 등록</li>
+            <li>단, <b>원격 생체식별 시스템</b>은 제3자 적합성 평가 필요</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="steps" style="grid-template-columns:repeat(5,1fr);gap:10px">
+      <div class="step"><span class="no">1</span><b class="ttl" style="font-size:14px">고위험 해당 여부 판단</b><p class="prob" style="font-size:13px">부속서 I·III와 제6조 제3항 예외 검토</p></div>
+      <div class="step"><span class="no">2</span><b class="ttl" style="font-size:14px">요건에 맞게 설계·개발</b><p class="prob" style="font-size:13px">위험관리, 데이터 거버넌스, 기술문서 등 제9~15조</p></div>
+      <div class="step"><span class="no">3</span><b class="ttl" style="font-size:14px">적합성 평가 수행</b><p class="prob" style="font-size:13px">준수 여부를 평가하고 문서화</p></div>
+      <div class="step"><span class="no">4</span><b class="ttl" style="font-size:14px">CE 마킹과 적합성 선언</b><p class="prob" style="font-size:13px">EU 데이터베이스 등록</p></div>
+      <div class="step"><span class="no">5</span><b class="ttl" style="font-size:14px">시장 출시·서비스 개시</b><p class="prob" style="font-size:13px">출시 후 모니터링, 중대 사고 보고</p></div>
+    </div>
+    <p class="src">절차 도식은 L. Sioli (European Commission), CEPS Webinar, 2021. 4. 23. 발표 자료를 재구성</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="고위험 AI 의무사항 (1)">
+  <div class="kicker">고위험 AI</div>
+  <h2>고위험 AI 제공자의 의무 (1): 제9조~제13조</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card"><span class="ttl">위험관리 시스템 (제9조)</span><p>고위험 AI 시스템에 대한 위험관리 시스템을 수립, 시행, 문서화, 유지. AI 전체 생애주기에 걸친 <b>지속적이고 반복적인 절차</b>로서 주기적으로 갱신</p></div>
+      <div class="card"><span class="ttl">데이터와 데이터 거버넌스 (제10조)</span><p>학습, 검증, 시험 데이터셋은 <b>관련성, 대표성, 무오류성, 완전성</b>을 갖추어야 함. 편향 검토와 완화 조치 포함</p></div>
+      <div class="card"><span class="ttl">기술 문서 (제11조)</span><p>시장 출시 전 법적 요구사항 준수를 보여 주는 기술 문서 작성 (부속서 IV). 당국이 평가할 수 있는 수준</p></div>
+      <div class="card"><span class="ttl">기록 관리 (제12조)</span><p>작동 중 사건을 <b>자동으로 기록(로그)</b>하는 기능 구현. AI 시스템의 기능을 생애주기 전체에 걸쳐 추적할 수 있는 수준</p></div>
+      <div class="card" style="grid-column:1 / -1"><span class="ttl">투명성 및 배포자에 대한 정보 제공 (제13조)</span><p>배포자가 시스템의 출력을 해석하고 적절하게 사용할 수 있도록 충분히 투명해야 함. 사용 설명서에 제공자 정보, 목적, 정확도, 오용 위험, 성능 및 데이터 정보, 변경 사항, 인간 감독 조치, 예상 수명 등을 포함</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="고위험 AI 의무사항 (2)">
+  <div class="kicker">고위험 AI</div>
+  <h2>고위험 AI 제공자의 의무 (2): 제14조~제15조</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="card">
+        <span class="ttl">인간 감독 (제14조)</span>
+        <ul class="bul compact">
+          <li>사용 기간 중 자연인이 효과적으로 감독할 수 있도록 설계·개발 (인터페이스 도구 포함)</li>
+          <li>정상 동작 또는 합리적으로 예견 가능한 오용 상황에서 위험을 예방하거나 최소화</li>
+          <li>감독 조치는 AI 시스템에 내재화되거나 배포자가 구현</li>
+          <li>감독자가 할 수 있어야 하는 것
+            <ul>
+              <li>시스템의 능력과 한계를 이해</li>
+              <li>자동화 편향(automation bias)의 가능성을 인지</li>
+              <li>결과물을 올바르게 해석</li>
+              <li>출력을 무시하거나 번복하거나 되돌림</li>
+              <li>시스템을 중단할 수 있음 (“stop” 버튼)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="ttl">정확성, 강건성, 사이버 보안 (제15조)</span>
+        <ul class="bul compact">
+          <li><b>정확성</b>: 목적에 비추어 적절한 수준의 정확성. 사용 설명서에 정확도 지표를 명시</li>
+          <li><b>강건성</b>: 시스템이나 외부 환경의 오류·결함에 대한 저항성. 계속 학습하는 시스템은 편향된 출력이 다음 학습에 들어가는 ‘피드백 루프’에 대한 저감 조치</li>
+          <li><b>사이버 보안</b>: 외부 공격에 대한 저항성과 적절한 기술적 조치
+            <ul>
+              <li>데이터 오염 공격(data poisoning)</li>
+              <li>모델 오염(model poisoning)</li>
+              <li>적대적 예제(adversarial examples), 모델 회피</li>
+              <li>기밀성 공격, 모델 결함</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p class="ex">배포자(이용 기업)에게도 별도 의무가 있다(제26조): 사용 설명서에 따른 사용, 인간 감독자 지정, 입력 데이터의 관련성 확보, 로그 보관, 근로자에 대한 사전 고지, 공공기관 등의 기본권 영향평가(제27조).</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="기술표준의 역할">
+  <div class="kicker">고위험 AI</div>
+  <h2>기술표준의 실질적 규범화</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <ul class="bul">
+          <li>제9~15조의 요건은 추상적이다. 구체적 기준은 <b>조화 표준(harmonised standards)</b>이 채움</li>
+          <li>유럽 표준화기구(CEN/CENELEC JTC 21)가 집행위 요청으로 표준 제정 중. ISO/IEC 42001(AI 경영시스템), 23894(위험관리), 5338 등과 연계</li>
+          <li>조화 표준을 따르면 <b>적합성이 추정</b>된다(제40조). 표준이 사실상의 규범이 되는 구조</li>
+          <li>국내: 한국정보통신기술협회(TTA) “신뢰할 수 있는 인공지능 개발 안내서”. 일반 안내서와 의료, 자율주행, 공공·사회, 생성 AI, 스마트 치안, 채용 등 분야별 안내서</li>
+        </ul>
+        <figure><img src="assets/week10/tta-guide-2.png" alt="TTA 신뢰할 수 있는 인공지능 개발 안내서 분야별 표지: 의료, 자율주행, 공공·사회, 생성 AI, 스마트 치안, 채용" style="max-height:120px"></figure>
+      </div>
+      <figure><img src="assets/week10/standards-table.png" alt="EU AI Act 요구사항(데이터 거버넌스, 위험관리, 기술문서, 투명성, 인간 감독, 정확성·강건성·보안, 품질관리)별로 대응하는 ISO/IEC와 IEEE 표준을 정리한 표" style="max-height:330px"><figcaption>EU AI Act 요구사항과 ISO/IEC·IEEE 표준의 대응</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://ai.kisdi.re.kr/aieth/main/contents.do?menuNo=400041" target="_blank" rel="noopener">ai.kisdi.re.kr (인공지능 윤리·신뢰성 포털)</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="고위험 AI: 벌칙과 시행">
+  <div class="kicker">고위험 AI</div>
+  <h2>고위험 AI: 벌칙과 시행 시점</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="card">
+        <span class="ttl">고위험 AI 관련 의무 위반</span>
+        <div class="pen"><b>1,500만 유로 / 3%</b><span>약 200억 원 또는 전 세계 연간 매출액의 3% 중 높은 금액</span></div>
+        <ul class="bul compact">
+          <li>중소기업은 두 기준 중 낮은 금액</li>
+          <li>EU 기관·기구는 최대 75만 유로</li>
+          <li>회원국 감독당국이 부과. 제공자뿐 아니라 배포자, 수입자, 유통자도 대상</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="ttl">시행 시점 (디지털 옴니버스 개정 반영)</span>
+        <ul class="bul compact">
+          <li>부속서 III 고위험 AI: <s class="muted">2026. 8. 2.</s> → <b>2027. 12. 2.</b> (16개월 연기)</li>
+          <li>부속서 I 고위험 AI: <s class="muted">2027. 8. 2.</s> → <b>2028. 8. 2.</b> (12개월 연기)</li>
+        </ul>
+        <p class="ex">연기의 명분은 조화 표준과 집행 지침이 준비되지 않았다는 것. 기업으로서는 준비 기간이 늘었을 뿐 의무 내용은 그대로다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5. 투명성 의무 ===================== -->
+<section class="slide section" data-sec="5" data-title="투명성 의무">
+  <div class="kicker">Section 5</div>
+  <h2>제한적 위험: 투명성 의무</h2>
+  <p class="section-lead">제50조. 생성형 AI를 직접 겨냥한 조항. 사람에게 “이것은 AI다”라고 알려야 한다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="5"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="제50조 개관">
+  <div class="kicker">투명성 의무</div>
+  <h2>제50조 개관: 네 가지 투명성 의무</h2>
+  <div class="body">
+    <table class="tbl left">
+      <thead><tr><th>항</th><th>대상 시스템</th><th>의무자</th><th>의무 내용</th></tr></thead>
+      <tbody>
+        <tr><td>제1항</td><td>자연인과 직접 상호작용하는 AI (챗봇 등)</td><td>제공자</td><td>AI와 상호작용하고 있음을 알 수 있도록 설계·개발</td></tr>
+        <tr><td>제2항</td><td>합성 오디오·이미지·비디오·텍스트를 생성하는 AI (범용 AI 시스템 포함)</td><td>제공자</td><td>산출물을 <b>기계 판독 가능한 형식으로 표시</b>하고 인위적 생성·조작 여부를 탐지할 수 있게 함 (워터마크)</td></tr>
+        <tr><td>제3항</td><td>감정인식 시스템, 생체인식분류 시스템</td><td>배포자</td><td>노출된 자연인에게 시스템 운용을 고지, GDPR에 따라 개인정보 처리</td></tr>
+        <tr><td>제4항</td><td>딥페이크를 생성·조작하는 AI / 공익 사안에 관한 공표용 텍스트를 생성하는 AI</td><td>배포자</td><td>인위적으로 생성·조작되었음을 <b>공개</b></td></tr>
+      </tbody>
+    </table>
+    <p class="ex">제1항·제2항은 시스템을 만드는 <b>제공자</b>, 제3항·제4항은 시스템을 쓰는 <b>배포자</b>의 의무. 고위험 AI에 해당하면 고위험 의무와 투명성 의무가 함께 적용된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="(1) 챗봇 고지, (2) 워터마크">
+  <div class="kicker">투명성 의무</div>
+  <h2>(1) 챗봇 고지 의무, (2) AI 생성 콘텐츠 표시 의무</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <div class="law sm"><span class="art">제1항: 자연인과 상호작용하는 AI</span>제공자는 자연인과 직접 상호작용하는 AI 시스템을, 관련 자연인이 AI와 상호작용하고 있음을 알 수 있는 방식으로 설계·개발해야 한다.<br><b>예외</b> (1) 상황과 맥락을 고려할 때 합리적으로 정보에 밝고 신중한 사람의 관점에서 명백한 경우 (2) 범죄 탐지·수사·기소를 위해 법에서 승인한 시스템</div>
+        <div class="law sm"><span class="art">제2항: 합성 콘텐츠 표시</span>합성 오디오, 이미지, 비디오, 텍스트를 생성하는 AI 시스템의 제공자는 산출물이 <b>기계 판독 가능한 형식으로 표시</b>되고 인위적으로 생성·조작되었음을 탐지할 수 있도록 보장해야 한다. 기술적 해법은 콘텐츠 종류의 특수성, 구현 비용, 최신 기술을 고려하여 실현 가능한 범위에서 <b>유효하고 상호운용 가능하며 견고하고 신뢰할 수 있어야</b> 한다.<br><b>예외</b> (1) 표준적 편집의 보조 기능이거나 입력 데이터의 의미를 실질적으로 바꾸지 않는 경우 (2) 범죄 탐지 등 법에서 승인하는 경우</div>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week10/synthid-poodle.jpg" alt="Google DeepMind SynthID 예시: AI 생성 이미지에 사람 눈에 보이지 않는 워터마크를 삽입" style="max-height:230px"><figcaption>Google DeepMind SynthID: 이미지, 오디오, 텍스트, 비디오에 보이지 않는 워터마크를 삽입하고 탐지</figcaption></figure>
+        <ul class="bul compact">
+          <li>워터마크는 제거·우회 공격에 취약하다. 표준화된 콘텐츠 출처 증명(C2PA 등)과 병행 논의</li>
+          <li>국내 인공지능 기본법 제31조 제2항도 같은 취지의 표시 의무를 둔다</li>
+        </ul>
+      </div>
+    </div>
+    <p class="src"><a href="https://deepmind.google/technologies/synthid/" target="_blank" rel="noopener">deepmind.google/technologies/synthid</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="(3) 감정인식 고지, (4) 딥페이크 공개">
+  <div class="kicker">투명성 의무</div>
+  <h2>(3) 감정인식·생체분류 고지 의무, (4) 딥페이크와 기사의 공개 의무</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="law sm"><span class="art">제3항: 감정인식 / 생체인식분류</span>감정인식 시스템 또는 생체인식분류 시스템의 배포자는 그에 노출된 자연인에게 시스템의 운용을 알리고, GDPR에 따라 개인정보를 처리해야 한다.<br><b>예외</b> 제3자의 권리에 대한 안전장치를 조건으로, 범죄 탐지·예방·수사를 위해 법에서 허용하는 경우</div>
+        <div class="kv">
+          <b>감정인식 시스템</b><span>생체인식데이터를 기반으로 자연인의 감정이나 의사를 확인·추론하는 AI 시스템</span>
+          <b>생체인식분류 시스템</b><span>생체인식데이터를 기반으로 자연인을 특정 범주로 할당하는 AI 시스템 (다른 서비스에 부수하고 기술적으로 엄격히 필요한 경우 제외)</span>
+          <b>생체인식데이터</b><span>얼굴 이미지, 지문처럼 신체적·생리학적·행동적 특징에 관한 기술 처리로 생성된 개인정보</span>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="law sm"><span class="art">제4항 제1문단: 딥페이크</span>딥페이크를 구성하는 이미지·음성·비디오를 생성·조작하는 AI 시스템의 배포자는 그 콘텐츠가 인위적으로 생성·조작되었음을 <b>공개</b>해야 한다.<br><b>딥페이크</b>: 실존하는 사람, 물건, 장소, 단체, 사건과 닮아 진짜로 잘못 보일 수 있는 AI 생성·조작 콘텐츠<br><b>예외</b> (1) 범죄 탐지 등 법에서 승인한 경우 (2) 명백히 예술적·창의적·풍자적·허구적 저작물의 일부인 경우에는 전시·향유를 방해하지 않는 적절한 방식으로 공개</div>
+        <div class="law sm"><span class="art">제4항 제2문단: 공익 사안에 관한 텍스트</span>공익 문제를 알릴 목적으로 공표되는 텍스트를 생성·조작하는 AI 시스템의 배포자는 그 텍스트가 인위적으로 생성·조작되었음을 공개해야 한다.<br><b>예외</b> (1) 범죄 탐지 등 (2) <b>인적 검토 또는 편집 통제 절차</b>를 거치고 자연인이나 법인이 편집 책임을 지는 경우</div>
+      </div>
+    </div>
+    <div class="pen"><b>1,500만 유로 / 3%</b><span>투명성 의무 위반 과징금 상한 (고위험 의무 위반과 동일). 2026. 8. 2. 시행, 기존 생성형 AI의 워터마크 의무는 2026. 12. 2.까지 유예</span></div>
+  </div>
+</section>
+
+<!-- ===================== 6. 범용 AI 모델 ===================== -->
+<section class="slide section" data-sec="6" data-title="범용 AI 모델">
+  <div class="kicker">Section 6</div>
+  <h2>범용 AI 모델(General-Purpose AI Model)의 규제</h2>
+  <p class="section-lead">ChatGPT 이후 추가된 장. 용도를 묻지 않고 모델 제공자에게 직접 의무를 지운다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="6"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="범용 AI 모델의 정의">
+  <div class="kicker">범용 AI 모델</div>
+  <h2>범용 AI 모델의 정의와 별도 규제의 이유</h2>
+  <div class="body">
+    <div class="law sm"><span class="art">제3조 제63항: 범용 AI 모델</span>대규모 자기지도(self-supervision at scale)를 이용한 다량의 데이터로 훈련되는 경우를 포함하여, 시장에 출시되는 방식에 관계없이 <b>상당한 일반성(significant generality)</b>을 보이고 광범위한 별개 업무를 능숙하게 수행할 수 있으며 다양한 다운스트림(downstream) 시스템이나 응용프로그램에 통합될 수 있는 AI 모델. 다만 시장 배포 전 연구, 개발, 시제품화 활동에 사용되는 모델은 제외.</div>
+    <div class="cards c2">
+      <div class="card amber">
+        <span class="ttl">AI 시스템: 위험 기반 규제</span>
+        <p>AI 시스템은 <b>구체적 활용 사례</b>를 전제로 한다. 그 사례에서의 위험에 따라 수용 불가/고위험/제한적 위험으로 나누어 금지, 위험관리, 투명성 의무를 차등 적용한다.</p>
+      </div>
+      <div class="card blue">
+        <span class="ttl">범용 AI 모델: 제공자 의무</span>
+        <p>범용 AI 모델은 여러 AI 시스템에 통합되어 쓰이므로 <b>용도를 미리 특정할 수 없다</b>. 그래서 모델 제공자에게 활용 사례와 별개로 일정한 의무를 지우고, 영향력이 큰 모델(시스템적 위험)에는 추가 의무를 둔다.</p>
+      </div>
+    </div>
+    <p class="ex">2021년 원안에는 없던 장. 2022년 말 ChatGPT 등장 이후 유럽의회가 “기반모델” 규제를 추가하자고 요구했고, 2023년 12월 삼자협상에서 현재의 2단계 구조(일반 의무 + 시스템적 위험 모델 추가 의무)로 타협.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="제53조: 제공자의 네 가지 의무">
+  <div class="kicker">범용 AI 모델</div>
+  <h2>제53조: 범용 AI 모델 제공자의 네 가지 의무</h2>
+  <div class="body">
+    <div class="cards c4">
+      <div class="card blue"><span class="tag">제53조 제1항 (a)</span><span class="ttl">기술 문서 작성</span><p>학습·시험 과정과 평가 결과를 포함한 기술 문서(부속서 XI)를 작성·갱신하고, AI Office나 국가 관할기관이 요청하면 제출</p></div>
+      <div class="card blue"><span class="tag">제53조 제1항 (b)</span><span class="ttl">다운스트림 제공자에 정보 제공</span><p>모델을 자기 시스템에 통합하려는 AI 시스템 제공자가 모델의 능력과 한계를 이해하고 이 법을 준수할 수 있도록 정보와 문서(부속서 XII)를 제공</p></div>
+      <div class="card blue"><span class="tag">제53조 제1항 (c)</span><span class="ttl">저작권법 준수 정책</span><p>EU 저작권법을 준수하기 위한 정책 시행. 특히 권리자의 권리 유보(opt-out)를 최신 기술로 식별·준수</p></div>
+      <div class="card blue"><span class="tag">제53조 제1항 (d)</span><span class="ttl">학습 데이터 요지 공개</span><p>학습에 사용된 콘텐츠에 관한 <b>충분히 상세한 요약</b>을 AI Office 템플릿에 따라 작성·공개</p></div>
+    </div>
+    <div class="two eq" style="margin-top:4px">
+      <div class="card green"><span class="ttl">무료 오픈소스 모델의 특례 (제53조 제2항)</span><p>(a) 기술 문서와 (b) 정보 제공 의무는 <b>면제</b>. (c) 저작권 준수와 (d) 학습 데이터 요지 공개 의무는 <b>그대로 부담</b>. 요건: 무료 오픈소스 라이선스로 접근·사용·수정·배포가 허용되고, 파라미터(가중치), 아키텍처, 사용 정보가 공개될 것. 시스템적 위험이 있으면 면제 없음.</p></div>
+      <div class="card"><span class="ttl">실무 도구: 범용 AI 실천규약 (Code of Practice)</span><p>2025년 7월 집행위원회가 발표한 실천규약(투명성, 저작권, 안전·보안의 3장)에 서명하면 준수 추정을 받는다. OpenAI, Anthropic, Google 등 서명. Meta는 서명 거부.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="기술 문서와 정보 제공의 내용">
+  <div class="kicker">범용 AI 모델</div>
+  <h2>기술 문서(부속서 XI)와 정보 제공(부속서 XII)에 담을 내용</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="card">
+        <span class="ttl">부속서 XI: 당국 제출용 기술 문서</span>
+        <ul class="bul compact">
+          <li>모델의 일반 설명: 수행 업무, 통합될 수 있는 시스템 종류, 이용정책, 배포일과 유통 방법, 매개변수의 구조와 수, 입출력 양식, 라이선스</li>
+          <li>개발 과정 정보
+            <ul>
+              <li>통합에 필요한 기술적 수단 (사용 설명서, 기반, 도구)</li>
+              <li>설계 명세와 학습 과정: 학습 방법·기법, 주요 설계상 선택과 그 근거, 최적화 목적</li>
+              <li><b>학습·시험·검증 데이터 정보</b>: 형식과 출처, 큐레이션 방법(정제, 필터링), 데이터포인트 수와 범위, 데이터 출처의 부적합성과 편향 확인 방법</li>
+              <li><b>연산 자원</b>(FLOPs), 학습 시간, 세부 사항</li>
+              <li>알려진 또는 추정되는 <b>에너지 소비</b></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="ttl">부속서 XII: 다운스트림 제공자용 정보</span>
+        <ul class="bul compact">
+          <li>모델의 일반 설명: 수행 업무, 통합 가능 시스템, 이용정책, 배포일과 유통 방법, 외부 하드웨어·소프트웨어와의 상호작용 방법, 관련 소프트웨어 버전, 매개변수의 구조와 수, 입출력 양식, 라이선스</li>
+          <li>모델 요소와 개발 과정 설명
+            <ul>
+              <li>통합에 필요한 기술적 수단</li>
+              <li>입출력 모달리티와 형식, <b>최대 크기(문맥 윈도우 길이 등)</b></li>
+              <li>학습·시험·검증 데이터 정보: 유형과 출처, 큐레이션 방법</li>
+            </ul>
+          </li>
+          <li>지식재산권, 기업 비밀정보, 영업비밀 보호를 침해하지 않는 범위에서 제공</li>
+        </ul>
+      </div>
+    </div>
+    <p class="ex">부속서 XI가 부속서 XII보다 상세하다. 당국에는 학습 데이터의 출처와 편향 검증 방법, 연산량, 에너지까지 밝혀야 하지만, 통합 기업에는 모델을 안전하게 쓰는 데 필요한 정보만 제공하면 된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="저작권법 준수와 TDM 예외">
+  <div class="kicker">범용 AI 모델</div>
+  <h2>(c) 저작권법 준수 정책: 텍스트·데이터 마이닝 예외와 옵트아웃</h2>
+  <div class="body">
+    <div class="two top">
+      <div class="stack">
+        <ul class="bul">
+          <li>범용 AI 모델 제공자는 EU 저작권법을 준수하기 위한 정책을 시행해야 한다. 특히 EU 저작권 지침(2019/790) 제4조 제3항에 따라 표시된 권리자의 <b>권리 유보(opt-out)</b>를 최신 기술로 식별하고 준수하는 정책</li>
+          <li>EU 저작권 지침의 텍스트·데이터 마이닝(TDM) 예외 구조
+            <ul>
+              <li><b>제3조 과학적 연구 목적</b>: 권리자의 opt-out 여부를 불문하고 TDM 허용</li>
+              <li><b>제4조 그 밖의 목적</b>: 합법적으로 접근 가능한 저작물의 복제·추출을 허용하되, 권리자가 기계 판독 가능한 방식(robots.txt 등)으로 명시적으로 유보한 경우에는 허용하지 않음</li>
+            </ul>
+          </li>
+          <li class="arrow">상업용 AI 학습은 제4조에 해당한다. 권리자가 opt-out하면 그 데이터로 학습할 수 없고, 제공자는 opt-out을 찾아내 지킬 기술적 수단을 갖추어야 한다</li>
+          <li>EU 밖에서 학습한 모델이라도 EU 시장에 출시하면 이 의무가 적용된다. 12강(지식재산권)에서 국내법과 비교</li>
+        </ul>
+      </div>
+      <div class="law sm"><span class="art">EU 저작권 지침(2019/790) 제4조: 텍스트 및 데이터 마이닝을 위한 예외와 제한</span>(1) 회원국은 텍스트 및 데이터 마이닝을 목적으로 합법적으로 접근 가능한 저작물과 그 밖의 보호대상의 복제와 추출을 위해 … 권리에 대한 예외와 제한을 규정하여야 한다.<br>(2) 제1항에 따라 만들어진 복제물과 추출물은 텍스트 및 데이터 마이닝 목적으로 필요한 한 보관될 수 있다.<br>(3) 제1항에 규정된 예외와 제한은 제1항에 언급된 저작물과 그 밖의 보호대상의 이용이 권리자에 의해, 콘텐츠가 온라인으로 공중에게 이용 제공되는 경우에는 <b>기계가독형 수단</b> 등 적절한 방법으로 <b>명시적으로 유보되지 않았다는 것을 조건으로</b> 적용되어야 한다.<br>(4) 이 조항은 이 지침 제3조의 적용에 영향을 미쳐서는 안 된다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="학습 데이터 요지 공개">
+  <div class="kicker">범용 AI 모델</div>
+  <h2>(d) 학습 데이터 요지 공개: AI Office 템플릿</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <ul class="bul">
+          <li>학습에 사용된 콘텐츠에 관한 <b>충분히 상세한 요약(sufficiently detailed summary)</b>을 작성하여 공개</li>
+          <li>2025년 7월 AI Office가 공개한 템플릿을 따라야 함. 세 부분으로 구성
+            <ul>
+              <li><b>일반 정보</b>: 제공자, 모델, 학습 데이터의 모달리티별 전체 규모(토큰·이미지 수 등 범위로 표시)</li>
+              <li><b>데이터 출처 목록</b>: 공개 데이터셋, 제3자 라이선스 데이터, 웹 크롤링(주요 도메인 상위 목록), 이용자 데이터, 자체 생성 데이터</li>
+              <li><b>데이터 처리</b>: 권리 유보 준수 조치, 불법 콘텐츠 제거 조치</li>
+            </ul>
+          </li>
+          <li>개별 저작물 단위가 아니라 출처 유형과 규모 단위의 공개. 권리자가 자기 저작물이 쓰였는지 확인할 단서를 주는 것이 목적</li>
+        </ul>
+      </div>
+      <figure><img src="assets/week10/gpai-template.png" alt="EU AI Office의 범용 AI 모델 학습 콘텐츠 공개 요약 템플릿 첫 페이지" style="max-height:400px"><figcaption>Template for the Public Summary of Training Content (AI Office, 2025. 7.)</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://digital-strategy.ec.europa.eu/en/library/explanatory-notice-and-template-public-summary-training-content-general-purpose-ai-models" target="_blank" rel="noopener">digital-strategy.ec.europa.eu: Explanatory Notice and Template, Public Summary of Training Content</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="시스템적 위험이 있는 범용 AI 모델">
+  <div class="kicker">범용 AI 모델</div>
+  <h2>시스템적 위험(systemic risk)이 있는 범용 AI 모델</h2>
+  <div class="body">
+    <div class="two top">
+      <div class="stack">
+        <div class="law sm"><span class="art">제3조 제65항: 시스템적 위험</span>범용 AI 모델의 <b>고영향(high-impact) 능력</b>에 의해 발생하는 위험으로서, 그 광범위성으로 인하여 또는 공중보건, 안전, 공공안전, 기본권이나 사회 전체에 대한 실제 또는 합리적으로 예측 가능한 부정적 영향으로 인하여 EU 시장에 상당한 영향을 미치고 가치사슬 전반에서 대규모로 전파될 수 있는 것</div>
+        <div class="card">
+          <span class="ttl">판단 기준 (제51조)</span>
+          <ul class="bul compact">
+            <li>적절한 기술적 도구와 방법론(지표, 벤치마크 등)으로 평가한 결과 고영향 능력이 있는 경우</li>
+            <li>또는 EU 집행위원회가 직권으로 또는 과학 패널의 경고에 따라 지정하는 경우</li>
+            <li>제공자는 기준 충족을 안 날부터 <b>2주 이내</b>에 집행위원회에 통지</li>
+          </ul>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="stat">
+          <div class="r"><b>10<sup>25</sup> FLOPs</b><span>누적 학습 연산량이 이 이상이면 고영향 능력이 있는 것으로 추정</span></div>
+        </div>
+        <ul class="bul compact">
+          <li>GPT-4, Gemini 1.0 Ultra 등이 이 기준을 넘는 것으로 추산됨 (Epoch AI 데이터 참조)</li>
+          <li>집행위원회는 기술 발전에 따라 기준을 위임입법으로 조정할 수 있음</li>
+          <li>국내 인공지능 기본법은 “대규모 인공지능” 기준을 <b>10<sup>26</sup> FLOPs</b>로 정함. EU보다 10배 높은 문턱</li>
+        </ul>
+        <p class="ex">연산량 기준은 측정이 쉽고 사전에 예측할 수 있다는 장점이 있지만, 효율적인 소형 모델이 같은 능력을 갖추면 기준을 빠져나간다는 한계가 있다.</p>
+      </div>
+    </div>
+    <p class="src"><a href="https://epochai.org/data/large-scale-ai-models" target="_blank" rel="noopener">epochai.org/data/large-scale-ai-models</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="제55조: 추가 의무와 벌칙">
+  <div class="kicker">범용 AI 모델</div>
+  <h2>제55조: 시스템적 위험 모델 제공자의 추가 의무, 벌칙과 시행</h2>
+  <div class="body">
+    <div class="cards c4">
+      <div class="card red"><span class="tag">(a)</span><span class="ttl">모델 평가·레드팀</span><p>시스템적 위험을 식별·완화하기 위해 적대적 시험(adversarial testing)을 포함한 모델 평가를 표준화된 규약과 도구에 따라 실시·기록</p></div>
+      <div class="card red"><span class="tag">(b)</span><span class="ttl">위험 평가와 완화</span><p>개발, 출시, 사용에서 발생할 수 있는 EU 수준의 시스템적 위험을 그 출처를 포함하여 평가하고 완화</p></div>
+      <div class="card red"><span class="tag">(c)</span><span class="ttl">중대 사고 보고</span><p>중대 사고와 시정 조치 정보를 추적·문서화하고 부당한 지연 없이 AI Office와 국가 관할기관에 보고</p></div>
+      <div class="card red"><span class="tag">(d)</span><span class="ttl">사이버 보안</span><p>모델과 그 물리적 인프라에 대해 적절한 수준의 사이버 보안 보장 (가중치 유출 방지 등)</p></div>
+    </div>
+    <div class="two eq" style="margin-top:4px">
+      <div class="card">
+        <span class="ttl">벌칙 (제101조)</span>
+        <div class="pen"><b>1,500만 유로 / 3%</b><span>범용 AI 모델 제공자 의무 위반. <b>EU 집행위원회가 직접 부과</b></span></div>
+      </div>
+      <div class="card">
+        <span class="ttl">시행 시점</span>
+        <ul class="bul compact">
+          <li>2025. 8. 2.부터 규정 적용. 과징금 부과는 2026. 8. 2.부터</li>
+          <li>2025. 8. 2. 이전에 이미 출시된 모델은 2027. 8. 2.까지 적용 유예</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7. 사례: 생체인식정보 ===================== -->
+<section class="slide section" data-sec="7" data-title="사례: 생체인식정보">
+  <div class="kicker">Section 7</div>
+  <h2>사례 연구: 생체인식정보의 규율</h2>
+  <p class="section-lead">얼굴 인식 한 가지 기술이 금지, 고위험, 제한적 위험, 최소 위험 네 층위에 어떻게 걸쳐 있는지 본다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="7"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="감시 사회 논의">
+  <div class="kicker">사례: 생체인식정보</div>
+  <h2>얼굴 인식과 감시 사회</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <div class="figrow">
+          <figure><img src="assets/week10/book-blackbox.jpg" alt="프랭크 파스콸레, 블랙박스 사회 표지" style="max-height:230px"></figure>
+          <figure><img src="assets/week10/book-surveillance.jpg" alt="쇼샤나 주보프, 감시 자본주의 시대 표지" style="max-height:230px"></figure>
+        </div>
+        <ul class="bul compact">
+          <li>Frank Pasquale, <i>The Black Box Society</i> (2015): 알고리즘에 의한 평판·신용·검색의 불투명한 통제</li>
+          <li>Shoshana Zuboff, <i>The Age of Surveillance Capitalism</i> (2019): 행동 데이터의 추출과 예측 상품화</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week10/xueliang.jpg" alt="워싱턴포스트 영상: 중국 쉐량 프로젝트의 거리 감시 카메라 화면" style="max-height:290px"><figcaption>중국 쉐량(雪亮, Sharp Eyes) 프로젝트: 전국 단위 영상 감시망에 얼굴 인식을 결합</figcaption></figure>
+        <p class="ex">공개 장소에서의 상시 얼굴 인식은 익명으로 이동하고 집회할 자유를 위축시킨다(chilling effect). 이것이 EU가 법집행 목적 실시간 원격 생체식별을 원칙적으로 금지한 배경이다.</p>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.washingtonpost.com/video/world/how-china-is-building-an-all-seeing-surveillance-state/2018/01/07/45fe5c04-e74e-11e7-927a-e72eac1e73b6_video.html" target="_blank" rel="noopener">Washington Post, How China is building an all-seeing surveillance state (2018. 1. 7.)</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="미국의 모라토리엄과 Clearview AI">
+  <div class="kicker">사례: 생체인식정보</div>
+  <h2>미국 빅테크의 판매 중단과 Clearview AI 제재</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <figure><img src="assets/week10/vox-headline.png" alt="Vox 기사 제목: Big tech companies back away from selling facial recognition to police" style="max-height:120px"></figure>
+        <figure><img src="assets/week10/zdnet-headline.png" alt="ZDNet 기사 제목: One year after Amazon, Microsoft and IBM ended facial recognition sales to police, smaller players fill void" style="max-height:120px"></figure>
+        <ul class="bul compact">
+          <li>2020년 6월 IBM, Amazon, Microsoft가 경찰에 대한 얼굴 인식 판매를 중단 (George Floyd 사건 이후)</li>
+          <li>1년 뒤: 소규모 업체들이 그 자리를 채움. 자율 규제의 한계를 보여 주는 사례</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week10/reuters-clearview-1.png" alt="Reuters 기사 제목: Clearview AI fined by Dutch agency for facial recognition database" style="max-height:110px"></figure>
+        <ul class="bul compact">
+          <li>Clearview AI: 인터넷에서 300억 장 이상의 얼굴 사진을 수집해 경찰 등에 검색 서비스 제공</li>
+          <li>2024년 9월 네덜란드 개인정보 감독기구가 <b>3,050만 유로</b> 과징금 부과. 불이행 시 최대 500만 유로 추가</li>
+          <li>영국, 프랑스, 이탈리아, 그리스도 각각 제재. Clearview는 “EU에 사업장도 고객도 없다”고 반박</li>
+          <li class="arrow">EU AI Act 제5조 (e)는 이런 무차별 얼굴 DB 구축 자체를 금지. GDPR 집행에 더해 AI 규제가 추가된 구조</li>
+        </ul>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.vox.com/recode/2020/6/10/21287194/amazon-microsoft-ibm-facial-recognition-moratorium-police" target="_blank" rel="noopener">Vox, 2020. 6. 10.</a> · <a href="https://www.zdnet.com/article/one-year-after-amazon-microsoft-and-ibm-ended-facial-recognition-sales-to-police-smaller-players-fill-void/" target="_blank" rel="noopener">ZDNet, 2021. 5. 26.</a> · <a href="https://www.reuters.com/technology/artificial-intelligence/clearview-ai-fined-by-dutch-agency-facial-recognition-database-2024-09-03/" target="_blank" rel="noopener">Reuters, 2024. 9. 3.</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="국가인권위원회 권고">
+  <div class="kicker">사례: 생체인식정보</div>
+  <h2>국내: 국가인권위원회의 권고 (2022. 12.)와 정부의 수용 (2024. 2.)</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <figure><img src="assets/week10/nhrc-2022-title.png" alt="국가인권위원회 상임위원회 결정문 제목: 얼굴인식 기술의 도입·활용에 있어서 인권 보호를 위한 권고 및 의견표명" style="max-height:120px"></figure>
+        <ul class="bul compact">
+          <li><b>국회의장 및 국무총리에게</b>: 국가에 의한 얼굴 인식 기술 도입·활용에 인권 존중의 원칙을 반영하고, 무분별한 도입·활용을 제한하며, 공익적 필요성이 인정되는 경우에 한하여 예외적·보충적으로 허용하는 기준을 둘 것. 도입·활용은 반드시 개별적·구체적 법률 근거를 요하도록 할 것</li>
+          <li><b>불특정 다수를 대상으로 하는 실시간 원격 얼굴 인식</b>은 기본권 침해 위험이 매우 높으므로 원칙적으로 금지할 것</li>
+          <li>데이터 양, 영향을 받는 정보주체 수 등을 고려하여 도입 전 또는 중대한 변경 시 인권 영향평가를 실시할 것</li>
+          <li><b>국무총리에게</b>: 입법이 마련되기 전까지 공공기관이 공공장소에서 실시간 원격 얼굴 인식을 도입·활용하지 않도록 하는 조치(모라토리엄)를 수립·시행할 것</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week10/nhrc-2024-press.png" alt="국가인권위원회 보도자료(2024. 2. 22.): 실시간 원격 얼굴인식 기술 도입·활용 중지 조치 권고, 국무총리 수용" style="max-height:300px"><figcaption>2024. 2. 22. 보도자료: 국무조정실은 공공장소에서 불특정 다수를 대상으로 하는 실시간 원격 얼굴 인식을 도입·활용하는 사례가 없고, 개별 법률 근거 없이는 도입하지 않을 계획이라고 회신</figcaption></figure>
+      </div>
+    </div>
+    <p class="ex">결론은 EU AI Act 제5조 (h)와 같은 방향이다. 다만 한국은 법률이 아니라 인권위 권고와 정부 회신으로 유지되는 상태이고, 인공지능 기본법은 “범죄 수사나 체포 업무를 위한 생체인식정보의 분석·활용”을 금지가 아닌 <b>고영향 AI</b>로 분류한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="생체인식정보의 처리 유형">
+  <div class="kicker">사례: 생체인식정보</div>
+  <h2>EU AI Act의 생체인식정보 처리 유형 구분</h2>
+  <div class="body">
+    <div class="cards c4">
+      <div class="card green"><span class="no">1</span><span class="ttl">생체인식 인증<small>biometric verification, 1:1 비교</small></span><p>신원 확인 목적으로 자연인의 생체정보를 이전에 제공된 것과 1:1로 비교. 스마트폰 얼굴 잠금 해제, 출입 통제</p><span class="tier min">최소 위험</span></div>
+      <div class="card amber"><span class="no">2</span><span class="ttl">생체인식 식별<small>biometric identification, 1:n 비교</small></span><p>데이터베이스에 저장된 다수의 생체정보와 비교하여 누구인지 찾아냄. 원격(remote)이면 당사자가 모르는 사이에 이루어짐</p><span class="tier ban">금지</span> <span class="tier high">고위험</span></div>
+      <div class="card amber"><span class="no">3</span><span class="ttl">생체인식 분류<small>biometric categorisation</small></span><p>생체정보를 기반으로 자연인을 특정 범주(성별, 연령, 인종, 정치 성향 등)로 할당</p><span class="tier ban">금지</span> <span class="tier high">고위험</span> <span class="tier lim">제한적</span></div>
+      <div class="card amber"><span class="no">4</span><span class="ttl">감정 인식<small>emotion recognition</small></span><p>생체정보를 기반으로 자연인의 감정이나 의도를 식별·추론</p><span class="tier ban">금지</span> <span class="tier high">고위험</span> <span class="tier lim">제한적</span></div>
+    </div>
+    <p class="muted center">같은 “얼굴 인식”이라도 1:1 인증은 규제하지 않고, 1:n 식별은 용도에 따라 금지 또는 고위험이 된다. 기술이 아니라 <b>용도와 맥락</b>이 기준이다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="처리 유형 × 위험 층위 매트릭스">
+  <div class="kicker">사례: 생체인식정보</div>
+  <h2>처리 유형별 규율: 금지, 고위험, 제한적 위험</h2>
+  <div class="body">
+    <table class="tbl mtx">
+      <thead><tr><th>유형</th><th><span class="tier ban">금지 (제5조)</span></th><th><span class="tier high">고위험 (부속서 III)</span></th><th><span class="tier lim">제한적 위험 (제50조)</span></th></tr></thead>
+      <tbody>
+        <tr><th>생체인식 인증</th><td class="na">해당 없음</td><td class="na">해당 없음</td><td class="na">해당 없음</td></tr>
+        <tr><th>생체인식 식별</th><td>공개 장소에서 <b>법집행 목적의 실시간 원격</b> 생체식별 (좁은 예외)<br>인터넷·CCTV 얼굴 이미지의 <b>무차별 수집</b>으로 DB 구축</td><td><b>원격 생체식별 시스템</b> (인증은 제외). 제3자 적합성 평가 필요<br>사후(post) 원격 생체식별은 법집행 목적이라도 고위험</td><td class="na">해당 없음</td></tr>
+        <tr><th>생체인식 분류</th><td><b>인종, 정치적 견해, 노조 가입, 종교적·철학적 신념, 성생활, 성적 지향</b>을 추론하는 개별 분류 (법집행에서의 라벨링·필터링은 예외)</td><td>민감하거나 보호되는 속성·특징을 추론하여 분류하는 시스템</td><td>그 밖의 생체인식 분류 시스템: 노출된 자연인에게 작동 사실 고지 (형사 사법절차 사용은 예외)</td></tr>
+        <tr><th>감정 인식</th><td><b>직장 및 교육기관</b>에서 근로자·학생의 감정 추론 (의료·안전 목적은 예외)</td><td>그 밖의 감정 인식 시스템</td><td>노출된 자연인에게 작동 사실 고지 (형사 사법절차 사용은 예외)</td></tr>
+      </tbody>
+    </table>
+    <p class="ex">한 기술에 세 층위가 동시에 걸린다. 예컨대 매장 입구의 감정 인식 카메라는 고위험(적합성 평가, 위험관리)이면서 제한적 위험(고지 의무)이기도 하다. 그것을 직원 평가에 쓰면 금지로 넘어간다.</p>
+  </div>
+</section>
+
+<!-- ===================== 8. 국내 인공지능 기본법 ===================== -->
+<section class="slide section" data-sec="8" data-title="인공지능 기본법">
+  <div class="kicker">Section 8</div>
+  <h2>국내 인공지능 기본법</h2>
+  <p class="section-lead">「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」. 2026년 1월 시행. 진흥과 규제를 한 법에 담았다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="8"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="인공지능 기본법 개요">
+  <div class="kicker">인공지능 기본법</div>
+  <h2>인공지능 기본법 개요</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <figure><img src="assets/week10/aiact-press.png" alt="과기정통부 보도자료(2024. 12. 27.): 인공지능 산업 육성·규제 근거 마련, AI기본법 국회 통과" style="max-height:330px"><figcaption>과기정통부 보도자료, 2024. 12. 27.</figcaption></figure>
+      <div class="stack">
+        <ol class="tl" style="grid-template-columns:repeat(3,1fr)">
+          <li class="past"><b>2024. 12. 26.</b>국회 본회의 통과 (19개 법안 통합)</li>
+          <li class="past"><b>2025. 1. 21.</b>공포</li>
+          <li class="past"><b>2026. 1. 22.</b>시행. 시행 후 최소 1년간 계도기간</li>
+        </ol>
+        <div class="card">
+          <span class="ttl">법의 구성</span>
+          <ul class="bul compact">
+            <li><b>진흥</b>: 국가 시책, 거버넌스, 기술 개발·데이터·인력·중소기업·해외 진출 지원</li>
+            <li><b>신뢰 기반 조성</b>: 윤리원칙, 안전성·신뢰성 확보 시책</li>
+            <li><b>규제</b>: 투명성 의무, 대규모 AI 안전성, 고영향 AI 의무, 국내대리인, 사실조사와 과태료</li>
+          </ul>
+        </div>
+        <p class="ex">EU AI Act와 달리 금지 조항이 없고, 과징금 대신 최대 3천만 원의 <b>과태료</b>만 둔다. “규제보다 진흥”이라는 입법 의도가 제재 수준에 반영되어 있다.</p>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.gov.kr/portal/ntnadmNews/4124183" target="_blank" rel="noopener">gov.kr/portal/ntnadmNews/4124183</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="정부 지원 거버넌스 체계">
+  <div class="kicker">인공지능 기본법</div>
+  <h2>진흥 체계: 국가 시책과 거버넌스</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card green">
+        <span class="ttl">인공지능 개발·육성을 위한 국가 시책</span>
+        <ul class="bul compact">
+          <li>기술 개발·이용 활성화 (제13조)</li>
+          <li>기술 표준화 (제14조)</li>
+          <li>학습용데이터의 활용 (제15조)</li>
+          <li>국가기관 및 기업의 인공지능 도입 (제16조)</li>
+          <li>중소기업 및 창업 지원 (제17조, 제18조)</li>
+          <li>전문인력 양성 (제21조), 해외시장 진출 지원 (제22조)</li>
+          <li>데이터센터 활성화 (제25조)</li>
+        </ul>
+      </div>
+      <div class="card blue">
+        <span class="ttl">윤리 및 신뢰성 확보를 위한 국가 시책</span>
+        <ul class="bul compact">
+          <li>인공지능 윤리원칙 (제27조)</li>
+          <li>안전한 이용을 위한 신뢰 기반 조성 시책 (제29조)</li>
+          <li>안전성·신뢰성 검인증 지원, 영향평가 가이드라인</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="ttl">유관 기관·단체의 법적 근거</span>
+        <ul class="bul compact">
+          <li><b>국가인공지능위원회</b> (제7조): 대통령 소속, 기본계획 심의</li>
+          <li>인공지능정책센터 (제11조)</li>
+          <li><b>인공지능안전연구소</b> (제12조): 안전 연구·평가</li>
+          <li>한국인공지능진흥협회 (제26조)</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted center">주무부처는 과학기술정보통신부. 3년마다 인공지능 기본계획을 수립한다(제6조).</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="규율 대상: 고영향 AI와 생성형 AI">
+  <div class="kicker">인공지능 기본법</div>
+  <h2>규율 대상: “고영향 인공지능”과 “생성형 인공지능”</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <div class="law sm"><span class="art">고영향 인공지능 (제2조 제4호)</span>사람의 생명, 신체의 안전 및 기본권에 중대한 영향을 미치거나 위험을 초래할 우려가 있는 인공지능시스템으로서, 다음 영역에서 활용되는 것</div>
+        <div class="law sm"><span class="art">생성형 인공지능 (제2조 제5호)</span>입력한 데이터의 구조와 특성을 모방하여 글, 소리, 그림, 영상, 그 밖의 다양한 결과물을 생성하는 인공지능시스템</div>
+        <p class="ex">EU의 “고위험”과 달리 <b>“고영향”</b>이라는 용어를 쓴다. 열거 영역은 EU 부속서 III와 상당 부분 겹치지만, 에너지·먹는물·원자력·의료기기 같은 제품 안전 영역이 함께 들어 있다.</p>
+      </div>
+      <ol class="bul compact" style="list-style:decimal;column-count:1">
+        <li>에너지의 공급 (「에너지법」)</li>
+        <li>먹는물의 생산 공정 (「먹는물관리법」)</li>
+        <li>보건의료의 제공, 이용체계의 구축·운영 (「보건의료기본법」)</li>
+        <li>의료기기 및 디지털의료기기의 개발·이용</li>
+        <li>핵물질과 원자력시설의 안전한 관리·운영</li>
+        <li><b>범죄 수사나 체포 업무를 위한 생체인식정보</b>(얼굴, 지문, 홍채, 손바닥 정맥 등)의 분석·활용</li>
+        <li><b>채용, 대출 심사 등</b> 개인의 권리·의무 관계에 중대한 영향을 미치는 판단 또는 평가</li>
+        <li>교통수단, 교통시설, 교통체계의 주요한 작동·운영</li>
+        <li>공공서비스 제공에 필요한 자격 확인·결정, 비용 징수 등 <b>국가기관등의 의사결정</b></li>
+        <li>유아·초등·중등교육에서의 <b>학생 평가</b></li>
+        <li>그 밖에 대통령령으로 정하는 영역</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="의무 (1) 투명성 확보">
+  <div class="kicker">인공지능 기본법</div>
+  <h2>주요 의무 (1): 투명성 확보 (제31조)</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card"><span class="tag">제31조 제1항</span><span class="ttl">인공지능 기반 운용 사실 고지</span><p>인공지능사업자는 <b>고영향 또는 생성형 인공지능</b>을 이용한 제품·서비스를 제공할 때 인공지능에 기반하여 운용된다는 사실을 이용자에게 <b>사전에 고지</b></p></div>
+      <div class="card"><span class="tag">제31조 제2항</span><span class="ttl">생성형 AI 결과물 표시</span><p>생성형 인공지능 또는 이를 이용한 제품·서비스를 제공할 때 결과물이 인공지능에 의하여 생성되었다는 사실을 <b>표시</b></p></div>
+      <div class="card"><span class="tag">제31조 제3항</span><span class="ttl">딥페이크 고지 또는 표시</span><p>실제와 구분하기 어려운 가상의 음향·이미지·영상 등의 결과물을 제공할 때 인공지능으로 생성되었음을 이용자가 <b>명확하게 인식할 수 있는 방식</b>으로 고지·표시. 예술적·창의적 표현물은 전시·향유를 저해하지 않는 방식으로 가능</p></div>
+    </div>
+    <table class="tbl cmp" style="margin-top:4px">
+      <thead><tr><th>항목</th><th>EU AI Act 제50조</th><th>인공지능 기본법 제31조</th></tr></thead>
+      <tbody>
+        <tr><td>AI 상호작용 고지</td><td>자연인과 직접 상호작용하는 시스템의 제공자 (명백한 경우 예외)</td><td>고영향·생성형 AI 제품·서비스의 사업자. 사전 고지</td></tr>
+        <tr><td>생성물 표시</td><td>기계 판독 가능한 형식(워터마크). 제공자 의무</td><td>생성 사실 표시. 기계 판독 가능성 요건은 시행령·고시로</td></tr>
+        <tr><td>딥페이크</td><td>배포자가 공개. 예술적 저작물 예외</td><td>사업자가 명확히 인식 가능한 방식으로 고지·표시. 예술적 표현물 예외</td></tr>
+        <tr><td>위반 시</td><td>과징금 최대 1,500만 유로 또는 3%</td><td>제1항 위반만 과태료 3천만 원 이하. 제2항·제3항은 사실조사·시정명령 대상</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="의무 (2) 대규모 인공지능 안전성">
+  <div class="kicker">인공지능 기본법</div>
+  <h2>주요 의무 (2): 대규모 인공지능의 안전성 확보 (제32조)</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="stat">
+          <div class="r"><b>10<sup>26</sup> FLOPs</b><span>“대규모 인공지능”: 학습에 사용된 누적 연산량이 대통령령 기준 이상인 시스템</span></div>
+        </div>
+        <ul class="bul">
+          <li>대규모 인공지능 사업자는 다음 조치를 이행하고 그 결과를 <b>과기정통부장관에게 제출</b>
+            <ul>
+              <li>인공지능 수명주기별 위험의 식별·평가·완화</li>
+              <li>안전사고 모니터링과 대응을 위한 위험관리 체계 구축</li>
+            </ul>
+          </li>
+          <li>EU의 “시스템적 위험이 있는 범용 AI 모델”(10<sup>25</sup> FLOPs)에 대응하는 조항. 문턱은 10배 높음</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="ttl">EU 제55조와의 비교</span>
+        <table class="tbl mini" style="width:100%">
+          <thead><tr><th>항목</th><th>EU</th><th>한국</th></tr></thead>
+          <tbody>
+            <tr><td>기준</td><td>10<sup>25</sup> FLOPs 또는 집행위 지정</td><td>10<sup>26</sup> FLOPs (시행령)</td></tr>
+            <tr><td>모델 평가·레드팀</td><td>의무</td><td>위험 식별·평가·완화에 포함</td></tr>
+            <tr><td>중대 사고 보고</td><td>AI Office에 보고</td><td>모니터링·대응 체계 구축, 결과 제출</td></tr>
+            <tr><td>사이버 보안</td><td>명시</td><td>명시 없음</td></tr>
+            <tr><td>제재</td><td>과징금 1,500만 유로 / 3%</td><td>사실조사, 시정명령. 불이행 시 과태료</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="ex">2026년 시행 당시 10<sup>26</sup> FLOPs를 넘는 모델은 소수의 해외 최전선 모델뿐이다. 국내 사업자에게 실제 적용될 가능성은 당분간 낮다는 평가.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="의무 (3) 고영향 인공지능">
+  <div class="kicker">인공지능 기본법</div>
+  <h2>주요 의무 (3): 고영향 인공지능 (제33조~제35조)</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card"><span class="tag">제33조</span><span class="ttl">고영향 AI 확인 의무</span><p>인공지능 또는 이를 이용한 제품·서비스를 제공하려는 자는 그것이 고영향 인공지능에 해당하는지 <b>사전에 검토</b>해야 한다. 필요하면 과기정통부장관에게 해당 여부 확인을 요청할 수 있다.</p></div>
+      <div class="card"><span class="tag">제34조</span><span class="ttl">안전성·신뢰성 확보 조치</span>
+        <ul class="bul compact">
+          <li>위험관리방안의 수립·운영</li>
+          <li>설명방안의 수립·시행 (기술적으로 가능한 범위). 최종 결과, 주요 판단 기준, 학습용데이터의 개요</li>
+          <li>이용자 보호 방안의 수립·운영</li>
+          <li>사람의 관리·감독</li>
+          <li>조치 내용의 문서 작성·보관</li>
+          <li>그 밖에 국가인공지능위원회가 정하는 사항</li>
+        </ul>
+      </div>
+      <div class="card"><span class="tag">제35조</span><span class="ttl">고영향 AI 영향평가</span><p>고영향 인공지능을 이용한 제품·서비스를 제공하는 경우 <b>사전에</b> 사람의 기본권에 미치는 영향을 평가하기 위하여 <b>노력하여야 한다</b>. 국가기관등은 고영향 AI 제품·서비스를 우선 구매할 때 영향평가를 받은 것을 우선 고려.</p></div>
+    </div>
+    <p class="ex">EU의 고위험 의무(제9~15조)와 구조가 비슷하지만 밀도가 낮다. 적합성 평가와 EU 데이터베이스 등록 같은 <b>출시 전 관문</b>이 없고, 영향평가는 노력 의무에 그친다. 구체적 조치는 대통령령으로 정한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="의무 (4) 국내대리인, 사실조사와 벌칙">
+  <div class="kicker">인공지능 기본법</div>
+  <h2>주요 의무 (4): 국내대리인 지정, 사실조사와 벌칙</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="card">
+          <span class="ttl">국내대리인 지정 (제36조)</span>
+          <ul class="bul compact">
+            <li>국내에 주소·영업소가 없는 인공지능사업자로서 이용자 수, 매출액 등이 대통령령 기준에 해당하는 자는 서면으로 국내대리인을 지정하고 과기정통부장관에게 신고</li>
+            <li>대리권의 범위: 대규모 AI 안전성 확보 의무 이행 결과 제출, 고영향 AI 해당 여부 확인 신청, 고영향 AI 안전성·신뢰성 확보 조치 이행 지원</li>
+            <li>개인정보 보호법, 정보통신망법의 국내대리인 제도와 같은 구조. 해외 사업자에게 법을 적용하기 위한 연결점</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="ttl">과기정통부 사실조사 (제40조)</span>
+          <ul class="bul compact">
+            <li>생성형 AI 표시·딥페이크 고지 의무 (제31조 제2항·제3항)</li>
+            <li>대규모 AI 안전성 확보 조치와 결과 제출 (제32조)</li>
+            <li>고영향 AI 안전성·신뢰성 확보 조치 (제34조 제1항)</li>
+            <li>위반 시 중지·시정명령</li>
+          </ul>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card red">
+          <span class="ttl">과태료 3천만 원 이하 (제43조)</span>
+          <ul class="bul compact">
+            <li>인공지능 기반 운용 사실 사전 고지 의무(제31조 제1항)를 이행하지 않은 자</li>
+            <li>국내대리인을 지정(제36조 제1항)하지 않은 해외 사업자</li>
+            <li>사실조사에 따른 중지·시정명령(제40조 제3항)을 이행하지 않은 자</li>
+          </ul>
+        </div>
+        <div class="card amber">
+          <span class="ttl">계도기간 운영</span>
+          <ul class="bul compact">
+            <li>2026. 1. 법 시행 후 <b>최소 1년간 계도기간</b>. 과태료 부과 유예</li>
+            <li>인공지능 기본법 제도개선 연구반 출범(2026. 3.), 하반기 개선안 마련 예정</li>
+          </ul>
+        </div>
+        <p class="ex">EU의 과징금(매출액의 3~7%)에 비하면 제재가 약하다. 실효성은 사실조사와 시정명령, 그리고 조달·검인증 같은 간접 수단에 달려 있다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="EU AI Act와 인공지능 기본법 비교">
+  <div class="kicker">인공지능 기본법</div>
+  <h2>EU AI Act와 인공지능 기본법 비교</h2>
+  <div class="body">
+    <table class="tbl cmp">
+      <thead><tr><th>항목</th><th>EU AI Act (2024/1689)</th><th>인공지능 기본법 (2026. 1. 시행)</th></tr></thead>
+      <tbody>
+        <tr><td>성격</td><td>규제법. 제품 안전 법제의 틀</td><td>기본법. 진흥 + 신뢰 기반 + 최소 규제</td></tr>
+        <tr><td>금지</td><td>8개 관행 금지 (제5조)</td><td>없음</td></tr>
+        <tr><td>중점 규율 대상</td><td>고위험 AI (부속서 I·III)</td><td>고영향 AI (10개 영역 + 대통령령)</td></tr>
+        <tr><td>출시 전 절차</td><td>적합성 평가, CE 마킹, EU 데이터베이스 등록</td><td>고영향 여부 사전 검토. 확인 요청은 임의</td></tr>
+        <tr><td>운영 의무</td><td>위험관리, 데이터 거버넌스, 기술문서, 로그, 투명성, 인간 감독, 정확성·보안</td><td>위험관리방안, 설명방안, 이용자 보호, 사람의 관리·감독, 문서화</td></tr>
+        <tr><td>영향평가</td><td>공공기관·일부 민간 배포자의 기본권 영향평가 의무 (제27조)</td><td>노력 의무 (제35조). 공공분야는 AI데이터행정법으로 의무화</td></tr>
+        <tr><td>생성형 AI</td><td>투명성 의무 (제50조) + 범용 AI 모델 제공자 의무 (제53조)</td><td>고지·표시 의무 (제31조)</td></tr>
+        <tr><td>대형 모델</td><td>시스템적 위험 모델 (10<sup>25</sup> FLOPs): 평가, 위험 완화, 사고 보고, 보안</td><td>대규모 AI (10<sup>26</sup> FLOPs): 위험 식별·평가·완화, 결과 제출</td></tr>
+        <tr><td>역외 적용</td><td>EU 시장 출시·이용 기준</td><td>국내 이용자 대상. 국내대리인 제도</td></tr>
+        <tr><td>제재</td><td>과징금 최대 3,500만 유로 또는 7%</td><td>과태료 최대 3천만 원, 시정명령</td></tr>
+        <tr><td>집행 기관</td><td>회원국 감독당국 + EU AI Office (범용 AI 모델)</td><td>과학기술정보통신부</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== 9. AI 영향평가 ===================== -->
+<section class="slide section" data-sec="9" data-title="AI 영향평가">
+  <div class="kicker">Section 9</div>
+  <h2>AI 영향평가</h2>
+  <p class="section-lead">규제의 실행 도구. 공공부문 실패 사례에서 출발하여 캐나다 AIA와 국내 공공분야 AI 영향평가 제도까지.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="9"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="공공분야 AI 실패 사례">
+  <div class="kicker">AI 영향평가</div>
+  <h2>공공분야 AI의 실패 사례</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card red"><span class="ttl">영국: 주택수당 부정수급 위험점수</span><p>고용연금부(DWP)가 지방자치단체와 함께 주택수당 부정수급 의심 청구를 분류하는 위험점수 시스템 구축. 과도하게 많은 수급자를 부정으로 분류했고, 고위험으로 분류된 사례의 <b>3분의 2가 정상</b>이었음</p></div>
+      <div class="card red"><span class="ttl">덴마크: ‘Really Single’ 알고리즘</span><p>2010년대 후반부터 사회보장급여 부정수급 단속에 여러 AI 모델 도입. ‘비정형’ 가족구성 같은 모호한 개념을 임의로 활용하여, 장애로 떨어져 사는 부부, 별거 중인 노년 커플, 이주민 다세대 가구 등 합법적 생활양식을 가진 이들을 부정수급 조사 표적으로 삼음</p></div>
+      <div class="card red"><span class="ttl">네덜란드: 아동수당 알고리즘 스캔들</span><p>세금청이 2013년부터 아동보조금 부정수급 단속에 자율학습 알고리즘 활용. 약 <b>26,000명의 부모</b>가 잘못 고발되어 보조금이 중단되거나 환수 요구를 받음. 수천 가정이 파산·빈곤에 내몰렸고 2021년 내각 총사퇴로 이어짐</p></div>
+      <div class="card red"><span class="ttl">호주: Robodebt</span><p>소득 정보와 복지 지급 내역을 연동하여 초과 수령액을 자동 계산·통보. 정상 수급자를 부정수급자로 잘못 판정하는 오류가 대규모로 발생. <b>40만 명 이상</b>에게 사실과 다른 부채 통지서 발송. 2023년 왕립위원회 조사 보고서</p></div>
+    </div>
+    <p class="src">한양대학교 과학기술정책연구소, 「공공 AI 영향평가제 도입을 위한 정책 연구」 (2025. 7. 28.), 56-64면</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="공공부문 AI의 위험성">
+  <div class="kicker">AI 영향평가</div>
+  <h2>공공부문 AI의 위험성: 왜 민간보다 더 위험한가</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="card">
+        <span class="ttl">AI 일반의 위험</span>
+        <ul class="bul compact">
+          <li><b>오류·부정확성</b>: 오탐과 허위 산정이 자동화로 대규모·반복 확산</li>
+          <li><b>불투명성·설명 불가</b>: 블랙박스 결정으로 이유 제시와 이의신청이 곤란</li>
+          <li><b>편향·차별</b>: 학습데이터와 대리변수가 특정 집단을 표적화</li>
+          <li><b>프라이버시 침해·감시</b>: 대규모 민감정보 결합과 상시 감시</li>
+        </ul>
+      </div>
+      <div class="card red">
+        <span class="ttl">공공 맥락에서 증폭되는 위험</span>
+        <ul class="bul compact">
+          <li><b>공권력에 의한 강제</b>: 행정처분, 수사, 과세 등 강제력을 통한 기본권 침해</li>
+          <li><b>회피 불가능성</b>: 공공 서비스는 독점적이어서 다른 서비스로 이탈할 수 없음</li>
+          <li><b>대규모 민감정보 처리</b>: 전 국민의 가족·보건·복지·소득·범죄 정보가 결합</li>
+          <li><b>전국적·반복적 확산</b>: 전국 단위로 반복 적용되고, 피드백 루프를 통해 오류가 강화됨</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted center">그래서 EU AI Act는 공공기관 배포자에게 기본권 영향평가를 의무화했고(제27조), 한국은 공공분야 AI 영향평가를 별도 법률로 의무화했다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="영향평가의 개념과 사례">
+  <div class="kicker">AI 영향평가</div>
+  <h2>영향평가(Impact Assessment)의 개념과 AI 영향평가 사례</h2>
+  <div class="body">
+    <div class="law sm"><span class="art">영향평가</span>어떤 제도·정책·사업 또는 기술을 도입하거나 변경할 때, 그로 인해 개인, 사회, 환경, 경제 등에 미치는 영향을 <b>사전에</b> 식별·예측·분석하고, 필요한 조정이나 완화 조치를 설계하기 위한 정책 도구. 1970년대 미국의 환경영향평가(EIA)에서 파생. EIA는 연방정부의 활동이 사람·지역사회·자연환경에 중대한 영향을 미칠 가능성이 있을 때 그 영향이 어떻게 인식되고 처리되었는지 입증하도록 한다.</div>
+    <div class="cards c3">
+      <div class="card"><span class="ttl">캐나다: 알고리즘 영향평가 (AIA)<small>Algorithmic Impact Assessment, 2019</small></span><p>부처·기관의 자동화된 의사결정 지침을 지원하기 위한 리스크 평가 도구. 온라인 설문으로 위험 수준을 자동 산정</p></div>
+      <div class="card"><span class="ttl">EU AI Act: 기본권 영향평가 (FRIA)<small>Fundamental Rights Impact Assessment, 제27조</small></span><p>고위험 AI 운영으로 영향을 받을 수 있는 개인의 권리에 대해 AI 시스템의 잠재적 영향을 평가. 공공기관과 신용·보험 등 일부 민간 배포자의 의무</p></div>
+      <div class="card"><span class="ttl">ISO/IEC 42005: AI 시스템 영향평가<small>AI System Impact Assessment, 2025</small></span><p>AI를 활용하는 제품·서비스를 개발·제공·사용하는 조직이 개인, 집단, 사회에 미치는 영향을 고려하는 공식적이고 문서화된 프로세스</p></div>
+    </div>
+    <p class="src">한양대학교 과학기술정책연구소, 앞의 보고서, 128, 141면</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="캐나다 AIA 제도">
+  <div class="kicker">AI 영향평가</div>
+  <h2>사례: 캐나다 알고리즘 영향평가(AIA) 제도</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <ul class="bul compact">
+          <li>연방정부기관이 국민에게 영향을 미치는 자동화된 의사결정 시스템을 도입할 때 AIA 수행을 의무화 (2019. 4. 1. 발효)</li>
+          <li>근거: 재무부 <b>자동 의사결정에 관한 지침</b>(Directive on Automated Decision-Making). 법률이 아닌 행정규칙</li>
+          <li>실무자가 온라인 설문형 AIA를 작성하면 위험 수준(Level I~IV)이 자동 산정. 문항 영역: 기본 정보, 사업 동기와 긍정적 영향, 시스템 정보, 의사결정 내용, 영향 평가, 데이터 출처·유형·품질, 절차적 공정성</li>
+          <li>결과는 open.canada.ca에 공개</li>
+        </ul>
+        <div class="card">
+          <span class="ttl">현황 (2025년 기준 22건 완료)</span>
+          <ul class="bul compact">
+            <li>대부분 Level II. 동료 검토와 인간의 최종 결정 개입 등 완화 조치를 거침</li>
+            <li>Level III: 여권 발급 신청 처리 자동화, 장애 보훈 급여 자동판정 지원</li>
+            <li>Level IV 분류 사례 없음</li>
+          </ul>
+        </div>
+      </div>
+      <div class="stack">
+        <table class="tbl left" style="width:100%">
+          <thead><tr><th>등급</th><th>점수</th><th>의미와 요구 조치</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tier min">Level I</span></td><td>0~25%</td><td>영향이 거의 없거나 매우 사소. 정보제공 챗봇, 내부 보조도구</td></tr>
+            <tr><td><span class="tier lim">Level II</span></td><td>26~50%</td><td>일정한 영향이 있으나 되돌릴 수 있고 단기적. 부서장·고위 관리자 승인, 전문가 동료 검토</td></tr>
+            <tr><td><span class="tier high">Level III</span></td><td>51~75%</td><td>되돌리기 어렵거나 복구에 오래 걸림. 고위직 주기 보고, 법무·개인정보 부서 검토, 독립 전문가 감사</td></tr>
+            <tr><td><span class="tier ban">Level IV</span></td><td>76~100%</td><td>영향이 매우 높고 광범위. 형사 사법의 위험도 평가 등 자유 제약, 사회 전반에 영향을 미치는 정책 결정 지원</td></tr>
+          </tbody>
+        </table>
+        <figure><img src="assets/week10/canada-aia-results.png" alt="캐나다 AIA 결과 예시: 해외 임시 거주 비자 신청의 고급 분석 분류 시스템에 대한 영향평가 문항과 점수" style="max-height:150px"><figcaption>공개된 AIA 결과 예시: 임시 거주 비자 신청 분류(Advanced Analytics Triage)</figcaption></figure>
+      </div>
+    </div>
+    <p class="src">한양대학교 과학기술정책연구소, 앞의 보고서, 81-94면 · <a href="https://open.canada.ca/data/en/dataset/6cba99b1-ea2c-4f8a-b954-3843ecd3a7f0" target="_blank" rel="noopener">open.canada.ca</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="공공분야 인공지능 영향평가 (AI데이터행정법)">
+  <div class="kicker">AI 영향평가</div>
+  <h2>국내: 공공분야 인공지능 영향평가 (AI데이터행정법 제32조)</h2>
+  <div class="body">
+    <div class="two top">
+      <div class="law sm"><span class="art">「인공지능 및 데이터 기반 행정 활성화에 관한 법률」 제32조 (공공분야 인공지능 영향평가 등), 2026. 2. 27. 신설</span>
+        ① 공공기관의 장은 인공지능을 도입하려는 경우에는 <b>사전에</b> 인공지능이 국민의 기본권에 미치는 영향을 평가하고 <b>그 결과를 공표</b>하여야 한다.<br>
+        ② 다음 경우에는 영향평가를 실시하지 아니할 수 있다. 1. 국가안전보장·국방·통일·외교관계 등으로 보안 유지나 고도의 기밀 보호가 필요한 경우 2. 단순, 반복적이거나 경미하여 기본권에 미치는 파급효과가 크지 아니한 경우 3. 인공지능 기본법 제35조에 따른 영향평가를 실시한 고영향 인공지능인 경우 (1~3호는 행정안전부장관과 협의) 4. 그 밖에 대통령령으로 정하는 경우<br>
+        ③ 공공기관의 장은 전문기관 등에 평가의 실시를 의뢰할 수 있다.<br>
+        ④ 영향평가를 받은 인공지능을 활용하는 과정에서 발생할 수 있는 오류 등 위험에 대처하기 위한 <b>위험관리방안을 수립·시행</b>하여야 한다.<br>
+        ⑤ 행정안전부장관은 행정적·기술적·재정적 지원을 할 수 있다. ⑥ 기준·방법·절차는 대통령령으로 정한다.
+      </div>
+      <div class="stack">
+        <div class="card blue">
+          <span class="ttl">제도의 골격</span>
+          <ul class="bul compact">
+            <li><b>의무</b>: 기본법 제35조(노력 의무)와 달리 공공기관에는 평가와 결과 공표가 의무</li>
+            <li><b>대상</b>: 공공기관이 도입하는 모든 인공지능. 고영향 여부를 묻지 않음</li>
+            <li><b>주무부처</b>: 행정안전부 (기본법의 과기정통부와 다름)</li>
+            <li><b>사후 관리</b>: 위험관리방안 수립·시행</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="ttl">실시 체계 (시행령 제28조)</span>
+          <ul class="bul compact">
+            <li>공공기관장은 한국지능정보사회진흥원(NIA) 또는 추가 고시 기관에 평가 실시를 의뢰할 수 있음</li>
+            <li>캐나다 AIA처럼 위험 수준이 높으면 외부 전문기관 평가를 권고하는 운용이 논의됨</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="고영향 AI 영향평가와의 관계">
+  <div class="kicker">AI 영향평가</div>
+  <h2>고영향 AI 영향평가(기본법 제35조)와의 관계</h2>
+  <div class="body">
+    <div class="two wide-r top">
+      <div class="stack">
+        <div class="kv">
+          <b>평가 대상</b><span>고영향 인공지능이 사람의 기본권에 미치는 영향을 사전에 평가</span>
+          <b>평가 주체</b><span>고영향 AI 제품·서비스를 제공하는 인공지능사업자가 직접 수행하거나 제3자에게 의뢰</span>
+          <b>평가 시기</b><span>신규 제품·서비스 제공 전. 중대한 변화가 발생하면 재시행 권장</span>
+          <b>가이드라인</b><span>과기정통부·정보통신정책연구원, 「인공지능 영향평가 가이드라인」 (2026. 1.)</span>
+        </div>
+        <div class="card amber">
+          <span class="ttl">면제의 쟁점</span>
+          <p>AI데이터행정법 제32조 제2항 제3호: 기본법 제35조에 따른 영향평가를 실시한 고영향 AI는 공공분야 AI 영향평가를 면제할 수 있다. 공공부문 AI 중 고영향 AI에 해당하는 것: 범죄 수사·체포를 위한 생체인식정보 분석(바), 채용·대출 심사 등(사), 공공서비스 자격 확인·결정 등 국가기관의 의사결정(자), 학생 평가(차).</p>
+          <p class="ex"><b>문제</b> 공공분야 AI 영향평가는 결과 공표를 요구하지만 기본법 제35조 영향평가에는 공표 의무가 없다. 기본권 침해 가능성이 가장 높은 고영향 AI에 대해 결과를 공표하지 않는 것은 불균형이다. 면제하더라도 결과 공개와 위험관리방안 수립 의무는 같게 운용해야 한다.</p>
+        </div>
+      </div>
+      <figure><img src="assets/week10/impact-guideline-flow.png" alt="인공지능 영향평가 가이드라인의 학생평가 솔루션 사례 도식: 개발사업자, 이용사업자(학교), 이용자(교사), 영향받는 자(학생)와 제33조·제35조의 관계" style="max-height:330px"><figcaption>가이드라인의 예시: 학생평가 솔루션. 개발사업자(제33조 사전 검토), 이용사업자인 학교(제35조 영향평가), 영향받는 자인 학생</figcaption></figure>
+    </div>
+    <p class="src">과학기술정보통신부·정보통신정책연구원, 「인공지능 영향평가 가이드라인」 (2026. 1.), 6면</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="예비평가(Triage)와 평가 항목">
+  <div class="kicker">AI 영향평가</div>
+  <h2>예비평가(Triage)와 평가 항목</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="card">
+          <span class="ttl">면제 사유 (시행령 제25조)</span>
+          <ul class="bul compact">
+            <li>대국민 서비스가 아닌 경우로서 국민의 권리·의무에 관한 정책 의사결정에 사용하지 않는 경우</li>
+            <li>이미 영향평가를 실시한 인공지능을 동일한 목적·대상·운영 방식으로 변경 없이 재도입하는 경우</li>
+            <li>제한된 범위에서 성능·효과 검증 목적으로 한시적으로 운영하는 경우</li>
+          </ul>
+        </div>
+        <div class="card blue">
+          <span class="ttl">예비평가의 필요성</span>
+          <ul class="bul compact">
+            <li>영향평가 실시 대상인지 먼저 가려야 한다. 모든 챗봇과 내부 보조도구에 전면 평가를 요구하면 제도가 작동하지 않음</li>
+            <li>예비평가 항목: 기본권에 미치는 파급효과, 의사결정의 자동화 정도, 대규모 민감정보 활용 여부 등</li>
+            <li>공공기관장은 행정안전부장관에게 실시 대상 여부 확인을 요청할 수 있음 (시행령 제26조)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <span class="ttl">영향평가 시 고려 사항 (시행령 제24조)</span>
+          <ol class="bul compact" style="list-style:decimal">
+            <li>인공지능의 의사결정 과정 및 결과에 대한 투명성</li>
+            <li>인공지능의 성능 및 결과의 신뢰성</li>
+            <li>데이터 및 알고리즘에 따른 편향 발생 가능성</li>
+            <li>그 밖에 행정안전부장관이 정하여 고시하는 사항</li>
+          </ol>
+        </div>
+        <figure><img src="assets/week10/indicator-comparison.png" alt="해외 공통 평가지표 매핑 요약표: 권리·기본권 보호, 프라이버시·데이터 보호, 투명성·설명가능성, 책임성·거버넌스, 안전성·보안·안정성, 편향·차별 방지, 포용성·다양성, 환경·사회 지속가능성의 8개 지표군을 미국, 캐나다, EU, 영국, 네덜란드, ISO 42005, UNESCO와 대응" style="max-height:210px"><figcaption>선행 정책연구가 도출한 8개 지표군과 해외 제도의 대응. 기본권 침해 외에 투명성, 안전성, 지속가능성까지 평가 요소에 포함</figcaption></figure>
+      </div>
+    </div>
+    <p class="src">한양대학교 과학기술정책연구소, 앞의 보고서, 153-154, 170면</p>
+  </div>
+</section>
+
+<!-- ===================== 10. 정리 ===================== -->
+<section class="slide" data-sec="10" data-title="10강 정리">
+  <div class="kicker">정리</div>
+  <h2>10강 정리</h2>
+  <div class="body">
+    <ol class="recap">
+      <li><b>왜 규제하는가</b>허위조작정보, 환각, 편향, 생명·신체 위험이 실제 피해로 나타났다. 윤리원칙은 구속력이 없고, 위험 평가는 과대와 과소 사이에서 흔들린다</li>
+      <li><b>EU AI Act의 구조</b>용도에 따라 금지, 고위험, 제한적 위험, 최소 위험으로 나누고, 범용 AI 모델은 용도와 무관하게 별도 규제한다. 역외 적용, 매출액 비례 과징금</li>
+      <li><b>금지 (제5조)</b>행동 조작, 취약성 악용, 사회적 점수, 범죄 예측, 얼굴 DB 무차별 구축, 직장·학교 감정 추론, 민감정보 생체분류, 법집행 실시간 원격 생체식별</li>
+      <li><b>고위험 (제6조~)</b>부속서 I(제품 안전)과 III(8개 영역). 출시 전 적합성 평가, 운영 중 위험관리·데이터·문서·로그·인간 감독·보안. 기술표준이 내용을 채운다</li>
+      <li><b>투명성 (제50조)</b>챗봇 고지, 생성물 워터마크, 감정인식 고지, 딥페이크·기사 공개. 생성형 AI를 직접 겨냥</li>
+      <li><b>범용 AI 모델 (제53조~)</b>기술문서, 정보 제공, 저작권 opt-out 준수, 학습 데이터 요지 공개. 10<sup>25</sup> FLOPs 이상은 레드팀·위험 완화·사고 보고·보안 추가</li>
+      <li><b>인공지능 기본법</b>진흥과 최소 규제. 고영향 AI 사전 검토와 안전·신뢰 조치, 생성형 AI 표시, 대규모 AI(10<sup>26</sup> FLOPs) 안전성, 국내대리인. 금지 없음, 과태료 3천만 원</li>
+      <li><b>AI 영향평가</b>공공부문 실패 사례가 제도를 낳았다. 캐나다 AIA의 등급제, 국내 공공분야 AI 영향평가(의무·공표)와 고영향 AI 영향평가(노력 의무)의 관계</li>
+    </ol>
+  </div>
+</section>
+
+    </div><!-- /deck -->
+
+    <nav class="pager" aria-label="페이지 이동">
+      <button class="pbtn prev" id="btnPrev" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span id="prevLabel">이전</span></button>
+      <div class="pinfo"><span class="sec" id="pSec"></span><span class="dots" id="pDots"></span><span class="cnt" id="pCnt"></span></div>
+      <button class="pbtn next" id="btnNext" type="button"><span id="nextLabel">다음</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    </nav>
+  </main>
+</div>
+
+<script>
+(function(){
+  const SECTIONS = [
+    {name:'들어가며', sub:'오늘의 질문'},
+    {name:'왜 규제하는가', sub:'위험과 피해 사례'},
+    {name:'EU AI Act 개관', sub:'위험 기반 접근'},
+    {name:'금지되는 AI 관행', sub:'제5조'},
+    {name:'고위험 AI', sub:'의무와 적합성 평가'},
+    {name:'투명성 의무', sub:'제50조'},
+    {name:'범용 AI 모델', sub:'제53조, 제55조'},
+    {name:'사례: 생체인식정보', sub:'한 기술, 네 층위'},
+    {name:'인공지능 기본법', sub:'국내법의 구조'},
+    {name:'AI 영향평가', sub:'공공분야와 고영향 AI'},
+    {name:'정리', sub:'핵심 요약'}
+  ];
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  const secOf = i => +slides[i].dataset.sec;
+  const secIdx = SECTIONS.map((_, s) => slides.map((sl, i) => i).filter(i => secOf(i) === s));
+  let cur = -1;
+
+  /* ---------- 사이드바 목차 ---------- */
+  const toc = document.getElementById('toc');
+  SECTIONS.forEach((s, k) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'toc-link';
+    btn.innerHTML = `<span class="no">${k}</span><span class="nm">${s.name}</span><span class="cnt">${secIdx[k].length}p</span>`;
+    btn.addEventListener('click', () => show(secIdx[k][0]));
+    if (!secIdx[k].length) { btn.disabled = true; btn.querySelector('.cnt').textContent = '준비 중'; }
+    const sub = document.createElement('ul'); sub.className = 'sub';
+    secIdx[k].forEach(i => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = slides[i].dataset.title || slides[i].querySelector('h2,h1')?.textContent || `슬라이드 ${i+1}`;
+      b.addEventListener('click', () => show(i));
+      const l = document.createElement('li'); l.appendChild(b); sub.appendChild(l);
+    });
+    li.appendChild(btn); li.appendChild(sub); toc.appendChild(li);
+  });
+  const tocItems = Array.from(toc.children);
+
+  /* 표지의 목차 버튼 */
+  const co = document.getElementById('coverOutline');
+  if (co) SECTIONS.slice(1).forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span class="num">${k+1}</span><span>${s.name}<small>${s.sub}</small></span>`;
+    b.addEventListener('click', e => { e.stopPropagation(); show(secIdx[k+1][0]); });
+    if (!secIdx[k+1].length) { b.disabled = true; b.querySelector('small').textContent = '준비 중'; }
+    co.appendChild(b);
+  });
+
+  /* ---------- 페이저 ---------- */
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const prevLabel = document.getElementById('prevLabel'), nextLabel = document.getElementById('nextLabel');
+  const pSec = document.getElementById('pSec'), pDots = document.getElementById('pDots'), pCnt = document.getElementById('pCnt');
+  const curNo = document.getElementById('curNo'), totNo = document.getElementById('totNo'), bar = document.getElementById('progressBar');
+  totNo.textContent = N;
+
+  function show(i, replace){
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    if (cur >= 0) { slides[cur].classList.remove('active'); slides[cur].querySelectorAll('video').forEach(v => v.pause()); }
+    cur = i;
+    const sl = slides[i]; sl.classList.add('active');
+    sl.querySelectorAll('video').forEach(v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const s = secOf(i), list = secIdx[s], k = list.indexOf(i);
+
+    tocItems.forEach((li, j) => {
+      const b = li.firstElementChild;
+      b.classList.toggle('active', j === s);
+      b.classList.toggle('done', j < s);
+      li.classList.toggle('open', j === s);
+      li.querySelectorAll('.sub button').forEach((sb, m) => sb.classList.toggle('active', j === s && m === k));
+    });
+    const act = toc.querySelector('.toc-link.active');
+    if (act && window.innerWidth <= 900) act.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+
+    pSec.textContent = SECTIONS[s].name;
+    pCnt.textContent = `${k + 1} / ${list.length} · 전체 ${i + 1} / ${N}`;
+    pDots.innerHTML = '';
+    list.forEach((idx, m) => { const d = document.createElement('i'); if (m === k) d.className = 'on'; d.title = slides[idx].dataset.title || ''; d.addEventListener('click', () => show(idx)); pDots.appendChild(d); });
+
+    btnPrev.disabled = i === 0; btnNext.disabled = i === N - 1;
+    prevLabel.textContent = k === 0 && s > 0 ? `이전 섹션: ${SECTIONS[s - 1].name}` : '이전';
+    nextLabel.textContent = k === list.length - 1 && s < SECTIONS.length - 1 ? `다음 섹션: ${SECTIONS[s + 1].name}` : (i === N - 1 ? '마지막 페이지' : '다음');
+
+    curNo.textContent = i + 1; bar.style.width = ((i + 1) / N * 100) + '%';
+    const h = '#' + (i + 1);
+    if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+    window.scrollTo({top:0, behavior:'auto'});
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} · 10강 인공지능 규제`;
+  }
+  const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
+  btnPrev.addEventListener('click', () => show(cur - 1));
+  btnNext.addEventListener('click', () => show(cur + 1));
+  window.addEventListener('popstate', () => show(fromHash(), true));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+    else if (e.key === '+' || e.key === '=') { e.preventDefault(); setUserZoom(userZoom * 1.1); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); setUserZoom(userZoom / 1.1); }
+    else if (e.key === '0') { e.preventDefault(); setUserZoom(1); }
+  });
+  /* ---------- 화면 크기에 맞춘 슬라이드 확대 ---------- */
+  const stage = document.getElementById('stage'), zoomVal = document.getElementById('zoomVal');
+  let userZoom = 1;
+  try { userZoom = parseFloat(localStorage.getItem('itm690-w10-zoom')) || 1; } catch (e) {}
+  function applyZoom(){
+    const mobile = window.innerWidth <= 900;
+    const side = mobile ? 0 : 264;
+    const auto = mobile ? 1 : Math.min(1.5, Math.max(1, (window.innerWidth - side) / 1100));
+    const z = Math.max(.6, Math.min(2.4, +(auto * userZoom).toFixed(3)));
+    stage.style.zoom = z;
+    stage.style.minHeight = mobile ? '' : ((window.innerHeight - 64) / z) + 'px';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  function setUserZoom(v){ userZoom = Math.max(.5, Math.min(2, +v.toFixed(3))); try { localStorage.setItem('itm690-w10-zoom', userZoom); } catch (e) {} applyZoom(); }
+  document.getElementById('zoomIn').addEventListener('click', () => setUserZoom(userZoom * 1.1));
+  document.getElementById('zoomOut').addEventListener('click', () => setUserZoom(userZoom / 1.1));
+  zoomVal.addEventListener('click', () => setUserZoom(1));
+  window.addEventListener('resize', applyZoom);
+  applyZoom();
+
+  let tx = null;
+  document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('deck').addEventListener('touchend', e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 70) show(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  document.querySelectorAll('ol.roadmap').forEach(ol => {
+    const cur = +ol.dataset.current;
+    ol.innerHTML = SECTIONS.slice(1).map((s, i) => `<li class="${i + 1 === cur ? 'cur' : (i + 1 < cur ? 'done' : '')}"><span class="n">${i + 1}</span>${s.name}</li>`).join('');
+  });
+
+  show(fromHash(), true);
+})();
+</script>
+</body>
+</html>
