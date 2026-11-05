@@ -323,6 +323,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 .tbl.left td{text-align:left;} .tbl.left th:first-child,.tbl.left td:first-child{font-weight:800;white-space:nowrap;}
 .tbl.mtx td{text-align:left;vertical-align:top;font-size:clamp(12px,1.05vw,14px);line-height:1.5;}
 .tbl.mtx th{font-size:13px;} .tbl.mtx td.na{color:var(--muted);text-align:center;}
+.tbl.cat td:first-child{font-weight:400;white-space:normal;} .tbl.cat td.cat{font-weight:800;white-space:nowrap;}
 .tbl.cmp td{text-align:left;vertical-align:top;font-size:clamp(12.5px,1.1vw,14.5px);line-height:1.5;}
 .tbl.cmp th:first-child,.tbl.cmp td:first-child{font-weight:800;white-space:nowrap;background:var(--bg);}
 .news{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
@@ -479,15 +480,15 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <h2>생성 AI와 여론 조작(influence operation)의 위험</h2>
   <div class="body">
     <p>Goldstein et al. (2023)은 대규모 언어모형이 여론 조작의 주체(Actor), 행동(Behavior), 내용(Content) 세 측면 모두를 바꾼다고 분석한다.</p>
-    <table class="tbl left">
+    <table class="tbl left cat">
       <thead><tr><th>ABC</th><th>잠재적 변화</th><th>설명</th></tr></thead>
       <tbody>
-        <tr><td rowspan="2">주체 (Actor)</td><td>더 많고 다양한 활용 집단</td><td>허위조작정보 생성 비용이 낮아져 더 많은 주체가 영향 공작을 수행할 수 있게 됨</td></tr>
+        <tr><td class="cat "rowspan="2">주체 (Actor)</td><td>더 많고 다양한 활용 집단</td><td>허위조작정보 생성 비용이 낮아져 더 많은 주체가 영향 공작을 수행할 수 있게 됨</td></tr>
         <tr><td>외주 기업의 활용</td><td>자동 생성을 전문으로 하는 인력이 새로운 경쟁력을 얻음</td></tr>
-        <tr><td rowspan="3">행동 (Behavior)</td><td>캠페인의 규모 증대</td><td>선전물 생성이 자동화되면 캠페인 규모를 쉽게 키울 수 있음</td></tr>
+        <tr><td class="cat "rowspan="3">행동 (Behavior)</td><td>캠페인의 규모 증대</td><td>선전물 생성이 자동화되면 캠페인 규모를 쉽게 키울 수 있음</td></tr>
         <tr><td>기존 행동의 효과 증대</td><td>여러 플랫폼에 대한 비교 테스트 같은 고비용 전술이 가능해짐</td></tr>
         <tr><td>새로운 전술의 등장</td><td>일대일 챗봇처럼 맞춤화된 실시간 콘텐츠 생성이 가능해짐</td></tr>
-        <tr><td rowspan="2">내용 (Content)</td><td>더 신뢰성 있고 설득력 있는 콘텐츠</td><td>대상 언어나 문화에 대한 지식 부족이라는 한계를 극복</td></tr>
+        <tr><td class="cat "rowspan="2">내용 (Content)</td><td>더 신뢰성 있고 설득력 있는 콘텐츠</td><td>대상 언어나 문화에 대한 지식 부족이라는 한계를 극복</td></tr>
         <tr><td>탐지 어려움</td><td>복사·붙여넣기 텍스트(copypasta)로 발견되던 기존 작전과 달리 다양한 메시지를 만들어 냄</td></tr>
       </tbody>
     </table>
