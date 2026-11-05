@@ -324,6 +324,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 .tbl.mtx td{text-align:left;vertical-align:top;font-size:clamp(12px,1.05vw,14px);line-height:1.5;}
 .tbl.mtx th{font-size:13px;} .tbl.mtx td.na{color:var(--muted);text-align:center;}
 .tbl.cat td:first-child{font-weight:400;white-space:normal;} .tbl.cat td.cat{font-weight:800;white-space:nowrap;}
+.tbl.tight td,.tbl.tight th{padding:5px 10px;font-size:12.5px;line-height:1.4;}
 .tbl.cmp td{text-align:left;vertical-align:top;font-size:clamp(12.5px,1.1vw,14.5px);line-height:1.5;}
 .tbl.cmp th:first-child,.tbl.cmp td:first-child{font-weight:800;white-space:nowrap;background:var(--bg);}
 .news{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
@@ -1989,12 +1990,12 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="예비평가(Triage)와 평가 항목">
+<section class="slide" data-sec="9" data-title="예비평가(Triage)">
   <div class="kicker">AI 영향평가</div>
-  <h2>예비평가(Triage)와 평가 항목</h2>
+  <h2>예비평가(Triage): 어떤 기준으로 평가 대상을 가리는가</h2>
   <div class="body">
-    <div class="two eq top">
-      <div class="stack">
+    <div class="stack" style="gap:12px">
+      <div class="cards c2">
         <div class="card">
           <span class="ttl">면제 사유 (시행령 제25조)</span>
           <ul class="bul compact">
@@ -2006,12 +2007,34 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         <div class="card blue">
           <span class="ttl">예비평가의 필요성</span>
           <ul class="bul compact">
-            <li>영향평가 실시 대상인지 먼저 가려야 한다. 모든 챗봇과 내부 보조도구에 전면 평가를 요구하면 제도가 작동하지 않음</li>
-            <li>예비평가 항목: 기본권에 미치는 파급효과, 의사결정의 자동화 정도, 대규모 민감정보 활용 여부 등</li>
+            <li>모든 챗봇과 내부 보조도구에 전면 평가를 요구하면 제도가 작동하지 않는다. 실시 대상인지 먼저 가려야 함</li>
+            <li>기준: 기본권에 미치는 파급효과, 대규모 민감정보 활용 여부, 의사결정의 자동화 정도</li>
             <li>공공기관장은 행정안전부장관에게 실시 대상 여부 확인을 요청할 수 있음 (시행령 제26조)</li>
           </ul>
         </div>
       </div>
+      <table class="tbl mtx tight" style="width:100%">
+        <thead><tr><th>구분</th><th>핵심 질문</th><th>배점</th><th>채점 기준</th></tr></thead>
+        <tbody>
+          <tr><th rowspan="3">기본권 및 중대한 권리 영향</th><td>행정 결정: 결과가 개인의 권리, 의무, 자격, 재정적 이익에 미치는 영향</td><td class="na">0~3</td><td>참고 자료 / 일부 영향 / 상당한 영향 / 사실상 최종 결정</td></tr>
+          <tr><td>물리적 안전: 오류가 생명, 신체, 건강에 미치는 피해</td><td class="na">0~4</td><td>피해 없음 / 경미 / 상당 / 치명적</td></tr>
+          <tr><td>법적 영향: 범죄 예측, 범인 식별, 수사 대상 선정 등 법집행·사법 절차에 활용되는 수준</td><td class="na">0~4</td><td>활용 없음 / 단순 분석 / 중간 의사결정 / 최종 판단에 직접 활용</td></tr>
+          <tr><th rowspan="2">대규모 민감정보 활용</th><td>민감 데이터 활용: 인종, 정치적 견해, 종교, 건강, 성생활 등 민감정보를 대규모로 수집·분석하는 정도</td><td class="na">0~2</td><td>활용 없음 / 최소한 / 대규모</td></tr>
+          <tr><td>프로파일링: 행동, 특성, 선호를 바탕으로 프로파일을 만들어 불이익을 줄 수 있는 결정을 내리는지</td><td class="na">0~2</td><td>하지 않음 / 정책 판단에 영향 / 직접적 불이익 결정에 활용</td></tr>
+          <tr><th rowspan="2">의사결정의 높은 자동화</th><td>완전 자동화: 인간 개입 없이 의사결정을 자동화하는 수준</td><td class="na">0~3</td><td>인간 최종 승인 필수 / 인간 검토 가능 / 인간 개입 없이 단독 결정</td></tr>
+          <tr><td>인간 개입의 한계: 결정이 너무 복잡하거나 빨라 인간이 실질적으로 검토·번복하기 어려운지</td><td class="na">0~2</td><td>개입·검토 가능 / 가능하나 효율 낮음 / 실질적으로 불가능</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">예비평가 항목(안): 한양대학교 과학기술정책연구소, 「공공 AI 영향평가제 도입을 위한 정책 연구」 (2025. 7. 28.), 153-154면</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="평가 항목">
+  <div class="kicker">AI 영향평가</div>
+  <h2>평가 항목: 무엇을 평가하는가</h2>
+  <div class="body">
+    <div class="two top" style="grid-template-columns:.8fr 1.2fr">
       <div class="stack">
         <div class="card">
           <span class="ttl">영향평가 시 고려 사항 (시행령 제24조)</span>
@@ -2022,10 +2045,18 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
             <li>그 밖에 행정안전부장관이 정하여 고시하는 사항</li>
           </ol>
         </div>
-        <figure><img src="assets/week10/indicator-comparison.png" alt="해외 공통 평가지표 매핑 요약표: 권리·기본권 보호, 프라이버시·데이터 보호, 투명성·설명가능성, 책임성·거버넌스, 안전성·보안·안정성, 편향·차별 방지, 포용성·다양성, 환경·사회 지속가능성의 8개 지표군을 미국, 캐나다, EU, 영국, 네덜란드, ISO 42005, UNESCO와 대응" style="max-height:210px"><figcaption>선행 정책연구가 도출한 8개 지표군과 해외 제도의 대응. 기본권 침해 외에 투명성, 안전성, 지속가능성까지 평가 요소에 포함</figcaption></figure>
+        <div class="card blue">
+          <span class="ttl">선행 정책연구의 표준 평가지표(안)</span>
+          <ul class="bul compact">
+            <li>사전 단계 6개 평가항목: 목적·편익과 대안 정합성, 데이터·모델 거버넌스, 공정성·차별·포용성, 개인정보·보안·안전성, 투명성·설명가능성·문서화, 성능·신뢰성·정확도</li>
+            <li>항목마다 측정 가능한 지표를 두고, 영향이 중대한 경우와 일반적인 경우에 요구 수준을 달리함</li>
+            <li>기본권 침해 외에 사업 타당성, 데이터 품질, 성능까지 평가 요소에 포함</li>
+          </ul>
+        </div>
       </div>
+      <figure><img src="assets/week10/indicator-table.png" alt="공공 AI 영향평가 표준 평가지표(안) 표 4-16: 사전 단계의 6개 평가항목(목적·편익 및 대안 정합성, 데이터·모델 거버넌스, 공정성·차별·포용성, 개인정보·보안·안전성, 투명성·설명가능성·문서화, 성능·신뢰성·정확도)과 각 평가지표, 중대·일반 구분" style="max-height:470px"><figcaption>공공 AI 영향평가 표준 평가지표(안), 사전 단계</figcaption></figure>
     </div>
-    <p class="src">한양대학교 과학기술정책연구소, 앞의 보고서, 153-154, 170면</p>
+    <p class="src">한양대학교 과학기술정책연구소, 앞의 보고서, 163면</p>
   </div>
 </section>
 
