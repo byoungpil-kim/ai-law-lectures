@@ -1,0 +1,6 @@
+{
+  "name": "week11-review-board",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=18" }
+}

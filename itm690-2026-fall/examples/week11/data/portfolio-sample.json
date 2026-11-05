@@ -1,0 +1,13 @@
+{
+  "asOf": "2026-08-25",
+  "source": "구글 시트 원장 스냅샷 8건 + Yahoo Finance 종가 (부트캠프 4주차 asset-manager의 실제 출력)",
+  "totals": { "value": 58682555, "cost": 56992751, "gain": 1689804, "gainRate": 0.0296, "dayChange": 207465, "dayRate": 0.0035 },
+  "periodReturns": { "week": -0.0086, "month": -0.0022, "quarter": -0.0561, "sinceStart": 0.0337 },
+  "rebalanceRule": "연 1회 정기(다음 2027-08-03) + 5/25 밴드 이탈 시 수시. 60·20%는 ±5%p, 10%는 ±2.5%p",
+  "positions": [
+    { "name": "S&P500", "fullName": "KODEX 미국S&P500", "quantity": 1510, "avgPrice": 22759, "price": 23955, "value": 36172050, "gainRate": 0.0526, "weight": 0.616, "target": 0.60 },
+    { "name": "금현물", "fullName": "ACE KRX금현물", "quantity": 390, "avgPrice": 29369, "price": 29125, "value": 11358750, "gainRate": -0.0083, "weight": 0.194, "target": 0.20 },
+    { "name": "CD금리", "fullName": "TIGER CD금리투자KIS(합성)", "quantity": 97, "avgPrice": 56947, "price": 57955, "value": 5621635, "gainRate": 0.0177, "weight": 0.096, "target": 0.10 },
+    { "name": "달러SOFR", "fullName": "TIGER 미국달러SOFR금리액티브(합성)", "quantity": 92, "avgPrice": 61401, "price": 60110, "value": 5530120, "gainRate": -0.0210, "weight": 0.094, "target": 0.10 }
+  ]
+}
