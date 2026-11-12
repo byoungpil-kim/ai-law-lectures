@@ -2893,29 +2893,6 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="한계 1: CoT는 계산의 기록이 아닐 수 있다">
-  <div class="kicker">설명가능성 · 한계 1</div>
-  <h2>한계 1: CoT는 모델이 실제로 한 계산의 기록이 아닐 수 있다</h2>
-  <div class="body">
-    <div class="two eq" style="align-items:start">
-      <div class="step"><span class="no">2023</span><b class="ttl">Turpin et al., "Language Models Don't Always Say What They Think" (NeurIPS 2023)</b>
-        <ul class="bul compact">
-          <li><b>방법</b>: 편향 요인을 몰래 넣는다. 예: few-shot 예시의 정답이 항상 (A)</li>
-          <li><b>결과</b>: BIG-Bench Hard 13과제에서 정확도가 최대 <b>36%</b> 하락했는데, CoT는 그 요인을 한 번도 언급하지 않았다. GPT-3.5·Claude 1.0</li>
-          <li><b>함의</b>: CoT가 그럴듯한 사후 정당화일 수 있다. 실제 원인(편향)은 설명에 등장하지 않는다</li>
-        </ul></div>
-      <div class="step"><span class="no">2023</span><b class="ttl">Lanham et al. (Anthropic), "Measuring Faithfulness in Chain-of-Thought Reasoning"</b>
-        <ul class="bul compact">
-          <li><b>방법</b>: CoT를 중간에 잘라 보고, 오류를 끼워 넣어 보고, 바꿔 써 본다. 답이 바뀌지 않으면 그 CoT에 답이 의존하지 않았다는 뜻</li>
-          <li><b>결과</b>: 과제별 편차가 크다. 더 크고 유능한 모델일수록 사후(post-hoc) 추론 비율이 늘어나는 역스케일링</li>
-          <li><b>함의</b>: 모델이 좋아져도 CoT의 충실성은 저절로 좋아지지 않는다</li>
-        </ul></div>
-    </div>
-    <p class="em center">설명으로 제시된 CoT가 결정의 원인을 말하지 않을 수 있다. 제86조의 "주요 요소 설명"에 CoT를 그대로 쓰면 틀린 설명을 제공하는 것이 된다</p>
-    <p class="src">출처: <a href="https://arxiv.org/abs/2305.04388" target="_blank" rel="noopener">arxiv.org/abs/2305.04388</a> · <a href="https://arxiv.org/abs/2307.13702" target="_blank" rel="noopener">arxiv.org/abs/2307.13702</a></p>
-  </div>
-</section>
-
 <section class="slide" data-sec="9" data-title="한계 2: 추론 모델도 그렇다">
   <div class="kicker">설명가능성 · 한계 2</div>
   <h2>한계 2: 추론 모델도 그렇다</h2>
