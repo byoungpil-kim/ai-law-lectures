@@ -2784,10 +2784,9 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <div class="step"><span class="no">②</span><b class="ttl">사후 표본 감사</b><p class="prob">일부를 뽑아 사람이 검토한다. 자동 실행을 허용하되 오류율을 측정한다. 비용: 표본만. 위험: 표본 밖 오류</p></div>
       <div class="step"><span class="no">③</span><b class="ttl">예외 상승</b><p class="prob">검증 역할이 "판단 불가"나 "충돌"로 표시한 건만 사람에게 올린다. 실습 보고의 "사람에게 남기는 질문"이 이것</p></div>
     </div>
-    <div class="two eq" style="align-items:start">
+    <div>
       <div class="callout bad" style="font-size:13.5px"><b>검토 피로와 자동화 편향</b>: 사람이 매번 승인하는 설계는 곧 "매번 승인 버튼을 누르는" 설계가 된다. 결과가 대체로 맞으면 사람은 틀린 것도 승인한다(automation bias). 사람 검증이 실제로 작동하려면 검토 건수를 줄이고(③), 검토자가 볼 근거를 구조화해 주어야 한다(§9).</div>
-      <div class="callout" style="font-size:13.5px"><b>검증 지점은 어디인가</b>: OpenAI Agents SDK의 가드레일은 체인의 첫 에이전트(입력)와 마지막 에이전트(출력)에만 걸린다. 중간 handoff 사이는 비어 있다. 멀티에이전트에서는 "어느 단계 사이에 검증을 두는가"를 그림으로 그려야 한다. VLAIR(§5)가 보여 준 "변호사가 더 잘하는 과제"가 사람을 둘 자리다.</div>
-    </div>
+          </div>
     <p class="src">출처: OpenAI Agents SDK, Handoffs·Guardrails 문서. <a href="https://openai.github.io/openai-agents-python/handoffs/" target="_blank" rel="noopener">openai.github.io/openai-agents-python/handoffs</a></p>
   </div>
 </section>
