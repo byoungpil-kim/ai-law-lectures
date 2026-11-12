@@ -852,7 +852,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
       <span class="lar">➜</span>
       <div class="lnode">📝 노션 리포트<small>종합 보고가 쌓이는 자리</small></div>
       <span class="lar">➜</span>
-      <div class="lnode user">🗂️ Supabase 로그<small>모델 · 토큰 · 비용 · 결과</small></div>
+      <div class="lnode user">🗂️ 실행 기록<small>모델 · 토큰 · 비용 · 결과 (data/review/)</small></div>
     </div>
     <div>
       <ul class="bul compact">
@@ -2208,7 +2208,7 @@ A 칼국수
 <text x="187" y="492" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2f765b">⑧ 종합 보고 (스트림 마지막 줄)</text>
 <rect x="14" y="512" width="138" height="34" rx="8" fill="#edf4ef" stroke="#bfe0c9"/><text x="83" y="534" text-anchor="middle" font-size="11.5" font-weight="800" fill="#2f765b">⑨ 표로 표시</text>
 <!-- side: log/notion -->
-<rect x="400" y="430" width="272" height="44" rx="8" fill="#fff" stroke="#d5ddd3" stroke-dasharray="5 4"/><text x="536" y="448" text-anchor="middle" font-size="11.5" font-weight="800" fill="#52514e">실습 3단계: Supabase 로그 · 노션 발행</text><text x="536" y="464" text-anchor="middle" font-size="10.5" fill="#898781">⑦의 결과를 저장하는 분기</text>
+<rect x="400" y="430" width="272" height="44" rx="8" fill="#fff" stroke="#d5ddd3" stroke-dasharray="5 4"/><text x="536" y="448" text-anchor="middle" font-size="11.5" font-weight="800" fill="#52514e">소집 직후 노션 발행 (data/review/ 저장)</text><text x="536" y="464" text-anchor="middle" font-size="10.5" fill="#898781">⑦의 결과를 저장하는 분기</text>
 </svg></div>
       <ul class="bul compact">
         <li>①~②는 7강 RAG 챗봇과 같은 모양이다. 달라지는 것은 ③~⑥의 <b>호출 수와 순서</b></li>
@@ -2400,82 +2400,6 @@ npm run dev
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="3단계: 기록">
-  <div class="kicker">실습: OpenRouter 검토단 · 3단계</div>
-  <h2>3단계: 기록한다. 보고는 노션에, 실행 기록은 파일과 Supabase에</h2>
-  <div class="body">
-    <div class="two eq" style="align-items:start">
-      <div class="stack">
-        <p style="font-weight:800;margin:0">Supabase 테이블 <code>review_runs</code> (7강 §7의 로그 확장)</p>
-        <table class="tbl cmp sm" style="width:100%">
-          <thead><tr><th>열</th><th>내용</th></tr></thead>
-          <tbody>
-            <tr><th>convened_at</th><td>소집 시각</td></tr>
-            <tr><th>as_of</th><td>데이터 기준일</td></tr>
-            <tr><th>role · model</th><td>역할별 모델 ID (3행 또는 JSON)</td></tr>
-            <tr><th>prompt_tokens · completion_tokens · cost_usd · ms</th><td>OpenRouter <code>usage</code>와 소요 시간</td></tr>
-            <tr><th>conflicts · questions</th><td>충돌 지점과 사람에게 남긴 질문</td></tr>
-            <tr><th>report_json</th><td>보고 전문(JSON)</td></tr>
-            <tr><th>decided_by · decided_at · decision</th><td><b>사람이 무엇을 결정했는가</b>(§9의 서명)</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="stack">
-        <pre class="prompt sm"><button class="copy" type="button">복사</button>소집이 끝나면 종합 보고를 노션의 "자산 현황 일지" 아래에 "검토단 보고 날짜" 페이지로 발행해 줘. 통합 토큰은 .env의 NOTION_API에 있어.</pre>
-        <div class="follow"><b>이어서</b><span>일일 리포트도 같은 자리에 날짜별 페이지로</span><span>부모 페이지의 누적 기록 표에 한 줄 추가</span><span>발행이 실패해도 보고는 화면에 남기고 경고만</span><span>검토 탭에 "노션에 저장됨" 링크</span></div>
-        <ul class="bul compact">
-          <li><b>노션</b>(§4): 사람이 읽고 공유하는 자리. 통합(integration) 토큰을 "자산 현황 일지" 페이지 하나에만 연결하고(최소 권한), 앱이 소집 직후 "검토단 보고 2026-11-12" 페이지를 만든다. 날짜별로 쌓이면 "지난주 검토단은 무엇을 걱정했나"를 커넥터로 물을 수 있다</li>
-          <li><b>Supabase</b>: 프로그램이 읽는 자리. 비용 추이, 모델 교체 전후 비교, 실패율 집계. 지금은 <code>data/review/report-&lt;날짜&gt;.json</code> 파일로 남는다</li>
-          <li>이 두 기록이 §9에서 말하는 <b>감사 기록</b>이다. 누가 어떤 근거로 무엇을 결정했는지 되짚을 수 있어야 한다</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="6" data-title="소집 자동화(선택)">
-  <div class="kicker">실습: OpenRouter 검토단 · 선택</div>
-  <h2>소집 자동화(선택): Vercel Cron으로 매일 아침</h2>
-  <div class="body">
-    <div class="two eq" style="align-items:start">
-<pre class="code pre" style="font-size:12px"><span class="c">// vercel.json : 매일 07:30 KST (= 22:30 UTC 전날) 소집</span>
-{
-  "crons": [
-    { "path": "/api/review?cron=1", "schedule": "30 22 * * *" }
-  ]
-}
-<span class="c">// api/review.js 안에서</span>
-<span class="k">if</span> (req.query.cron &amp;&amp; req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`)
-  <span class="k">return</span> res.status(401).end();          <span class="c">// Vercel이 보내는 비밀로 인증</span>
-<span class="k">if</span> (<span class="k">await</span> runsToday() &gt;= 3) <span class="k">return</span> res.status(429).end(); <span class="c">// 일일 상한</span></pre>
-      <ul class="bul compact">
-        <li>부트캠프 ⑦에서 자가 호스팅 에이전트의 루틴이 하던 일을 Vercel Cron이 대신한다. 내 PC가 꺼져 있어도 돈다</li>
-        <li><b>비용 상한</b>: 하루 호출 수 제한, 실패 시 재시도 횟수 제한. 자동 실행은 사람이 보지 않을 때 돈다는 뜻이다</li>
-        <li><b>실패 알림</b>: 실패하면 이메일 또는 노션 페이지에 오류를 남긴다. 조용히 멈추는 것이 가장 나쁘다</li>
-        <li><b>자율 실행의 위험</b>(6강 치명적 3요소): 이 검토단은 사적 데이터를 읽지만 외부 통신은 OpenRouter 호출뿐이고 실행 권한이 없다. 세 요소가 모이지 않게 설계한다</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="6" data-title="안전장치 점검">
-  <div class="kicker">실습: OpenRouter 검토단</div>
-  <h2>안전장치 점검: 자동으로 돌리기 전 다섯 가지</h2>
-  <div class="body">
-    <table class="tbl cmp sm">
-      <thead><tr><th style="width:22%">원칙 (부트캠프 ⑤·⑦)</th><th>이 검토단에서</th><th style="width:30%">6강과의 연결</th></tr></thead>
-      <tbody>
-        <tr><th>원장과의 거리</th><td>검토단은 시트 원장을 읽기만 한다(서비스 계정 뷰어 권한, §3). 모델이 폭주해도 원장은 바뀌지 않는다</td><td>최소 권한</td></tr>
-        <tr><th>실행 권한 없음</th><td>증권사 연결이 없다. 출력은 글이 전부라서 최악의 사고도 "이상한 보고서"에서 멈춘다</td><td>치명적 3요소 중 외부 행위 차단</td></tr>
-        <tr><th>Human-in-the-loop</th><td>종합 보고의 끝은 항상 사람의 결정이다. 매매는 내가 증권사 앱을 열어 하는 별개의 행동</td><td>승인 단계</td></tr>
-        <tr><th>외부 콘텐츠 경계</th><td>입력 데이터와 웹 검색 결과 속 지시문은 따르지 않는다고 역할 정의서 금지 항목에 적었다</td><td>프롬프트 인젝션</td></tr>
-        <tr><th>기록</th><td>Supabase에 실행 기록, 노션에 보고. 모델·토큰·비용·결정이 남는다</td><td>6강 §10 "기록" 원칙, §9 감사 기록</td></tr>
-      </tbody>
-    </table>
-    <div class="callout warn"><b>다중 에이전트 환경의 데이터 유출</b>(6강 §11): 데이터가 모델 제공자 셋에게 간다. 회사 데이터라면 셋 각각이 처리위탁인지 제3자 제공인지, 국외 이전인지 판단해야 한다. 기말 과제 법적 쟁점의 첫 항목이다.</div>
-  </div>
-</section>
-
 <section class="slide" data-sec="6" data-title="체크리스트">
   <div class="kicker">실습: OpenRouter 검토단</div>
   <h2>체크리스트: 이 섹션을 마치면 손에 있어야 하는 것</h2>
@@ -2485,7 +2409,7 @@ npm run dev
       <li><b>역할별 모델 선택 근거</b>서로 다른 제공자, 검증 역할에 더 강한 모델. 가격과 모델 ID를 DECISIONS.md에 기록</li>
       <li><b>함수 1개</b><code>/api/review</code>. 병렬 호출 → 검증 → 코드 종합. 키는 환경변수. 타임아웃과 실패 처리 결정</li>
       <li><b>구조화 출력</b>JSON 스키마. 화면과 로그가 같은 필드를 읽는다. 파싱 실패 시 원문 보존</li>
-      <li><b>기록</b>Supabase에 소집 시각·모델·토큰·비용·결과, 노션에 보고. 사람의 결정도 기록</li>
+      <li><b>기록</b>소집 시각·모델·토큰·비용·결과를 파일로, 보고는 노션에. 사람의 결정도 기록</li>
       <li><b>비용 상한</b>소집 1회 비용을 알고 있다. 자동 실행이면 일일 상한과 실패 알림</li>
     </ol>
   </div>
@@ -2986,13 +2910,13 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
         <div><span class="pill warn">반론</span> 검증: "실적 51% 성장"은 AI 투자 사이클 지속이 전제 · "쏠림"은 밴드(55~65%) 안이라 규칙상 문제 없음</div>
         <div><span class="pill bad">충돌</span> S&amp;P500 비중 65% vs 55% vs 현재 60% · 금리 방향 전망 차이</div>
         <div><span class="pill ok">결정</span> 사용자: 현재 유지. 사유: 전 종목 밴드 이내, 하위 5% 시나리오 차이 미미 · 서명 2026-08-21 22:51</div>
-        <div class="muted" style="font-size:11.5px">모델: 의견 A gpt-… / 의견 B gemini-… / 검증 claude-… · 토큰 합계 · 노션 페이지 링크 · Supabase row id</div>
+        <div class="muted" style="font-size:11.5px">모델: 의견 A gpt-… / 의견 B gemini-… / 검증 claude-… · 토큰 합계 · 노션 페이지 링크 · 저장 파일명</div>
       </div></div>
       <div class="stack">
         <ul class="bul compact">
           <li><b>무엇을 남기나</b>: 어떤 근거가 제시되었고, 어떤 반론이 있었고, 어디서 의견이 갈렸고, 사람이 무엇을 왜 결정했는가. 실습 보고의 "충돌 지점"과 "사람에게 남기는 질문"이 그대로 이 기록이 된다</li>
           <li><b>근거</b>: Khan et al.·Kenton et al.은 판정자가 토론 기록만 보고도 정확도를 높일 수 있음을 보였다. AgentsCourt는 변론을 법정 기록으로 저장하는 구조를 택했다</li>
-          <li><b>보존</b>: 노션(사람이 읽는 자리)과 Supabase(시스템 기록). 보존 기간과 접근 권한을 정한다. 6강 개인정보 원칙 적용</li>
+          <li><b>보존</b>: 노션(사람이 읽는 자리)과 파일·DB(시스템 기록). 보존 기간과 접근 권한을 정한다. 6강 개인정보 원칙 적용</li>
         </ul>
         <div class="callout warn" style="font-size:13px"><b>단서</b>: "토론 로그 = 감사 추적"의 직접 실증은 아직 얇다. 설계 가설로 제시한다. 다음 장들의 연구는 이 기록 중 1층(CoT)이 왜 보증이 못 되는지 보여 준다.</div>
       </div>
@@ -3470,7 +3394,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
         <ul class="bul compact">
           <li>희망 발표일을 구글 시트에서 선택</li>
           <li>1차 작업(선례 조사 메모)과 MVP 주제 1줄</li>
-          <li>OpenRouter 키 잔액, Vercel·Supabase 로그인 확인</li>
+          <li>OpenRouter 키 잔액, 노션 통합 연결 확인</li>
         </ul></div>
     </div>
     <p class="muted" style="text-align:center;font-size:13px">강의 자료: <a href="index.html">일정 페이지</a> · 예제 코드: <a href="examples/week11/" target="_blank" rel="noopener">examples/week11/</a> · 원문: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week4/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프 4주차</a></p>
