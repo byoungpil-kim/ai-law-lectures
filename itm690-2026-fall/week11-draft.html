@@ -641,11 +641,57 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 .code mark.hl-line{background:#ffe9a8;color:var(--ink);border-radius:4px;padding:1px 4px;font-weight:700;} .code mark.hl-line b{color:var(--red);}
 
 /* ---------- 11강 추가 컴포넌트 ---------- */
-/* 1장: AI 에이전트 시스템 (pptx 이미지 슬라이드) */
-.w11-ppt .body{justify-content:center;align-items:center;}
-.w11-ppt figure{width:100%;}
-.w11-ppt img{display:block;margin:0 auto;width:auto;max-width:100%;max-height:calc(100vh - 64px - 150px);border:1px solid var(--line);border-radius:8px;}
-@media print{.w11-ppt img{max-height:650px;}}
+/* ---------- 1장: AI 에이전트 시스템 (pptx 변환) ---------- */
+.ag{display:grid;grid-template-columns:168px 18px 1fr 18px 176px;gap:0 4px;align-items:stretch;width:100%;max-width:1040px;margin:0 auto;font-size:12.5px;line-height:1.45;min-height:400px;}
+.ag .lab{font-weight:800;font-size:13px;color:#1b5fcf;margin:0 0 6px;}
+.ag .lab.red{color:#d64a3a;}
+.ag-left,.ag-right{display:flex;flex-direction:column;gap:10px;min-width:0;}
+.ag-left>div,.ag-right>div{display:flex;flex-direction:column;}
+.ag-device,.ag-ext{white-space:pre-line;}
+.ag-chat,.ag-device,.ag-ext,.ag-note{background:#fff;border:1.5px solid #bfe0e3;border-radius:10px;padding:9px 10px;}
+.ag-chat{flex:1 1 auto;display:flex;flex-direction:column;gap:7px;min-height:150px;}
+.ag-chat .cont{font-size:10.5px;color:#7b857d;}
+.ag-chat .u,.ag-chat .a{padding:6px 9px;border-radius:8px;max-width:92%;white-space:pre-line;font-size:12px;}
+.ag-chat .u{align-self:flex-end;background:#eef2f1;border:1px solid #c9d3cf;}
+.ag-chat .a{align-self:flex-start;background:#e6f3fb;border:1px solid #b9dcf0;}
+.ag-chat .in{margin-top:auto;border:1px solid #c9d3cf;border-radius:8px;padding:5px 8px;color:#9aa39b;font-size:11px;}
+.ag-device b,.ag-ext b{display:block;color:#1b5fcf;margin-bottom:4px;font-size:12.5px;}
+.ag-ext.red{border-color:#e0574a;} .ag-ext.red b{color:#d64a3a;}
+.ag-ext.hi{border-color:#1b5fcf;border-width:2px;}
+.ag-ext.big{align-items:center;justify-content:center;text-align:center;font-weight:800;font-size:15px;min-height:56px;}
+.ag-ext.big.red{color:#d64a3a;}
+.ag-note{background:#fff8e6;border-color:#e4c36a;}
+.ag-note b{display:block;color:#9a6a12;font-size:13px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid #eedca8;}
+.ag-note .sub{display:block;color:#626a64;margin-top:8px;}
+.ag-har{background:#dff0ee;border:1.5px solid #9fcac6;border-radius:12px;padding:8px 10px 10px;display:flex;flex-direction:column;gap:6px;min-width:0;}
+.ag-har>.hl{font-weight:800;font-size:13px;color:#22201d;}
+.ag-row{display:grid;grid-template-columns:150px repeat(var(--mem,0),1fr);gap:8px;align-items:stretch;}
+.ag-brain{position:relative;display:flex;flex-direction:column;}
+.ag-brain .b{border:2px solid #1b5fcf;border-radius:10px;background:#fff;color:#1b5fcf;font-weight:800;font-size:15px;text-align:center;padding:7px 4px;}
+.ag-brain .arr{display:flex;justify-content:space-around;padding:3px 10px 0;font-size:11px;color:#1b5fcf;}
+.ag-brain .arr span::before{content:"";display:inline-block;width:0;height:0;margin-right:3px;vertical-align:-1px;}
+.ag-mem{background:#fff;border:1.5px solid #cfe1e0;border-radius:8px;padding:5px 8px;font-size:11.5px;line-height:1.35;white-space:pre-line;}
+.ag-mem b{display:block;color:#1b5fcf;font-size:12px;margin-bottom:2px;}
+.ag-mem.hi{border:2px solid #1b5fcf;}
+.ag-ctx{flex:1 1 auto;background:#fff;border:1.5px solid #cfe1e0;border-radius:9px;padding:8px 12px;display:flex;flex-direction:column;gap:3px;min-height:150px;}
+.ag-ctx .t{font-weight:800;color:#1b5fcf;font-size:14px;margin-bottom:3px;}
+.ag-ctx .cont{font-size:10.5px;color:#7b857d;}
+.ag-ctx p{margin:0;font-size:12.5px;white-space:pre-line;}
+.ag-ctx p.dim{color:#7b857d;} .ag-ctx p.hi{color:#1b5fcf;font-weight:800;} .ag-ctx p.big{font-size:14.5px;}
+.ag-ctx .box{border:2px solid #e0574a;background:#fdeee9;border-radius:8px;padding:7px 10px;margin-top:6px;white-space:pre-line;font-size:12.5px;}
+.ag-ctx .box b{display:block;color:#d64a3a;font-size:13px;margin-bottom:2px;}
+.ag-ctx .box.in{border-color:#1b5fcf;background:#e6f3fb;} .ag-ctx .box.in b{color:#1b5fcf;}
+.ag-ctx .foot{color:#d64a3a;font-weight:800;font-size:12px;margin-top:2px;}
+.ag-gut{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;font-size:16px;font-weight:900;line-height:1;}
+.ag-gut .r{color:#e0574a;} .ag-gut .b{color:#1b5fcf;}
+.ag-gut.top{justify-content:flex-start;padding-top:140px;}
+.ag-caption{text-align:center;font-weight:800;color:#1b5fcf;font-size:14px;margin:4px 0 0;}
+.ag-caption.red{color:#d64a3a;}
+.ag-single{max-width:560px;margin:0 auto;width:100%;}
+.ag-single .ag-chat{min-height:230px;}
+.ag-single .big{text-align:left;font-weight:800;color:#1b5fcf;font-size:18px;margin-top:14px;}
+@media (max-width:900px){.ag{grid-template-columns:1fr;} .ag-gut{display:none;}}
+@media print{.ag{grid-template-columns:168px 18px 1fr 18px 176px;} .ag-gut{display:flex;}}
 
 .cover .outline{margin-top:14px;gap:8px;grid-template-columns:repeat(6,1fr);}
 .cover .outline button{padding:9px 11px;font-size:12.5px;}
@@ -857,100 +903,236 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 </section>
 
 
-<section class="slide w11-ppt" data-sec="1" data-title="직장인들의 최고 난제">
+<section class="slide" data-sec="1" data-title="직장인들의 최고 난제">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">1 / 16</span></div>
+  <h2>직장인들의 최고 난제</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-01.png" alt="직장인들의 최고 난제"></figure>
+    <div class="ag-single"><p class="lab" style="color:#3a3f3b">AI와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="in">메시지 입력</div></div><p class="big">“점메추”, 무슨 뜻일까요?</p></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="AI의 작업판: 컨텍스트">
+<section class="slide" data-sec="1" data-title="AI의 작업판: 컨텍스트">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">2 / 16</span></div>
+  <h2>AI의 작업판: 컨텍스트</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-02.png" alt="AI의 작업판: 컨텍스트"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"></div><div class="ag-har"><div class="hl">AI 하네스(harness)</div><div class="ag-row" style="--mem:0"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="big">점메추는 점심메뉴추천의 약자이다.
+파악한 이용자 요청은 점심메뉴추천</p></div></div><div class="ag-gut"></div><div class="ag-right"><div><div class="ag-note"><b>컨텍스트(context)</b>AI의 두뇌가 읽고 쓰며 작업하는 공간</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="이용자 요청 분석과 다음 행동 생성">
+<section class="slide" data-sec="1" data-title="이용자 요청 분석과 다음 행동 생성">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">3 / 16</span></div>
+  <h2>이용자 요청 분석과 다음 행동 생성</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-03.png" alt="이용자 요청 분석과 다음 행동 생성"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:0"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="big">점메추는 점심메뉴추천의 약자이다.
+파악한 이용자 요청은 점심메뉴추천</p><p class="hi big">다음 작업: 이용자 선호 음식,
+최근에 먹은 음식 확인</p></div></div><div class="ag-gut"></div><div class="ag-right"></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="AI 하네스(harness): 기억과 도구 실행">
+<section class="slide" data-sec="1" data-title="AI 하네스(harness): 기억과 도구 실행">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">4 / 16</span></div>
+  <h2>AI 하네스(harness): 기억과 도구 실행</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-04.png" alt="AI 하네스(harness): 기억과 도구 실행"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:1"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem hi"><b>장기 기억 저장소</b>40대 남성
+따뜻한 국물, 덜 매운 음식</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="hi">이용자 요청: 점심 메뉴 추천</p><p class="hi">이용자 기억: 40대 남성
+선호 음식: 따뜻한 국물, 덜 매운 음식</p></div></div><div class="ag-gut"></div><div class="ag-right"><div><div class="ag-note"><b>하네스(harness)</b>AI 두뇌를 가동시키는 실행 장치. 두뇌의 출력을 확인하여 도구를 실행하고 결과를 다시 작업판에 기록</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="대화 이력 조회">
+<section class="slide" data-sec="1" data-title="대화 이력 조회">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">5 / 16</span></div>
+  <h2>대화 이력 조회</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-05.png" alt="대화 이력 조회"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:2"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+따뜻한 국물, 덜 매운 음식</div><div class="ag-mem hi"><b>대화 이력</b>10/31 점심 대화
+“우동을 먹었어.”</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="hi">이용자 요청: 점심 메뉴 추천</p><p>이용자 기억: 40대 남성
+선호 음식: 따뜻한 국물, 덜 매운 음식</p><p class="hi">10/31 대화: “오늘 점심은 우동을 먹었어.”</p></div></div><div class="ag-gut"></div><div class="ag-right"></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="위치정보 확인">
+<section class="slide" data-sec="1" data-title="위치정보 확인">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">6 / 16</span></div>
+  <h2>위치정보 확인</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-06.png" alt="위치정보 확인"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="in">메시지 입력</div></div></div><div><div class="ag-device"><b>이용자 장치</b>현재 위치
+서울 시청역 부근</div></div></div><div class="ag-gut top"><span class="b">→</span></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:2"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+따뜻한 국물, 덜 매운 음식</div><div class="ag-mem"><b>대화 이력</b>10/31 점심 대화
+“우동을 먹었어.”</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="hi">이용자 요청: 점심 메뉴 추천</p><p>이용자 기억: 40대 남성
+선호 음식: 따뜻한 국물, 덜 매운 음식
+10/31 대화: “오늘 점심은 우동을 먹었어.”</p><p class="hi">장치 위치: 서울 시청역 부근</p></div></div><div class="ag-gut"></div><div class="ag-right"><div><div class="ag-note"><b>예시의 가정</b>앱 실행 시 별도 창에서 위치정보 이용에 동의<span class="sub">현재도 권한이 유효함</span></div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="외부 서비스 활용">
+<section class="slide" data-sec="1" data-title="외부 서비스 활용">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">7 / 16</span></div>
+  <h2>외부 서비스 활용</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-07.png" alt="외부 서비스 활용"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="in">메시지 입력</div></div></div><div><div class="ag-device"><b>이용자 장치</b>앱 실행 시 별도 창에서 위치정보 이용에 동의
+
+현재 위치
+서울 시청역 부근</div></div></div><div class="ag-gut top"><span class="b">→</span></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:2"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+따뜻한 국물, 덜 매운 음식</div><div class="ag-mem"><b>대화 이력</b>10/31 점심 대화
+“우동을 먹었어.”</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="hi">이용자 요청: 점심 메뉴 추천</p><p>이용자 기억: 40대 남성
+선호 음식: 따뜻한 국물, 덜 매운 음식
+10/31 대화: “오늘 점심은 우동을 먹었어.”
+장치 위치: 서울 시청역 부근</p><p class="hi">서울 날씨: 12°C, 흐림</p></div></div><div class="ag-gut"><span class="r">→</span><span class="b">←</span></div><div class="ag-right"><div><p class="lab red" style="margin:0">외부 서비스</p></div><div><div class="ag-ext hi"><b>외부 날씨 서비스</b>요청: 서울 날씨
+결과: 12°C, 흐림</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="답변 생성">
+<section class="slide" data-sec="1" data-title="답변 생성">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">8 / 16</span></div>
+  <h2>답변 생성</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-08.png" alt="답변 생성"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="a">오늘은 날씨도
+흐리고 쌀쌀하니
+칼국수 어때요?</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"><span class="b">←</span></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:2"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+따뜻한 국물, 덜 매운 음식</div><div class="ag-mem"><b>대화 이력</b>10/31 점심 대화
+“우동을 먹었어.”</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="hi">이용자 요청: 점심 메뉴 추천</p><p>이용자 기억: 40대 남성
+선호 음식: 따뜻한 국물, 덜 매운 음식
+10/31 대화: “오늘 점심은 우동을 먹었어.”
+장치 위치: 서울 시청역 부근
+서울 날씨: 12°C, 흐림</p><p class="hi">메뉴 추천: 따뜻한 칼국수</p></div></div><div class="ag-gut"></div><div class="ag-right"><div><p class="lab red" style="margin:0">외부 서비스</p></div><div><div class="ag-ext "><b>외부 날씨 서비스</b>요청: 서울 날씨
+결과: 12°C, 흐림</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="웹 검색">
+<section class="slide" data-sec="1" data-title="웹 검색">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">9 / 16</span></div>
+  <h2>웹 검색</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-09.png" alt="웹 검색"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="u">점메추</div><div class="a">오늘은 날씨도
+흐리고 쌀쌀하니
+칼국수 어때요?</div><div class="u">칼국수 좋아</div><div class="a">근처 칼국수집을
+찾아볼게요.</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:2"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+따뜻한 국물, 덜 매운 음식</div><div class="ag-mem"><b>대화 이력</b>10/31 점심 대화
+“우동을 먹었어.”</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="dim">이용자 요청: 점심 메뉴 추천</p><p>이용자 기억: 40대 남성, 따뜻한 국물·덜 매운 음식
+10/31 대화: “오늘 점심은 우동을 먹었어.”
+장치 위치: 서울 시청역 부근
+서울 날씨: 12°C, 흐림
+메뉴 추천: 따뜻한 칼국수</p><p class="hi">이용자 요청: 칼국수집 검색
+사이트 A: A 칼국수, 도보 5분
+사이트 B: B 손칼국수, 도보 8분</p></div></div><div class="ag-gut"><span class="r">→</span><span class="b">←</span></div><div class="ag-right"><div><p class="lab red" style="margin:0">외부 서비스</p></div><div><div class="ag-ext "><b>외부 날씨 서비스</b>요청: 서울 날씨
+결과: 12°C, 흐림</div></div><div><div class="ag-ext hi"><b>웹 검색</b>사이트 A
+A 칼국수: 도보 5분
+
+사이트 B
+B 손칼국수: 도보 8분</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="개인화된 추천">
+<section class="slide" data-sec="1" data-title="개인화된 추천">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">10 / 16</span></div>
+  <h2>개인화된 추천</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-10.png" alt="개인화된 추천"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><div class="a">오늘은 날씨도
+흐리고 쌀쌀하니
+칼국수 어때요?</div><div class="u">칼국수 좋아</div><div class="a">근처 칼국수집을
+찾아볼게요.</div><div class="a">근처 칼국수 정보예요.
+A 칼국수: 도보 5분
+B 손칼국수: 도보 8분
+가까운 A를
+추천해요.</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"><span class="b">←</span></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:2"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+따뜻한 국물, 덜 매운 음식</div><div class="ag-mem"><b>대화 이력</b>10/31 점심 대화
+“우동을 먹었어.”</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="dim">이용자 요청: 점심 메뉴 추천</p><p>이용자 기억: 40대 남성, 따뜻한 국물·덜 매운 음식
+10/31 대화: “오늘 점심은 우동을 먹었어.”
+장치 위치: 서울 시청역 부근
+서울 날씨: 12°C, 흐림
+메뉴 추천: 따뜻한 칼국수</p><p class="hi">이용자 요청: 칼국수집 검색</p><p>사이트 A: A 칼국수, 도보 5분
+사이트 B: B 손칼국수, 도보 8분</p></div></div><div class="ag-gut"></div><div class="ag-right"><div><p class="lab red" style="margin:0">외부 서비스</p></div><div><div class="ag-ext "><b>외부 날씨 서비스</b>요청: 서울 날씨
+결과: 12°C, 흐림</div></div><div><div class="ag-ext "><b>웹 검색</b>사이트 A
+A 칼국수: 도보 5분
+
+사이트 B
+B 손칼국수: 도보 8분</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="이용자 요청">
+<section class="slide" data-sec="1" data-title="이용자 요청">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">11 / 16</span></div>
+  <h2>이용자 요청</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-11.png" alt="이용자 요청"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><span class="cont">앞선 대화에서 이어짐</span><div class="a">근처 칼국수 정보예요.
+A 칼국수: 도보 5분
+B 손칼국수: 도보 8분
+가까운 A를
+추천해요.</div><div class="u">A 칼국수
+예약해줘.</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:2"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+따뜻한 국물, 덜 매운 음식</div><div class="ag-mem"><b>대화 이력</b>10/31 점심 대화
+“우동을 먹었어.”</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="dim">이용자 요청: 점심 메뉴 추천</p><p>이용자 기억: 40대 남성, 따뜻한 국물·덜 매운 음식
+10/31 대화: “오늘 점심은 우동을 먹었어.”
+장치 위치: 서울 시청역 부근
+서울 날씨: 12°C, 흐림
+메뉴 추천: 따뜻한 칼국수
+이용자 요청: 칼국수집 검색
+사이트 A: A 칼국수, 도보 5분
+사이트 B: B 손칼국수, 도보 8분</p><p class="hi">이용자 요청: A 칼국수 예약</p></div></div><div class="ag-gut"></div><div class="ag-right"><div><div class="ag-note"><b>예시의 가정</b>예약 플랫폼 P와 연동되어 있어 AI가 예약을 실행할 수 있다고 가정합니다.</div></div><div><p class="lab red" style="margin:0">외부 서비스</p></div><div><div class="ag-ext big red">예약 플랫폼 P</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="이용자 정보 확인">
+<section class="slide" data-sec="1" data-title="이용자 정보 확인">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">12 / 16</span></div>
+  <h2>이용자 정보 확인</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-12.png" alt="이용자 정보 확인"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><span class="cont">앞선 대화에서 이어짐</span><div class="a">가까운 A 칼국수를
+추천해요.</div><div class="u">A 칼국수
+예약해줘.</div><div class="a">몇 시에 몇 분이
+방문하시나요?</div><div class="u">오늘 12시 30분,
+2명.</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:3"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+음식 취향</div><div class="ag-mem"><b>대화 이력</b>10/31 점심
+우동을 먹음</div><div class="ag-mem hi"><b>계정 이용자 정보</b>김국민
+010-****-1234</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><span class="cont">앞선 작업판 내용에서 이어짐</span><p class="hi">이용자 요청: A 칼국수 예약</p><p class="big">날짜와 시간: 11/1 12:30
+인원: 2명</p><p class="hi big">예약자: 김국민
+연락처: 010-****-1234  ← 계정 이용자 정보에서</p></div></div><div class="ag-gut"></div><div class="ag-right"><div><div class="ag-note"><b>처리 과정 설명</b>계정 이용자 정보에서 이름과 연락처를 확인합니다.</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="정보 외부 전송">
+<section class="slide" data-sec="1" data-title="정보 외부 전송">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">13 / 16</span></div>
+  <h2>정보 외부 전송</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-13.png" alt="정보 외부 전송"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><span class="cont">앞선 대화에서 이어짐</span><div class="u">A 칼국수
+예약해줘.</div><div class="a">몇 시에 몇 분이
+방문하시나요?</div><div class="u">오늘 12시 30분,
+2명.</div><div class="a">예약에 필요한
+정보를 전달해요.</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:3"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+음식 취향</div><div class="ag-mem"><b>대화 이력</b>10/31 점심
+우동을 먹음</div><div class="ag-mem"><b>계정 이용자 정보</b>김국민
+010-****-1234</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><span class="cont">앞선 작업판 내용에서 이어짐</span><p class="hi">이용자 요청: A 칼국수 예약</p><div class="box out"><b>외부로 보내는 정보</b>식당: A 칼국수
+예약: 11/1 12:30, 2명
+예약자: 김국민
+전화번호: 010-****-1234</div><div class="foot">전송 항목: 이름, 전화번호, 예약 조건</div></div></div><div class="ag-gut"><span class="r">→</span></div><div class="ag-right"><div><p class="lab red" style="margin:0">외부 서비스</p></div><div><div class="ag-ext big red">예약 플랫폼 P</div></div><div style="text-align:center;color:#e0574a;font-weight:900;line-height:1">↓</div><div><div class="ag-ext big red">A 칼국수</div></div></div></div>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="작업 결과 확인">
+<section class="slide" data-sec="1" data-title="작업 결과 확인">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">14 / 16</span></div>
+  <h2>작업 결과 확인</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-14.png" alt="작업 결과 확인"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-chat"><span class="cont">앞선 대화에서 이어짐</span><div class="u">A 칼국수
+예약해줘.</div><div class="u">오늘 12시 30분,
+2명.</div><div class="a">예약에 필요한
+정보를 전달해요.</div><div class="a">예약 완료
+A 칼국수
+오늘 12:30
+2명, 김국민</div><div class="in">메시지 입력</div></div></div></div><div class="ag-gut"><span class="b">←</span></div><div class="ag-har"><div class="hl">AI 하네스 · 대화 내용 저장 → 대화 이력</div><div class="ag-row" style="--mem:3"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+음식 취향</div><div class="ag-mem hi"><b>대화 이력</b>11/1 A 칼국수
+12:30, 2명</div><div class="ag-mem"><b>계정 이용자 정보</b>김국민
+010-****-1234</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><span class="cont">앞선 작업판 내용에서 이어짐</span><p class="hi">이용자 요청: A 칼국수 예약</p><div class="box in"><b>외부에서 받은 정보</b>예약 상태: 확정
+식당: A 칼국수
+일시와 인원: 11/1 12:30, 2명
+예약번호: DEMO-001</div></div></div><div class="ag-gut"><span class="b">←</span></div><div class="ag-right"><div><p class="lab red" style="margin:0">외부 서비스</p></div><div><div class="ag-ext big ">예약 플랫폼 P</div></div></div></div><p class="ag-caption">대화 이력에 남아 이후 대화에서 참고할 수 있습니다.</p>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="전체 구조">
+<section class="slide" data-sec="1" data-title="전체 구조">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">15 / 16</span></div>
+  <h2>전체 구조</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-15.png" alt="전체 구조"></figure>
+    <div class="ag"><div class="ag-left"><div><p class="lab">이용자와 대화</p><div class="ag-device" style="min-height:120px"><b>현재 질문과 요청</b>점메추<br>칼국수집 검색<br>A 칼국수 예약</div></div><div><div class="ag-device" style="min-height:120px"><b>이용자 장치</b>동의한 위치정보<br>서울 시청역 부근</div></div></div><div class="ag-gut"><span class="b">→</span><span class="b">→</span></div><div class="ag-har"><div class="hl">AI 하네스</div><div class="ag-row" style="--mem:3"><div class="ag-brain"><div class="b">AI의 두뇌</div><div class="arr"><span>읽기 ↑</span><span>쓰기 ↓</span></div></div><div class="ag-mem"><b>장기 기억 저장소</b>40대 남성
+음식 취향</div><div class="ag-mem"><b>대화 이력</b>이전 대화
+이번 예약 내역</div><div class="ag-mem"><b>계정 이용자 정보</b>이름·연락처</div></div><div class="ag-ctx"><div class="t">작업판(context, 컨텍스트)</div><p class="hi big">이용자 요청: 메뉴 추천 → 식당 검색 → 예약</p><p>이용자 기억: 나이, 음식 취향
+대화 이력: 이전 대화와 예약 내역
+계정 이용자 정보: 이름, 연락처
+장치 위치: 서울 시청역 부근
+외부 서비스 결과: 날씨, 식당 정보, 예약 결과</p></div></div><div class="ag-gut"><span class="r">→</span><span class="b">←</span></div><div class="ag-right"><div><p class="lab red" style="margin:0">연결된 외부 서비스</p></div><div><div class="ag-ext "><b>날씨 서비스</b>보냄: 지역
+받음: 날씨</div></div><div><div class="ag-ext "><b>웹 검색 서비스</b>보냄: 검색어의 정보
+받음: 식당·상품 정보</div></div><div><div class="ag-ext red"><b>예약 플랫폼과 식당</b>보냄: 이름·연락처 등
+받음: 예약 결과</div></div></div></div><p class="ag-caption">AI는 여러 곳의 개인정보를 종합하고, 그 일부를 외부로 보낼 수 있습니다.</p>
   </div>
 </section>
-<section class="slide w11-ppt" data-sec="1" data-title="에이전틱 AI 시스템">
+<section class="slide" data-sec="1" data-title="에이전틱 AI 시스템">
   <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">16 / 16</span></div>
+  <h2>에이전틱 AI 시스템</h2>
   <div class="body">
-    <figure class="plain"><img src="assets/week11/agentsys/agentsys-16.png" alt="에이전틱 AI 시스템"></figure>
+    <ul class="bul compact"><li><b>에이전틱 AI (OECD, 2026)</b>: 에이전틱 AI는 일반적으로 상호 조율되는 다수의 AI 에이전트(multiple co-ordinated AI agents)로 구성되어, 과업을 분해(break down tasks)하고 협력(collaborate)하며 장기간에 걸쳐 자율적으로 복잡한 목표를 추구(pursue complex objectives)할 수 있는 시스템을 의미</li></ul><table class="tbl cmp sm" style="width:100%;max-width:1000px"><thead><tr><th style="width:14%">구분</th><th>AI 에이전트</th><th>에이전틱 AI 시스템</th></tr></thead><tbody><tr><th>목표</th><td class="c">좁은 목표, 짧은 수행 기간</td><td class="c">복잡한 목표, 과제 분해·위임, 긴 기간</td></tr><tr><th>출력</th><td class="c">제한된 행동 범위에서 과제 수행</td><td class="c">넓은 행동 범위에서 복잡한 과제 수행</td></tr><tr><th>자율성</th><td class="c">단계별 지시와 감독에 상대적으로 의존</td><td class="c">높은 자율성·유연성, 자율적 도구 탐색</td></tr><tr><th>환경</th><td class="c">주로 비교적 제한된 디지털 환경</td><td class="c">개방적이고 복잡하며 예측하기 어려운 환경</td></tr><tr><th>적응성</th><td class="c">상대적으로 낮은 적응성</td><td class="c">높은 적응성과 환경 상호작용</td></tr><tr><th>추론</th><td class="c">단일 에이전트의 추론</td><td class="c">여러 에이전트의 조정·분산 문제 해결</td></tr><tr><th>데이터·입력</th><td class="c">비교적 제한적·덜 동적인 출처</td><td class="c">다양하고 동적인 출처와 상호작용</td></tr></tbody></table><p class="src">OECD (2026), The agentic AI landscape and its conceptual foundations, OECD Artificial Intelligence Papers, No. 56</p>
   </div>
 </section>
 <section class="slide" data-sec="1" data-title="워크플로 vs 에이전트">
