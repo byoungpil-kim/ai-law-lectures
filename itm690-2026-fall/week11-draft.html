@@ -1613,6 +1613,26 @@ A 칼국수
   </div>
 </section>
 
+<section class="slide" data-sec="4" data-title="노션 토큰 발급과 페이지 연결">
+  <div class="kicker">협업 면: 노션 리포트</div>
+  <h2>노션 토큰 발급과 페이지 연결: 한 번만 하면 되는 설정</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.05fr .95fr;align-items:start">
+      <div class="stack">
+        <ol class="bul compact">
+          <li><b>통합(integration) 만들기</b>: 노션 설정 → 개발자 도구 → Developer connections → "신규 연결". 이름을 붙이고(예: KAIST-ITM) 내부 통합으로 만든다. 권한은 콘텐츠 읽기·업데이트·삽입, 사용자 정보 읽기면 충분하다</li>
+          <li><b>토큰 복사</b>: 만들어진 연결의 "Internal Integration Secret"(<code>ntn_</code>으로 시작)을 복사한다. 비밀번호와 같은 급으로 다룬다</li>
+          <li><b>페이지에 연결</b>: 리포트를 쌓을 페이지(예: "자산 현황 일지")의 ⋯ 메뉴 → 연결(Connections) → 방금 만든 통합을 추가한다. 통합은 <b>이 페이지와 그 아래</b>만 읽고 쓸 수 있다</li>
+          <li><b>앱에 넣기</b>: <code>.env</code>에 <code>NOTION_API=ntn_…</code> 한 줄. 부모 페이지 주소 끝의 32자리가 페이지 ID다</li>
+          <li><b>확인</b>: <code>npm run notion -- --list</code>로 그 페이지 아래 하위 페이지가 보이면 연결된 것이다</li>
+        </ol>
+        <div class="callout"><b>최소 권한의 실물</b>: 커넥터(§2)는 계정 단위로 연결되지만, 통합 토큰은 페이지 단위로 연결된다. 워크스페이스의 다른 문서는 이 토큰으로 보이지 않는다. 6강의 최소 권한 원칙이 노션에서는 이렇게 구현된다.</div>
+      </div>
+      <figure><img src="assets/week11/notion-connections.png" alt="노션 개발자 도구의 Developer connections 화면. KAIST-ITM 연결 하나가 API 토큰 인증 유형으로 등록되어 있다" style="width:100%"><figcaption>노션 설정 → 개발자 도구 → Developer connections. 연결 하나(KAIST-ITM)가 API 토큰 방식으로 등록된 모습. 권한은 콘텐츠 읽기·업데이트·삽입과 사용자 정보 읽기</figcaption></figure>
+    </div>
+  </div>
+</section>
+
 <section class="slide" data-sec="4" data-title="실습: 지시 한 줄과 루틴">
   <div class="kicker">협업 면: 노션 리포트 · 실습</div>
   <h2>실습: 지시 한 줄로 날짜별 리포트가 자동 발행된다</h2>
@@ -3473,7 +3493,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
     {name:'에이전트에서 멀티에이전트로', sub:'AI 에이전트 시스템 · 워크플로 vs 에이전트 · 패턴 5종'},
     {name:'연동: MCP와 커넥터', sub:'표준 규격 · Drive 커넥터 실습'},
     {name:'데이터 면: 구글 시트 원장', sub:'링크 공유 · 서비스 계정'},
-    {name:'협업 면: 노션 리포트', sub:'리포트 발행 · 커넥터로 대화'},
+    {name:'협업 면: 노션 리포트', sub:'토큰 발급 · 리포트 발행 · 커넥터로 대화'},
     {name:'멀티에이전트 아키텍처와 사례', sub:'구조 · 수치 · 실패 연구'},
     {name:'실습: OpenRouter 검토단', sub:'역할 3 · 모델 다양성 · 기록'},
     {name:'코드 없이: 페르소나와 스킬', sub:'한계 · 서브에이전트 · review-board'},
