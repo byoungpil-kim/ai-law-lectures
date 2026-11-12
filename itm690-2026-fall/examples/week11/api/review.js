@@ -45,8 +45,10 @@ async function callRole(role, userContent, { timeoutMs = 90_000 } = {}) {
     if (!res.ok) throw new Error(`${role}: HTTP ${res.status} ${await res.text()}`);
     const data = await res.json();
     const text = data.choices?.[0]?.message?.content ?? "";
+    // 일부 모델은 json_object를 요청해도 ```json ... ``` 펜스로 감싸 보낸다. 펜스를 벗기고 파싱한다.
+    const stripped = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
     let parsed;
-    try { parsed = JSON.parse(text); } catch { parsed = { parse_error: true, raw: text }; }
+    try { parsed = JSON.parse(stripped); } catch { parsed = { parse_error: true, raw: text }; }
     return {
       role, model: data.model || MODELS[role], output: parsed,
       usage: data.usage || null, // prompt_tokens, completion_tokens, cost(USD)

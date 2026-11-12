@@ -808,7 +808,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
         <li><b>도구</b>: Claude 데스크톱 앱의 Code(Claude Code). 로컬 서버를 켜고, 코드를 깃헙에 올리고, Vercel에 배포하기 때문</li>
         <li><b>예시 주제</b>: 투자 포트폴리오 검토단(의견 A 강세, 의견 B 약세, 검증 역할). 수강생은 §6 마지막 장의 설계표로 자기 주제에 옮긴다</li>
       </ul>
-      <div class="callout good"><b>예제 코드</b>: 오늘 실습의 역할 정의서 3개와 서버리스 함수, 실행 결과는 <a href="examples/week11/" target="_blank" rel="noopener">examples/week11/</a>에 공개한다. 슬라이드의 보고서 화면은 이 코드의 출력 형식(JSON 스키마)을 샘플 데이터로 채운 형식 예시다. 실제 실행 결과는 output/ 폴더의 JSON으로 확인한다.</div>
+      <div class="callout good"><b>예제 코드</b>: 오늘 실습의 역할 정의서 3개와 서버리스 함수, 실행 결과는 <a href="examples/week11/" target="_blank" rel="noopener">examples/week11/</a>에 공개한다. 슬라이드의 보고서 화면은 2026-11-12에 이 코드를 실제로 실행해 받은 결과다. 결과 JSON 전문은 data/report-2026-11-12.json에 있다.</div>
     </div>
   </div>
 </section>
@@ -1999,7 +1999,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
       <ul class="bul compact">
         <li><b>왜 섞는가</b>: 같은 모델 셋은 같은 자리에서 함께 틀린다. Mixture-of-Agents(§5 사례 3)가 보여 준 것처럼 모델 다양성 자체가 성능 요인이다</li>
         <li><b>OpenRouter를 쓰는 이유</b>: 키 하나로 제공자 셋을 호출하고, 응답의 <code>usage</code>에 토큰과 비용이 함께 온다. 모델 교체는 환경변수 한 줄</li>
-        <li><b>비용 어림</b>: 역할당 입력 3~5천 토큰, 출력 1천 토큰 안팎이면 소집 1회에 약 $0.04~0.06, 수십 원 수준. 모델을 올리면 10배까지 늘 수 있다</li>
+        <li><b>실측 비용</b>(2026-11-12 소집 1회): 강세 $0.004(6초), 약세 $0.023(14초), 검증 $0.074(53초, 입력 3,547·출력 6,711 토큰), 합계 <b>$0.101</b>, 약 150원. 검증 역할이 비용과 시간의 3/4를 차지한다</li>
       </ul>
       <div class="callout warn"><b>모델 ID는 바뀐다.</b> 가격·ID는 2026-11-05 OpenRouter 모델 목록 기준이다. 실습 당일 <a href="https://openrouter.ai/models" target="_blank" rel="noopener">openrouter.ai/models</a>에서 확인하고 환경변수 <code>MODEL_BULL</code>, <code>MODEL_BEAR</code>, <code>MODEL_RISK</code>로 바꾼다.</div>
     </div>
@@ -2088,34 +2088,34 @@ node run-local.mjs
 
 <section class="slide top" data-sec="6" data-title="첫 보고 화면">
   <div class="kicker">실습: OpenRouter 검토단 · 2단계</div>
-  <h2>첫 보고: 설계한 출력 형식이 그대로 돌아온다</h2>
+  <h2>첫 보고: 설계한 출력 형식이 그대로 돌아온다 (2026-11-12 실제 소집)</h2>
   <div class="body">
-    <div class="mock w11-report"><div class="mbar">검토단 보고 · 2026-08-25 기준 · 자산 5,868만원 · S&amp;P500 61.6% / 금 19.4% / CD 9.6% / SOFR 9.4% · 전 종목 밴드 이내</div><div class="min" style="font-size:12.5px">
+    <div class="mock w11-report"><div class="mbar">검토단 보고 · 데이터 2026-08-25 · 자산 5,868만원 · S&amp;P500 61.6% / 금 19.4% / CD 9.6% / SOFR 9.4% · 전 종목 밴드 이내 · 소집 2026-11-12 14:33</div><div class="min">
       <div class="two eq" style="gap:12px;align-items:start">
-        <div><b style="color:#1b6fa6">1. 강세론 (모델 1)</b>
-          <table class="tbl cmp sm" style="width:100%;margin-top:4px"><thead><tr><th>자산</th><th>강세 근거</th><th>매력도</th></tr></thead><tbody>
-          <tr><td>S&amp;P500</td><td>수익률 +5.3%로 네 자산 중 유일한 뚜렷한 상승 추세</td><td class="c">상</td></tr>
-          <tr><td>금현물</td><td>목표 대비 -0.6%p 비중 부족, 채울 여지</td><td class="c">중</td></tr>
-          <tr><td>CD금리 · 달러SOFR</td><td>확정 수익, 그러나 기회 대비 매력 낮음</td><td class="c">하</td></tr></tbody></table>
-          <p style="margin:4px 0 0"><b>제안</b>: S&amp;P500을 밴드 상단 65%까지 확대, 금은 목표 20%로 채움</p></div>
-        <div><b style="color:#b0483f">2. 약세론 (모델 2)</b>
-          <table class="tbl cmp sm" style="width:100%;margin-top:4px"><thead><tr><th>자산</th><th>위험 요인</th><th>경계</th></tr></thead><tbody>
-          <tr><td>S&amp;P500</td><td>비중 61.6%로 쏠림, 분기 수익률 -5.6% 되돌림 진행 중</td><td class="c">상</td></tr>
-          <tr><td>달러SOFR</td><td>수익률 -2.1%, 환율 방향 불확실</td><td class="c">중</td></tr>
-          <tr><td>금현물</td><td>최근 1주 -0.9%, 추세 약화</td><td class="c">중</td></tr></tbody></table>
-          <p style="margin:4px 0 0"><b>제안</b>: S&amp;P500 55%로 축소, CD금리 비중 확대로 방어</p></div>
+        <div><b style="color:#1b6fa6">1. 강세론</b> <span class="pill" style="font-size:10.5px">openai/gpt-5.4-mini</span>
+          <table class="tbl cmp sm" style="width:100%;margin-top:4px"><thead><tr><th>자산</th><th>강세 근거 (요약)</th><th>매력도</th></tr></thead><tbody>
+          <tr><td>S&amp;P500</td><td>수익률 +5.26%로 추세가 가장 강하다. 61.6%는 밴드 안이라 더 늘릴 여지</td><td class="c">상</td></tr>
+          <tr><td>CD금리</td><td>+1.77%, 목표 대비 0.4%p 부족. 추가 편입 여지</td><td class="c">중</td></tr>
+          <tr><td>금현물 · 달러SOFR</td><td>목표 대비 소폭 부족. "확인되지 않은 일반적 견해"로 방어·완충 효과 언급</td><td class="c">중</td></tr></tbody></table>
+          <p style="margin:4px 0 0"><b>제안</b>: S&amp;P500 우선 증액, CD금리·달러SOFR 소폭 보완, 금현물 유지</p></div>
+        <div><b style="color:#b0483f">2. 약세론</b> <span class="pill" style="font-size:10.5px">google/gemini-3.5-flash</span>
+          <table class="tbl cmp sm" style="width:100%;margin-top:4px"><thead><tr><th>자산</th><th>위험 요인 (요약)</th><th>경계</th></tr></thead><tbody>
+          <tr><td>S&amp;P500</td><td>쏠림·가치: 비중 61.6%로 목표 초과, 누적 +5.26%로 상대적 고평가</td><td class="c">상</td></tr>
+          <tr><td>포트폴리오 전체</td><td>추세: 1분기 -5.61%, 1주 -0.86%로 하락세</td><td class="c">중</td></tr>
+          <tr><td>달러SOFR</td><td>추세: 누적 -2.10%</td><td class="c">하</td></tr></tbody></table>
+          <p style="margin:4px 0 0"><b>제안</b>: S&amp;P500을 60% 이하로 축소, 현금성 자산 비중 유지</p></div>
       </div>
-      <div class="res"><b style="color:#2f765b">3. 리스크·검증 (모델 3)</b><br/>
-        <b>반론</b> · 강세: "상승 추세"는 누적 수익률 한 값에 기댄 판단. 분기 수익률 -5.6%와 상충한다 · 약세: 61.6%는 밴드(55~65%) 안이므로 규칙상 쏠림이 아니다<br/>
-        <b>확인되지 않은 주장</b>: 환율 방향, 지수 밸류에이션(입력 데이터에 없음)<br/>
-        <table class="tbl cmp sm" style="width:100%;margin-top:4px"><thead><tr><th>안</th><th>매매 (총 5,868만원 기준)</th><th>밴드 내</th><th>비용 메모</th></tr></thead><tbody>
-        <tr><td>현재 유지</td><td>없음</td><td class="c">예</td><td>없음</td></tr>
-        <tr><td>강세안 (S&amp;P 65%)</td><td>S&amp;P +약 196만원 매수, 금 +약 38만원, 현금성 축소</td><td class="c">예(상단)</td><td>매매 약 230만원</td></tr>
-        <tr><td>약세안 (S&amp;P 55%)</td><td>S&amp;P 약 -387만원 매도, CD금리 확대</td><td class="c">예(하단)</td><td>매매 약 390만원, 회전 큼</td></tr></tbody></table></div>
-      <div class="res"><b>4. 종합</b> · 충돌 지점: S&amp;P500 비중(65 vs 55 vs 현재 61.6, 모두 밴드 안) · 공통: 지금 리밸런싱 의무 없음<br/>
-        <b>사람에게 남기는 질문</b>: ① 위험 허용도상 S&amp;P 비중을 55~65% 중 어디에 둘 것인가 ② 환율 전망에 무게를 둘 것인가 ③ 매매는 직접 할 것인가 · <i>매매 실행 없음, 최종 결정은 사용자</i></div>
+      <div class="res"><b style="color:#2f765b">3. 리스크·검증</b> <span class="pill" style="font-size:10.5px">anthropic/claude-sonnet-5.5</span><br/>
+        <b>반론</b> · 강세: "+5.26%"는 평균 매입가 대비 누적 손익률이지 추세 지표가 아니다. 신규 자금이 없으면 S&amp;P500 증액은 다른 자산 매도로만 가능해 "부족분 보완"과 맞지 않는다 · 약세: "고평가"는 가치 지표 입력이 없어 근거가 없고, 61.6%는 밴드(55~65%) 안이라 규칙상 수시 리밸런싱 사유가 아니다<br/>
+        <b>확인되지 않은 주장</b> 9건: 자산별 추세, 금의 방어 효과, 경기 침체 우려, 달러SOFR 하락세 지속 등(입력 데이터에 없음)<br/>
+        <table class="tbl cmp sm" style="width:100%;margin-top:4px"><thead><tr><th>안</th><th>매매 (총 58,682,555원 기준, 계산식 포함)</th><th>밴드 내</th><th>비용 메모</th></tr></thead><tbody>
+        <tr><td>현재 유지</td><td>없음. 4개 자산 모두 밴드 안</td><td class="c">예</td><td>0원. 다음 정기 점검 2027-08-03</td></tr>
+        <tr><td>강세안</td><td>S&amp;P +1%p 예시 = 586,826원(약 24주). 상한 65%까지 여유 1,971,611원(약 82주). 재원은 다른 자산 매도뿐</td><td class="c">예 (197만원 이내일 때)</td><td>왕복 약 117만원(2.0%). 이탈을 키우는 매매</td></tr>
+        <tr><td>약세안</td><td>S&amp;P 매도 962,517원(약 40주) → 60.0%. 부족분 금 377,761 · CD 246,621 · SOFR 338,136원 = 매도액과 일치</td><td class="c">예</td><td>왕복 약 193만원(3.3%). 실현 이익 47,840원. 정기일 전 재량 매매</td></tr></tbody></table></div>
+      <div class="res"><b>4. 종합</b> · 충돌 5건: S&amp;P500 방향(같은 61.6%를 정반대로 해석) · 추세 해석(평단 대비 손익률 vs 포트폴리오 기간 수익률, 서로 다른 지표) · 달러SOFR 평가 · "현금성 자산"의 범위 · 두 안 모두 규칙 밖 재량 매매<br/>
+        <b>사람에게 남기는 질문</b> 6건: ① 신규 입금 여력이 있는가 ② 밴드 이탈이 없어도 정기일 전 재량 매매를 허용할 것인가 ③ 수수료·세금·계좌 종류 ④ 자산별 1·3개월 수익률을 줄 수 있는가 ⑤ gainRate 2.96%와 sinceStart 3.37%가 다른 이유 ⑥ 달러SOFR 보유 목적 · <i>매매 실행 없음, 최종 결정은 사람</i></div>
     </div></div>
-    <p class="muted" style="font-size:12px">위 화면은 예제 코드의 출력 형식(JSON 스키마)을 2026-08-25 샘플 데이터로 채운 <b>형식 예시</b>다. 실제 소집 결과는 examples/week11/output/에 저장되는 JSON을 그대로 표로 그린다. 수치와 전망은 교육용 시뮬레이션의 산출물이며 투자 자문이 아니다.</p>
+    <p class="muted" style="font-size:12px">실행 기록: 강세 6초 $0.004 · 약세 14초 $0.023 · 검증 53초 $0.074 · 합계 $0.101. 결과 JSON 전문은 <a href="examples/week11/data/report-2026-11-12.json" target="_blank" rel="noopener">examples/week11/data/report-2026-11-12.json</a>. 첫 실행에서는 검증 역할이 JSON을 코드 펜스로 감싸 보내 파싱에 실패했고, 펜스를 벗기는 한 줄을 추가해 다시 돌렸다. 수치와 전망은 교육용 시뮬레이션의 산출물이며 투자 자문이 아니다.</p>
   </div>
 </section>
 
