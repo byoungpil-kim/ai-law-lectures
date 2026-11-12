@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>11강 실습 (3) 멀티에이전트 시스템 구축 · 인공지능 경영과 법 (ITM.690)</title>
-<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 11강 실습: MCP·커넥터, 구글 시트·노션 연동, 멀티에이전트 아키텍처와 사례, OpenRouter로 검토단 구현, 멀티 페르소나 프롬프팅과 스킬, 답변 검증 전략, CoT·토론 로그와 설명가능성, 사례 조사, 기말 과제" />
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 11강 실습: MCP·커넥터, 구글 시트·노션 연동, 멀티에이전트 아키텍처와 사례, OpenRouter로 검토단 구현, 멀티 페르소나 프롬프팅과 스킬, 답변 검증 전략, 기말 과제" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -832,7 +832,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
     <div class="steps">
       <div class="step"><span class="no">A</span><b class="ttl">연결한다 (§2~4)</b><p class="prob">MCP와 커넥터 → 구글 시트를 원장으로 → 서비스 계정 → 노션 리포트. 내 프로그램이 바깥 데이터를 읽고, 사람이 읽는 자리에 결과를 쌓는다. 부트캠프 4주차 ①~④</p></div>
       <div class="step"><span class="no">B</span><b class="ttl">맡기고 검증한다 (§5~8)</b><p class="prob">멀티에이전트 구조와 사례 수치 → 자산관리 앱이 OpenRouter로 검토단 소집 → 코드 없이 같은 절차를 스킬로 → 답변 검증 전략 7갈래</p></div>
-      <div class="step"><span class="no">C</span><b class="ttl">기말 과제 소개 (§9~10)</b><p class="prob">사례 조사 자료(McKinsey, Deloitte, 국내 사례) → 기말 과제: 도메인 선례 조사 → MVP → 법적 쟁점. 12/3·12/10 발표</p></div>
+      <div class="step"><span class="no">C</span><b class="ttl">기말 과제 소개 (§9)</b><p class="prob">도메인 선례 조사 → MVP → 법적 쟁점. 12/3·12/10 발표. 선례 조사는 각자 자기 도메인에서 한다</p></div>
     </div>
     <div class="callout">7강과 달라지는 점: 7강의 서비스는 모델을 <b>한 번</b> 호출해 답했다. 오늘은 역할이 다른 호출 <b>여러 개</b>가 서로의 답을 검토한다. 호출이 늘면 비용·지연·실패 경로도 늘고, 기록해야 할 것도 늘어난다. 6강 §11에서 본 다중 에이전트의 법적 과제가 오늘은 설계 문제가 된다.</div>
     <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week4/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프 4주차: 연동과 에이전트</a>.</p>
@@ -2548,7 +2548,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
 검증자는 각 검토가 든 조문이 실제로 존재하는지, 내용이 맞는지 확인해 줘.</pre>
         <ul class="bul compact">
           <li>1차 결과는 <b>쟁점 목록의 초안</b>이다. 6강·10강·12강에서 배운 것과 대조하며 사람이 결론을 쓴다</li>
-          <li>발표에서는 "AI가 뽑은 쟁점 목록"과 "내가 검증한 결과"를 구분해 보인다(§10)</li>
+          <li>발표에서는 "AI가 뽑은 쟁점 목록"과 "내가 검증한 결과"를 구분해 보인다(§9)</li>
         </ul>
       </div>
       <div class="stack">
@@ -2705,7 +2705,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <div class="step"><span class="no">2</span><b class="ttl">귀속 확인 (ALCE)</b><p class="prob">인용된 문서가 그 문장을 실제로 뒷받침하는가. Gao et al. (EMNLP 2023)의 인용 정확도·재현율 평가. ELI5에서 최고 모델도 50%는 완전한 지지가 없었다</p><p class="sol">있지만 틀린 인용을 잡는다</p></div>
       <div class="step"><span class="no">3</span><b class="ttl">원자 사실 단위 (FActScore)</b><p class="prob">긴 답을 사실 단위로 쪼개 각각 검증한다. Min et al. (EMNLP 2023): ChatGPT 전기 생성의 FActScore 58%. 자동 추정기의 오차 2% 미만</p><p class="sol">긴 문서의 부분 오류를 잡는다</p></div>
     </div>
-    <div class="callout"><b>실습 적용</b>: 검토단의 의견 역할이 뉴스·수치를 인용하면, 검증 역할은 (1) 그 출처가 입력 데이터나 검색 결과에 실제로 있는지 (2) 있다면 그 숫자가 주장과 맞는지 두 단계로 본다. 법적 쟁점 분석(§10)에서는 조문 존재 여부 조회를 자동화한다.</div>
+    <div class="callout"><b>실습 적용</b>: 검토단의 의견 역할이 뉴스·수치를 인용하면, 검증 역할은 (1) 그 출처가 입력 데이터나 검색 결과에 실제로 있는지 (2) 있다면 그 숫자가 주장과 맞는지 두 단계로 본다. 법적 쟁점 분석(§9)에서는 조문 존재 여부 조회를 자동화한다.</div>
     <p class="src">출처: Gao, Yen, Yu, Chen, "Enabling Large Language Models to Generate Text with Citations," EMNLP 2023, <a href="https://arxiv.org/abs/2305.14627" target="_blank" rel="noopener">arxiv.org/abs/2305.14627</a> · Min et al., "FActScore," EMNLP 2023, <a href="https://arxiv.org/abs/2305.14251" target="_blank" rel="noopener">arxiv.org/abs/2305.14251</a></p>
   </div>
 </section>
@@ -2824,152 +2824,18 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
 </section>
 
 
-<!-- ===================== 10. 사례 조사 ===================== -->
-<section class="slide section" data-sec="9" data-title="사례 조사">
+
+<!-- ===================== 11. 기말 과제 ===================== -->
+<section class="slide section" data-sec="9" data-title="기말 과제">
   <div class="kicker">Section 9</div>
-  <h2>사례 조사: 어디에 에이전트를 쓰고 있는가</h2>
-  <p class="section-lead">기말 과제의 첫 작업은 내 도메인의 AI 활용 선례 조사다. 그 출발 자료 둘과, 국내·도메인 사례를 찾는 곳을 안내한다.</p>
+  <h2>기말 과제: AI 서비스 MVP + 법적 쟁점</h2>
+  <p class="section-lead">도메인 선례 조사 → MVP → 법적 쟁점의 세 작업을 거쳐 12/3·12/10에 발표한다. 중간 제출은 없다.</p>
   <div class="body">
     <ol class="roadmap" data-current="9"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="왜 선례부터 보는가">
-  <div class="kicker">사례 조사</div>
-  <h2>왜 선례부터 보는가</h2>
-  <div class="body">
-    <div class="two eq" style="align-items:start">
-      <ul class="bul">
-        <li>MVP 주제는 <b>"내가 만들어 제공하고 싶은 서비스"</b>에서 고른다. 그래도 같은 도메인에서 누가 무엇을 어디까지 자동화했고 어떤 결과를 냈는지 알아야 범위와 검증 방법을 정할 수 있다</li>
-        <li>강의계획서의 발표 요건 첫 항목이 <b>"유사 AI 선행 적용 사례"</b>다. 선례 조사 메모가 그대로 발표 자료가 된다(§9~10)</li>
-        <li>선례에서 볼 것은 성과 수치가 아니라 <b>구조</b>다. 업무 흐름의 어느 구간을 자동화했는가, 어떤 검증과 사람 개입이 있는가, 수치는 누가 측정했는가</li>
-      </ul>
-      <div class="step"><span class="no">?</span><b class="ttl">선례 하나를 읽을 때 묻는 네 가지</b>
-        <ul class="bul compact">
-          <li>무엇을 자동화했는가 (어느 구간, 어디까지)</li>
-          <li>어떤 검증·사람 개입 장치가 있는가</li>
-          <li>보고된 수치와 그 출처의 성격 (벤더 자기보고 / 컨설팅 설문 / 학술 평가 / 내부 측정)</li>
-          <li>내 MVP와 무엇이 같고 다른가</li>
-        </ul></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="핵심 자료 1: McKinsey">
-  <div class="kicker">사례 조사</div>
-  <h2>핵심 자료 1: McKinsey, "Seizing the agentic AI advantage" (2025-06)</h2>
-  <div class="body">
-    <div class="two eq" style="align-items:stretch">
-      <div class="step"><span class="no">H</span><b class="ttl">수평적 활용 (horizontal)</b><p class="prob">채팅 비서, 문서 요약, 코파일럿. 널리 쓰이지만 업무 흐름을 바꾸지 않는다. 측정 가능한 수익 영향이 작다</p><p class="sol">"gen AI 패러독스": 약 80%가 쓰지만 대부분 수익 영향 없음</p></div>
-      <div class="step"><span class="no">V</span><b class="ttl">수직적 활용 (vertical)</b><p class="prob">한 업무 흐름(신용 심사, 레거시 현대화, 고객 응대 전 과정)을 끝까지 재설계. 에이전트가 단계 사이를 잇는다. 가치가 여기서 나온다</p><p class="sol">MVP 범위를 "수직적 업무 흐름 하나"로 잡는 근거</p></div>
-    </div>
-    <ul class="bul compact">
-      <li><b>agentic AI mesh</b>: 에이전트들이 데이터·도구·다른 에이전트와 연결되는 조직 차원의 구조. 거버넌스(권한·기록·검증)를 처음부터 설계하라는 권고</li>
-      <li>같은 기관 State of AI 2025(2025-11): 응답 기업의 62%가 에이전트를 실험 중, 23%가 어딘가에서 확장 중, 기능별 확장은 10% 이하. 실험은 많고 운영은 적다</li>
-    </ul>
-    <p class="src">McKinsey QuantumBlack, "Seizing the agentic AI advantage," 2025-06. <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/seizing-the-agentic-ai-advantage" target="_blank" rel="noopener">mckinsey.com</a> · "The state of AI in 2025," 2025-11. <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener">mckinsey.com</a>. 보고서 안 개별 사례의 % 수치는 원문에서 직접 확인한다.</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="핵심 자료 2: Deloitte">
-  <div class="kicker">사례 조사</div>
-  <h2>핵심 자료 2: Deloitte, "Tech Trends 2026" 2장 The agentic reality check (2025-12)</h2>
-  <div class="body">
-    <div class="two" style="grid-template-columns:.8fr 1.2fr;align-items:center">
-      <div class="dia"><svg viewBox="0 0 300 220" role="img" aria-label="에이전트 도입 단계 분포">
-<text x="150" y="18" text-anchor="middle" font-size="12.5" font-weight="800" fill="#22201d">에이전트 도입 단계 (Deloitte 설문)</text>
-<rect x="20" y="40" width="260" height="26" rx="6" fill="#eceae6"/>
-<rect x="20" y="40" width="29" height="26" rx="6" fill="#2f765b"/><text x="34" y="58" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">11%</text>
-<rect x="49" y="40" width="99" height="26" fill="#b8792e"/><text x="98" y="58" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">38%</text>
-<rect x="148" y="40" width="109" height="26" fill="#9dc4de"/><text x="202" y="58" text-anchor="middle" font-size="11" font-weight="800" fill="#124d78">42%</text>
-<text x="34" y="86" text-anchor="middle" font-size="11" fill="#2f765b" font-weight="700">프로덕션</text>
-<text x="98" y="86" text-anchor="middle" font-size="11" fill="#8a5a1e" font-weight="700">파일럿</text>
-<text x="202" y="86" text-anchor="middle" font-size="11" fill="#124d78" font-weight="700">전략 수립 중</text>
-<text x="150" y="124" text-anchor="middle" font-size="12.5" font-weight="800" fill="#b0483f">"자동화하지 말고 재설계하라"</text>
-<text x="150" y="146" text-anchor="middle" font-size="11.5" fill="#52514e">기존 절차에 에이전트를 끼우면 파일럿에서 멈춘다.</text>
-<text x="150" y="163" text-anchor="middle" font-size="11.5" fill="#52514e">업무 흐름을 에이전트 전제로 다시 그린 곳이 운영에 간다.</text>
-<rect x="30" y="180" width="240" height="30" rx="8" fill="#edf4ef" stroke="#2f765b"/>
-<text x="150" y="200" text-anchor="middle" font-size="11.5" font-weight="700" fill="#2f765b">예: Walmart 매장 스케줄링 90분 → 30분</text>
-</svg></div>
-      <ul class="bul compact">
-        <li>프로덕션 11%, 파일럿 38%, 전략 수립 중 42%. 실제로 운영에 들어간 조직은 열에 하나</li>
-        <li>운영에 간 사례의 공통점: 업무 흐름 하나를 에이전트 전제로 다시 설계했고, 검증·승인 지점을 처음부터 넣었다</li>
-        <li>같은 기관 "State of AI in the Enterprise 2026"(2026-01, 3,500명): 40%가 중간 수준 이상의 자율 실행을 허용하지만 23%는 책임 소재가 불명확하다고 답했다. 기말 과제 법적 쟁점의 출발점</li>
-        <li><b>두 자료를 짝지어 읽으면</b>: 파일럿은 많고 운영은 적다, 운영에 간 것은 수직적 업무 흐름 하나를 끝까지 간 것. 이것이 MVP 선정 기준</li>
-      </ul>
-    </div>
-    <p class="src">Deloitte Insights, "Tech Trends 2026," 2025-12-10. <a href="https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends.html" target="_blank" rel="noopener">deloitte.com</a> · "State of AI in the Enterprise 2026," 2026-01.</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="현실 수치 한 장">
-  <div class="kicker">사례 조사</div>
-  <h2>현실 수치 한 장: 기대와 운영 사이</h2>
-  <div class="body">
-    <table class="tbl cmp sm">
-      <thead><tr><th style="width:28%">출처</th><th>수치</th><th style="width:30%">읽는 법</th></tr></thead>
-      <tbody>
-        <tr><th>MIT NANDA, "The GenAI Divide" (2025-07)</th><td>기업 생성형 AI 파일럿의 95%가 측정 가능한 수익 없음</td><td>표본 기술이 자료마다 달라 수치 자체보다 "학습 격차" 진단에 주목</td></tr>
-        <tr><th>Gartner (2025-06)</th><td>에이전틱 AI 프로젝트의 40% 이상이 2027년 말까지 취소될 전망. "agent washing" 지적</td><td>비용·불명확한 가치·위험 통제 미비가 원인</td></tr>
-        <tr><th>PwC US AI Agent Survey (2025-05)</th><td>임원 300명 중 79% 도입 중, 전사 적용은 17%</td><td>부서 단위 파일럿이 대부분</td></tr>
-        <tr><th>Stanford HAI, AI Index 2026 (2026-04)</th><td>컴퓨터 사용 벤치마크 OSWorld 에이전트 성공률 약 12% → 66.3% (인간 72.35%)</td><td>능력은 빠르게 오르고 있다. 병목은 능력보다 조직·검증</td></tr>
-        <tr><th>Vals Legal AI Report (2025-02)</th><td>문서 Q&amp;A: 변호사 70.1% vs Harvey 94.8%. 수정 표시(redlining): 변호사 79.7 vs Harvey 65.0</td><td>쉬운 과제는 AI, 추론 집약 과제는 전문가. 어느 쪽 과제인지 먼저 본다</td></tr>
-        <tr><th>Thomson Reuters, Future of Professionals 2026</th><td>AI 전략을 가진 조직의 기대 충족 66% vs 없는 조직 22%</td><td>전략(범위·검증·기록)이 있는 쪽이 결과를 낸다</td></tr>
-      </tbody>
-    </table>
-    <p class="src">MIT NANDA 2025 · Gartner 보도자료 2025-06-25(Reuters 보도로 확인) · PwC 2025 · Stanford HAI 2026 <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report" target="_blank" rel="noopener">hai.stanford.edu</a> · Vals AI <a href="https://www.vals.ai/vlair" target="_blank" rel="noopener">vals.ai/vlair</a> · Thomson Reuters <a href="https://www.thomsonreuters.com/en/c/future-of-professionals" target="_blank" rel="noopener">thomsonreuters.com</a></p>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="국내·도메인 사례를 찾는 곳">
-  <div class="kicker">사례 조사</div>
-  <h2>국내·도메인 사례를 찾는 곳 (참고 링크)</h2>
-  <div class="body">
-    <table class="tbl cmp sm">
-      <thead><tr><th style="width:30%">자료</th><th>무엇이 있는가</th><th style="width:26%">주의</th></tr></thead>
-      <tbody>
-        <tr><th>Google Cloud 한국어 고객 사례 페이지</th><td>국내 기업 에이전트 사례: 채널코퍼레이션(데이터 분석 2주 → 3분), 여기어때(사내 에이전틱 AI 플랫폼), 카카오모빌리티(카카오내비 대화형 에이전트), 신한투자증권(망분리 준수 에이전트 플랫폼 3개월 구축), 크래프톤(사내 에이전트, 4천 명), CJ ENM, 카카오게임즈</td><td>벤더 자기보고. 비교군 없음. 구조 파악용으로만</td></tr>
-        <tr><th>Google Cloud, "1,302 real-world gen AI use cases" (2026-04)</th><td>11개 산업 × 6개 에이전트 유형(고객·직원·창작·코드·데이터·보안). 법률(eDiscovery 수개월 → 수시간), 보험(오류 80% 감소) 등 사례별 한두 줄</td><td>영문. 한국어 정리본 없음. 벤더 자기보고</td></tr>
-        <tr><th>삼정KPMG, "AI 에이전트 혁신" (2025-09)</th><td>기술·제조(현대차, 포스코DX)·금융(AI 뱅커) 사례 서술</td><td>성과 수치 없음</td></tr>
-        <tr><th>KISDI, "AI 에이전트의 부상과 정책과제" (2025-06)</th><td>산업·법제도·사회 정책과제. 법적 쟁점 분석의 국내 참고</td><td>사례 수치 없음</td></tr>
-        <tr class="hl"><th>자기 조직의 내부 사례</th><td>도입 검토 문서, 파일럿 결과, 운영 중 시스템. <b>선례로 인정한다</b>. 공개 가능한 범위에서 구조와 검증 장치를 설명</td><td>데이터·문서 공개 범위 확인(7강 §9의 "해도 되나")</td></tr>
-      </tbody>
-    </table>
-    <p class="src"><a href="https://cloud.google.com/customers" target="_blank" rel="noopener">cloud.google.com/customers</a> (한국어 사례 필터) · <a href="https://blog.google/products/google-cloud/gen-ai-business-use-cases/" target="_blank" rel="noopener">blog.google/products/google-cloud/gen-ai-business-use-cases</a> · <a href="https://kpmg.com/kr/ko/media/press-releases/2025/09/press-release-08.html" target="_blank" rel="noopener">kpmg.com/kr</a> · <a href="https://www.kisdi.re.kr/" target="_blank" rel="noopener">kisdi.re.kr</a> (Premium Report 2025-02)</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="분야별 영감 표와 선정 기준">
-  <div class="kicker">사례 조사</div>
-  <h2>수강생 분야별 영감 표: 줄마다 검증 역할을 둔다</h2>
-  <div class="body">
-    <table class="tbl cmp sm">
-      <thead><tr><th>분야</th><th>수직적 업무 흐름 하나</th><th>검증 역할 (필수)</th></tr></thead>
-      <tbody>
-        <tr><th>법률</th><td>계약 검토 역할 분담(우리 측·상대 측·조항 충돌), 판례 조사 메모</td><td>인용 존재·지지 검증(사건번호·조문 대조)</td></tr>
-        <tr><th>금융</th><td>심사 메모 초안, 리스크 보고</td><td>수치 재계산, 규정 적합성</td></tr>
-        <tr><th>공공</th><td>입찰·공고 분석, 민원 분류와 초안</td><td>자격 요건 조문 대조, 담당자 확인</td></tr>
-        <tr><th>특허</th><td>선행 기술 조사와 신규성 의견</td><td>청구항 요소별 대응표</td></tr>
-        <tr><th>병원</th><td>리뷰·문의 응대 초안</td><td>의료광고법 금지 표현 점검</td></tr>
-        <tr><th>HR</th><td>공고·지원서 매칭</td><td>차별 요소 점검표</td></tr>
-        <tr><th>연구</th><td>문헌 조사와 계보도</td><td>인용 존재 확인(DOI·arXiv)</td></tr>
-      </tbody>
-    </table>
-    <div class="callout"><b>선정 기준</b> (7강 §8의 가치·위험 매트릭스에 네 가지를 더한다): ① 수직적 업무 흐름 하나인가 ② 관점이 갈릴 수 있는가 ③ 검증이 가능한가(도구·외부 데이터·사람) ④ 데이터를 외부 모델에 넣어도 되는가. 넷 중 하나라도 "아니오"면 범위를 바꾼다.</div>
-  </div>
-</section>
-
-<!-- ===================== 11. 기말 과제 ===================== -->
-<section class="slide section" data-sec="10" data-title="기말 과제">
-  <div class="kicker">Section 10</div>
-  <h2>기말 과제: AI 서비스 MVP + 법적 쟁점</h2>
-  <p class="section-lead">도메인 선례 조사 → MVP → 법적 쟁점의 세 작업을 거쳐 12/3·12/10에 발표한다. 중간 제출은 없다.</p>
-  <div class="body">
-    <ol class="roadmap" data-current="10"></ol>
-  </div>
-</section>
-
-<section class="slide" data-sec="10" data-title="일정과 형식">
+<section class="slide" data-sec="9" data-title="일정과 형식">
   <div class="kicker">기말 과제</div>
   <h2>일정과 형식</h2>
   <div class="body">
@@ -2996,7 +2862,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="1차 작업: 선례 조사">
+<section class="slide" data-sec="9" data-title="1차 작업: 선례 조사">
   <div class="kicker">기말 과제 · 1차 작업</div>
   <h2>1차 작업: 내 도메인의 AI 활용 선례 조사. 반드시 먼저 한다</h2>
   <div class="body">
@@ -3006,7 +2872,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
         <li><b>사례마다 적을 것</b>: ① 무엇을 자동화했는가(업무 흐름의 어느 구간) ② 어떤 검증·사람 개입 장치가 있는가 ③ 보고된 결과 수치와 그 출처의 성격(벤더 자기보고 / 컨설팅 설문 / 학술 평가 / 내부 측정) ④ 내 MVP와 무엇이 같고 다른가</li>
         <li><b>마지막 줄</b>: 이 조사에서 정한 내 주제 1줄</li>
         <li><b>정리 형식</b>: 1쪽 메모(표 1개 + 주제 1줄). 별도 제출은 없고 발표 ② "유사 선행 사례"에 그대로 들어간다</li>
-        <li>§9의 자료에서 출발하되 도메인 전문 매체·학회·규제기관 자료까지 넓힌다</li>
+        <li>자기 도메인의 전문 매체·학회·규제기관 자료, 컨설팅 보고서, 벤더 사례집, 소속 조직의 내부 문서에서 찾는다. 벤더·컨설팅사 수치는 자기보고임을 적는다</li>
       </ul>
       <table class="tbl cmp sm" style="width:100%">
         <thead><tr><th>선례</th><th>자동화 구간</th><th>검증·개입</th><th>수치 (출처 성격)</th><th>내 MVP와의 차이</th></tr></thead>
@@ -3021,7 +2887,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="2차 작업: MVP">
+<section class="slide" data-sec="9" data-title="2차 작업: MVP">
   <div class="kicker">기말 과제 · 2차 작업</div>
   <h2>2차 작업: MVP 웹앱 URL 1개</h2>
   <div class="body">
@@ -3043,7 +2909,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="3차 작업: 법적 쟁점">
+<section class="slide" data-sec="9" data-title="3차 작업: 법적 쟁점">
   <div class="kicker">기말 과제 · 3차 작업</div>
   <h2>3차 작업: 법적 쟁점 분석</h2>
   <div class="body">
@@ -3066,7 +2932,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="발표 구성">
+<section class="slide" data-sec="9" data-title="발표 구성">
   <div class="kicker">기말 과제</div>
   <h2>발표 구성 (15분, 10~15장)</h2>
   <div class="body">
@@ -3095,7 +2961,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="평가 기준">
+<section class="slide" data-sec="9" data-title="평가 기준">
   <div class="kicker">기말 과제</div>
   <h2>평가 기준: 결과물보다 판단 과정</h2>
   <div class="body">
@@ -3113,7 +2979,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="작업 순서와 문서">
+<section class="slide" data-sec="9" data-title="작업 순서와 문서">
   <div class="kicker">기말 과제</div>
   <h2>작업 순서와 남길 문서</h2>
   <div class="body">
@@ -3140,16 +3006,16 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
 </section>
 
 <!-- ===================== 12. 11강 정리 ===================== -->
-<section class="slide section" data-sec="11" data-title="11강 정리">
-  <div class="kicker">Section 11</div>
+<section class="slide section" data-sec="10" data-title="11강 정리">
+  <div class="kicker">Section 10</div>
   <h2>11강 정리</h2>
   <p class="section-lead">연결하고, 맡기고, 검증한다. 오늘 배운 것을 한 장으로 정리하고 다음 강의를 안내한다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="11"></ol>
+    <ol class="roadmap" data-current="10"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="한 장 정리">
+<section class="slide" data-sec="10" data-title="한 장 정리">
   <div class="kicker">11강 정리</div>
   <h2>한 장 정리</h2>
   <div class="body">
@@ -3160,13 +3026,12 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <li><b>실습</b>역할 정의서 3개 + 서로 다른 모델 + 함수 1개 + 구조화 출력 + 로그 + 비용 상한. 결정은 사람</li>
       <li><b>코드 없이</b>한 대화 안의 역할극은 초안용. 독립성은 대화 분리·서브에이전트·모델 분리로. 절차는 review-board 스킬로 표준화</li>
       <li><b>검증 7갈래</b>자기 검증은 외부 신호 없이 악화될 수 있다. 독립 검증자·토론·인용 검증·도구 실행·평가 세트·사람 검증을 피해 크기에 맞춰 조합</li>
-      <li><b>사례 조사</b>McKinsey(수직적 업무 흐름)와 Deloitte(프로덕션 11%)를 핵심 자료로. 벤더 사례는 구조 파악용</li>
       <li><b>기말 과제</b>선례 조사 → MVP(검증 층 1개 이상) → 법적 쟁점. 12/3·12/10 발표. 중간 제출 없음</li>
     </ol>
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="다음 강의">
+<section class="slide" data-sec="10" data-title="다음 강의">
   <div class="kicker">11강 정리</div>
   <h2>다음 강의와 할 일</h2>
   <div class="body">
@@ -3204,7 +3069,6 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
     {name:'실습: OpenRouter 검토단', sub:'역할 3 · 모델 다양성 · 기록'},
     {name:'코드 없이: 페르소나와 스킬', sub:'한계 · 서브에이전트 · review-board'},
     {name:'답변의 정확성 검증 전략', sub:'7갈래 · 무엇을 잡고 못 잡나'},
-    {name:'사례 조사', sub:'McKinsey · Deloitte · 국내 사례'},
     {name:'기말 과제', sub:'선례 조사 → MVP → 법적 쟁점'},
     {name:'11강 정리', sub:'핵심 요약 · 다음 강의'},
   ];
