@@ -37,6 +37,19 @@ data/rates/kr-cd91.csv    CD 91일물 금리 근사 곡선 (백테스트 백필�
 - 출력은 `response_format: json_object`로 구조화한다. 화면과 로그가 필드를 그대로 읽는다.
 - 검증 역할은 입력 데이터에 없는 수치를 계산하지 않고 "입력 없음"으로 표시한다. 백테스트·몬테카를로 같은 도구 검증은 서버가 계산해 입력으로 넘기는 것이 다음 단계다(§8 (e) 도구·실행 기반 검증).
 
+## 통합판: 자산관리 앱의 "검토" 탭 (수업에서 보여 주는 버전)
+
+11강 수업에서는 부트캠프 4주차 포트폴리오 관리기(asset-manager, http://localhost:5173)에 네 번째 탭 "검토"를 붙인 통합판을 쓴다. 현황 탭의 데이터를 그대로 입력으로 쓰고, 세 역할의 응답을 스트리밍으로 화면에 흘려보낸 뒤 종합 보고를 표로 정리한다. 그 코드는 `integrated/`에 참고용으로 복사해 두었다.
+
+```
+integrated/review.ts        서버: /api/review 가 부르는 소집 로직 (OpenRouter 스트리밍, NDJSON 이벤트, data/review/ 저장)
+integrated/plugin-route.ts  vite 개발 서버 미들웨어에 추가한 /api/review 분기
+integrated/review-tab.tsx   React "검토" 탭 (실시간 패널 3개 + 보고 표 5개)
+data/report-2026-11-12-integrated.json  통합판으로 2026-11-12 데이터를 소집한 실제 결과 ($0.097)
+```
+
+이 폴더의 `server.mjs` + `public/index.html` 은 같은 구조를 가장 작게 만든 독립 실행판이다.
+
 ## 시세 데이터 갱신
 
 `python refresh_prices.py` 를 실행하면 `data/prices/` 의 8개 파일이 오늘까지로 갱신된다. 부트캠프 4주차의 포트폴리오 관리기(asset-manager)의 `data/prices/` 폴더를 인자로 함께 주면 그 앱의 캐시도 같은 내용으로 바뀐다. 금리 곡선 `data/rates/kr-cd91.csv` 는 2023-06 이전 구간의 백필에만 쓰인다.
