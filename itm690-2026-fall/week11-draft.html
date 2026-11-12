@@ -641,6 +641,12 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 .code mark.hl-line{background:#ffe9a8;color:var(--ink);border-radius:4px;padding:1px 4px;font-weight:700;} .code mark.hl-line b{color:var(--red);}
 
 /* ---------- 11강 추가 컴포넌트 ---------- */
+/* 1장: AI 에이전트 시스템 (pptx 이미지 슬라이드) */
+.w11-ppt .body{justify-content:center;align-items:center;}
+.w11-ppt figure{width:100%;}
+.w11-ppt img{display:block;margin:0 auto;width:auto;max-width:100%;max-height:calc(100vh - 64px - 150px);border:1px solid var(--line);border-radius:8px;}
+@media print{.w11-ppt img{max-height:650px;}}
+
 .cover .outline{margin-top:14px;gap:8px;grid-template-columns:repeat(6,1fr);}
 .cover .outline button{padding:9px 11px;font-size:12.5px;}
 .cover .outline small{font-size:11px;}
@@ -775,21 +781,21 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
 
 <section class="slide" data-sec="0" data-title="오늘의 구성">
   <div class="kicker">들어가며</div>
-  <h2>오늘의 구성: 연결한다, 맡기고 검증한다, 과제로 옮긴다</h2>
+  <h2>오늘의 구성: 연결한다, 맡기고 검증한다, 기말 과제 소개</h2>
   <div class="body">
     <div class="steps">
       <div class="step"><span class="no">A</span><b class="ttl">연결한다 (§2~4)</b><p class="prob">MCP와 커넥터 → 구글 시트를 원장으로 → 서비스 계정 → 노션 리포트. 내 프로그램이 바깥 데이터를 읽고, 사람이 읽는 자리에 결과를 쌓는다. 부트캠프 4주차 ①~④</p></div>
       <div class="step"><span class="no">B</span><b class="ttl">맡기고 검증한다 (§5~9)</b><p class="prob">멀티에이전트 구조와 사례 수치 → 내 웹앱이 OpenRouter로 검토단 소집 → 코드 없이 같은 절차를 스킬로 → 답변 검증 전략 7갈래 → CoT·토론 로그와 그 한계</p></div>
-      <div class="step"><span class="no">C</span><b class="ttl">과제로 옮긴다 (§10~11)</b><p class="prob">사례 조사 자료(McKinsey, Deloitte, 국내 사례) → 기말 과제: 도메인 선례 조사 → MVP → 법적 쟁점. 12/3·12/10 발표</p></div>
+      <div class="step"><span class="no">C</span><b class="ttl">기말 과제 소개 (§10~11)</b><p class="prob">사례 조사 자료(McKinsey, Deloitte, 국내 사례) → 기말 과제: 도메인 선례 조사 → MVP → 법적 쟁점. 12/3·12/10 발표</p></div>
     </div>
     <div class="callout">7강과 달라지는 점: 7강의 서비스는 모델을 <b>한 번</b> 호출해 답했다. 오늘은 역할이 다른 호출 <b>여러 개</b>가 서로의 답을 검토한다. 호출이 늘면 비용·지연·실패 경로도 늘고, 기록해야 할 것도 늘어난다. 6강 §11에서 본 다중 에이전트의 법적 과제가 오늘은 설계 문제가 된다.</div>
-    <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week4/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프 4주차: 연동과 에이전트</a>. 자가 호스팅 에이전트(헤르메스) 부분은 제외하고, 검토단을 내 웹앱의 서버리스 함수로 다시 구현했다.</p>
+    <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week4/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프 4주차: 연동과 에이전트</a>.</p>
   </div>
 </section>
 
 <section class="slide" data-sec="0" data-title="오늘 만드는 것">
   <div class="kicker">들어가며</div>
-  <h2>오늘 만드는 것: 시트에서 검토단 보고까지 한 줄로 잇는다</h2>
+  <h2>오늘 만드는 것: 시트에서 검토단 보고까지</h2>
   <div class="body">
     <div class="loop">
       <div class="lnode">📊 구글 시트 원장<small>보유 현황 스냅샷</small></div>
@@ -802,28 +808,14 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
       <span class="lar">➜</span>
       <div class="lnode user">🗂️ Supabase 로그<small>모델 · 토큰 · 비용 · 결과</small></div>
     </div>
-    <div class="two eq" style="align-items:start">
+    <div>
       <ul class="bul compact">
         <li><b>재료</b>: 과제 2에서 배포한 Vercel 웹앱(또는 새 폴더), 3강·7강에서 쓴 OpenRouter 키, 구글 계정, 노션 무료 계정</li>
-        <li><b>도구</b>: Claude 데스크톱 앱의 Code(Claude Code). 로컬 서버를 켜고, 코드를 깃헙에 올리고, Vercel에 배포하기 때문</li>
+        <li><b>도구</b>: Claude Code 또는 ChatGPT Codex. 로컬 서버를 켜고, 코드를 깃헙에 올리고, Vercel에 배포하기 때문</li>
         <li><b>예시 주제</b>: 투자 포트폴리오 검토단(의견 A 강세, 의견 B 약세, 검증 역할). 수강생은 §6 마지막 장의 설계표로 자기 주제에 옮긴다</li>
       </ul>
-      <div class="callout good"><b>예제 코드</b>: 오늘 실습의 역할 정의서 3개와 서버리스 함수, 실행 결과는 <a href="examples/week11/" target="_blank" rel="noopener">examples/week11/</a>에 공개한다. 슬라이드의 보고서 화면은 2026-11-12에 이 코드를 실제로 실행해 받은 결과다. 결과 JSON 전문은 data/report-2026-11-12.json에 있다.</div>
+      
     </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="0" data-title="준비물 점검">
-  <div class="kicker">들어가며</div>
-  <h2>준비물 점검: 수업 전 네 가지</h2>
-  <div class="body">
-    <div class="steps s4">
-      <div class="step"><span class="no">1</span><b class="ttl">노션 계정</b><p class="prob">notion.com 무료 계정. §4에서 리포트를 발행하고 공유한다. 통합(Integration) 토큰을 만들 수 있으면 더 좋다</p></div>
-      <div class="step"><span class="no">2</span><b class="ttl">OpenRouter 키와 잔액</b><p class="prob">3강에서 발급한 키를 다시 쓴다. 키가 만료되었으면 새로 발급한다. 검토단 1회 소집 비용은 모델 선택에 따라 수십 원에서 수백 원 수준</p></div>
-      <div class="step"><span class="no">3</span><b class="ttl">구글 시트 1개</b><p class="prob">아무 표라도 된다. 예: 이번 달 지출 10행, 또는 §3의 보유 현황 표(종목명·종목코드·보유량·평균매입가)</p></div>
-      <div class="step"><span class="no">4</span><b class="ttl">Claude Code 실행 확인</b><p class="prob">과제 2 웹앱 폴더를 Claude Code로 열고 로컬에서 한 번 실행해 둔다. git·gh·Vercel 로그인 상태 확인(7강 §1·§5)</p></div>
-    </div>
-    <div class="callout warn"><b>키와 비밀은 환경변수에</b>: 오늘도 OpenRouter 키, 시트 주소, 노션 토큰, Supabase 키가 모두 <code>.env</code>와 Vercel 환경변수로 들어간다. 코드와 슬라이드에 키를 붙여 넣지 않는다(7강 §5).</div>
   </div>
 </section>
 
@@ -864,6 +856,103 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   </div>
 </section>
 
+
+<section class="slide w11-ppt" data-sec="1" data-title="직장인들의 최고 난제">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">1 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-01.png" alt="직장인들의 최고 난제"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="AI의 작업판: 컨텍스트">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">2 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-02.png" alt="AI의 작업판: 컨텍스트"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="이용자 요청 분석과 다음 행동 생성">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">3 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-03.png" alt="이용자 요청 분석과 다음 행동 생성"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="AI 하네스(harness): 기억과 도구 실행">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">4 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-04.png" alt="AI 하네스(harness): 기억과 도구 실행"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="대화 이력 조회">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">5 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-05.png" alt="대화 이력 조회"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="위치정보 확인">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">6 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-06.png" alt="위치정보 확인"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="외부 서비스 활용">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">7 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-07.png" alt="외부 서비스 활용"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="답변 생성">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">8 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-08.png" alt="답변 생성"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="웹 검색">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">9 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-09.png" alt="웹 검색"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="개인화된 추천">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">10 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-10.png" alt="개인화된 추천"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="이용자 요청">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">11 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-11.png" alt="이용자 요청"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="이용자 정보 확인">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">12 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-12.png" alt="이용자 정보 확인"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="정보 외부 전송">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">13 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-13.png" alt="정보 외부 전송"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="작업 결과 확인">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">14 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-14.png" alt="작업 결과 확인"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="전체 구조">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">15 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-15.png" alt="전체 구조"></figure>
+  </div>
+</section>
+<section class="slide w11-ppt" data-sec="1" data-title="에이전틱 AI 시스템">
+  <div class="kicker">에이전트에서 멀티에이전트로 · AI 에이전트 시스템 <span class="n">16 / 16</span></div>
+  <div class="body">
+    <figure class="plain"><img src="assets/week11/agentsys/agentsys-16.png" alt="에이전틱 AI 시스템"></figure>
+  </div>
+</section>
 <section class="slide" data-sec="1" data-title="워크플로 vs 에이전트">
   <div class="kicker">에이전트에서 멀티에이전트로</div>
   <h2>워크플로와 에이전트의 구분: 누가 경로를 정하는가</h2>
@@ -3232,8 +3321,8 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
 <script>
 (function(){
   const SECTIONS = [
-    {name:'들어가며', sub:'구성 · 오늘 만드는 것 · 준비물'},
-    {name:'에이전트에서 멀티에이전트로', sub:'워크플로 vs 에이전트 · 패턴 5종'},
+    {name:'들어가며', sub:'구성 · 오늘 만드는 것'},
+    {name:'에이전트에서 멀티에이전트로', sub:'AI 에이전트 시스템 · 워크플로 vs 에이전트 · 패턴 5종'},
     {name:'연동: MCP와 커넥터', sub:'표준 규격 · Drive 커넥터 실습'},
     {name:'데이터 면: 구글 시트 원장', sub:'링크 공유 · 서비스 계정'},
     {name:'협업 면: 노션 리포트', sub:'리포트 발행 · 커넥터로 대화'},
