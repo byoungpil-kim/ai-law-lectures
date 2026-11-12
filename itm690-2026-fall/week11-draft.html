@@ -831,8 +831,8 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
   <div class="body">
     <div class="steps">
       <div class="step"><span class="no">A</span><b class="ttl">연결한다 (§2~4)</b><p class="prob">MCP와 커넥터 → 구글 시트를 원장으로 → 서비스 계정 → 노션 리포트. 내 프로그램이 바깥 데이터를 읽고, 사람이 읽는 자리에 결과를 쌓는다. 부트캠프 4주차 ①~④</p></div>
-      <div class="step"><span class="no">B</span><b class="ttl">맡기고 검증한다 (§5~9)</b><p class="prob">멀티에이전트 구조와 사례 수치 → 자산관리 앱이 OpenRouter로 검토단 소집 → 코드 없이 같은 절차를 스킬로 → 답변 검증 전략 7갈래 → CoT·토론 로그와 그 한계</p></div>
-      <div class="step"><span class="no">C</span><b class="ttl">기말 과제 소개 (§10~11)</b><p class="prob">사례 조사 자료(McKinsey, Deloitte, 국내 사례) → 기말 과제: 도메인 선례 조사 → MVP → 법적 쟁점. 12/3·12/10 발표</p></div>
+      <div class="step"><span class="no">B</span><b class="ttl">맡기고 검증한다 (§5~8)</b><p class="prob">멀티에이전트 구조와 사례 수치 → 자산관리 앱이 OpenRouter로 검토단 소집 → 코드 없이 같은 절차를 스킬로 → 답변 검증 전략 7갈래</p></div>
+      <div class="step"><span class="no">C</span><b class="ttl">기말 과제 소개 (§9~10)</b><p class="prob">사례 조사 자료(McKinsey, Deloitte, 국내 사례) → 기말 과제: 도메인 선례 조사 → MVP → 법적 쟁점. 12/3·12/10 발표</p></div>
     </div>
     <div class="callout">7강과 달라지는 점: 7강의 서비스는 모델을 <b>한 번</b> 호출해 답했다. 오늘은 역할이 다른 호출 <b>여러 개</b>가 서로의 답을 검토한다. 호출이 늘면 비용·지연·실패 경로도 늘고, 기록해야 할 것도 늘어난다. 6강 §11에서 본 다중 에이전트의 법적 과제가 오늘은 설계 문제가 된다.</div>
     <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week4/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프 4주차: 연동과 에이전트</a>.</p>
@@ -894,7 +894,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
       <ul class="bul compact">
         <li><b>도구 활용</b>(6강 §8): 모델이 함수를 골라 호출하고 결과를 다시 읽는다. MCP는 그 도구 연결의 표준 규격(§2)</li>
         <li><b>기억</b>(6강 §9): 대화 안의 컨텍스트와, 대화 밖에 저장하는 기록. 오늘은 시트와 노션이 대화 밖 기록이 된다</li>
-        <li><b>추론과 계획</b>(6강 §10): CoT, Tree of Thoughts, ReAct, Reflexion. 오늘 §9에서 CoT가 설명으로 쓰일 수 있는지 다시 본다</li>
+        <li><b>추론과 계획</b>(6강 §10): CoT, Tree of Thoughts, ReAct, Reflexion. </li>
         <li><b>다중 에이전트</b>(6강 §11): MAI-DxO, AgentCourt, PrivacyLens, OpenAI·HF 사고. 오늘 §5에서 구조와 수치를 더 들여다본다</li>
       </ul>
       <div class="callout">7강에서 만든 RAG 챗봇도 이 구조의 축소판이었다. 질문 → 검색(도구) → 근거를 넣어 답변. 다만 경로가 코드로 고정되어 있었고, 모델은 한 번만 호출되었다.</div>
@@ -1609,7 +1609,7 @@ A 칼국수
         <tr><th>소통</th><td>없음</td><td>없음</td><td>코멘트로 묻고 답하기</td></tr>
       </tbody>
     </table>
-    <p class="em center">셋 다 같은 데이터에서 출발하지만 하는 일이 다르다. §6의 검토단 보고서는 노션에 쌓여 감사 기록이 된다(§9)</p>
+    <p class="em center">셋 다 같은 데이터에서 출발하지만 하는 일이 다르다. §6의 검토단 보고서는 노션에 쌓여 감사 기록이 된다</p>
   </div>
 </section>
 
@@ -1724,7 +1724,7 @@ A 칼국수
       </div>
       <div class="stack">
         <div class="callout good"><b>실제 답변의 특징</b>: 숫자를 읽어 주는 데서 끝나지 않고, 리포트에 적힌 표들을 근거로 판독까지 한다. 이어서 “이번 달 흐름은 어때?”처럼 계속 물으면 된다.</div>
-        <div class="callout"><b>오늘 실습에서 노션의 역할</b>: §6의 검토단이 내놓는 보고서(의견 A, 의견 B, 검증, 충돌 지점, 사람에게 남긴 질문)가 날짜별 페이지로 쌓이는 자리다. 이 기록이 §9에서 말하는 감사 기록이 된다. 어떤 근거로 무슨 말을 했는지 나중에 되짚을 수 있고, 사람의 결정도 같은 페이지에 적는다.</div>
+        <div class="callout"><b>오늘 실습에서 노션의 역할</b>: §6의 검토단이 내놓는 보고서(의견 A, 의견 B, 검증, 충돌 지점, 사람에게 남긴 질문)가 날짜별 페이지로 쌓이는 자리다. 이 기록이 감사 기록이 된다. 어떤 근거로 무슨 말을 했는지 나중에 되짚을 수 있고, 사람의 결정도 같은 페이지에 적는다.</div>
         <p class="muted" style="font-size:13px">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week4/week4-04-notion-report.html" target="_blank" rel="noopener">부트캠프 4주차 ④ 노션 연동</a></p>
       </div>
     </div>
@@ -2548,7 +2548,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
 검증자는 각 검토가 든 조문이 실제로 존재하는지, 내용이 맞는지 확인해 줘.</pre>
         <ul class="bul compact">
           <li>1차 결과는 <b>쟁점 목록의 초안</b>이다. 6강·10강·12강에서 배운 것과 대조하며 사람이 결론을 쓴다</li>
-          <li>발표에서는 "AI가 뽑은 쟁점 목록"과 "내가 검증한 결과"를 구분해 보인다(§11)</li>
+          <li>발표에서는 "AI가 뽑은 쟁점 목록"과 "내가 검증한 결과"를 구분해 보인다(§10)</li>
         </ul>
       </div>
       <div class="stack">
@@ -2593,7 +2593,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <div class="w11-layers">
         <div class="l1"><b>1층 생성</b>질문 + 검색된 근거 → 1차 답변 (7강 RAG)</div>
         <div class="l2"><b>2층 검증</b>1차 답변이 맞는지 다른 신호로 확인 (오늘)</div>
-        <div class="l3"><b>3층 기록</b>검증 결과와 근거를 남긴다 (§9)</div>
+        <div class="l3"><b>3층 기록</b>검증 결과와 근거를 남긴다</div>
       </div>
     </div>
     <p class="src">출처: Magesh et al., "Hallucination-Free?," J. Empirical Legal Studies 2025, <a href="https://arxiv.org/abs/2405.20362" target="_blank" rel="noopener">arxiv.org/abs/2405.20362</a> · Dahl et al., "Large Legal Fictions," J. Legal Analysis 2024, <a href="https://arxiv.org/abs/2401.01301" target="_blank" rel="noopener">arxiv.org/abs/2401.01301</a> · Gao et al., ALCE, EMNLP 2023, <a href="https://arxiv.org/abs/2305.14627" target="_blank" rel="noopener">arxiv.org/abs/2305.14627</a></p>
@@ -2705,7 +2705,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <div class="step"><span class="no">2</span><b class="ttl">귀속 확인 (ALCE)</b><p class="prob">인용된 문서가 그 문장을 실제로 뒷받침하는가. Gao et al. (EMNLP 2023)의 인용 정확도·재현율 평가. ELI5에서 최고 모델도 50%는 완전한 지지가 없었다</p><p class="sol">있지만 틀린 인용을 잡는다</p></div>
       <div class="step"><span class="no">3</span><b class="ttl">원자 사실 단위 (FActScore)</b><p class="prob">긴 답을 사실 단위로 쪼개 각각 검증한다. Min et al. (EMNLP 2023): ChatGPT 전기 생성의 FActScore 58%. 자동 추정기의 오차 2% 미만</p><p class="sol">긴 문서의 부분 오류를 잡는다</p></div>
     </div>
-    <div class="callout"><b>실습 적용</b>: 검토단의 의견 역할이 뉴스·수치를 인용하면, 검증 역할은 (1) 그 출처가 입력 데이터나 검색 결과에 실제로 있는지 (2) 있다면 그 숫자가 주장과 맞는지 두 단계로 본다. 법적 쟁점 분석(§11)에서는 조문 존재 여부 조회를 자동화한다.</div>
+    <div class="callout"><b>실습 적용</b>: 검토단의 의견 역할이 뉴스·수치를 인용하면, 검증 역할은 (1) 그 출처가 입력 데이터나 검색 결과에 실제로 있는지 (2) 있다면 그 숫자가 주장과 맞는지 두 단계로 본다. 법적 쟁점 분석(§10)에서는 조문 존재 여부 조회를 자동화한다.</div>
     <p class="src">출처: Gao, Yen, Yu, Chen, "Enabling Large Language Models to Generate Text with Citations," EMNLP 2023, <a href="https://arxiv.org/abs/2305.14627" target="_blank" rel="noopener">arxiv.org/abs/2305.14627</a> · Min et al., "FActScore," EMNLP 2023, <a href="https://arxiv.org/abs/2305.14251" target="_blank" rel="noopener">arxiv.org/abs/2305.14251</a></p>
   </div>
 </section>
@@ -2785,7 +2785,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <div class="step"><span class="no">③</span><b class="ttl">예외 상승</b><p class="prob">검증 역할이 "판단 불가"나 "충돌"로 표시한 건만 사람에게 올린다. 실습 보고의 "사람에게 남기는 질문"이 이것</p></div>
     </div>
     <div>
-      <div class="callout bad" style="font-size:13.5px"><b>검토 피로와 자동화 편향</b>: 사람이 매번 승인하는 설계는 곧 "매번 승인 버튼을 누르는" 설계가 된다. 결과가 대체로 맞으면 사람은 틀린 것도 승인한다(automation bias). 사람 검증이 실제로 작동하려면 검토 건수를 줄이고(③), 검토자가 볼 근거를 구조화해 주어야 한다(§9).</div>
+      <div class="callout bad" style="font-size:13.5px"><b>검토 피로와 자동화 편향</b>: 사람이 매번 승인하는 설계는 곧 "매번 승인 버튼을 누르는" 설계가 된다. 결과가 대체로 맞으면 사람은 틀린 것도 승인한다(automation bias). 사람 검증이 실제로 작동하려면 검토 건수를 줄이고(③), 검토자가 볼 근거를 구조화해 주어야 한다.</div>
           </div>
     <p class="src">출처: OpenAI Agents SDK, Handoffs·Guardrails 문서. <a href="https://openai.github.io/openai-agents-python/handoffs/" target="_blank" rel="noopener">openai.github.io/openai-agents-python/handoffs</a></p>
   </div>
@@ -2818,193 +2818,30 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <li><b>도구를 준다</b>계산 재현, DB 조회, 코드 실행이 가능하면 말로 하는 검증보다 우선한다</li>
       <li><b>검증 단계를 반드시 둔다</b>검증 단계가 없는 멀티에이전트는 틀린 답을 더 비싸게 낼 뿐이다</li>
       <li><b>사람의 자리를 정한다</b>사전 승인·표본 감사·예외 상승 중 어디에 둘지 명시한다. 검토 피로를 설계로 줄인다</li>
-      <li><b>기록한다</b>검증 결과(일치·불일치·판단 불가)와 근거를 로그로 남긴다. §9의 설명가능성이 여기서 시작된다</li>
+      <li><b>기록한다</b>검증 결과(일치·불일치·판단 불가)와 근거를 로그로 남긴다. 설명가능성이 여기서 시작된다</li>
     </ol>
   </div>
 </section>
 
-<!-- ===================== 9. 설명가능성: CoT와 토론 로그, 그리고 불충실성 ===================== -->
-<section class="slide section" data-sec="9" data-title="설명가능성: CoT와 토론 로그">
+
+<!-- ===================== 10. 사례 조사 ===================== -->
+<section class="slide section" data-sec="9" data-title="사례 조사">
   <div class="kicker">Section 9</div>
-  <h2>설명가능성: CoT와 토론 로그, 그리고 불충실성</h2>
-  <p class="section-lead">에이전트 시스템이 남기는 기록을 설명으로 쓰는 설계와, 그 기록이 실제 추론과 다를 수 있다는 연구를 함께 본다.</p>
+  <h2>사례 조사: 어디에 에이전트를 쓰고 있는가</h2>
+  <p class="section-lead">기말 과제의 첫 작업은 내 도메인의 AI 활용 선례 조사다. 그 출발 자료 둘과, 국내·도메인 사례를 찾는 곳을 안내한다.</p>
   <div class="body">
     <ol class="roadmap" data-current="9"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="왜 설명이 필요한가">
-  <div class="kicker">설명가능성</div>
-  <h2>왜 설명이 필요한가: 법이 요구하는 네 지점 (10강 복습)</h2>
-  <div class="body">
-    <table class="tbl cmp sm">
-      <thead><tr><th style="width:30%">근거</th><th>요구하는 것</th><th>에이전트 시스템에서 걸리는 지점</th></tr></thead>
-      <tbody>
-        <tr><th>EU AI Act 제13조</th><td>고위험 AI는 배포자가 출력을 해석·사용할 수 있도록 투명성과 정보를 제공해야 한다</td><td>배포자(이용 조직)가 역할 구조와 검증 절차를 이해할 수 있는가</td></tr>
-        <tr><th>EU AI Act 제86조</th><td>고위험 AI의 결정에 영향을 받는 사람은 결정에서 AI가 한 역할과 주요 요소의 설명을 요구할 수 있다</td><td>개별 결정마다 "어떤 근거가 작용했는가"를 사후에 재구성할 수 있는가</td></tr>
-        <tr><th>인공지능 기본법 제31조</th><td>고영향·생성형 AI의 투명성 확보: 사전 고지, 생성물 표시</td><td>AI가 만든 보고임을 이용자에게 알리는가</td></tr>
-        <tr><th>인공지능 기본법 제34조</th><td>고영향 AI의 안전성·신뢰성 확보조치</td><td>검증·기록 절차가 조치로 문서화되어 있는가. 현행 고시는 단일 모델 중심(6강 §11)</td></tr>
-      </tbody>
-    </table>
-    <p class="em center">질문은 "설명을 제공했는가"가 아니라 "제공한 설명이 실제 결정 과정과 같은가"다</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="기록의 세 층">
-  <div class="kicker">설명가능성</div>
-  <h2>에이전트 시스템이 남기는 기록 세 층</h2>
-  <div class="body">
-    <div class="steps">
-      <div class="step"><span class="no">1</span><b class="ttl">추론 과정 (CoT)</b><p class="prob">모델이 답 전에 쓴 중간 추론. 추론 모델은 이를 길게 남긴다. 단일 모델 답변에도 있다</p><p class="sol">가장 많이 쓰이고, 가장 믿기 어렵다 (4~7번 장)</p></div>
-      <div class="step"><span class="no">2</span><b class="ttl">토론 로그</b><p class="prob">역할별 의견, 반론, 검증 결과, 충돌 지점. 멀티에이전트에서만 생긴다</p><p class="sol">어떤 근거가 어떤 반론을 만났는지 남는다</p></div>
-      <div class="step"><span class="no">3</span><b class="ttl">도구 호출 로그</b><p class="prob">무엇을 읽고(시트, 검색 결과), 무엇을 계산했는지(비중, 밴드 판정), 어떤 값이 나왔는지</p><p class="sol">결정적 절차의 기록. 재현 가능</p></div>
-    </div>
-    <div class="two eq" style="align-items:start">
-      <ul class="bul compact">
-        <li>단일 모델의 답 한 줄보다 설명 재료가 많다. 특히 2·3층은 모델의 자기보고가 아니라 시스템이 기록한 사건이다</li>
-        <li>세 층의 신뢰도가 다르다. 3층은 재현할 수 있고, 2층은 실제로 주고받은 메시지이며, 1층은 모델이 "그렇게 생각했다고 말한 것"이다</li>
-      </ul>
-      <div class="callout"><b>이 섹션의 순서</b>: 먼저 2·3층을 설명으로 쓰는 설계(3번 장)를 본 뒤, 1층의 한계를 보여 주는 연구(4~7번 장)를 보고, 설계 결론(8번 장)으로 간다.</div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="토론 로그를 설명으로">
-  <div class="kicker">설명가능성</div>
-  <h2>토론 로그를 설명으로 쓰는 설계: 근거, 반론, 충돌, 결정</h2>
-  <div class="body">
-    <div class="two" style="align-items:start">
-      <div class="mock"><div class="mbar">검토단 보고 기록 · 2026-08-21 · 감사용 보기</div><div class="min">
-        <div><span class="pill">근거</span> 강세: Q2 실적 리비전 상향 (출처 2건) · 약세: 밸류 20배, GDP 컨센서스 하회 (출처 2건)</div>
-        <div><span class="pill warn">반론</span> 검증: "실적 51% 성장"은 AI 투자 사이클 지속이 전제 · "쏠림"은 밴드(55~65%) 안이라 규칙상 문제 없음</div>
-        <div><span class="pill bad">충돌</span> S&amp;P500 비중 65% vs 55% vs 현재 60% · 금리 방향 전망 차이</div>
-        <div><span class="pill ok">결정</span> 사용자: 현재 유지. 사유: 전 종목 밴드 이내, 하위 5% 시나리오 차이 미미 · 서명 2026-08-21 22:51</div>
-        <div class="muted" style="font-size:11.5px">모델: 의견 A gpt-… / 의견 B gemini-… / 검증 claude-… · 토큰 합계 · 노션 페이지 링크 · 저장 파일명</div>
-      </div></div>
-      <div class="stack">
-        <ul class="bul compact">
-          <li><b>무엇을 남기나</b>: 어떤 근거가 제시되었고, 어떤 반론이 있었고, 어디서 의견이 갈렸고, 사람이 무엇을 왜 결정했는가. 실습 보고의 "충돌 지점"과 "사람에게 남기는 질문"이 그대로 이 기록이 된다</li>
-          <li><b>근거</b>: Khan et al.·Kenton et al.은 판정자가 토론 기록만 보고도 정확도를 높일 수 있음을 보였다. AgentsCourt는 변론을 법정 기록으로 저장하는 구조를 택했다</li>
-          <li><b>보존</b>: 노션(사람이 읽는 자리)과 파일·DB(시스템 기록). 보존 기간과 접근 권한을 정한다. 6강 개인정보 원칙 적용</li>
-        </ul>
-        <div class="callout warn" style="font-size:13px"><b>단서</b>: "토론 로그 = 감사 추적"의 직접 실증은 아직 얇다. 설계 가설로 제시한다. 다음 장들의 연구는 이 기록 중 1층(CoT)이 왜 보증이 못 되는지 보여 준다.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="한계 2: 추론 모델도 그렇다">
-  <div class="kicker">설명가능성 · 한계 2</div>
-  <h2>한계 2: 추론 모델도 그렇다</h2>
-  <div class="body">
-    <div class="two" style="align-items:start">
-      <div>
-        <span class="w11-lbl">Chen et al. (Anthropic), "Reasoning Models Don't Always Say What They Think," 2025-04</span>
-        <table class="tbl cmp sm w11-num">
-          <thead><tr><th>힌트를 썼음을 CoT에 밝힌 비율</th><th>Claude 3.7 Sonnet</th><th>DeepSeek R1</th></tr></thead>
-          <tbody>
-            <tr><td class="l">일반 힌트 (정답 암시 등)</td><td><b>25%</b></td><td><b>39%</b></td></tr>
-            <tr><td class="l">"무단 접근" 힌트</td><td>41%</td><td>19%</td></tr>
-          </tbody>
-        </table>
-        <ul class="bul compact" style="margin-top:8px">
-          <li>결과 기반 RL로 충실성이 오르다 MMLU 28%, GPQA 20%에서 정체했다</li>
-          <li>보상 해킹 환경에서는 힌트를 99% 이상 쓰면서 언급은 2% 미만이었다</li>
-          <li>충실하지 않은 CoT가 충실한 CoT보다 더 길었다. 길고 자세한 설명이 더 믿을 만하다는 직관은 틀릴 수 있다</li>
-        </ul>
-      </div>
-      <div class="stack">
-        <span class="w11-lbl">Arcuschin et al., "CoT Reasoning In The Wild Is Not Always Faithful," ICML 2026</span>
-        <ul class="bul compact">
-          <li>편향 프롬프트를 넣지 않은 자연 질의에서도 암묵적 사후 합리화가 나타났다</li>
-          <li>프로덕션 모델에서 최대 <b>13%</b>. DeepSeek R1 0.37%, Claude 3.7 Sonnet(thinking) 0.04%</li>
-          <li>프런티어 모델이 더 충실하지만 0은 아니다</li>
-        </ul>
-        <div class="callout warn" style="font-size:13px"><b>읽는 법</b>: "추론 모델이니 사고 과정이 보인다"는 설계 전제는 성립하지 않는다. 보이는 것은 모델이 쓴 텍스트이고, 그것이 결정 요인을 담았는지는 측정해야 한다.</div>
-      </div>
-    </div>
-    <p class="src">출처: <a href="https://www.anthropic.com/research/reasoning-models-dont-say-think" target="_blank" rel="noopener">anthropic.com/research/reasoning-models-dont-say-think</a> · <a href="https://arxiv.org/abs/2503.08679" target="_blank" rel="noopener">arxiv.org/abs/2503.08679</a></p>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="한계 3: 감시하면 숨긴다">
-  <div class="kicker">설명가능성 · 한계 3</div>
-  <h2>한계 3: 감시하면 숨긴다. CoT는 설명가능성에 필요하지도 충분하지도 않다</h2>
-  <div class="body">
-    <table class="tbl cmp sm">
-      <thead><tr><th style="width:28%">연구</th><th>발견</th><th>함의</th></tr></thead>
-      <tbody>
-        <tr><th>Baker et al. (OpenAI), "Monitoring Reasoning Models for Misbehavior," 2025-03</th><td>GPT-4o가 o3-mini의 CoT를 읽어 코딩 환경의 보상 해킹을 탐지했다. 행동·출력만 보는 모니터보다 효과적. 그러나 CoT 감시를 훈련 보상에 넣자 의도를 숨긴 채 해킹하는 "난독화된 보상 해킹"이 학습됐다</td><td>CoT를 감시 신호로 쓰면 유용하지만, 그 압력이 CoT를 믿을 수 없게 만든다. "monitorability tax" 수용 권고</td></tr>
-        <tr><th>Korbak et al., "Chain of Thought Monitorability," 2025-07</th><td>OpenAI·Anthropic·DeepMind·UK AISI 공동 입장. CoT 모니터링은 불완전하지만 유용하며, 훈련 방식이 모니터 가능성을 훼손할 수 있으니 개발사가 평가·공개해야 한다</td><td>"깨지기 쉬운 기회". 이용자는 개발사의 모니터 가능성 평가를 요구할 근거를 얻는다</td></tr>
-        <tr><th>Barez et al., "Chain-of-Thought Is Not Explainability," 2025-07</th><td>CoT는 신뢰할 수 있는 해석가능성에 필요하지도 충분하지도 않다. 실패 유형: 편향 유도 답변, 답 재배열, 묵시적 수정, 복원 오류. 최근 1년 arXiv 1,000편 중 <b>24.4%</b>가 CoT를 해석가능성으로 간주</td><td>CoT를 설명으로 제시하는 관행 자체가 문제다</td></tr>
-        <tr><th>Zaman &amp; Srivastava, "Is CoT Really Not Explainability?," 2025-12</th><td>반론. 힌트 언급 지표는 불충실성과 불완전성을 혼동한다. 추론 토큰 예산을 늘리면 힌트 언급이 최대 90%까지 올라간다</td><td>측정 방법에 따라 결론이 달라진다. 논쟁은 진행 중</td></tr>
-      </tbody>
-    </table>
-    <p class="src">출처: <a href="https://arxiv.org/abs/2503.11926" target="_blank" rel="noopener">arxiv.org/abs/2503.11926</a> · <a href="https://arxiv.org/abs/2507.11473" target="_blank" rel="noopener">2507.11473</a> · <a href="https://www.alphaxiv.org/abs/2507.chain-of-thought-is-not-explainability" target="_blank" rel="noopener">alphaxiv.org (Barez et al.)</a> · <a href="https://arxiv.org/abs/2512.23032" target="_blank" rel="noopener">2512.23032</a></p>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="다른 길과 2026 후속">
-  <div class="kicker">설명가능성</div>
-  <h2>다른 길과 2026년 후속: 자기보고가 아니라 내부 관측, 그리고 증거의 분리</h2>
-  <div class="body">
-    <div class="two eq" style="align-items:start">
-      <div class="step"><span class="no">A</span><b class="ttl">Anthropic, "Tracing the thoughts of a large language model" (2025-03)</b>
-        <ul class="bul compact">
-          <li>귀속 그래프(attribution graph)로 Claude 3.5 Haiku의 내부 계산을 직접 추적. 예: Dallas → Texas → Austin의 다단계 추론, 시 운율의 사전 계획</li>
-          <li>CoT(모델의 자기보고)와 다른 층이다. 모델이 "말한 것"이 아니라 "안에서 일어난 것"을 본다</li>
-          <li>한계: 저자 스스로 시도한 프롬프트의 약 <b>1/4</b>에서만 유용한 통찰을 얻었다. 운영 서비스에 바로 쓸 도구는 아직 아니다</li>
-        </ul></div>
-      <div class="step"><span class="no">B</span><b class="ttl">Li et al., "CoT Oversight Requires Separate Evidence for Faithfulness and Monitorability" (2026-11-01)</b>
-        <ul class="bul compact">
-          <li>네 속성을 분리한다: 추론 가시성, 기계적 충실성, 기계적 국소화, 행동적 모니터 가능성</li>
-          <li>사례 연구에서 모니터는 답 변화를 구별했지만, 7개 기계적 분석은 압축된 인과 메커니즘을 찾지 못했다</li>
-          <li>제안: 각 속성에 대한 "증거 사슬"을 따로 보고하는 표준</li>
-        </ul></div>
-    </div>
-    <p class="em center">"로그가 설명이다"라는 주장에는 어떤 속성에 대한 어떤 증거가 있는지 따로 물어야 한다</p>
-    <p class="src">출처: <a href="https://transformer-circuits.pub/2025/attribution-graphs/biology.html" target="_blank" rel="noopener">transformer-circuits.pub/2025/attribution-graphs/biology.html</a> · <a href="https://arxiv.org/abs/2611.01620" target="_blank" rel="noopener">arxiv.org/abs/2611.01620</a></p>
-  </div>
-</section>
-
-<section class="slide" data-sec="9" data-title="설계 결론">
-  <div class="kicker">설명가능성 · 정리</div>
-  <h2>설계 결론: 로그는 절차의 증거이고, 결정 이유의 보증은 아니다</h2>
-  <div class="body">
-    <div class="w11-cards c4">
-      <div class="w11-card"><span class="ic">🧾</span><b>(가) 구조화 출력</b><p>자유 텍스트가 아니라 근거 필드, 인용 필드, 확신도 필드로 받는다. 무엇을 근거로 삼았는지가 데이터로 남는다</p><span class="tag">§6 JSON 출력</span></div>
-      <div class="w11-card"><span class="ic">✅</span><b>(나) 검증 결과 기록</b><p>검증 역할의 일치·불일치·판단 불가 판정과 그 계산 과정을 함께 저장한다</p><span class="tag">§8 (d)·(e)</span></div>
-      <div class="w11-card"><span class="ic">✍️</span><b>(다) 사람의 서명</b><p>누가, 어떤 질문에, 어떻게 답했는가. 사람의 결정과 사유를 로그의 마지막 행으로 남긴다</p><span class="tag">§8 (g)</span></div>
-      <div class="w11-card"><span class="ic">📢</span><b>(라) AI 생성 고지</b><p>보고가 AI 시스템의 산출물임을 이용자에게 알린다. 인공지능 기본법 제31조</p><span class="tag">10강</span></div>
-    </div>
-    <div class="two eq" style="align-items:start">
-      <ul class="bul compact">
-        <li>CoT는 보조 자료로 남기되, "주요 요소의 설명"(EU AI Act 제86조)으로는 (가)~(다)의 구조화된 기록을 제시한다</li>
-        <li>설명가능성은 모델의 성질이 아니라 시스템 설계로 확보한다. 멀티에이전트는 2·3층 기록이 풍부해 이 설계에 유리하다</li>
-      </ul>
-      <div class="callout good"><b>기말 발표 요건</b>: 법적 쟁점 분석에서 "설명 의무를 어떻게 충족하는가"를 (가)~(라) 네 가지로 답한다. 각 항목에 내 MVP의 어느 화면·어느 로그가 대응하는지 적는다.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== 10. 사례 조사 ===================== -->
-<section class="slide section" data-sec="10" data-title="사례 조사">
-  <div class="kicker">Section 10</div>
-  <h2>사례 조사: 어디에 에이전트를 쓰고 있는가</h2>
-  <p class="section-lead">기말 과제의 첫 작업은 내 도메인의 AI 활용 선례 조사다. 그 출발 자료 둘과, 국내·도메인 사례를 찾는 곳을 안내한다.</p>
-  <div class="body">
-    <ol class="roadmap" data-current="10"></ol>
-  </div>
-</section>
-
-<section class="slide" data-sec="10" data-title="왜 선례부터 보는가">
+<section class="slide" data-sec="9" data-title="왜 선례부터 보는가">
   <div class="kicker">사례 조사</div>
   <h2>왜 선례부터 보는가</h2>
   <div class="body">
     <div class="two eq" style="align-items:start">
       <ul class="bul">
         <li>MVP 주제는 <b>"내가 만들어 제공하고 싶은 서비스"</b>에서 고른다. 그래도 같은 도메인에서 누가 무엇을 어디까지 자동화했고 어떤 결과를 냈는지 알아야 범위와 검증 방법을 정할 수 있다</li>
-        <li>강의계획서의 발표 요건 첫 항목이 <b>"유사 AI 선행 적용 사례"</b>다. 선례 조사 메모가 그대로 발표 자료가 된다(§11)</li>
+        <li>강의계획서의 발표 요건 첫 항목이 <b>"유사 AI 선행 적용 사례"</b>다. 선례 조사 메모가 그대로 발표 자료가 된다(§9~10)</li>
         <li>선례에서 볼 것은 성과 수치가 아니라 <b>구조</b>다. 업무 흐름의 어느 구간을 자동화했는가, 어떤 검증과 사람 개입이 있는가, 수치는 누가 측정했는가</li>
       </ul>
       <div class="step"><span class="no">?</span><b class="ttl">선례 하나를 읽을 때 묻는 네 가지</b>
@@ -3018,7 +2855,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="핵심 자료 1: McKinsey">
+<section class="slide" data-sec="9" data-title="핵심 자료 1: McKinsey">
   <div class="kicker">사례 조사</div>
   <h2>핵심 자료 1: McKinsey, "Seizing the agentic AI advantage" (2025-06)</h2>
   <div class="body">
@@ -3034,7 +2871,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="핵심 자료 2: Deloitte">
+<section class="slide" data-sec="9" data-title="핵심 자료 2: Deloitte">
   <div class="kicker">사례 조사</div>
   <h2>핵심 자료 2: Deloitte, "Tech Trends 2026" 2장 The agentic reality check (2025-12)</h2>
   <div class="body">
@@ -3065,7 +2902,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="현실 수치 한 장">
+<section class="slide" data-sec="9" data-title="현실 수치 한 장">
   <div class="kicker">사례 조사</div>
   <h2>현실 수치 한 장: 기대와 운영 사이</h2>
   <div class="body">
@@ -3084,7 +2921,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="국내·도메인 사례를 찾는 곳">
+<section class="slide" data-sec="9" data-title="국내·도메인 사례를 찾는 곳">
   <div class="kicker">사례 조사</div>
   <h2>국내·도메인 사례를 찾는 곳 (참고 링크)</h2>
   <div class="body">
@@ -3102,7 +2939,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="10" data-title="분야별 영감 표와 선정 기준">
+<section class="slide" data-sec="9" data-title="분야별 영감 표와 선정 기준">
   <div class="kicker">사례 조사</div>
   <h2>수강생 분야별 영감 표: 줄마다 검증 역할을 둔다</h2>
   <div class="body">
@@ -3123,16 +2960,16 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
 </section>
 
 <!-- ===================== 11. 기말 과제 ===================== -->
-<section class="slide section" data-sec="11" data-title="기말 과제">
-  <div class="kicker">Section 11</div>
+<section class="slide section" data-sec="10" data-title="기말 과제">
+  <div class="kicker">Section 10</div>
   <h2>기말 과제: AI 서비스 MVP + 법적 쟁점</h2>
   <p class="section-lead">도메인 선례 조사 → MVP → 법적 쟁점의 세 작업을 거쳐 12/3·12/10에 발표한다. 중간 제출은 없다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="11"></ol>
+    <ol class="roadmap" data-current="10"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="일정과 형식">
+<section class="slide" data-sec="10" data-title="일정과 형식">
   <div class="kicker">기말 과제</div>
   <h2>일정과 형식</h2>
   <div class="body">
@@ -3159,7 +2996,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="1차 작업: 선례 조사">
+<section class="slide" data-sec="10" data-title="1차 작업: 선례 조사">
   <div class="kicker">기말 과제 · 1차 작업</div>
   <h2>1차 작업: 내 도메인의 AI 활용 선례 조사. 반드시 먼저 한다</h2>
   <div class="body">
@@ -3169,7 +3006,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
         <li><b>사례마다 적을 것</b>: ① 무엇을 자동화했는가(업무 흐름의 어느 구간) ② 어떤 검증·사람 개입 장치가 있는가 ③ 보고된 결과 수치와 그 출처의 성격(벤더 자기보고 / 컨설팅 설문 / 학술 평가 / 내부 측정) ④ 내 MVP와 무엇이 같고 다른가</li>
         <li><b>마지막 줄</b>: 이 조사에서 정한 내 주제 1줄</li>
         <li><b>정리 형식</b>: 1쪽 메모(표 1개 + 주제 1줄). 별도 제출은 없고 발표 ② "유사 선행 사례"에 그대로 들어간다</li>
-        <li>§10의 자료에서 출발하되 도메인 전문 매체·학회·규제기관 자료까지 넓힌다</li>
+        <li>§9의 자료에서 출발하되 도메인 전문 매체·학회·규제기관 자료까지 넓힌다</li>
       </ul>
       <table class="tbl cmp sm" style="width:100%">
         <thead><tr><th>선례</th><th>자동화 구간</th><th>검증·개입</th><th>수치 (출처 성격)</th><th>내 MVP와의 차이</th></tr></thead>
@@ -3184,7 +3021,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="2차 작업: MVP">
+<section class="slide" data-sec="10" data-title="2차 작업: MVP">
   <div class="kicker">기말 과제 · 2차 작업</div>
   <h2>2차 작업: MVP 웹앱 URL 1개</h2>
   <div class="body">
@@ -3206,7 +3043,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="3차 작업: 법적 쟁점">
+<section class="slide" data-sec="10" data-title="3차 작업: 법적 쟁점">
   <div class="kicker">기말 과제 · 3차 작업</div>
   <h2>3차 작업: 법적 쟁점 분석</h2>
   <div class="body">
@@ -3224,12 +3061,12 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
         <li><b>발표에서 구분</b>: "AI가 뽑은 쟁점 목록"과 "내가 검증한 결과". 어떤 쟁점이 과장이었고 어떤 쟁점을 AI가 놓쳤는지</li>
         <li>1차 작업의 선례가 같은 쟁점을 어떻게 처리했는지(고지, 동의, 접근 통제)도 비교한다</li>
       </ul>
-      <div class="callout"><b>설명 의무에 대한 답</b>(§9): 로그는 절차의 증거다. 구조화 출력(근거 필드), 검증 결과 기록, 사람의 서명, AI 생성 사실 고지의 네 가지로 "설명 의무를 어떻게 충족하는가"에 답한다.</div>
+      <div class="callout"><b>설명 의무에 대한 답</b>: 로그는 절차의 증거다. 구조화 출력(근거 필드), 검증 결과 기록, 사람의 서명, AI 생성 사실 고지의 네 가지로 "설명 의무를 어떻게 충족하는가"에 답한다.</div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="발표 구성">
+<section class="slide" data-sec="10" data-title="발표 구성">
   <div class="kicker">기말 과제</div>
   <h2>발표 구성 (15분, 10~15장)</h2>
   <div class="body">
@@ -3258,7 +3095,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="평가 기준">
+<section class="slide" data-sec="10" data-title="평가 기준">
   <div class="kicker">기말 과제</div>
   <h2>평가 기준: 결과물보다 판단 과정</h2>
   <div class="body">
@@ -3276,7 +3113,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="11" data-title="작업 순서와 문서">
+<section class="slide" data-sec="10" data-title="작업 순서와 문서">
   <div class="kicker">기말 과제</div>
   <h2>작업 순서와 남길 문서</h2>
   <div class="body">
@@ -3303,16 +3140,16 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
 </section>
 
 <!-- ===================== 12. 11강 정리 ===================== -->
-<section class="slide section" data-sec="12" data-title="11강 정리">
-  <div class="kicker">Section 12</div>
+<section class="slide section" data-sec="11" data-title="11강 정리">
+  <div class="kicker">Section 11</div>
   <h2>11강 정리</h2>
   <p class="section-lead">연결하고, 맡기고, 검증한다. 오늘 배운 것을 한 장으로 정리하고 다음 강의를 안내한다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="12"></ol>
+    <ol class="roadmap" data-current="11"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="12" data-title="한 장 정리">
+<section class="slide" data-sec="11" data-title="한 장 정리">
   <div class="kicker">11강 정리</div>
   <h2>한 장 정리</h2>
   <div class="body">
@@ -3323,14 +3160,13 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <li><b>실습</b>역할 정의서 3개 + 서로 다른 모델 + 함수 1개 + 구조화 출력 + 로그 + 비용 상한. 결정은 사람</li>
       <li><b>코드 없이</b>한 대화 안의 역할극은 초안용. 독립성은 대화 분리·서브에이전트·모델 분리로. 절차는 review-board 스킬로 표준화</li>
       <li><b>검증 7갈래</b>자기 검증은 외부 신호 없이 악화될 수 있다. 독립 검증자·토론·인용 검증·도구 실행·평가 세트·사람 검증을 피해 크기에 맞춰 조합</li>
-      <li><b>설명가능성</b>CoT·토론 로그는 절차의 증거이지 결정 이유의 보증이 아니다(충실성 25~39%). 구조화 출력 + 검증 기록 + 사람의 서명 + 고지</li>
       <li><b>사례 조사</b>McKinsey(수직적 업무 흐름)와 Deloitte(프로덕션 11%)를 핵심 자료로. 벤더 사례는 구조 파악용</li>
       <li><b>기말 과제</b>선례 조사 → MVP(검증 층 1개 이상) → 법적 쟁점. 12/3·12/10 발표. 중간 제출 없음</li>
     </ol>
   </div>
 </section>
 
-<section class="slide" data-sec="12" data-title="다음 강의">
+<section class="slide" data-sec="11" data-title="다음 강의">
   <div class="kicker">11강 정리</div>
   <h2>다음 강의와 할 일</h2>
   <div class="body">
@@ -3368,7 +3204,6 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
     {name:'실습: OpenRouter 검토단', sub:'역할 3 · 모델 다양성 · 기록'},
     {name:'코드 없이: 페르소나와 스킬', sub:'한계 · 서브에이전트 · review-board'},
     {name:'답변의 정확성 검증 전략', sub:'7갈래 · 무엇을 잡고 못 잡나'},
-    {name:'설명가능성: CoT와 토론 로그', sub:'감사 기록 · 불충실성'},
     {name:'사례 조사', sub:'McKinsey · Deloitte · 국내 사례'},
     {name:'기말 과제', sub:'선례 조사 → MVP → 법적 쟁점'},
     {name:'11강 정리', sub:'핵심 요약 · 다음 강의'},
