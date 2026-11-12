@@ -1,0 +1,92 @@
+[
+ {
+  "date": "2026-09-01",
+  "tabName": "2026-09-01",
+  "holdings": [
+   {
+    "name": "KODEX 미국S&P500",
+    "code": "379800",
+    "quantity": 1535,
+    "avgPrice": 22775
+   },
+   {
+    "name": "ACE KRX금현물",
+    "code": "411060",
+    "quantity": 397,
+    "avgPrice": 29335
+   },
+   {
+    "name": "TIGER CD금리투자KIS(합성)",
+    "code": "357870",
+    "quantity": 99,
+    "avgPrice": 56968
+   },
+   {
+    "name": "TIGER 미국달러SOFR금리액티브(합성)",
+    "code": "456610",
+    "quantity": 94,
+    "avgPrice": 61361
+   }
+  ]
+ },
+ {
+  "date": "2026-10-01",
+  "tabName": "2026-10-01",
+  "holdings": [
+   {
+    "name": "KODEX 미국S&P500",
+    "code": "379800",
+    "quantity": 1560,
+    "avgPrice": 22788
+   },
+   {
+    "name": "ACE KRX금현물",
+    "code": "411060",
+    "quantity": 405,
+    "avgPrice": 29262
+   },
+   {
+    "name": "TIGER CD금리투자KIS(합성)",
+    "code": "357870",
+    "quantity": 101,
+    "avgPrice": 56991
+   },
+   {
+    "name": "TIGER 미국달러SOFR금리액티브(합성)",
+    "code": "456610",
+    "quantity": 96,
+    "avgPrice": 61316
+   }
+  ]
+ },
+ {
+  "date": "2026-11-02",
+  "tabName": "2026-11-02",
+  "holdings": [
+   {
+    "name": "KODEX 미국S&P500",
+    "code": "379800",
+    "quantity": 1586,
+    "avgPrice": 22791
+   },
+   {
+    "name": "ACE KRX금현물",
+    "code": "411060",
+    "quantity": 413,
+    "avgPrice": 29151
+   },
+   {
+    "name": "TIGER CD금리투자KIS(합성)",
+    "code": "357870",
+    "quantity": 103,
+    "avgPrice": 57017
+   },
+   {
+    "name": "TIGER 미국달러SOFR금리액티브(합성)",
+    "code": "456610",
+    "quantity": 98,
+    "avgPrice": 61262
+   }
+  ]
+ }
+]

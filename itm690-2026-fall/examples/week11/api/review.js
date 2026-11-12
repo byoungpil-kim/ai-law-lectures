@@ -4,6 +4,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const OPENROUTER = "https://openrouter.ai/api/v1/chat/completions";
 
@@ -14,7 +15,7 @@ const MODELS = {
   risk: process.env.MODEL_RISK || "anthropic/claude-sonnet-5.5",
 };
 
-const ROOT = process.cwd();
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), ".."); // 예제 폴더(prompts/, data/ 의 부모)
 const readPrompt = (name) => fs.readFileSync(path.join(ROOT, "prompts", `${name}.md`), "utf8");
 
 async function callRole(role, userContent, { timeoutMs = 90_000 } = {}) {

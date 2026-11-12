@@ -2,7 +2,9 @@
 // 결과는 output/report-<날짜>.json 에 저장한다.
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { convene } from "./api/review.js";
+process.chdir(path.dirname(fileURLToPath(import.meta.url)));
 
 // 아주 작은 .env 로더 (dotenv 패키지 없이)
 const envPath = path.join(process.cwd(), ".env");
