@@ -45,6 +45,8 @@ data/rates/kr-cd91.csv    CD 91일물 금리 근사 곡선 (백테스트 백필�
 integrated/review.ts        서버: /api/review 가 부르는 소집 로직 (OpenRouter 스트리밍, NDJSON 이벤트, data/review/ 저장)
 integrated/plugin-route.ts  vite 개발 서버 미들웨어에 추가한 /api/review 분기
 integrated/review-tab.tsx   React "검토" 탭 (실시간 패널 3개 + 보고 표 5개)
+integrated/notion.ts        노션 발행: 일일 리포트·검토단 보고를 "자산 현황 일지" 아래 페이지로, 누적 기록 표 갱신 (NOTION_API 토큰)
+integrated/notion-publish.mts  CLI: npm run notion -- <날짜> | --review | --list | --archive <문자열>
 data/report-2026-11-12-integrated.json  통합판으로 2026-11-12 데이터를 소집한 실제 결과 ($0.097)
 ```
 

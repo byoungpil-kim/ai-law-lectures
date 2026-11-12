@@ -2341,7 +2341,7 @@ asset-manager/
 <span class="c"># 실행 (Node 18 이상) → 브라우저에서 http://localhost:5173 → "검토" 탭</span>
 npm run dev
 <span class="c"># 버튼을 누르면 의견 A·B가 동시에 글자 단위로 흘러오고, 검증이 이어진 뒤 종합 보고가 표로 뜬다 (약 1분)</span></pre>
-        <pre class="prompt sm"><button class="copy" type="button">복사</button>계획대로 구현하고 개발 서버를 띄워 줘. 검토 탭에서 버튼을 눌러 한 번 소집해 볼게.</pre>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>계획대로 구현하고 개발 서버를 띄워 줘.</pre>
         <div class="follow"><b>이어서</b><span>실행 기록에 역할별 모델·토큰·비용을 표로</span><span>결과 JSON은 data/review/에 저장</span><span>다시 열면 마지막 결과를 비용 없이 보여줘</span></div>
     </div>
   </div>
@@ -2382,7 +2382,7 @@ npm run dev
 
 <section class="slide" data-sec="6" data-title="3단계: 기록">
   <div class="kicker">실습: OpenRouter 검토단 · 3단계</div>
-  <h2>3단계: 기록한다. 실행 기록은 Supabase에, 보고는 노션에</h2>
+  <h2>3단계: 기록한다. 보고는 노션에, 실행 기록은 파일과 Supabase에</h2>
   <div class="body">
     <div class="two eq" style="align-items:start">
       <div class="stack">
@@ -2401,9 +2401,10 @@ npm run dev
         </table>
       </div>
       <div class="stack">
-        <pre class="prompt sm"><button class="copy" type="button">복사</button>소집 결과를 Supabase의 review_runs 테이블에 저장하고, 종합 보고를 노션의 "검토단 보고" 페이지 아래에 오늘 날짜 페이지로 발행하는 기능을 추가해 줘. 신원 정보는 저장하지 마.</pre>
+        <pre class="prompt sm"><button class="copy" type="button">복사</button>소집이 끝나면 종합 보고를 노션의 "자산 현황 일지" 아래에 "검토단 보고 날짜" 페이지로 발행해 줘. 통합 토큰은 .env의 NOTION_API에 있어.</pre>
+        <div class="follow"><b>이어서</b><span>일일 리포트도 같은 자리에 날짜별 페이지로</span><span>부모 페이지의 누적 기록 표에 한 줄 추가</span><span>발행이 실패해도 보고는 화면에 남기고 경고만</span><span>검토 탭에 "노션에 저장됨" 링크</span></div>
         <ul class="bul compact">
-          <li><b>노션</b>(§4): 사람이 읽고 공유하는 자리. 날짜별 페이지로 쌓이면 "지난주 검토단은 무엇을 걱정했나"를 커넥터로 물을 수 있다</li>
+          <li><b>노션</b>(§4): 사람이 읽고 공유하는 자리. 통합(integration) 토큰을 "자산 현황 일지" 페이지 하나에만 연결하고(최소 권한), 앱이 소집 직후 "검토단 보고 2026-11-12" 페이지를 만든다. 날짜별로 쌓이면 "지난주 검토단은 무엇을 걱정했나"를 커넥터로 물을 수 있다</li>
           <li><b>Supabase</b>: 프로그램이 읽는 자리. 비용 추이, 모델 교체 전후 비교, 실패율 집계. 지금은 <code>data/review/report-&lt;날짜&gt;.json</code> 파일로 남는다</li>
           <li>이 두 기록이 §9에서 말하는 <b>감사 기록</b>이다. 누가 어떤 근거로 무엇을 결정했는지 되짚을 수 있어야 한다</li>
         </ul>
