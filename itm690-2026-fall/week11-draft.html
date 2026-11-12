@@ -832,7 +832,7 @@ code{padding:.1em .35em;border-radius:5px;background:var(--sky-light);color:var(
     <div class="steps">
       <div class="step"><span class="no">A</span><b class="ttl">연결한다 (§2~4)</b><p class="prob">MCP와 커넥터 → 구글 시트를 원장으로 → 서비스 계정 → 노션 리포트. 내 프로그램이 바깥 데이터를 읽고, 사람이 읽는 자리에 결과를 쌓는다. 부트캠프 4주차 ①~④</p></div>
       <div class="step"><span class="no">B</span><b class="ttl">맡기고 검증한다 (§5~8)</b><p class="prob">멀티에이전트 구조와 사례 수치 → 자산관리 앱이 OpenRouter로 검토단 소집 → 코드 없이 같은 절차를 스킬로 → 답변 검증 전략 7갈래</p></div>
-      <div class="step"><span class="no">C</span><b class="ttl">기말 과제 소개 (§9)</b><p class="prob">도메인 선례 조사 → MVP → 법적 쟁점. 12/3·12/10 발표. 선례 조사는 각자 자기 도메인에서 한다</p></div>
+      <div class="step"><span class="no">C</span><b class="ttl">기말 과제 소개 (§9)</b><p class="prob">도메인 선례 조사 → MVP → 검증 전략 → 법적 쟁점. 12/3·12/10 발표. 선례 조사는 각자 자기 도메인에서 한다</p></div>
     </div>
     <div class="callout">7강과 달라지는 점: 7강의 서비스는 모델을 <b>한 번</b> 호출해 답했다. 오늘은 역할이 다른 호출 <b>여러 개</b>가 서로의 답을 검토한다. 호출이 늘면 비용·지연·실패 경로도 늘고, 기록해야 할 것도 늘어난다. 6강 §11에서 본 다중 에이전트의 법적 과제가 오늘은 설계 문제가 된다.</div>
     <p class="muted">원문 자료: <a href="https://kaist-itm-aibootcamp.github.io/aibootcamp2026/week4/" target="_blank" rel="noopener">2026 에이전틱 AI 부트캠프 4주차: 연동과 에이전트</a>.</p>
@@ -2829,7 +2829,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
 <section class="slide section" data-sec="9" data-title="기말 과제">
   <div class="kicker">Section 9</div>
   <h2>기말 과제: AI 서비스 MVP + 법적 쟁점</h2>
-  <p class="section-lead">도메인 선례 조사 → MVP → 법적 쟁점의 세 작업을 거쳐 12/3·12/10에 발표한다. 중간 제출은 없다.</p>
+  <p class="section-lead">도메인 선례 조사 → MVP → 답변 검증 전략 → 법적 쟁점의 네 작업을 거쳐 12/3·12/10에 발표한다. 중간 제출은 없다.</p>
   <div class="body">
     <ol class="roadmap" data-current="9"></ol>
   </div>
@@ -2853,7 +2853,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
     <div class="two eq" style="align-items:start">
       <ul class="bul compact">
         <li><b>발표</b>: 한 사람 15분 안팎, PPT 10~15장 (강의계획서). 시연 포함</li>
-        <li><b>세 작업</b>: 1차 도메인 선례 조사 → 2차 MVP → 3차 법적 쟁점</li>
+        <li><b>네 작업</b>: 1차 도메인 선례 조사 → 2차 MVP → 3차 답변 정확성 검증 전략 → 4차 법적 쟁점</li>
         <li><b>발표 순서</b>: 희망 발표일(12/3 또는 12/10)을 구글 시트에서 고른다</li>
         <li>발표 자료와 MVP URL은 발표 전까지 KLMS에 올린다</li>
       </ul>
@@ -2891,9 +2891,36 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   </div>
 </section>
 
-<section class="slide" data-sec="9" data-title="3차 작업: 법적 쟁점">
+<section class="slide" data-sec="9" data-title="3차 작업: 답변 검증 전략">
   <div class="kicker">기말 과제 · 3차 작업</div>
-  <h2>3차 작업: 법적 쟁점 분석</h2>
+  <h2>3차 작업: 내 MVP의 답변 정확성 검증 전략</h2>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1fr 1fr;align-items:start">
+      <ul class="bul compact">
+        <li><b>출발 질문</b>(7강 §8, §8 검증 설계표): 내 MVP의 1차 답변이 <b>틀리면 누가 어떤 피해를 입는가</b>. 피해의 크기가 검증 강도를 정한다</li>
+        <li><b>갈래 고르기</b>: §8의 일곱 갈래 중 내 서비스에 맞는 조합을 고른다. 하나로 충분한 경우는 드물다</li>
+        <li><b>원칙 셋</b>: 생성자와 검증자를 분리한다(자기 검증만으로는 일관된 오류를 못 잡는다) · 도구·DB·사람 같은 <b>외부 신호</b>를 우선한다 · 검증 결과(일치·불일치·판단 불가)와 근거를 기록한다</li>
+        <li><b>발표에서 보일 것</b>: ① 검증 설계 한 줄(피해 → 강도 → 갈래 조합) ② 검증이 실제로 잡은 실패 사례 1건 이상 ③ 이 검증이 못 잡는 오류는 무엇인가</li>
+      </ul>
+      <table class="tbl cmp sm" style="width:100%">
+        <thead><tr><th style="width:30%">갈래 (§8)</th><th>내 MVP에 넣는 방법</th></tr></thead>
+        <tbody>
+          <tr><th>(a) 자기 검증</th><td>같은 질문을 여러 번 생성해 다수결, 검증 질문을 따로 만들어 수정(CoVe)</td></tr>
+          <tr><th>(b) 독립 검증자</th><td>다른 모델·다른 컨텍스트의 검토 역할이 답을 채점한다</td></tr>
+          <tr><th>(c) 토론·대립</th><td>관점 둘 + 검증 하나(§6 검토단). 충돌 지점을 사람에게 남긴다</td></tr>
+          <tr><th>(d) 근거·인용 검증</th><td>조문·판례·문서 번호가 존재하는지, 인용이 주장을 뒷받침하는지 프로그램으로 대조</td></tr>
+          <tr><th>(e) 도구·실행 기반</th><td>계산 재현, 코드 실행, 외부 DB 조회. 가능하면 가장 먼저 넣는다</td></tr>
+          <tr><th>(f) 평가 세트·회귀</th><td>실패 사례를 모아 평가 세트로. 프롬프트·모델을 바꿀 때마다 다시 돌린다</td></tr>
+          <tr><th>(g) 사람 검증</th><td>사전 승인·표본 감사·예외 상승 중 어디에 둘지 명시한다</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="9" data-title="4차 작업: 법적 쟁점">
+  <div class="kicker">기말 과제 · 4차 작업</div>
+  <h2>4차 작업: 법적 쟁점 분석</h2>
   <div class="body">
     <table class="tbl cmp sm">
       <thead><tr><th style="width:18%">강의</th><th>내 서비스에 물을 것</th></tr></thead>
@@ -2922,9 +2949,9 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <ol class="bul compact">
         <li><b>선정 이유와 기대 이익</b>: 누구의 어떤 업무 흐름인가, 왜 내가 만들고 싶은가</li>
         <li><b>유사 선행 사례</b>: 1차 작업 메모(선례 2~3건, 구조·검증·수치 출처·차이)</li>
-        <li><b>데이터와 모델·아키텍처</b>: 데이터 흐름도(어디로 가는가), 역할 구조도, 검증 층의 위치, 모델 선택 근거</li>
+        <li><b>데이터와 모델·아키텍처</b>: 데이터 흐름도(어디로 가는가), 역할 구조도, 모델 선택 근거. 3차 작업의 검증 전략(피해 → 강도 → 갈래 조합)을 함께 보인다</li>
         <li><b>시연</b>: URL. 입력 → 출력 → 검증 결과 → 기록</li>
-        <li><b>법적·윤리적 쟁점과 대응</b>: 3차 작업. AI가 뽑은 목록과 내가 검증한 결과를 구분</li>
+        <li><b>법적·윤리적 쟁점과 대응</b>: 4차 작업. AI가 뽑은 목록과 내가 검증한 결과를 구분</li>
         <li><b>남은 위험</b>과 "무엇을 맡기고 무엇을 남겼나": 사람이 결정하는 지점, 실제 업무에 쓰려면 더 필요한 것</li>
       </ol>
       <div class="stack">
@@ -2972,6 +2999,8 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <span class="lar">➜</span>
       <div class="lnode">구현<small>기능 하나 끝까지</small></div>
       <span class="lar">➜</span>
+      <div class="lnode">검증 전략<small>피해 → 강도 → 갈래 조합</small></div>
+      <span class="lar">➜</span>
       <div class="lnode">법적 쟁점<small>review-board → 검증 → 결론</small></div>
       <span class="lar">➜</span>
       <div class="lnode user">발표<small>12/3 · 12/10</small></div>
@@ -3008,7 +3037,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
       <li><b>실습</b>역할 정의서 3개 + 서로 다른 모델 + 함수 1개 + 구조화 출력 + 로그 + 비용 상한. 결정은 사람</li>
       <li><b>코드 없이</b>한 대화 안의 역할극은 초안용. 독립성은 대화 분리·서브에이전트·모델 분리로. 절차는 review-board 스킬로 표준화</li>
       <li><b>검증 7갈래</b>자기 검증은 외부 신호 없이 악화될 수 있다. 독립 검증자·토론·인용 검증·도구 실행·평가 세트·사람 검증을 피해 크기에 맞춰 조합</li>
-      <li><b>기말 과제</b>선례 조사 → MVP(검증 층 1개 이상) → 법적 쟁점. 12/3·12/10 발표. 중간 제출 없음</li>
+      <li><b>기말 과제</b>선례 조사 → MVP → 답변 검증 전략 → 법적 쟁점. 12/3·12/10 발표. 중간 제출 없음</li>
     </ol>
   </div>
 </section>
@@ -3018,7 +3047,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
   <h2>다음 강의와 할 일</h2>
   <div class="body">
     <div class="two eq" style="align-items:stretch">
-      <div class="step"><span class="no">12</span><b class="ttl">12강 (11/19) 인공지능의 법적 쟁점 (3): 인공지능과 지식재산권 보호</b><p class="prob">학습 데이터의 저작권, 산출물의 권리, 데이터베이스와 약관. 기말 과제 3차 작업(법적 쟁점)의 마지막 재료</p></div>
+      <div class="step"><span class="no">12</span><b class="ttl">12강 (11/19) 인공지능의 법적 쟁점 (3): 인공지능과 지식재산권 보호</b><p class="prob">학습 데이터의 저작권, 산출물의 권리, 데이터베이스와 약관. 기말 과제 4차 작업(법적 쟁점)의 마지막 재료</p></div>
       <div class="step"><span class="no">✓</span><b class="ttl">그 전까지</b>
         <ul class="bul compact">
           <li>희망 발표일을 구글 시트에서 선택</li>
@@ -3051,7 +3080,7 @@ description: 문서·코드·계획을 관점이 다른 검토자 2~3명과 검�
     {name:'실습: OpenRouter 검토단', sub:'역할 3 · 모델 다양성 · 기록'},
     {name:'코드 없이: 페르소나와 스킬', sub:'한계 · 서브에이전트 · review-board'},
     {name:'답변의 정확성 검증 전략', sub:'7갈래 · 무엇을 잡고 못 잡나'},
-    {name:'기말 과제', sub:'선례 조사 → MVP → 법적 쟁점'},
+    {name:'기말 과제', sub:'선례 조사 → MVP → 검증 전략 → 법적 쟁점'},
     {name:'11강 정리', sub:'핵심 요약 · 다음 강의'},
   ];
   const slides = Array.from(document.querySelectorAll('.slide'));
