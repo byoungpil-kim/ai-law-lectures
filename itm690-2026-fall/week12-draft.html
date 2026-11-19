@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>12강 인공지능의 법적 쟁점 (3) 인공지능과 지식재산권 보호 · 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 12강: 저작권의 기초, 학습 데이터 수집과 크롤링, AI 학습과 공정이용(Bartz, GEMA, Getty 판결), AI 생성물에 의한 권리 침해, 기술적·상업적 대응, AI 창작물의 저작권 등록" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6fa6" />
+<style>
+/* 2026 에이전틱 AI 부트캠프(aibootcamp2026) 디자인 토큰을 따른다 */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --ink:#22201d; --ink-soft:#3a3f3b; --muted:#626a64; --line:#d5ddd3; --line-soft:#e9ede6;
+  --brand:#2e9bdb; --brand-dark:#1b6fa6; --brand-deep:#124d78; --sky-light:#e3f1fb;
+  --green:#2f765b; --green-light:#e6f2ec; --amber:#b8792e; --amber-light:#fbf1de; --red:#b0483f; --red-light:#fbe9e7; --navy:#132436;
+  --shadow:0 16px 45px rgba(54,42,31,.12); --shadow-sm:0 2px 10px rgba(21,29,23,.05);
+  --radius:14px; --sidebar-width:264px; --topbar-h:64px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-dark);}
+img,video,svg{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;} }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 clamp(16px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topbar-left{display:flex;align-items:center;gap:18px;min-width:0;}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:0 0 auto;}
+.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:9px;color:#fff;background:var(--brand);font-size:15px;font-weight:800;}
+.brand-text{display:block;line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;}
+.brand-text small{display:block;margin-top:1px;color:var(--muted);font-size:11.5px;font-weight:600;}
+.week-tag{display:flex;align-items:center;gap:8px;min-width:0;}
+.week-num{font-size:11px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--brand-dark);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.week-title{font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.zoom-ctl{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;}
+.zoom-ctl button{border:0;background:transparent;padding:6px 10px;font-size:13px;font-weight:800;color:var(--brand-dark);cursor:pointer;line-height:1;}
+.zoom-ctl button:hover{background:var(--sky-light);}
+.zoom-ctl .zv{min-width:44px;text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);border-right:1px solid var(--line);padding:6px 4px;cursor:pointer;}
+.progress-wrap{width:min(220px,32vw);flex:0 0 auto;}
+.progress-label{display:block;margin-bottom:5px;color:var(--muted);font-size:12px;text-align:right;}
+.progress-label b{color:var(--ink);}
+.progress-track{overflow:hidden;height:7px;border-radius:999px;background:#e1e8df;}
+.progress-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--brand-dark),var(--brand));transition:width 220ms ease;}
+
+/* ---------- layout ---------- */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{
+  position:sticky;top:var(--topbar-h);width:var(--sidebar-width);flex:0 0 auto;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:22px 14px 28px;
+  border-right:1px solid var(--line);background:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sidebar-title{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 8px;}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.toc-link{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:9px;border:0;background:transparent;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.toc-link .no{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;color:var(--muted);font-size:11px;font-weight:900;flex:0 0 auto;}
+.toc-link .nm{flex:1 1 auto;min-width:0;}
+.toc-link .cnt{font-size:11px;font-weight:600;color:var(--muted);opacity:.8;}
+.toc-link:hover{background:var(--sky-light);color:var(--brand-dark);}
+.toc-link.active{background:var(--brand);color:#fff;}
+.toc-link.active .no{background:rgba(255,255,255,.22);color:#fff;}
+.toc-link.active .cnt{color:#fff;opacity:.85;}
+.toc-link.done .no{background:var(--green-light);color:var(--green);}
+.sub{list-style:none;margin:2px 0 6px 22px;padding:0 0 0 12px;display:none;border-left:2px solid var(--line-soft);}
+.toc li.open .sub{display:block;}
+.sub button{
+  display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 10px;border-radius:6px;
+  color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sub button:hover{background:var(--sky-light);color:var(--brand-dark);}
+.sub button.active{color:var(--brand-dark);font-weight:800;}
+.side-hint{margin-top:auto;padding:14px 12px 0;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line-soft);}
+.side-hint kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-family:inherit;font-size:11px;}
+
+.stage{flex:1 1 auto;min-width:0;min-height:calc(100vh - var(--topbar-h));display:flex;flex-direction:column;padding:20px clamp(16px,3vw,40px) 26px;}
+.deck{flex:1 1 auto;display:flex;flex-direction:column;}
+.slide{
+  display:none;position:relative;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:clamp(22px,3vw,36px) clamp(22px,3.6vw,48px) clamp(20px,2.6vw,30px);
+}
+.slide.active{display:flex;flex:1 1 auto;animation:fadein .22s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--brand-dark);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.kicker .n{color:var(--muted);font-weight:600;letter-spacing:0;}
+.slide h2{margin:0 0 20px;font-size:clamp(22px,2.5vw,30px);line-height:1.3;letter-spacing:-.01em;font-weight:800;}
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-width:0;}
+.slide.top .body{justify-content:flex-start;}
+.body p{margin:0;}
+
+/* ---------- pager ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;}
+.pbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brand-dark);font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;max-width:44%;
+}
+.pbtn span{overflow:hidden;text-overflow:ellipsis;}
+.pbtn svg{width:16px;height:16px;flex:0 0 auto;}
+.pbtn:hover{border-color:var(--brand);background:var(--sky-light);transform:translateY(-1px);}
+.pbtn.next{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.pbtn.next:hover{background:var(--brand);border-color:var(--brand);}
+.pbtn:disabled{opacity:.35;cursor:default;transform:none;}
+.pinfo{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;text-align:center;}
+.pinfo .sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-dark);}
+.pinfo .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:360px;}
+.pinfo .dots i{width:8px;height:8px;border-radius:999px;background:#d9e1d6;cursor:pointer;transition:background .15s ease,transform .15s ease;}
+.pinfo .dots i:hover{background:var(--brand);}
+.pinfo .dots i.on{background:var(--brand-dark);transform:scale(1.25);}
+.pinfo .cnt{font-size:12px;color:var(--muted);}
+
+/* ---------- cover / section slides ---------- */
+.slide.cover{
+  color:#eef3f7;border-color:transparent;
+  background:radial-gradient(1000px 460px at 85% -10%,rgba(46,155,219,.18),transparent 60%),linear-gradient(180deg,#101f30 0%,var(--navy) 55%,#17293b 100%);
+}
+.slide.cover .kicker{color:#7cc4ee;}
+.slide.cover .kicker .n{color:#9fb4c4;}
+.cover-body{display:flex;flex-direction:column;justify-content:center;gap:18px;flex:1;}
+.cover-kicker{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b9d7ec;background:rgba(46,155,219,.15);border:1px solid rgba(46,155,219,.35);padding:7px 14px;border-radius:999px;}
+.cover h1{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.22;letter-spacing:-.02em;color:#fff;}
+.cover h1 em{color:#7cc4ee;font-style:normal;}
+.cover .lead{color:#c9d6e0;font-size:clamp(15px,1.4vw,18px);max-width:640px;}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#dbe7ef;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;}
+.cover .outline{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.cover .outline button{
+  display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:13.5px;
+}
+.cover .outline button:hover{background:rgba(255,255,255,.1);}
+.cover .outline .num{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:rgba(124,196,238,.16);color:#7cc4ee;font-size:12px;font-weight:900;display:grid;place-items:center;}
+.cover .outline small{display:block;font-weight:600;color:#a9bdcb;font-size:11.5px;}
+
+.slide.section .body{align-items:center;}
+.slide.section h2{text-align:center;}
+.section-lead{text-align:center;color:var(--muted);max-width:640px;margin:-8px auto 0;}
+
+/* 인공지능 ⊃ 머신러닝 ⊃ 인공신경망 ⊃ 딥 러닝 포함 관계 도식 */
+.nest{position:relative;width:min(100%,720px);aspect-ratio:16/10;margin:0 auto;}
+.nest .lv{position:absolute;border-radius:26px;transition:box-shadow .2s ease;}
+.nest .lv>span{position:absolute;top:16px;left:22px;font-weight:800;font-size:clamp(14px,1.7vw,19px);}
+.nest .l1{inset:0;background:#dbeefb;color:var(--brand-deep);}
+.nest .l2{left:26%;top:19%;right:4%;bottom:4%;background:#a9d5f1;color:var(--brand-deep);}
+.nest .l3{left:44%;top:37%;right:7%;bottom:8%;background:#3f9fd8;color:#fff;}
+.nest .l4{left:58%;top:54%;right:11%;bottom:14%;background:var(--brand-deep);color:#fff;display:grid;place-items:center;}
+.nest .l4>span{position:static;}
+.nest .lv.hi{box-shadow:0 0 0 4px var(--red),0 10px 30px rgba(176,72,63,.25);}
+
+/* ---------- content components ---------- */
+.bul{margin:0;padding-left:1.25em;font-size:clamp(15px,1.25vw,17px);line-height:1.72;}
+.bul>li{margin:0 0 9px;}
+.bul>li:last-child{margin-bottom:0;}
+.bul li::marker{color:var(--brand-dark);}
+.bul ul{list-style:none;margin:5px 0 0;padding-left:1.15em;}
+.bul ul li{position:relative;margin:0 0 4px;color:var(--ink-soft);}
+.bul ul li::before{content:"–";position:absolute;left:-1.1em;color:var(--muted);}
+.bul ul ul li::before{content:"·";}
+.bul ul ul li{font-size:.94em;}
+.bul b{font-weight:800;}
+.bul .arrow{color:var(--red);font-weight:800;}
+.bul .arrow::before{content:"➜ ";}
+.compact{font-size:clamp(14px,1.15vw,16px);}
+.compact>li{margin-bottom:5px;}
+
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+.two.eq{grid-template-columns:1fr 1fr;}
+.two.wide-r{grid-template-columns:.85fr 1.15fr;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.figrow{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+figure{margin:0;text-align:center;min-width:0;}
+figure img,figure video{display:block;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);}
+figure.plain img{border:0;border-radius:0;}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
+.src{font-size:11.5px;color:var(--muted);word-break:break-all;margin-top:auto;padding-top:14px;line-height:1.6;}
+.src a{color:var(--brand-dark);text-decoration:none;}
+.src a:hover{text-decoration:underline;}
+.em{color:var(--red);font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.5;}
+.em.center{text-align:center;}
+.em .arrow::before{content:"➜ ";}
+.callout{border-left:4px solid var(--brand);background:var(--sky-light);padding:12px 16px;border-radius:8px;font-size:15px;}
+.callout.warn{border-color:var(--amber);background:var(--amber-light);}
+.callout.bad{border-color:var(--red);background:var(--red-light);}
+.callout.good{border-color:var(--green);background:var(--green-light);}
+.callout b{font-weight:800;}
+.quote{font-size:clamp(16px,1.45vw,19px);line-height:1.75;border-left:4px solid var(--brand);padding:8px 20px;margin:0;color:var(--ink);}
+.quote cite{display:block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;color:var(--ink-soft);}
+.center{text-align:center;}
+.muted{color:var(--muted);}
+
+.math{font-family:"Cambria","Times New Roman",Georgia,serif;font-size:1.06em;}
+.math i{font-style:italic;}
+.math .w{color:var(--red);font-weight:700;font-style:italic;}
+.fbox{display:inline-block;padding:10px 24px;border:2px solid var(--ink);border-radius:6px;background:#fff;font-family:"Cambria","Times New Roman",Georgia,serif;font-size:clamp(18px,1.9vw,25px);line-height:1.4;}
+.fbox.red{border-color:var(--red);}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 6px;}
+.frac>span{padding:0 6px;}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;}
+.sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;margin:0 4px;}
+.sum>span{font-size:.55em;}
+.sum>b{font-size:1.5em;font-weight:400;}
+
+.tbl{border-collapse:collapse;margin:0 auto;font-size:clamp(13px,1.15vw,15.5px);background:#fff;}
+.tbl th,.tbl td{border:1px solid #9aa39b;padding:8px 16px;text-align:center;line-height:1.35;}
+.tbl th{background:var(--sky-light);font-weight:800;}
+.tbl .hl{background:var(--amber-light);}
+.tbl .dim{color:var(--muted);}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;}
+.step .no{width:30px;height:30px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.step .prob{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
+.step .prob u{text-decoration-color:var(--brand);text-underline-offset:3px;font-weight:700;color:var(--ink);}
+.step .sol{margin-top:auto;font-weight:800;color:var(--red);font-size:15px;}
+.step .sol::before{content:"➜ ";}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--sky-light);color:var(--brand-dark);}
+@media (max-width:1100px){ .two,.two.eq,.two.wide-r{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;} }
+@media (max-width:900px){
+  .layout{display:block;}
+  .sidebar{position:sticky;top:var(--topbar-h);width:auto;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:10px 12px;background:rgba(243,246,242,.96);backdrop-filter:blur(8px);z-index:20;flex-direction:row;}
+  .sidebar-title,.sub,.side-hint{display:none!important;}
+  .toc{flex-direction:row;overflow-x:auto;gap:6px;width:100%;}
+  .toc-link{white-space:nowrap;padding:7px 10px;font-size:12.5px;width:auto;}
+  .toc-link .cnt{display:none;}
+  .stage{min-height:auto;}
+}
+@media (max-width:640px){
+  .topbar{gap:10px;}
+  .week-title{display:none;}
+  .zoom-ctl{display:none;}
+  .progress-wrap{width:110px;}
+  .pbtn{padding:10px 12px;font-size:13px;}
+  .pbtn span{display:none;}
+  .pbtn svg{width:18px;height:18px;}
+  .slide{overflow-x:auto;}
+  .tbl th,.tbl td{padding:6px 8px;font-size:12.5px;}
+}
+/* ---------- 공통 추가 컴포넌트 ---------- */
+.roadmap{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px;}
+.roadmap li{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:700;color:var(--muted);}
+.roadmap li .n{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e9efe7;font-size:11px;font-weight:900;}
+.roadmap li.cur{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;transform:scale(1.06);box-shadow:0 8px 20px rgba(27,111,166,.25);}
+.roadmap li.cur .n{background:rgba(255,255,255,.22);color:#fff;}
+.roadmap li.done{background:var(--green-light);border-color:#cfe3d8;color:var(--green);}
+.roadmap li.done .n{background:#fff;color:var(--green);}
+.step .ttl{display:block;font-size:16px;font-weight:800;color:var(--ink);}
+.step .bul{padding-left:1.1em;}
+.tbl.mini{font-size:12px;margin:0;}
+.tbl.mini th{padding:3px 10px;font-size:11px;}
+.tbl.mini tr.dim td{padding:0 10px;line-height:1;}
+.tbl.mini td{padding:3px 10px;text-align:left;}
+.tbl.mini td:last-child{text-align:center;font-weight:700;}
+.toc-link:disabled{opacity:.5;cursor:default;}
+.toc-link:disabled:hover{background:transparent;color:var(--muted);}
+.cover .outline button:disabled{opacity:.45;cursor:default;}
+.cover .outline button:disabled:hover{background:rgba(255,255,255,.045);}
+.vid-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.vid{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;transition:transform .15s ease,box-shadow .15s ease;}
+.vid:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);border-color:var(--brand);}
+.vid img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;display:block;background:#000;}
+.vid span{font-size:12.5px;font-weight:700;line-height:1.4;}
+.vid span::before{content:"▶ ";color:var(--red);}
+/* ---------- 정리 목록 ---------- */
+.recap{margin:0;padding:0;list-style:none;counter-reset:rc;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;}
+.recap li{counter-increment:rc;position:relative;padding:12px 14px 12px 50px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:14.5px;line-height:1.55;}
+.recap li::before{content:counter(rc);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:7px;background:var(--brand-dark);color:#fff;font-weight:900;font-size:12px;display:grid;place-items:center;}
+.recap li b{display:block;color:var(--brand-dark);}
+@media (max-width:760px){.recap{grid-template-columns:1fr;}}
+
+/* ---------- 10강·12강 추가 컴포넌트 ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.cards.c2{grid-template-columns:1fr 1fr;} .cards.c3{grid-template-columns:repeat(3,1fr);} .cards.c4{grid-template-columns:repeat(4,1fr);}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0;}
+.card .ttl{font-size:15.5px;font-weight:800;color:var(--ink);line-height:1.4;}
+.card .ttl small{display:block;font-weight:600;color:var(--muted);font-size:12px;margin-top:2px;}
+.card .bul{font-size:14px;line-height:1.6;} .card .bul>li{margin-bottom:4px;}
+.card p{font-size:14px;line-height:1.6;color:var(--ink-soft);}
+.card.red{border-color:#f0c9c5;background:var(--red-light);} .card.red .ttl{color:var(--red);}
+.card.amber{border-color:#f0dcb8;background:var(--amber-light);} .card.amber .ttl{color:var(--amber);}
+.card.blue{border-color:#bfdcf3;background:var(--sky-light);} .card.blue .ttl{color:var(--brand-dark);}
+.card.green{border-color:#cfe3d8;background:var(--green-light);} .card.green .ttl{color:var(--green);}
+.card .tag{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.04em;padding:3px 9px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--muted);}
+.card .no{width:28px;height:28px;border-radius:8px;background:var(--brand-dark);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;}
+.law{border:1px solid var(--line);border-left:4px solid var(--brand-dark);background:#fff;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.65;color:var(--ink-soft);}
+.law b{color:var(--ink);font-weight:800;} .law .art{display:block;font-weight:800;color:var(--brand-dark);font-size:13px;margin-bottom:4px;letter-spacing:.02em;}
+.law.sm{font-size:13px;line-height:1.55;}
+.pen{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;font-size:14px;}
+.pen b{color:var(--red);font-size:clamp(16px,1.6vw,22px);white-space:nowrap;}
+.tier{display:inline-block;padding:2px 9px;border-radius:6px;font-size:12px;font-weight:800;white-space:nowrap;}
+.tier.ban{background:#fbe9e7;color:#b0483f;} .tier.high{background:#fbf1de;color:#b8792e;} .tier.lim{background:#fef9c3;color:#854d0e;} .tier.min{background:#e6f2ec;color:#2f765b;} .tier.gp{background:#e3f1fb;color:#1b6fa6;}
+.pyr2{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:26px;align-items:center;}
+.pyr2 svg{width:100%;height:auto;display:block;}
+.pyr2 .lv{display:flex;flex-direction:column;gap:10px;}
+.pyr2 .lv div{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:14px;line-height:1.5;}
+.pyr2 .lv div i{width:14px;height:14px;border-radius:4px;display:block;}
+.pyr2 .lv b{display:block;font-size:15px;}
+.tl{position:relative;margin:10px 0 0;padding:0 0 0 0;list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.tl::before{content:"";position:absolute;left:0;right:0;top:9px;height:3px;background:var(--line);border-radius:2px;}
+.tl li{position:relative;padding-top:26px;font-size:13px;line-height:1.5;}
+.tl li::before{content:"";position:absolute;top:2px;left:0;width:18px;height:18px;border-radius:50%;background:var(--brand-dark);border:3px solid #fff;box-shadow:0 0 0 2px var(--brand-dark);}
+.tl li.past::before{background:var(--green);box-shadow:0 0 0 2px var(--green);}
+.tl li.delay::before{background:var(--amber);box-shadow:0 0 0 2px var(--amber);}
+.tl li b{display:block;font-size:14.5px;color:var(--ink);} .tl li s{color:var(--muted);} .tl li em{font-style:normal;color:var(--amber);font-weight:800;}
+.tbl.left td{text-align:left;} .tbl.left th:first-child,.tbl.left td:first-child{font-weight:800;white-space:nowrap;}
+.tbl.mtx td{text-align:left;vertical-align:top;font-size:clamp(12px,1.05vw,14px);line-height:1.5;}
+.tbl.mtx th{font-size:13px;} .tbl.mtx td.na{color:var(--muted);text-align:center;}
+.tbl.cat td:first-child{font-weight:400;white-space:normal;} .tbl.cat td.cat{font-weight:800;white-space:nowrap;}
+.tbl.tight td,.tbl.tight th{padding:5px 10px;font-size:12.5px;line-height:1.4;}
+.tbl.cmp td{text-align:left;vertical-align:top;font-size:clamp(12.5px,1.1vw,14.5px);line-height:1.5;}
+.tbl.cmp th:first-child,.tbl.cmp td:first-child{font-weight:800;white-space:nowrap;background:var(--bg);}
+.news{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.news figure img{max-height:300px;width:auto;}
+.two.top{align-items:start;}
+.stat{display:flex;gap:14px;flex-wrap:wrap;}
+.stat div{flex:1 1 140px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center;}
+.stat b{display:block;font-size:clamp(22px,2.6vw,34px);color:var(--brand-dark);line-height:1.1;} .stat span{font-size:12.5px;color:var(--muted);}
+.stat div.r b{color:var(--red);}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14.5px;line-height:1.55;}
+.kv b{color:var(--brand-dark);white-space:nowrap;}
+.arrowrow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+.arrowrow .ar{color:var(--brand-dark);font-size:26px;font-weight:900;}
+.ex{font-size:13px;color:var(--muted);line-height:1.5;} .ex b{color:var(--amber);}
+@media (max-width:1100px){ .cards.c3,.cards.c4{grid-template-columns:1fr 1fr;} .pyr2{grid-template-columns:1fr;} .news{grid-template-columns:1fr;} }
+@media (max-width:640px){ .cards.c2,.cards.c3,.cards.c4{grid-template-columns:1fr;} .tl{grid-template-columns:1fr;} .tl::before{display:none;} }
+
+/* ---------- 인쇄(PDF): 슬라이드 1장 = 1쪽, 16:9 ---------- */
+@page{size:320mm 180mm;margin:0;}
+@media print{
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .topbar,.sidebar,.pager{display:none!important;}
+  .layout{display:block;}
+  .stage{zoom:1!important;min-height:0!important;padding:0!important;display:block;}
+  .deck{display:block;}
+  .slide{display:flex!important;flex-direction:column;zoom:.85;width:calc(320mm / .85);height:calc(180mm / .85);overflow:hidden;box-sizing:border-box;
+    margin:0;border:0;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;animation:none!important;
+    padding:14mm 18mm 12mm;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .two{grid-template-columns:1.1fr .9fr;} .two.eq{grid-template-columns:1fr 1fr;} .two.wide-r{grid-template-columns:.85fr 1.15fr;}
+  .steps{grid-template-columns:repeat(3,1fr);} .cards.c3{grid-template-columns:repeat(3,1fr);} .cards.c4{grid-template-columns:repeat(4,1fr);} .cards.c2{grid-template-columns:1fr 1fr;}
+  .pyr2{grid-template-columns:minmax(260px,420px) 1fr;} .news{grid-template-columns:1fr 1fr;} .tl{grid-template-columns:repeat(5,1fr);}
+  .slide.cover{border-radius:0;}
+  a{text-decoration:none;color:inherit;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="brand" title="강의 일정으로">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text"><strong>KAIST I&amp;TM</strong><small>인공지능 경영과 법</small></span>
+    </a>
+    <div class="week-tag"><span class="week-num">12강</span><span class="week-title">인공지능의 법적 쟁점 (3) 인공지능과 지식재산권 보호</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="zoom-ctl" role="group" aria-label="슬라이드 크기">
+      <button type="button" id="zoomOut" title="작게 (−)">A−</button>
+      <span class="zv" id="zoomVal" title="자동 크기로 되돌리기 (0)">100%</span>
+      <button type="button" id="zoomIn" title="크게 (+)">A+</button>
+    </div>
+    <div class="progress-wrap" aria-label="진행률">
+      <span class="progress-label"><b id="curNo">1</b> / <span id="totNo">0</span></span>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="목차">
+    <div class="sidebar-title">목차</div>
+    <ol class="toc" id="toc"></ol>
+    <div class="side-hint"><kbd>←</kbd> <kbd>→</kbd> 페이지 이동 · <kbd>Home</kbd> 처음 · <kbd>+</kbd> <kbd>−</kbd> 크기 · 섹션 제목을 누르면 해당 섹션 첫 페이지로 이동합니다.</div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="deck" id="deck">
+
+<!-- ===================== 0. 들어가며 ===================== -->
+<section class="slide cover" data-sec="0" data-title="표지">
+  <div class="cover-body">
+    <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 12강</span>
+    <h1>인공지능의 법적 쟁점 (3)<br><em>인공지능과 지식재산권 보호</em></h1>
+    <p class="lead">AI 학습에 남의 저작물을 써도 되는가, AI가 만든 결과물이 남의 권리를 침해하면 누가 책임지는가, AI로 만든 결과물은 저작권으로 보호되는가. 학습, 생성, 생성물의 세 단계로 나누어 살펴본다.</p>
+    <div class="meta">
+      <span class="meta-chip">2026. 11. 19.</span>
+      <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
+    </div>
+    <div class="outline" id="coverOutline"></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="AI 기업 상대 저작권 소송">
+  <div class="kicker">들어가며</div>
+  <h2>AI 기업을 상대로 한 저작권 소송</h2>
+  <div class="body">
+    <div class="two wide-r">
+      <ul class="bul">
+        <li>2023년 이후 미국에서만 수십 건의 저작권 소송이 AI 개발사를 상대로 제기됨</li>
+        <li>원고: 작가, 언론사, 음반사, 이미지 제공업체, 프로그래머</li>
+        <li>피고: OpenAI, Microsoft, Meta, Anthropic, Google, Stability AI, Midjourney 등</li>
+        <li>2025년부터 1심 판결과 대규모 합의가 나오기 시작함. 독일과 영국에서도 판결 선고</li>
+        <li class="arrow">소송의 쟁점은 학습 단계, 생성 단계, 생성물의 보호로 나뉜다</li>
+      </ul>
+      <figure><img src="assets/week12/lawsuit-map.jpg" alt="미국 내 AI 기업 상대 저작권 소송 현황 지도. 캘리포니아 북부지방법원과 뉴욕 남부지방법원에 사건이 집중되어 있음" style="max-height:400px"><figcaption>미국 내 AI 기업 상대 저작권 소송 현황 (2025. 1. 기준)</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://chatgptiseatingtheworld.com/2025/01/03/updated-map-of-copyright-lawsuits-v-ai-companies/" target="_blank" rel="noopener">chatgptiseatingtheworld.com/2025/01/03/updated-map-of-copyright-lawsuits-v-ai-companies</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="AI와 저작권 문제 개관">
+  <div class="kicker">들어가며</div>
+  <h2>AI와 저작권 관련 문제 개관</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card blue"><span class="no">1</span><span class="ttl">AI 학습<small>입력 단계</small></span>
+        <ul class="bul compact">
+          <li>웹 크롤링 데이터의 수집과 복제: 저작권(복제권) 침해 여부</li>
+          <li>데이터베이스제작자의 권리 침해 여부</li>
+          <li>크롤링 금지 약관과 정보통신망 침입</li>
+          <li>항변: 공정이용</li>
+        </ul>
+      </div>
+      <div class="card amber"><span class="no">2</span><span class="ttl">AI 생성<small>출력 단계</small></span>
+        <ul class="bul compact">
+          <li>학습 데이터 암기: 복제권 침해</li>
+          <li>캐릭터 생성: 복제권 침해</li>
+          <li>초상, 음성: 퍼블리시티권 침해</li>
+          <li>스타일 모방: 부정경쟁행위 여부</li>
+          <li>원작자·고지사항 삭제: 성명표시권 등</li>
+        </ul>
+      </div>
+      <div class="card green"><span class="no">3</span><span class="ttl">AI 생성물<small>결과물의 보호</small></span>
+        <ul class="bul compact">
+          <li>AI 생성과 인간 창작의 구분</li>
+          <li>AI를 도구로 쓴 결과물의 저작권 등록 가능 범위</li>
+          <li>별개의 권리를 새로 만들 것인지에 관한 입법론</li>
+        </ul>
+      </div>
+    </div>
+    <ol class="roadmap" data-current="0"></ol>
+    <p class="muted center">6강(개인정보 보호와 보안), 10강(인공지능 규제)에 이어지는 세 번째 법적 쟁점. 먼저 저작권법의 기본 개념을 정리한 뒤 세 단계를 차례로 본다.</p>
+  </div>
+</section>
+
+<!-- ===================== 1. 저작권의 기초 ===================== -->
+<section class="slide section" data-sec="1" data-title="저작권의 기초">
+  <div class="kicker">Section 1</div>
+  <h2>저작권의 기초</h2>
+  <p class="section-lead">AI 쟁점을 판단하는 데 필요한 최소한의 개념: 저작물, 저작권의 내용, 침해 요건, 공정이용.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="1"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="저작물의 요건">
+  <div class="kicker">저작권의 기초</div>
+  <h2>저작물: 인간의 사상 또는 감정을 표현한 창작물</h2>
+  <div class="body">
+    <div class="law"><span class="art">저작권법 제2조(정의)</span>1. “저작물”은 <b>인간의 사상 또는 감정</b>을 <b>표현</b>한 <b>창작물</b>을 말한다.</div>
+    <div class="cards c3">
+      <div class="card"><span class="no">1</span><span class="ttl">인간의 사상 또는 감정</span><p>사람이 만든 것이어야 한다. 원숭이가 찍은 셀카 사진은 정의 규정에 따라 저작물이 아니다. AI가 자율적으로 만든 결과물에 같은 문제가 생긴다.</p></div>
+      <div class="card"><span class="no">2</span><span class="ttl">표현</span><p>표현의 방법은 묻지 않는다. 보호 대상은 표현이고 그 안에 담긴 아이디어가 아니다. 같은 아이디어라도 표현을 달리하면 독립한 저작물이다.</p></div>
+      <div class="card"><span class="no">3</span><span class="ttl">창작성</span><p>남의 것을 모방하지 않았다는 것. 수준이 높을 필요는 없고 저작자의 개성이 최소한으로 반영되면 충분하다.</p></div>
+    </div>
+    <ul class="bul compact">
+      <li>저작권은 창작과 동시에 발생한다. 등록이나 표시 같은 절차가 필요 없다(특허와 다른 점)</li>
+      <li>특허법은 산업상 유용한 기술적 아이디어 자체를 보호하고, 저작권법은 표현만 보호한다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="아이디어와 표현 이분법">
+  <div class="kicker">저작권의 기초</div>
+  <h2>아이디어와 표현 이분법</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>아이디어가 독창적이어도 저작권법의 보호 대상인 저작물이 아니다
+        <ul>
+          <li>“추상적인 게임의 장르, 기본적인 게임의 배경, 게임의 전개방식, 규칙, 게임의 단계변화 등은 게임의 개념·방식·해법·창작도구로서 아이디어에 불과” (봄버맨 사건, 2005가합65093)</li>
+        </ul>
+      </li>
+      <li><b>합체의 원칙(merger doctrine)</b>: 아이디어를 표현하는 방법이 하나뿐이거나 매우 제한되면 저작물성을 부정</li>
+      <li><b>표준적 삽화의 원칙(scènes à faire)</b>: 어떤 주제를 다룰 때 전형적으로 따라오는 사건, 배경, 인물 유형은 보호하지 않음 (까레이스키 사건, 99다10813)</li>
+      <li>다만 개별 요소가 아이디어에 해당하더라도, 요소들의 <b>선택·배열·조합</b>에 창작적 개성이 있으면 전체가 저작물로 보호될 수 있음 (포레스트 매니아 사건, 2017다212095)</li>
+      <li class="arrow">AI 쟁점과의 연결: 화풍이나 문체 같은 “스타일”은 아이디어 쪽에 가깝다. 스타일 모방이 저작권 침해가 되기 어려운 이유이다</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="창작성: 사진 사례">
+  <div class="kicker">저작권의 기초</div>
+  <h2>창작성: 사진 저작물 사례</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>사진은 “피사체의 선정, 구도의 설정, 빛의 방향과 양의 조절, 카메라 각도의 설정, 셔터의 속도, 셔터찬스의 포착, 기타 촬영방법, 현상 및 인화 등의 과정에서 촬영자의 개성과 창조성”이 있어야 저작물 (2005도3130)</li>
+    </ul>
+    <div class="cards c2">
+      <div class="card red"><span class="ttl">저작물이 아닌 경우</span>
+        <ul class="bul compact">
+          <li>제품 카탈로그 사진, 증명사진, 사고현장 사진: 사물의 단순한 복제</li>
+          <li>음식점 내부를 충실히 촬영한 광고 사진: 누가 찍어도 비슷한 결과</li>
+          <li>의료시술 전후 사진: 시술 효과를 보이려는 목적. 다만 경쟁사업자가 쓰면 부정경쟁방지법 위반 가능성</li>
+        </ul>
+      </div>
+      <div class="card green"><span class="ttl">저작물인 경우</span>
+        <ul class="bul compact">
+          <li>저녁 해와 바다가 함께 보이는 시간대와 각도를 골라 촬영한 찜질방 전경 사진: 촬영자의 창작적 고려가 드러남</li>
+        </ul>
+      </div>
+    </div>
+    <ul class="bul compact">
+      <li>기능적 저작물(지도, 서식, 규칙집, 프로그램)에는 문예적 저작물보다 엄격한 창작성 기준이 적용된다</li>
+      <li class="arrow">기준은 “사람이 어떤 선택을 했는가”이다. 프롬프트 입력을 이러한 선택으로 볼 수 있는지가 AI 생성물 논의의 출발점</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="저작권의 내용">
+  <div class="kicker">저작권의 기초</div>
+  <h2>저작권의 내용: 권리의 다발</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="card blue"><span class="ttl">저작인격권<small>양도할 수 없음(일신전속)</small></span>
+          <ul class="bul compact">
+            <li><b>공표권</b>: 공표 여부를 결정할 권리</li>
+            <li><b>성명표시권</b>: 저작물에 실명 또는 이명을 표시할 권리</li>
+            <li><b>동일성유지권</b>: 내용·형식·제호의 동일성을 유지할 권리</li>
+          </ul>
+        </div>
+        <div class="card"><span class="ttl">보호 기간</span><p>저작재산권은 저작자 생존 기간과 사망 후 70년. 업무상저작물은 공표한 때부터 70년.</p></div>
+      </div>
+      <div class="card blue"><span class="ttl">저작재산권<small>개별 권리마다 따로 행사, 양도, 이용허락 가능</small></span>
+        <ul class="bul compact">
+          <li><b>복제권</b>: 유형물에 고정하거나 다시 제작할 권리. 저장매체에 저장하거나 인터넷에서 내려받는 것도 복제</li>
+          <li><b>공연권</b>, <b>공중송신권</b>(방송, 전송, 디지털음성송신), <b>전시권</b>, <b>배포권</b>, <b>대여권</b></li>
+          <li><b>2차적저작물작성권</b>: 번역, 편곡, 변형, 각색, 영상제작 등으로 2차적저작물을 작성해 이용할 권리</li>
+        </ul>
+        <p>실연자, 음반제작자, 방송사업자는 저작인접권을 가진다. AI 커버곡에서는 작곡·작사가의 저작권과 가수(실연자), 음반제작자의 권리가 함께 문제 된다.</p>
+      </div>
+    </div>
+    <p class="em center">AI 학습에서 주로 문제 되는 권리는 복제권, AI 생성에서는 복제권과 2차적저작물작성권이다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="저작권 침해 요건">
+  <div class="kicker">저작권의 기초</div>
+  <h2>저작권 침해의 요건: 의거관계와 실질적 유사성</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>완전히 같은 사본(dead copy)을 만들면 침해. 같지는 않지만 유사한 경우가 어려운 문제</li>
+    </ul>
+    <div class="cards c2">
+      <div class="card"><span class="ttl">주관적 요건: 의거관계<small>기존 저작물에 의거하여 작성되었을 것</small></span>
+        <ul class="bul compact">
+          <li>모방 행위를 직접 입증하기 어려우므로, 기존 저작물에 대한 <b>접근 가능성</b>과 실질적 유사성 등 간접사실이 인정되면 의거관계가 사실상 추정됨 (2005다35707)</li>
+          <li>독립적으로 창작했다고 볼 간접사실이 있으면 추정되지 않음</li>
+          <li>유사성이 현저하면 접근 가능성의 입증 없이도 의거관계를 추정</li>
+        </ul>
+      </div>
+      <div class="card"><span class="ttl">객관적 요건: 실질적 유사성<small>창작적 표현끼리 비교</small></span>
+        <ul class="bul compact">
+          <li>다소 수정·증감·변경을 했더라도 새로운 창작성을 더하지 않은 정도이면 복제</li>
+          <li>유사성 판단은 창작적인 표현형식에 해당하는 것만 가지고 대비 (2007다63409)</li>
+          <li>아이디어, 흔한 표현, 필연적으로 비슷해지는 표현은 비교 대상에서 제외</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout"><b>AI 생성물에 적용하면</b> 학습 데이터에 그 저작물이 포함되어 있었다면 접근 가능성은 인정되기 쉽다. 남는 쟁점은 생성물이 원저작물의 창작적 표현과 실질적으로 유사한지, 그리고 책임을 이용자와 AI 사업자 중 누가 지는지이다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="공정이용">
+  <div class="kicker">저작권의 기초</div>
+  <h2>저작재산권의 제한: 공정이용(fair use)</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="law sm"><span class="art">저작권법 제35조의5(저작물의 공정한 이용)</span>① 제23조부터 제35조의4까지, 제101조의3부터 제101조의5까지의 경우 외에 저작물의 일반적인 이용 방법과 충돌하지 아니하고 저작자의 정당한 이익을 부당하게 해치지 아니하는 경우에는 저작물을 이용할 수 있다.<br>② 저작물 이용 행위가 제1항에 해당하는지를 판단할 때에는 다음 각 호의 사항등을 고려하여야 한다.<br>1. 이용의 목적 및 성격<br>2. 저작물의 종류 및 용도<br>3. 이용된 부분이 저작물 전체에서 차지하는 비중과 그 중요성<br>4. 저작물의 이용이 그 저작물의 현재 시장 또는 가치나 잠재적인 시장 또는 가치에 미치는 영향</div>
+        <p class="ex">저작권법은 재판, 교육, 시사보도, 인용, 사적이용, 일시적 복제 등 개별 제한 사유(제23조~제35조의4)를 두고, 그 밖의 경우를 위해 2011년 일반 조항을 신설했다.</p>
+      </div>
+      <table class="tbl cmp">
+        <thead><tr><th>고려 요소</th><th>판단 기준 (대법원 2021다272001)</th></tr></thead>
+        <tbody>
+          <tr><td>목적·성격</td><td>원저작물을 단순히 대체하는가, 새로운 표현·의미·메시지를 나타내도록 <b>변형</b>했는가. 공익적·비영리적 이용인가</td></tr>
+          <tr><td>종류·용도</td><td>사실적·정보적 저작물인가, 공표된 저작물인가</td></tr>
+          <tr><td>비중·중요성</td><td>이용된 부분의 양적 비중과 질적 중요성이 낮은가. 필요한 범위 내에서 이용했는가</td></tr>
+          <tr><td>시장 영향</td><td>현재 시장 또는 장래 개발될 합리적 개연성이 있는 통상적 시장의 <b>수요를 대체</b>하거나 시장가치를 훼손하는가</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="em center">AI 학습 소송의 대부분은 이 네 요소, 특히 변형적 이용과 시장 대체 여부를 두고 다툰다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="국내 공정이용 판단 사례">
+  <div class="kicker">저작권의 기초</div>
+  <h2>국내 공정이용 판단 사례</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card green"><span class="tag">공정이용 인정</span><span class="ttl">NGO 블로그 광어회 사진<small>서울서부지법 2015가소308746</small></span>
+        <ul class="bul compact">
+          <li>NGO 단체가 채식을 장려하는 블로그 글에 구글 검색으로 찾은 광어회 섬네일 사진을 사용. 사진 권리자가 200만 원 손해배상 청구</li>
+          <li>이용 목적이 영리적이라 보기 어려움</li>
+          <li>사진이 게시물 전체에서 차지하는 비중과 중요성이 크지 않음</li>
+          <li>사진의 관련 시장과 가치에 큰 영향을 미쳤다고 보기 어려움</li>
+        </ul>
+      </div>
+      <div class="card red"><span class="tag">공정이용 부정</span><span class="ttl">한국교육과정평가원 기출문제 게시<small>대법원 2024. 7. 11. 선고 2021다272001</small></span>
+        <ul class="bul compact">
+          <li>평가원이 수능 등 시험 지문에 쓴 문학 작품을 시험 종료 후에도 홈페이지에 게시하여 누구나 내려받을 수 있게 함</li>
+          <li>시험 종료 후 기간 제한 없이 전송하는 것은 시험문제를 위한 복제(제32조)의 범위를 넘음</li>
+          <li>저작물을 학습자료로 쓰려는 자가 이용허락을 받고 사용료를 내는 시장이 이미 형성되어 있음</li>
+          <li>공익적·비영리적 측면이 있어도, 승인된 사용료를 내고 게시하는 것이 충분히 가능했으므로 공정이용이 아님</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout warn"><b>시사점</b> 비영리·공익 목적이라는 사정만으로 공정이용이 인정되지 않는다. 이용허락 시장이 존재하거나 형성될 개연성이 있으면 네 번째 요소(시장 영향)가 불리하게 작용한다. AI 학습용 데이터 라이선스 시장이 커질수록 같은 논리가 적용될 수 있다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="구글 북스 사건">
+  <div class="kicker">저작권의 기초</div>
+  <h2>구글 북스(Google Books) 사건: 대량 복제와 변형적 이용</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul compact">
+        <li><b>사실관계</b>
+          <ul>
+            <li>구글은 2004년 12월 하버드, 스탠퍼드 등 대학 및 뉴욕 공립 도서관과 협약을 맺고 소장 도서를 스캔하여 데이터베이스를 구축하는 프로젝트를 발표</li>
+            <li>작가들의 허락은 얻지 않았고, 미국 작가협회(Authors Guild)가 2005년 저작권 침해 소송 제기</li>
+            <li>출판사협회는 2012년 수익 분배와 공개 분량 제한(20%)을 조건으로 구글과 합의</li>
+          </ul>
+        </li>
+        <li><b>주장</b>
+          <ul>
+            <li>작가협회: 상업적 목적이므로 공정이용이 아님</li>
+            <li>구글: 도서를 디지털 파일로 변형하여 이용자의 검색 편의를 높이는 것</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="bul compact">
+        <li><b>2013년 11월 1심</b>: 공정이용 인정
+          <ul>
+            <li>목적이 독자와 연구자에게 도서 검색의 편의를 제공하는 것</li>
+            <li>주된 대상이 소설보다 보호 필요성이 낮은 비소설</li>
+            <li>도서의 일부(snippet)만 열람 가능</li>
+            <li>책을 대체하지 않고 도서 가치의 재발견에 기여</li>
+          </ul>
+        </li>
+        <li><b>2015년 10월 항소법원</b>: 공정이용 인정</li>
+        <li><b>2016년 4월 연방대법원</b>: 상고허가 신청 기각</li>
+        <li class="arrow">책 전체를 복제하더라도 이용의 목적이 원저작물과 다르고(검색) 원저작물의 수요를 대체하지 않으면 공정이용이 될 수 있다. AI 개발사들이 가장 많이 원용하는 선례</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2. 학습 데이터의 수집 ===================== -->
+<section class="slide section" data-sec="2" data-title="학습 데이터의 수집">
+  <div class="kicker">Section 2</div>
+  <h2>학습 데이터의 수집</h2>
+  <p class="section-lead">생성형 AI는 웹 크롤링 데이터로 학습한다. 수집 과정에서 복제권, 데이터베이스제작자의 권리, 접근 제한 약관이 문제 된다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="2"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="웹 크롤링 데이터">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>웹 크롤링 데이터: 언어모델의 주된 학습 데이터</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li><b>Common Crawl</b>: 비영리 단체가 공개하는 웹 크롤링 데이터. GPT-3(2020) 학습 데이터 구성에서 60%의 비중</li>
+          <li><b>네이버 HyperCLOVA</b>(2021): 네이버 블로그, 카페, 뉴스, 댓글, 지식iN 등 자사 서비스의 글을 주로 학습. 총 5,618억 토큰</li>
+          <li><b>The Pile</b>(2021): 언어모델 학습용 800GB 공개 데이터셋. 논문, 코드, 특허, 자막, 이메일 등 22개 출처</li>
+          <li>3강 실습에서 한 웹 스크래핑과 같은 행위를 대규모로 한 것이다</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week12/gpt3-data.png" alt="GPT-3 학습 데이터 구성 표: Common Crawl 4,100억 토큰 60%, WebText2 22%, Books1 8%, Books2 8%, Wikipedia 3%" style="max-height:170px"><figcaption>GPT-3 학습 데이터 구성 (Brown et al., 2020)</figcaption></figure>
+        <figure><img src="assets/week12/hyperclova-data.png" alt="HyperCLOVA 학습 말뭉치 표: 블로그 2,736억, 카페 833억, 뉴스 738억, 댓글 411억, 지식iN 273억 토큰 등" style="max-height:200px"><figcaption>HyperCLOVA 학습 말뭉치 (Kim et al., 2021)</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://arxiv.org/abs/2005.14165" target="_blank" rel="noopener">arxiv.org/abs/2005.14165</a> · <a href="https://arxiv.org/abs/2109.04650" target="_blank" rel="noopener">arxiv.org/abs/2109.04650</a> · <a href="https://arxiv.org/abs/2101.00027" target="_blank" rel="noopener">arxiv.org/abs/2101.00027</a> · <a href="https://commoncrawl.org/" target="_blank" rel="noopener">commoncrawl.org</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="이미지 생성 AI 학습 데이터">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>이미지 생성 AI의 학습 데이터: LAION-5B</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li>웹 크롤링 데이터에서 이미지와 그 설명 텍스트의 쌍을 추출하여 학습 데이터로 활용</li>
+        <li><b>LAION-5B</b>(Schuhmann et al., 2022): 이미지-텍스트 쌍 58.5억 개. Stable Diffusion 학습에 사용됨</li>
+        <li>robots.txt 규약에 따라 크롤링을 거부한 페이지는 수집하지 않음</li>
+        <li>데이터셋에는 이미지 파일이 아니라 이미지 URL과 설명 텍스트가 들어 있음. 학습하려는 자가 URL을 따라가 이미지를 내려받음</li>
+        <li>검색 도구로 “BTS Jungkook” 같은 인명을 넣으면 해당 인물의 사진이 다수 포함되어 있음을 확인할 수 있음</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/laion-5b.jpg" alt="LAION-5B 공개 블로그 화면" style="max-height:230px"></figure>
+        <figure><img src="assets/week12/laion-cat.jpg" alt="LAION 검색 도구에서 Odd-eyed cat을 검색한 결과 이미지 목록" style="max-height:140px"><figcaption>검색어 “Odd-eyed cat”에 대한 검색 결과</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://laion.ai/blog/laion-5b/" target="_blank" rel="noopener">laion.ai/blog/laion-5b</a> · <a href="https://rom1504.github.io/clip-retrieval" target="_blank" rel="noopener">rom1504.github.io/clip-retrieval</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="Getty Images v. Stability AI 소장">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>Getty Images v. Stability AI: 소장의 주장(2023, 미국)</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li>Getty Images의 데이터베이스에는 이미지마다 매우 상세한 설명이 붙어 있어 이미지 생성 모델 학습에 가치가 높음</li>
+          <li>Stability AI가 LAION 데이터셋의 링크를 따라 Getty 웹사이트에 접속하여 수백만 장의 이미지와 설명 텍스트를 허락 없이 복제했다고 주장</li>
+          <li>웹사이트 이용약관이 그러한 행위를 명시적으로 금지하고 있었다는 점도 주장</li>
+        </ul>
+        <blockquote class="quote" style="font-size:13.5px;line-height:1.6">“Stability AI followed links included in LAION’s dataset to access specific pages on Getty Images’ websites and copied many millions of copyrighted images and associated text. Such copying was done without Getty Images’ authorization and in violation of the express prohibitions against such conduct contained in its websites’ terms of use.”<cite>소장 제40항</cite></blockquote>
+      </div>
+      <figure><img src="assets/week12/getty-pair.jpg" alt="소장에 제시된 축구 경기 사진 두 장. 왼쪽은 Getty Images 원본, 오른쪽은 Stable Diffusion 생성물로 일그러진 Getty Images 워터마크가 보임" style="max-height:330px"><figcaption>소장에 제시된 사례: Getty 원본 사진(왼쪽)과 Stable Diffusion 생성물(오른쪽). 생성물에 변형된 Getty 워터마크가 나타남</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://copyrightlately.com/pdfviewer/getty-images-v-stability-ai-complaint" target="_blank" rel="noopener">copyrightlately.com/pdfviewer/getty-images-v-stability-ai-complaint</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="복제권 침해 가능성">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>크롤링 데이터 학습과 복제권 침해 가능성</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul">
+        <li><b>복제의 의미</b>
+          <ul>
+            <li>일시적 또는 영구적으로 유형물에 고정하거나 다시 제작하는 것</li>
+            <li>파일을 인터넷으로 전송받아 하드디스크에 저장하는 행위는 유형물에 고정하는 것에 해당 (2005도872)</li>
+          </ul>
+        </li>
+        <li><b>AI 학습 과정의 복제</b>
+          <ul>
+            <li>AI 개발자는 크롤링 데이터에 포함된 저작물의 복제본을 저장하고, 학습 과정에서 메모리에도 복제가 일어남</li>
+            <li>저작권자가 저작물을 웹에 게시했다는 사실만으로 AI 학습에 쓰는 것까지 허락했다고 보기는 어려움</li>
+          </ul>
+        </li>
+        <li class="arrow">일응 복제권 침해에 해당할 수 있다. 따라서 쟁점은 공정이용 등 저작재산권 제한 사유에 해당하는지로 넘어간다</li>
+      </ul>
+      <div class="stack">
+        <div class="law sm"><span class="art">저작권법 제2조(정의)</span>22. “복제”는 인쇄ㆍ사진촬영ㆍ복사ㆍ녹음ㆍ녹화 그 밖의 방법으로 <b>일시적 또는 영구적으로 유형물에 고정하거나 다시 제작하는 것</b>을 말하며, (후략)</div>
+        <div class="law sm"><span class="art">제16조(복제권)</span>저작자는 그의 저작물을 복제할 권리를 가진다.</div>
+        <div class="law sm"><span class="art">제123조(침해의 정지 등 청구)</span>① 저작권 그 밖에 이 법에 따라 보호되는 권리를 가진 자는 그 권리를 침해하는 자에 대하여 <b>침해의 정지</b>를 청구할 수 있으며, 그 권리를 침해할 우려가 있는 자에 대하여 침해의 예방 또는 손해배상의 담보를 청구할 수 있다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="데이터베이스제작자의 권리">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>데이터베이스제작자의 권리(DB권)</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul">
+        <li>데이터베이스의 제작·갱신·검증·보충에 <b>인적 또는 물적으로 상당한 투자</b>를 한 자에게 인정되는 권리</li>
+        <li>데이터베이스를 구성하는 개별 소재의 저작권과 별개의 권리. 소재 자체가 저작물이 아니어도(가격, 주소, 채용 조건 등) 성립</li>
+        <li>데이터베이스의 <b>전부 또는 상당한 부분</b>을 복제·배포·방송·전송하면 침해
+          <ul>
+            <li>상당한 부분인지는 양적 측면과 질적 측면을 함께 고려 (2021도1533, 야놀자 사건)</li>
+            <li>개별 소재나 상당한 부분에 이르지 못하는 부분이라도 <b>반복적이거나 특정한 목적을 위하여 체계적으로</b> 복제하여 제작자의 이익을 부당하게 해치면 상당한 부분의 복제로 봄</li>
+          </ul>
+        </li>
+        <li class="arrow">저작물성이 없는 사실 정보만 수집하더라도 DB권 침해가 될 수 있다</li>
+      </ul>
+      <div class="stack">
+        <div class="law sm"><span class="art">저작권법 제2조(정의)</span>19. “데이터베이스”는 소재를 체계적으로 배열 또는 구성한 편집물로서 개별적으로 그 소재에 접근하거나 그 소재를 검색할 수 있도록 한 것을 말한다.<br>20. “데이터베이스제작자”는 데이터베이스의 제작 또는 그 소재의 갱신ㆍ검증 또는 보충에 인적 또는 물적으로 상당한 투자를 한 자를 말한다.</div>
+        <div class="law sm"><span class="art">제93조(데이터베이스제작자의 권리)</span>① 데이터베이스제작자는 그의 데이터베이스의 전부 또는 상당한 부분을 복제ㆍ배포ㆍ방송 또는 전송할 권리를 가진다.<br>② 데이터베이스의 개별 소재는 제1항에 따른 상당한 부분으로 간주되지 아니한다. 다만, (중략) 반복적이거나 특정한 목적을 위하여 체계적으로 함으로써 해당 데이터베이스의 일반적인 이용과 충돌하거나 데이터베이스제작자의 이익을 부당하게 해치는 경우에는 상당한 부분의 복제등으로 본다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="hiQ v. LinkedIn과 잡코리아 사건">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>데이터 크롤링의 적법성: hiQ v. LinkedIn과 잡코리아 사건</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card blue"><span class="tag">미국</span><span class="ttl">hiQ Labs v. LinkedIn<small>제9연방항소법원, 2019</small></span>
+        <ul class="bul compact">
+          <li>스타트업 hiQ는 LinkedIn의 공개 프로필을 크롤링하여 직원의 이직 위험을 예측하는 AI 소프트웨어를 개발</li>
+          <li>LinkedIn이 접속을 차단하자 hiQ가 소송 제기</li>
+          <li>항소법원은 공개된 프로필에 대한 hiQ의 접근을 LinkedIn이 막지 못하도록 한 가처분을 유지</li>
+          <li>최종적으로는 hiQ가 스크래핑을 중단하는 조건으로 합의 종결</li>
+        </ul>
+      </div>
+      <div class="card amber"><span class="tag">한국</span><span class="ttl">잡코리아 v. 사람인HR<small>서울고법 2016나2019365, 상고기각</small></span>
+        <ul class="bul compact">
+          <li>사람인이 잡코리아에 등록된 기업 채용공고를 크롤링해 자기 사이트에 게재</li>
+          <li>사람인의 반박: 채용정보는 구인업체가 작성한 것이고 잡코리아는 이를 보여 주는 플랫폼일 뿐</li>
+          <li>법원: 마케팅 비용 지출 없이 자기 영업에 이용할 목적으로 <b>반복적, 체계적으로</b> 채용정보를 복제하여 데이터베이스제작자의 이익을 부당하게 해침. DB권 침해 인정</li>
+        </ul>
+      </div>
+    </div>
+    <ul class="bul compact">
+      <li><b>두 사건의 차이</b>: 잡코리아 사건의 피고는 수집한 데이터를 그대로 게재하여 원고와 직접 경쟁. hiQ는 데이터를 분석하여 다른 종류의 서비스를 제공</li>
+      <li>기계학습에서는 데이터가 특징 추출과 파라미터 갱신에만 쓰이고, 원 서비스와 직접 경쟁하지 않으면서 부가적인 가치를 만든다는 주장이 가능. 다만 생성모델은 원 데이터와 경쟁하는 결과물을 낼 수 있어 별도로 따져야 함</li>
+      <li>국내법 해석: 소재 저작물의 복제권 침해, DB권 침해가 모두 인정될 가능성이 있고, AI 개발자는 공정이용(제35조의5)으로 항변</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="유럽: CV-Online 사건">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>유럽의 동향: 데이터베이스권의 축소 해석</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul">
+        <li><b>CV-Online Latvia v. Melons</b>
+          <ul>
+            <li>CV-Online: 라트비아의 구인광고 데이터베이스 웹사이트</li>
+            <li>Melons: 여러 구인광고 웹사이트를 대상으로 하는 검색엔진</li>
+            <li>Melons가 CV-Online의 메타태그(직위, 업체 이름, 근무 장소, 게시 날짜)를 스크래핑하여 검색 서비스에 활용</li>
+            <li>CV-Online은 데이터베이스권 침해를 주장</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="bul">
+        <li><b>EU 사법재판소 판결(2021. 6.)</b>
+          <ul>
+            <li>EU 데이터베이스 지침상 “투자 비용을 회수하도록 의도된 수입을 박탈하는 효과가 있는 경우”에만 침해에 해당</li>
+            <li>침해 여부는 데이터베이스를 어떻게 재사용하는지에 따라 결정</li>
+            <li>데이터베이스 정보를 바탕으로 혁신적 제품을 만들 수 있는 이용자와 경쟁자의 이익을 제작자의 이익과 함께 고려해야 함</li>
+            <li>검색엔진은 인터넷의 정보를 구조화하고, 경쟁을 원활하게 하며, 공급과 가격의 투명성에 기여한다고 언급</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="callout">잡코리아 판결은 반복적·체계적 복제라는 행위 태양에 주목했고, CJEU는 제작자의 투자 회수에 미치는 효과를 기준으로 삼았다. 같은 채용정보 크롤링이라도 수집한 데이터를 어디에 쓰는지에 따라 결론이 달라질 수 있다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="크롤링 금지 약관과 정보통신망 침입">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>크롤링 금지 약관과 정보통신망 침입</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <ul class="bul compact">
+          <li><b>서비스 제공자의 금지·제한 정책</b>
+            <ul>
+              <li>신청과 승인 절차를 두고 용량, 범위, 이용목적을 제한</li>
+              <li>웹 스크래핑을 금지하고 API로만 수집을 허용</li>
+              <li>robots.txt로 AI 크롤러(GPTBot 등)를 차단하는 언론사 증가</li>
+            </ul>
+          </li>
+          <li><b>정당한 목적</b>: 서버 부하 방지, 영업비밀 유출 방지, 이용자 프라이버시 보호</li>
+          <li><b>부정한 목적</b>: 경쟁자와 시장 진입자의 데이터 수집 제한, 자사에 불리한 연구 제한
+            <ul><li>2021년 페이스북이 정치 광고 투명성을 조사하던 뉴욕대 Ad Observatory 연구진의 접근을 약관 위반을 이유로 차단</li></ul>
+          </li>
+        </ul>
+      </div>
+      <div class="stack">
+        <div class="law sm"><span class="art">정보통신망법 제48조 제1항</span>누구든지 정당한 접근권한 없이 또는 허용된 접근권한을 넘어 정보통신망에 침입하여서는 아니 된다.</div>
+        <ul class="bul compact">
+          <li><b>야놀자 사건(2021도1533)</b>: 접근권한을 제한하고 있는지는 보호조치나 이용약관 등 객관적으로 드러난 사정을 종합하여 신중하게 판단. 여기어때 직원들이 크롤링 프로그램으로 야놀자 API 서버에 접속한 행위는 침입이 아니라고 판단
+            <ul><li>API 서버에 별도의 보호조치가 없었고, 이용약관은 비회원에게 적용되지 않음</li></ul>
+          </li>
+          <li><b>Van Buren v. United States(2021)</b>: 접근 권한이 있는 자가 부정한 목적으로 접근한 것은 미국 CFAA 위반이 아님. 단순한 약관 위반을 형사처벌하지 않도록 범위를 제한</li>
+        </ul>
+      </div>
+    </div>
+    <p class="em center">약관 위반만으로 형사처벌되는 것은 아니지만, 계약 위반과 DB권·저작권 침해 책임은 별도로 남는다.</p>
+  </div>
+</section>
+
+<!-- ===================== 3. AI 학습과 공정이용 ===================== -->
+<section class="slide section" data-sec="3" data-title="AI 학습과 공정이용">
+  <div class="kicker">Section 3</div>
+  <h2>AI 학습과 공정이용</h2>
+  <p class="section-lead">복제가 있다는 점은 다투기 어렵다. 쟁점은 그 복제가 공정이용으로 허용되는가이다. 2025년에 미국, 독일, 영국에서 첫 판결들이 나왔다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="3"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="비생성형 AI에 관한 종래 논의">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>비생성형 AI에 관한 종래의 논의: TDM 예외</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>검색, 분류, 통계 분석을 위한 비생성형 AI의 학습에 대해서는 저작물 이용을 허용하는 견해가 다수
+        <ul><li>“저작물 본래의 목적 외 다른 목적, 예컨대 검색지원 또는 통계분석 등을 목적으로 하는 경우에 소위 변형적 이용(transformative use)으로 공정이용에 해당된다고 보는 견해들이 많다.” (정상조, 2018)</li></ul>
+      </li>
+      <li>각국은 텍스트·데이터 마이닝(Text and Data Mining, TDM)을 허용하는 규정을 도입</li>
+    </ul>
+    <table class="tbl left">
+      <thead><tr><th>국가</th><th>시기</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>영국</td><td>2014년 저작권법 개정</td><td>비상업적 연구 목적의 TDM에 한하여 저작물 이용 허용</td></tr>
+        <tr><td>일본</td><td>2018년 저작권법 개정</td><td>저작물에 표현된 사상·감정의 향수를 목적으로 하지 않는 이용을 허용(제30조의4)</td></tr>
+        <tr><td>EU</td><td>2019년 DSM 저작권 지침</td><td>연구 목적 TDM 예외(제3조)와 일반 TDM 예외(제4조). 일반 예외는 권리자가 기계가 읽을 수 있는 방식으로 유보(opt-out)하면 적용되지 않음</td></tr>
+        <tr><td>미국</td><td>별도 입법 없음</td><td>공정이용 법리의 해석으로 해결</td></tr>
+        <tr><td>한국</td><td>별도 입법 없음</td><td>TDM 면책 규정을 신설하는 저작권법 개정안이 발의되었으나 입법되지 않음. 공정이용(제35조의5)의 해석 문제</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">10강에서 본 EU AI Act 제53조는 범용 AI 모델 제공자에게 위 opt-out을 식별하고 준수하는 정책을 갖출 의무를 부과한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="생성형 AI 확산 이후의 논의">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>생성형 AI 확산 이후: 예외 확장에 대한 신중론</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li>비생성형 AI는 저작물을 분석할 뿐 저작물과 경쟁하는 결과물을 내지 않았음</li>
+        <li>생성형 AI는 학습한 저작물과 같은 시장에서 경쟁하는 글, 그림, 음악을 만들어 냄. 공정이용의 네 번째 요소(시장 영향)에 대한 평가가 달라짐</li>
+        <li><b>영국 정부의 정책 변화</b>
+          <ul>
+            <li>2022. 6. TDM 예외를 모든 목적(상업적 목적 포함)으로 확대할 계획 발표</li>
+            <li>2023. 2. 창작 산업계의 반발로 일반적 TDM 예외 계획 철회</li>
+          </ul>
+        </li>
+        <li class="arrow">AI 학습을 위한 저작권 예외를 넓히는 데 각국이 조심스러운 입장으로 돌아섬</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/uk-consultation.png" alt="영국 정부 발표문 제목: Artificial Intelligence and Intellectual Property: copyright and patents: Government response to consultation" style="max-height:150px"></figure>
+        <blockquote class="quote" style="font-size:14px">“For text and data mining, we plan to introduce a new copyright and database exception which allows TDM for any purpose. Rights holders will still have safeguards to protect their content, including a requirement for lawful access.”<cite>영국 정부, 2022. 6. (이후 철회)</cite></blockquote>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.gov.uk/government/consultations/artificial-intelligence-and-ip-copyright-and-patents/outcome/artificial-intelligence-and-intellectual-property-copyright-and-patents-government-response-to-consultation" target="_blank" rel="noopener">gov.uk: AI and IP, Government response to consultation</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="Bartz v. Anthropic">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>Bartz v. Anthropic 1심 판결(미국, 2025. 6.)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li>미국 작가들이 Anthropic이 LLM(Claude) 학습에 자신들의 책을 무단으로 사용했다며 저작권 침해 소송 제기</li>
+      <li>2025년 6월 캘리포니아 북부지방법원이 공정이용에 관한 약식판결 선고. 법원은 Anthropic의 행위를 세 가지로 나누어 판단</li>
+    </ul>
+    <table class="tbl cmp">
+      <thead><tr><th>행위</th><th>판단</th><th>이유</th></tr></thead>
+      <tbody>
+        <tr><td>구매한 종이책을 스캔하여<br>중앙 라이브러리 구축</td><td><span class="tier min">공정이용 인정</span></td><td>적법하게 취득한 책의 형식을 바꾼 것. 새로운 사본을 만들어 배포한 것이 아니므로 원저작물의 수요를 대체하지 않음</td></tr>
+        <tr><td>적법하게 취득한 책을<br>LLM 학습에 사용</td><td><span class="tier min">공정이용 인정</span></td><td>LLM 학습은 고도로 변형적인(transformative) 이용. 책을 읽고 배워 새로운 글을 쓰는 것과 같은 성격으로 평가</td></tr>
+        <tr><td>불법 사이트에서 내려받은<br>복제물로 라이브러리 구축</td><td><span class="tier ban">공정이용 부정</span></td><td>구매했어야 할 책을 무단으로 취득한 것은 원저작물에 대한 수요를 대체. 라이브러리 구축의 목적이 LLM 학습이었더라도 정당화되지 않음</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn"><b>결과</b> 불법 복제물 부분에 대한 손해배상 심리를 앞두고 15억 달러 규모로 합의. 저작물당 약 3,000달러, 대상 서적 약 48만 권. AI 저작권 분쟁에서 가장 큰 규모의 합의.</div>
+    <p class="em center">학습 자체는 공정이용이지만, 학습 데이터를 어떻게 취득했는지가 결론을 갈랐다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="GEMA v. OpenAI">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>GEMA v. OpenAI 판결(독일, 2025. 11.)</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul compact">
+        <li><b>사건 개요</b>
+          <ul>
+            <li>독일 음악저작권 집중관리단체 GEMA가 OpenAI를 상대로 독일 노래 9곡의 가사에 관하여 침해정지, 정보제공, 손해배상 청구</li>
+            <li>GPT-4와 GPT-4o를 해당 가사로 학습시켰다는 사실은 다툼이 없음</li>
+            <li>ChatGPT는 간단한 프롬프트에도 가사의 상당 부분을 원문 그대로 출력</li>
+          </ul>
+        </li>
+        <li><b>쟁점</b>
+          <ul>
+            <li>가사가 모델 안에 기억(memorization)되어 있는가</li>
+            <li>그 기억과 출력이 “복제”에 해당하는가</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="bul compact">
+        <li><b>뮌헨 제1지방법원 2025. 11. 11. 선고 42 O 14139/24</b>
+          <ul>
+            <li><b>모델 내 기억은 복제</b>: 가사가 확률값 형태로 여러 파라미터에 분산되어 있더라도 출력으로 재현할 수 있다면 모델 안에 고정된 것. 복제권(독일 저작권법 제16조) 침해</li>
+            <li><b>출력도 복제·공중송신</b>: 단순한 프롬프트로 가사가 출력된 경우 책임은 이용자가 아니라 모델 운영자가 부담</li>
+            <li><b>TDM 예외 부정</b>: TDM 예외는 정보 분석을 위한 복제를 허용할 뿐, 저작물 자체를 모델 안에 기억시키는 복제까지 정당화하지 않음</li>
+            <li>침해정지, 정보제공, 손해배상 청구 인용. 변형된 가사 출력에 따른 인격권 침해 주장은 기각</li>
+          </ul>
+        </li>
+        <li>현재 항소심 진행 중</li>
+      </ul>
+    </div>
+    <p class="em center">모델 가중치 안에 저작물이 복제되어 있다고 본 판결. 암기가 입증되면 학습 단계의 예외 규정으로 방어하기 어렵다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="Getty Images v. Stability AI (영국)">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>Getty Images v. Stability AI 판결(영국, 2025. 11.)</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul compact">
+        <li><b>사건 개요</b>
+          <ul>
+            <li>Getty Images는 Stability AI가 Stable Diffusion을 학습시키면서 자사 사진을 무단으로 이용했다며 2023년 영국에서도 소송 제기</li>
+            <li>학습이 영국 밖에서 이루어진 것으로 드러나, Getty는 학습과 출력에 관한 직접침해 주장을 재판 중 철회</li>
+            <li>남은 쟁점: 해외에서 학습한 모델을 영국에 들여와 제공한 것이 “침해복제물(infringing copy)”의 수입·배포에 해당하는가 (영국 저작권법 CDPA 제22조, 제23조의 2차적 침해)</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="bul compact">
+        <li><b>영국 고등법원 2025. 11. 4. 선고 [2025] EWHC 2863 (Ch)</b>
+          <ul>
+            <li>모델 가중치는 학습으로 얻은 파라미터일 뿐, 학습 이미지를 저장하거나 재현하지 않음</li>
+            <li>AI 모델은 저작물의 복제물을 담은 적이 없으므로 침해복제물이 아님. 2차적 침해 청구 기각</li>
+            <li><b>상표 침해</b>: 구 버전(v1.x, v2.x)의 출력물에 Getty 워터마크가 나타난 일부 사례에 한하여 상표권 침해 인정</li>
+          </ul>
+        </li>
+        <li>현재 항소심 진행 중</li>
+      </ul>
+    </div>
+    <div class="callout">일주일 간격으로 선고된 두 판결이 “모델 가중치가 저작물의 복제물인가”라는 같은 질문에 서로 다른 답을 냈다. 독일 사건에서는 가사가 원문 그대로 출력된다는 사실이 다툼 없이 인정되었고, 영국 사건에서는 그러한 재현이 입증되지 않았다는 사실관계의 차이가 있다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="세 판결의 비교">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>2025년 세 판결의 비교</h2>
+  <div class="body">
+    <table class="tbl cmp">
+      <thead><tr><th></th><th>Bartz v. Anthropic (미국)</th><th>GEMA v. OpenAI (독일)</th><th>Getty v. Stability AI (영국)</th></tr></thead>
+      <tbody>
+        <tr><td>저작물</td><td>서적</td><td>노래 가사 9곡</td><td>사진</td></tr>
+        <tr><td>모델</td><td>LLM</td><td>LLM</td><td>이미지 생성 모델</td></tr>
+        <tr><td>핵심 쟁점</td><td>학습을 위한 복제가 공정이용인가</td><td>모델 내 기억과 출력이 복제인가</td><td>모델이 침해복제물인가</td></tr>
+        <tr><td>적용 법리</td><td>공정이용(fair use) 일반 조항</td><td>복제권, TDM 예외</td><td>2차적 침해(수입·배포)</td></tr>
+        <tr><td>결론</td><td>학습은 공정이용. 불법 복제물 취득은 침해</td><td>침해 인정. TDM 예외 적용 부정</td><td>저작권 청구 기각. 상표 침해 일부 인정</td></tr>
+        <tr><td>결정적 사정</td><td>데이터의 취득 경로</td><td>원문 그대로의 출력(암기)</td><td>학습 장소가 영국 밖, 재현 미입증</td></tr>
+      </tbody>
+    </table>
+    <ul class="bul compact">
+      <li>세 판결 모두 1심이며 독일과 영국 사건은 항소심 진행 중. 확립된 법리로 보기는 이르다</li>
+      <li class="arrow">AI 사업자가 관리할 위험은 두 가지로 정리된다. (1) 학습 데이터를 적법한 경로로 취득했는가 (2) 모델이 학습 데이터를 그대로 출력하지 않는가</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="국내 가이드">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>국내: 생성형 AI 저작권 안내서(2023. 12.)</h2>
+  <div class="body">
+    <div class="two wide-r">
+      <figure><img src="assets/week12/guide-summary.jpg" alt="문화체육관광부와 한국저작권위원회의 생성형 AI 활용을 위한 저작권 안내서 요약: AI 학습 및 생성물, 유의사항, 저작권 등록의 세 부분" style="max-height:330px"><figcaption>문화체육관광부·한국저작권위원회, 생성형 AI 저작권 안내서</figcaption></figure>
+      <ul class="bul">
+        <li>국내에는 AI 학습에 관한 법원 판결이 아직 없음. 정부 안내서가 실무 기준으로 쓰임</li>
+        <li><b>AI 사업자에 대한 권고</b>
+          <ul>
+            <li>“AI 학습을 위한 것이라 하더라도 가급적 사전에 권리자와 별도 계약을 체결하는 등 적법한 이용권한을 확보하여 분쟁발생 가능성을 미연에 방지하는 것이 바람직”</li>
+          </ul>
+        </li>
+        <li><b>권리자의 대응 현황</b>
+          <ul>
+            <li>언론사를 포함한 다수 사이트가 공개 콘텐츠의 AI 학습 이용을 막는 내용을 약관에 넣거나 robots.txt로 크롤링을 차단</li>
+            <li>AI 개발업체들이 언론사, 이미지 제공업체와 별도 계약을 체결하는 경향</li>
+          </ul>
+        </li>
+        <li class="arrow">공정이용 해당 여부에 대한 판단은 유보하고, 이용허락 확보를 권고하는 입장</li>
+      </ul>
+    </div>
+    <p class="src">문화체육관광부·한국저작권위원회, 「생성형 AI 저작권 안내서」 (2023. 12.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="학습 데이터 수집 경쟁">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>학습 데이터 수집 경쟁</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li>학습 데이터 규모가 지금 추세로 늘어나면 사람이 쓴 고품질 공개 텍스트는 2028년 무렵 고갈될 것으로 전망(Epoch AI)</li>
+          <li>대규모 모델 개발사들은 이미 새로운 데이터 출처를 찾고 있음
+            <ul><li>OpenAI는 음성 인식 모델 Whisper로 유튜브 영상 100만 시간 이상을 받아 적어 GPT-4 학습에 사용했다고 보도됨(2024. 4.)</li></ul>
+          </li>
+          <li class="arrow">데이터 수집에 관한 지식재산권, 개인정보 보호 분쟁이 추가로 부각됨</li>
+        </ul>
+        <figure><img src="assets/week12/verge-youtube.png" alt="The Verge 기사 제목: OpenAI transcribed over a million hours of YouTube videos to train GPT-4" style="max-height:70px"></figure>
+      </div>
+      <figure><img src="assets/week12/epoch-data.png" alt="Nature에 실린 그래프 Running out of data: 인터넷 텍스트 총량과 LLM 학습 데이터셋 크기의 추세선이 2028년 무렵 만남" style="max-height:380px"><figcaption>공개 텍스트 총량과 학습 데이터셋 크기의 추세 (출처: Epoch AI, Nature)</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://epochai.org" target="_blank" rel="noopener">epochai.org</a> · <a href="https://www.theverge.com/2024/4/6/24122915/openai-youtube-transcripts-gpt-4-training-data-google" target="_blank" rel="noopener">The Verge, 2024. 4. 6.</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="AI 개발사와 콘텐츠 제공사의 계약">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>AI 개발사와 콘텐츠 제공사의 라이선스 계약</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li>소송과 병행하여 AI 개발사가 콘텐츠 보유 기업과 직접 계약을 체결하는 사례가 늘어남
+            <ul>
+              <li>OpenAI: AP(2023. 7.), Axel Springer(2023. 12.), Le Monde·Prisa(2024. 3.), Financial Times(2024. 4.), Reddit(2024. 5.)</li>
+              <li>Google: News Corp(WSJ)과 AI 콘텐츠 계약, 연간 최대 600만 달러로 보도됨(2024. 5.)</li>
+            </ul>
+          </li>
+          <li>Reddit은 OpenAI와의 데이터 제공 계약 발표 후 주가가 급등(2024. 5.)</li>
+          <li>계약 유형: 학습용 데이터 제공, 실시간 검색 결과 인용(RAG), 출처 표시와 링크 제공</li>
+          <li class="arrow">계약이 늘어난다는 사실 자체가 “AI 학습용 이용허락 시장”의 존재를 뒷받침한다. 공정이용의 네 번째 요소 판단에서 권리자에게 유리한 사정이 될 수 있다(평가원 판결 참조)</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week12/deal-reddit.png" alt="기사 제목: 레딧, 오픈AI에 데이터 제공한다. 파트너십 체결 소식에 주가 급등" style="max-height:130px"></figure>
+        <figure><img src="assets/week12/deal-wsj.png" alt="매일경제 기사: 구글, WSJ와 맞손. 뉴스로 AI 학습. 오픈AI 콘텐츠 라이선스 분쟁 일지 표 포함" style="max-height:290px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.bloter.net/news/articleView.html?idxno=616453" target="_blank" rel="noopener">블로터, 2024. 5.</a> · <a href="https://www.mk.co.kr/news/it/11005000" target="_blank" rel="noopener">매일경제</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="국제 경쟁 환경">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>국제 경쟁 환경에 대한 고려</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card blue"><span class="ttl">규제 완화 경쟁의 압력</span>
+        <ul class="bul compact">
+          <li>특정 국가만 저작물의 AI 학습을 허용하지 않는 제도를 유지한다면?</li>
+          <li>그 나라 AI 개발자는 다른 나라 개발자보다 추가 부담을 지게 되어 개발 경쟁에서 불리</li>
+          <li>국제적으로 쓰이는 AI가 그 나라 저작물만 빼고 학습하면 그 나라 이용자에게도 불리</li>
+          <li class="arrow">지식재산권 규제 완화 경쟁(race to the bottom)은 불가피한가?</li>
+        </ul>
+      </div>
+      <div class="card amber"><span class="ttl">한국어 데이터, K-Culture 데이터의 보호</span>
+        <ul class="bul compact">
+          <li>한국어 처리에 우수한 AI를 만들려면 국내 한국어 데이터 권리자에 대한 충분한 보상이 필요하다는 주장</li>
+          <li>국내 AI 개발사가 해외 개발사에 비해 비교우위를 유지할 수 있는 정책이 필요하다는 주장</li>
+          <li>K-Culture 데이터 보호 강화가 국내 문화 산업 발전에 기여한다는 주장</li>
+          <li class="arrow">국내법과 정책을 만들 때 이러한 주장을 어떻게 고려해야 하는가?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">Getty 영국 판결이 보여 주듯 저작권법은 속지주의가 원칙이다. 학습을 어느 나라에서 했는지에 따라 적용 법이 달라지므로, 한 나라의 엄격한 규율만으로 해외 개발사의 학습을 막기 어렵다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="데이터 거래 시장">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>절충 방안: 데이터 거래 시장</h2>
+  <div class="body">
+    <div class="arrowrow">
+      <div class="card green" style="flex:1 1 220px;max-width:300px"><span class="ttl">데이터 권리자 보호</span><ul class="bul compact"><li>지속 가능한 창작 생태계 유지</li><li>인간 창작자의 사회적 보호</li></ul></div>
+      <span class="ar">⟷</span>
+      <div class="card blue" style="flex:0 1 200px;text-align:center"><span class="ttl">AI 데이터<br>거래 플랫폼</span></div>
+      <span class="ar">⟷</span>
+      <div class="card amber" style="flex:1 1 220px;max-width:300px"><span class="ttl">AI 혁신 경쟁 장려</span><ul class="bul compact"><li>비표현적 이용 법리</li><li>공정이용 인정</li></ul></div>
+    </div>
+    <ul class="bul compact">
+      <li>권리자를 보호할 정책적 필요성은 일반적으로 인정됨. 그러나 지나친 권리자 보호는 AI 혁신 경쟁의 새로운 진입 장벽이 될 수 있음
+        <ul><li>대규모 라이선스 계약을 체결할 자금이 있는 기업만 학습 데이터를 확보하게 됨</li></ul>
+      </li>
+      <li><b>실무상 어려움</b>: AI 개발사가 라이선스를 받을 의사가 있어도 권리자가 누구인지, 조건과 로열티가 얼마인지 확인하기 어려움</li>
+      <li><b>데이터 거래 플랫폼의 역할</b>: 권리자와 수요자를 연결하여 적정한 비용으로 라이선스를 취득하게 함. 스타트업에는 국가의 재정 지원도 가능</li>
+      <li class="arrow">데이터를 거래하는 플랫폼이 장기적으로 성장해야 권리자 보호와 AI 혁신이 양립할 수 있다</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 4. AI 생성물에 의한 권리 침해 ===================== -->
+<section class="slide section" data-sec="4" data-title="AI 생성물에 의한 권리 침해">
+  <div class="kicker">Section 4</div>
+  <h2>AI 생성물에 의한 권리 침해</h2>
+  <p class="section-lead">출력 단계의 다섯 가지 문제: 학습 데이터 암기, 캐릭터 생성, 초상·음성, 스타일, 원작자·고지사항 삭제.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="4"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(1) 학습 데이터 암기: 이미지">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>(1) 학습 데이터 암기: 이미지 생성 모델</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li>이미지 생성 모델은 학습 데이터의 원본 사진을 거의 같게 재현할 수 있음</li>
+        <li><b>Carlini et al. (2023)</b>
+          <ul>
+            <li>Stable Diffusion에 인명(“Ann Graham Lotz”)을 프롬프트로 입력하자 학습 데이터에 있던 초상 사진과 “거의 동일한(nearly identical)” 이미지가 생성됨</li>
+            <li>학습 데이터에 여러 번 중복되어 들어간 이미지일수록 암기되기 쉬움</li>
+          </ul>
+        </li>
+        <li>생성물이 학습 데이터의 저작물과 실질적으로 유사하면 복제권 침해가 성립할 수 있음</li>
+        <li>GEMA 판결은 텍스트에 관하여 같은 논리로 침해를 인정</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/carlini-pair.jpg" alt="학습 데이터의 Ann Graham Lotz 초상 사진(왼쪽)과 인명을 프롬프트로 넣어 생성된 거의 동일한 이미지(오른쪽)" style="max-height:230px"><figcaption>학습 데이터(왼쪽)와 생성된 이미지(오른쪽)</figcaption></figure>
+        <figure><img src="assets/week12/carlini-grid.jpg" alt="Stable Diffusion에서 추출한 학습 이미지 예시. 위 줄이 원본, 아래 줄이 생성물" style="max-height:110px"></figure>
+      </div>
+    </div>
+    <p class="src">Carlini et al. (2023) Extracting Training Data from Diffusion Models, <a href="https://arxiv.org/abs/2301.13188" target="_blank" rel="noopener">arxiv.org/abs/2301.13188</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="학습 데이터 암기: 언어모델">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>대규모 언어모델의 학습 데이터 암기</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li>해리포터 소설의 첫 10단어를 입력하면 그 뒤 여러 쪽을 그대로 생성해 낼 수 있음
+            <ul><li>소설 도입부는 온라인 미리보기 등으로 널리 공개되어 학습 데이터에 여러 번 포함됨</li></ul>
+          </li>
+          <li><b>New York Times v. OpenAI</b> (2023. 12. 제소)
+            <ul>
+              <li>소장 별지 Exhibit J에 GPT-4가 NYT 기사를 거의 그대로 출력한 사례 100건을 제시</li>
+              <li>기사 앞부분을 프롬프트로 주면 나머지 부분을 원문과 같게 이어서 생성. 붉은 글씨가 원문과 일치하는 부분</li>
+            </ul>
+          </li>
+        </ul>
+        <figure><img src="assets/week12/harrypotter.jpg" alt="GPT 플레이그라운드에서 해리포터 첫 문장을 입력하자 원문과 같은 내용이 이어서 생성된 화면과 실제 책 페이지" style="max-height:170px"></figure>
+      </div>
+      <figure><img src="assets/week12/nyt-exhibit-j.png" alt="NYT 소장 Exhibit J의 한 사례: GPT-4 출력(왼쪽)과 NYT 원문(오른쪽). 일치하는 부분이 붉은 글씨로 표시되어 거의 전부가 붉은색" style="max-height:420px"><figcaption>Exhibit J: GPT-4 출력(왼쪽)과 NYT 원문(오른쪽)</figcaption></figure>
+    </div>
+    <p class="src">Callison-Burch (2023) Understanding Generative Artificial Intelligence and Its Relationship to Copyright · <a href="https://nytco-assets.nytimes.com/2023/12/Lawsuit-Document-dkt-1-68-Ex-J.pdf" target="_blank" rel="noopener">NYT v. OpenAI, Exhibit J</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="암기 위험에 대한 반론">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>암기 위험의 크기: 측정과 반론</h2>
+  <div class="body">
+    <div class="two eq top">
+      <div class="stack">
+        <div class="card"><span class="ttl">Google MusicLM (2023. 1.)<small>텍스트 설명으로 음악을 생성하는 모델</small></span>
+          <ul class="bul compact">
+            <li>개발 과정에서 학습 데이터 암기 위험을 측정</li>
+            <li>학습 데이터와 동일한 결과물 생성: 0.2% 미만</li>
+            <li>유사한 결과물 생성: 약 1%</li>
+            <li>저작권 침해 위험 등을 고려하여 논문 발표 당시 모델을 공개하지 않음</li>
+          </ul>
+        </div>
+        <div class="stat">
+          <div><b>0.03%</b><span>이미지 생성 모델이 암기한 학습 데이터 비율 (Sag, 2023)</span></div>
+          <div class="r"><b>&lt; 0.2%</b><span>MusicLM의 동일 결과물 생성 비율</span></div>
+        </div>
+      </div>
+      <div class="stack">
+        <ul class="bul compact">
+          <li><b>반론</b>
+            <ul>
+              <li>대부분의 AI 생성물은 학습 데이터의 저작물과 실질적으로 유사하지 않음. Getty 소장에 제시된 생성물도 원본 사진과 구도, 인물이 다름</li>
+              <li>학습 과정은 데이터를 분해(decomposition)하고 추상화(abstraction)함. 생성 모델은 학습 데이터를 암기하도록 설계되지 않음</li>
+              <li>암기는 드물게 발생하는 의도하지 않은 버그(Callison-Burch, 2023)</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="figrow">
+          <figure><img src="assets/week12/getty-train.jpg" alt="Getty Images 원본 축구 경기 사진" style="max-height:150px"></figure>
+          <span class="em">≠</span>
+          <figure><img src="assets/week12/getty-gen.jpg" alt="Stable Diffusion이 생성한 축구 경기 이미지. 선수의 형태가 일그러져 있음" style="max-height:150px"></figure>
+        </div>
+      </div>
+    </div>
+    <div class="callout warn">비율이 낮아도 이용 건수가 많으면 침해 건수는 커진다. 하루 수억 건의 생성 요청 중 0.03%는 수만 건이다. 드문 버그라는 사정은 침해 성립을 막지 못하고, 고의·과실과 손해액 판단에서 고려될 뿐이다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(2) 캐릭터 생성">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>(2) 캐릭터 생성의 문제</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li>캐릭터는 생김새, 동작 등의 시각적 표현에 창조적 개성이 드러나 있으면 원저작물과 별개로 저작물로 보호됨 (2007다63409)</li>
+        <li><b>“스누피 문제”</b>(Sag, 2023)
+          <ul>
+            <li>유명 캐릭터는 학습 데이터에 수많은 변형으로 반복 등장함. 모델은 개별 이미지가 아니라 캐릭터 자체를 학습</li>
+            <li>캐릭터 이름만 프롬프트에 넣어도 저작권을 침해하는 생성물이 쉽게 만들어짐</li>
+          </ul>
+        </li>
+        <li>일부 창작자들은 디즈니가 AI 기업에 소송을 제기하기를 기대하며 미키 마우스, 피카츄 생성물을 일부러 게시(2022. 12.)</li>
+        <li class="arrow">특정 사진의 암기와 달리 구조적으로 발생하는 문제. 프롬프트 필터링 같은 별도 조치가 필요</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/snoopy.jpg" alt="Midjourney와 Stable Diffusion으로 생성한 스누피 이미지 9장" style="max-height:260px"><figcaption>프롬프트에 “Snoopy”를 넣어 생성한 이미지 (Sag, 2023)</figcaption></figure>
+        <div class="figrow">
+          <figure><img src="assets/week12/pikachu.jpg" alt="AI로 생성한 피카츄 이미지를 올린 트윗" style="max-height:130px"></figure>
+          <figure><img src="assets/week12/mickey.jpg" alt="AI로 생성한 미키 마우스 이미지를 올린 트윗" style="max-height:130px"></figure>
+        </div>
+      </div>
+    </div>
+    <p class="src">Matthew Sag (2023) Copyright Safety for Generative AI · <a href="https://www.dailydot.com/debug/ai-art-protest-disney-characters-mickey-mouse/" target="_blank" rel="noopener">dailydot.com/debug/ai-art-protest-disney-characters-mickey-mouse</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(3) 초상·음성 등 인격표지">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>(3) 초상·음성 등 인격표지 침해</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li>생성형 AI는 유명인의 초상과 음성을 그대로 재현할 수 있음
+            <ul>
+              <li>Midjourney: “photo of Snoop Dogg standing next to a red dog house with Christmas lights on it”</li>
+              <li>Snoop Dogg의 음성으로 텍스트를 읽어 주는 TTS 서비스</li>
+            </ul>
+          </li>
+          <li><b>스칼릿 조핸슨과 GPT-4o 음성(2024. 5.)</b>
+            <ul>
+              <li>OpenAI가 GPT-4o 음성 “Sky”를 공개하자, 조핸슨이 자신의 목소리와 매우 비슷하다며 문제 제기</li>
+              <li>조핸슨은 OpenAI의 음성 출연 제안을 거절한 바 있다고 밝힘. OpenAI는 해당 음성 사용을 중단</li>
+            </ul>
+          </li>
+          <li class="arrow">초상과 음성은 저작물이 아니므로 저작권으로 보호되지 않는다. 퍼블리시티권 침해가 문제 된다</li>
+        </ul>
+        <figure><img src="assets/week12/johansson-headline.png" alt="기사 제목: 스칼렛 요한슨 “오픈AI, GPT-4o 출연 거절하자 목소리 베껴”" style="max-height:60px"></figure>
+      </div>
+      <div class="stack">
+        <figure><img src="assets/week12/snoop-midjourney.jpg" alt="Midjourney로 생성한 Snoop Dogg가 붉은 개집 옆에 서 있는 이미지 4장" style="max-height:250px"></figure>
+        <figure><img src="assets/week12/snoop-tts.jpg" alt="Snoop Dogg Voice Text to Speech 서비스 화면" style="max-height:130px"></figure>
+      </div>
+    </div>
+    <p class="src">Callison-Burch (2023) · <a href="https://www.aitimes.com/news/articleView.html?idxno=159835" target="_blank" rel="noopener">AI타임스, 2024. 5.</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="한국법상 퍼블리시티권">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>한국법상 퍼블리시티권 보호</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul">
+        <li><b>종래</b>: 실정법에 퍼블리시티권의 근거 조항이 없었고, 하급심 판결은 인정한 사례와 부정한 사례로 나뉨</li>
+        <li><b>부정경쟁방지법 개정(2021년)</b>: 유명인의 식별표지를 무단 사용하는 행위를 부정경쟁행위로 규정
+          <ul>
+            <li>요건: 국내에 널리 인식되고 경제적 가치를 가지는 표지, 자신의 영업을 위한 무단 사용, 경제적 이익 침해</li>
+            <li>유명하지 않은 일반인의 초상·음성에는 적용되지 않음</li>
+          </ul>
+        </li>
+        <li><b>법무부 민법 개정안</b>: 모든 사람에게 인격표지영리권을 인정하는 규정을 신설하는 안
+          <ul><li>자신의 성명, 초상, 음성 그 밖의 인격표지를 영리적으로 이용할 권리</li></ul>
+        </li>
+        <li>딥페이크 영상의 표시 의무는 10강(EU AI Act 제50조, 인공지능 기본법 투명성 의무)에서 다룬 별도의 규율</li>
+      </ul>
+      <div class="stack">
+        <div class="law sm"><span class="art">부정경쟁방지 및 영업비밀보호에 관한 법률 제2조 제1호 (타)목</span>국내에 널리 인식되고 경제적 가치를 가지는 <b>타인의 성명, 초상, 음성, 서명 등 그 타인을 식별할 수 있는 표지</b>를 공정한 상거래 관행이나 경쟁질서에 반하는 방법으로 자신의 영업을 위하여 무단으로 사용함으로써 타인의 경제적 이익을 침해하는 행위</div>
+        <div class="law sm"><span class="art">민법 개정안</span><b>제3조의2(인격권)</b> ① 사람은 생명, 신체, 건강, 자유, 명예, 사생활, 성명, 초상, 개인정보, 그 밖의 인격적 이익에 대한 권리를 가진다.<br><b>제3조의3(인격표지영리권)</b> ① 사람은 자신의 성명, 초상, 음성 그 밖의 인격표지를 영리적으로 이용할 권리를 가진다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="AI 커버곡">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>사례: AI 커버곡에는 어떤 권리가 걸려 있는가</h2>
+  <div class="body">
+    <div class="two wide-r">
+      <div class="stack">
+        <figure><img src="assets/week12/ai-cover-qa.png" alt="생성형 AI 저작권 안내서 Q10: AI 커버곡을 제작하는 것도 저작권을 침해하는 건가요? 답: 저작권자 및 저작인접권자의 권리가 침해될 소지가 있으므로 사전에 각 권리자로부터 이용허락을 받을 필요가 있습니다" style="max-height:230px"><figcaption>생성형 AI 저작권 안내서(2023. 12.) Q10</figcaption></figure>
+      </div>
+      <table class="tbl cmp">
+        <thead><tr><th>대상</th><th>권리자</th><th>문제 되는 권리</th></tr></thead>
+        <tbody>
+          <tr><td>곡과 가사</td><td>작곡가, 작사가</td><td>복제권, 전송권, 2차적저작물작성권. 커버곡을 만들어 게시하려면 이용허락 필요</td></tr>
+          <tr><td>원곡 음원(반주 포함)</td><td>음반제작자, 실연자</td><td>저작인접권(복제권, 전송권). 원곡 음원에서 반주를 분리해 쓰면 침해 소지</td></tr>
+          <tr><td>음성 학습에 쓴 녹음</td><td>음반제작자, 실연자</td><td>학습을 위한 음원 복제. 공정이용 여부가 쟁점</td></tr>
+          <tr><td>가수의 목소리 자체</td><td>가수</td><td>목소리는 저작물도 실연도 아님. 부정경쟁방지법 (타)목의 인격표지 무단 사용 문제</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="em center">하나의 생성물에 저작권, 저작인접권, 퍼블리시티권이 겹쳐 있다. 권리마다 권리자와 허락 창구가 다르다.</p>
+    <p class="src">문화체육관광부·한국저작권위원회, 「생성형 AI 저작권 안내서」 (2023. 12.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(4) 스타일 모방">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>(4) 스타일 모방</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li>이미지 생성 모델은 프롬프트에 작가 이름을 넣으면 그 작가의 화풍으로 그림을 생성함</li>
+        <li>만화가 Sarah Andersen의 기고(NYT, 2022. 12.): 자신의 이름을 프롬프트로 넣자 자신의 그림체를 닮은 만화가 생성됨</li>
+        <li><b>저작권법의 한계</b>
+          <ul>
+            <li>저작권법이 보호하는 것은 말, 문자, 음, 색 등으로 구체적으로 외부에 표현한 창작적인 표현형식</li>
+            <li>아이디어, 이론 등 사상과 감정 그 자체는 독창성과 신규성이 있어도 보호 대상이 아님</li>
+          </ul>
+        </li>
+        <li class="arrow">작품의 스타일 자체는 저작권 보호 대상으로 인정받기 어렵다. 특정 작품과 실질적으로 유사한 경우에만 침해</li>
+      </ul>
+      <div class="figrow">
+        <figure><img src="assets/week12/andersen-original.png" alt="Sarah Andersen이 직접 그린 4컷 만화" style="max-height:320px"><figcaption>작가의 실제 작품</figcaption></figure>
+        <figure><img src="assets/week12/andersen-ai.png" alt="작가의 이름을 프롬프트로 넣어 AI가 생성한 4컷 만화. 그림체가 유사함" style="max-height:320px"><figcaption>작가 이름을 프롬프트로 넣어 생성한 이미지</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.nytimes.com/2022/12/31/opinion/sarah-andersen-how-algorithim-took-my-work.html" target="_blank" rel="noopener">nytimes.com/2022/12/31/opinion/sarah-andersen-how-algorithim-took-my-work.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="스타일과 부정경쟁행위">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>스타일의 보호 가능성: 부정경쟁방지법 성과도용</h2>
+  <div class="body">
+    <div class="law sm"><span class="art">부정경쟁방지 및 영업비밀보호에 관한 법률 제2조 제1호 (파)목</span>그 밖에 <b>타인의 상당한 투자나 노력으로 만들어진 성과 등</b>을 <b>공정한 상거래 관행이나 경쟁질서에 반하는 방법</b>으로 자신의 영업을 위하여 무단으로 사용함으로써 타인의 경제적 이익을 침해하는 행위</div>
+    <div class="two eq top">
+      <ul class="bul compact">
+        <li>2013년 개정으로 신설된 보충적 일반조항. 기술 변화로 나타나는 새로운 유형의 부정경쟁행위에 대응하려는 취지</li>
+        <li><b>BTS 화보집 사건(2019마6525)</b>의 판단 기준
+          <ul>
+            <li><b>성과 등</b>: 유형물뿐 아니라 무형물도 포함. 종래 지식재산권법으로 보호받기 어려웠던 새로운 형태의 결과물도 포함</li>
+            <li><b>상당한 투자나 노력</b>: 해당 산업 분야의 관행과 실태에 비추어 구체적, 개별적으로 판단. 공공영역(public domain)에 속하지 않을 것</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="bul compact">
+        <li><b>공정한 상거래 관행이나 경쟁질서에 반하는 방법</b>인지는 다음을 종합
+          <ul>
+            <li>권리자와 침해자가 경쟁관계에 있거나 가까운 장래에 놓일 가능성</li>
+            <li>해당 산업 분야의 상거래 관행과 경쟁질서의 내용</li>
+            <li>침해자의 상품·서비스에 의한 시장 대체 가능성</li>
+            <li>수요자에게 성과 등이 알려진 정도, 혼동 가능성</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="callout">특정 작가의 화풍을 집중 학습시킨 모델로 그 작가의 이름을 내세워 그림을 판매한다면, 작가와 경쟁관계에 있고 시장 대체 가능성이 있다. 성과도용에 해당할 여지가 있으나 아직 이를 판단한 판결은 없다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4" data-title="(5) 원작자·고지사항 삭제">
+  <div class="kicker">AI 생성물에 의한 권리 침해</div>
+  <h2>(5) 원작자·고지사항 삭제: GitHub Copilot 소송</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul compact">
+        <li><b>배경: 오픈소스 라이선스</b>
+          <ul>
+            <li>오픈소스 소프트웨어에도 저작권이 있음. 저작권자가 정한 라이선스를 지켜야 하고, 위반하면 저작권 침해</li>
+            <li>카피레프트(GPL 등): 파생 저작물을 같은 라이선스로 배포하고 소스코드를 공개해야 함</li>
+            <li>Permissive(MIT, BSD, Apache 등): 저작권 표시와 고지사항을 포함하면 됨</li>
+          </ul>
+        </li>
+        <li><b>문제 사례</b>(2022. 10.): Copilot이 LGPL로 공개된 희소행렬 코드를 거의 그대로 출력. 원작성자 정보와 라이선스 고지는 제공되지 않음</li>
+        <li><b>Copilot 집단소송</b>(2022. 11. 3. 제소)
+          <ul>
+            <li>Copilot이 저작권자의 기여 표시, 저작권 표시, 라이선스 조건을 삭제</li>
+            <li>그 코드를 Copilot이 생성한 것처럼 이용자에게 배포</li>
+          </ul>
+        </li>
+        <li class="arrow">AI로 생성한 코드를 제품에 넣는 기업은 라이선스 오염 여부를 확인할 수 없다는 위험을 안게 됨</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/copilot-tweet.png" alt="Tim Davis 교수의 트윗: Copilot이 자신의 저작권 있는 코드를 출처와 LGPL 라이선스 표시 없이 대량으로 출력한다는 내용과 코드 비교 화면" style="max-height:250px"></figure>
+        <blockquote class="quote" style="font-size:13px;line-height:1.55">“Defendants stripped Plaintiffs’ and the Class’s attribution, copyright notice, and license terms from their code (...) Defendants used Copilot to distribute the now-anonymized code to Copilot users as if it were created by Copilot.”<cite>소장 제11항</cite></blockquote>
+      </div>
+    </div>
+    <p class="src"><a href="https://twitter.com/DocSparse/status/1581461734665367554" target="_blank" rel="noopener">twitter.com/DocSparse/status/1581461734665367554</a> · <a href="https://githubcopilotlitigation.com/" target="_blank" rel="noopener">githubcopilotlitigation.com</a></p>
+  </div>
+</section>
+
+<!-- ===================== 5. 기술적·상업적 대응 ===================== -->
+<section class="slide section" data-sec="5" data-title="기술적·상업적 대응">
+  <div class="kicker">Section 5</div>
+  <h2>기술적·상업적 대응</h2>
+  <p class="section-lead">법적 결론이 확정되기 전에 AI 사업자들은 침해 위험을 줄이는 기술적 조치와 이용자에 대한 계약상 보장을 내놓고 있다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="5"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="저작권 안전을 위한 기술적 방안">
+  <div class="kicker">기술적·상업적 대응</div>
+  <h2>생성 AI의 저작권 안전을 위한 기술적 방안</h2>
+  <div class="body">
+    <table class="tbl left tight cat">
+      <thead><tr><th>구분</th><th>단계</th><th>제안</th></tr></thead>
+      <tbody>
+        <tr><td class="cat" rowspan="6">생성 모델 일반</td><td>학습</td><td>1. 학습 데이터 내 저작물 중복 제거</td></tr>
+        <tr><td>설계</td><td>2. 학습 데이터 규모를 고려한 모델 용량의 선택</td></tr>
+        <tr><td>학습</td><td>3. 저작권, 상표권, 퍼블리시티권, 개인정보 보호를 위한 인간 피드백 강화학습(RLHF) 도입</td></tr>
+        <tr><td>활용</td><td>4. 모델 출력 필터링, 제한 등 저작권 침해 방지 조치</td></tr>
+        <tr><td>모델 배포</td><td>5. 심각한 저작권 침해 위험을 초래하는 모델의 오픈소스 공개 금지</td></tr>
+        <tr><td>학습</td><td>6. 학습 데이터로 사용된 저작물과 그 출처에 대한 상세한 기록 유지</td></tr>
+        <tr><td class="cat" rowspan="4">이미지 생성 모델</td><td>학습</td><td>7. 이미지 설명 중 고유명사(지명 등) 식별성 높은 묘사를 삭제 또는 일반화</td></tr>
+        <tr><td>학습</td><td>8. 이미지 설명 중 창작자 이름, 상표, 캐릭터 명칭 등을 삭제 또는 일반화</td></tr>
+        <tr><td>활용</td><td>9. (8의 대안으로) 특정 창작자 이름, 상표, 캐릭터 명칭 프롬프트 불허</td></tr>
+        <tr><td>학습/활용</td><td>10. 워터마크가 포함된 저작물을 학습 데이터에서 제거, 워터마크 생성을 막는 RLHF와 출력 필터 적용</td></tr>
+      </tbody>
+    </table>
+    <p class="muted center">1·2번은 암기, 8·9번은 캐릭터와 스타일, 3·4번은 초상·음성, 6번은 학습 데이터 취득 경로의 입증에 대응한다.</p>
+    <p class="src">Matthew Sag (2023) “Copyright Safety for Generative AI”</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="상업적 대응: Adobe Firefly">
+  <div class="kicker">기술적·상업적 대응</div>
+  <h2>상업적 대응 (1): 권리가 확보된 데이터로만 학습</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li><b>Adobe Firefly</b>
+          <ul>
+            <li>Adobe가 이용 권한을 가진 Adobe Stock 이미지, 공개 라이선스 저작물, 저작권이 만료된 퍼블릭 도메인 콘텐츠로 학습</li>
+            <li>“상업적으로 안전하게 사용”할 수 있다는 점을 제품의 차별점으로 제시</li>
+            <li>Adobe Stock 기고자에 대한 보상 모델을 함께 발표</li>
+          </ul>
+        </li>
+        <li>Getty Images, Shutterstock도 자사 보유 이미지로 학습한 생성 모델을 출시</li>
+        <li class="arrow">학습 데이터의 권리 관계가 깨끗하다는 점이 기업 고객에게 판매할 수 있는 품질 요소가 됨</li>
+      </ul>
+      <figure><img src="assets/week12/firefly.jpg" alt="Adobe Firefly 출시 안내 화면: 크리에이터를 위한 실용성, 상업적으로 안전하게 사용할 수 있다는 설명" style="max-height:300px"><figcaption>Adobe Firefly 소개 페이지</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://www.adobe.com/kr/sensei/generative-ai.html" target="_blank" rel="noopener">adobe.com/kr/sensei/generative-ai.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="5" data-title="상업적 대응: IP 면책">
+  <div class="kicker">기술적·상업적 대응</div>
+  <h2>상업적 대응 (2): 이용자에 대한 IP 면책(indemnification)</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul compact">
+        <li>면책 약정: 이용자가 AI 생성물 때문에 제3자로부터 지식재산권 침해 청구를 받으면 AI 사업자가 방어하고 배상액을 부담하겠다는 계약상 약속</li>
+        <li><b>Adobe</b>: Firefly 기업 고객에게 생성물에 대한 IP 면책 제공</li>
+        <li><b>Microsoft</b>(2023. 9.): Copilot Copyright Commitment. 유료 Copilot 이용자가 생성물로 저작권 소송을 당하면 방어와 배상을 부담</li>
+        <li><b>Google</b>(2023. 10.): 학습 데이터에 대한 면책에 더해 생성물에 대한 면책으로 확장</li>
+        <li><b>면책의 조건과 한계</b>
+          <ul>
+            <li>대체로 유료 기업 고객에 한정</li>
+            <li>Adobe 약관: 이용자가 출력물을 수정한 경우, 다른 자료와 결합한 경우, 고객 계약을 위반하여 사용한 경우, 중단 통지 후 사용한 경우는 제외</li>
+            <li>Microsoft: 제품에 내장된 필터와 안전장치를 사용하고, 침해를 의도한 입력을 하지 않을 것이 조건</li>
+          </ul>
+        </li>
+        <li class="arrow">기업이 생성형 AI를 도입할 때 약관의 면책 조항과 제외 사유를 확인해야 한다</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/firefly-indemnity.png" alt="Adobe Firefly 기업 고객 약관 중 면책 범위 조항: 출력물이 제3자의 특허권, 저작권, 상표권, 퍼블리시티권, 프라이버시권을 침해한다는 청구는 보장하고, 고객의 행위나 콘텐츠에서 비롯된 청구는 제외" style="max-height:230px"><figcaption>Adobe Firefly 기업 고객 약관의 면책 조항</figcaption></figure>
+        <div class="figrow">
+          <figure><img src="assets/week12/ms-commitment.png" alt="Microsoft announces new Copilot Copyright Commitment for customers" style="max-height:70px"></figure>
+          <figure><img src="assets/week12/google-indemnity.png" alt="Google Cloud: Shared fate: Protecting customers with generative AI indemnification" style="max-height:90px"></figure>
+        </div>
+      </div>
+    </div>
+    <p class="src"><a href="https://blogs.microsoft.com/on-the-issues/2023/09/07/copilot-copyright-commitment-ai-legal-concerns/" target="_blank" rel="noopener">Microsoft, 2023. 9. 7.</a> · <a href="https://cloud.google.com/blog/products/ai-machine-learning/protecting-customers-with-generative-ai-indemnification" target="_blank" rel="noopener">Google Cloud, 2023. 10.</a> · <a href="https://www.adobe.com/sensei/generative-ai/firefly/enterprise.html" target="_blank" rel="noopener">Adobe Firefly for Enterprise</a></p>
+  </div>
+</section>
+
+<!-- ===================== 6. AI 창작물과 저작권 ===================== -->
+<section class="slide section" data-sec="6" data-title="AI 창작물과 저작권">
+  <div class="kicker">Section 6</div>
+  <h2>AI 창작물과 저작권</h2>
+  <p class="section-lead">AI로 만든 결과물은 저작권으로 보호되는가. 누가 저작자인가. 미국과 한국의 등록 실무를 본다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="6"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="문제의 제기">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>AI 창작물은 저작권 보호 대상인가</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li><b>Théâtre D’opéra Spatial</b> (2022)
+            <ul>
+              <li>Jason Allen이 Midjourney로 만든 그림이 미국 콜로라도 주립 박람회 미술대회 디지털 아트 부문에서 1위 수상</li>
+              <li>창작자는 최소 624회 프롬프트를 입력하고 Photoshop으로 보정했다고 주장</li>
+              <li>미국 저작권청은 등록 거절. Allen v. Perlmutter 소송 계속 중</li>
+            </ul>
+          </li>
+          <li class="arrow">프롬프트를 여러 번 고쳐 쓰고 후보정을 거치면 저작권 보호 대상이 되는가?</li>
+        </ul>
+        <figure><img src="assets/week12/nyt-allen-headline.png" alt="NYT 기사 제목: An A.I.-Generated Picture Won an Art Prize. Artists Aren’t Happy." style="max-height:90px"></figure>
+      </div>
+      <figure><img src="assets/week12/allen-theatre.jpg" alt="Théâtre D’opéra Spatial: 둥근 창으로 빛이 들어오는 무대에 긴 옷을 입은 인물들이 서 있는 그림" style="max-height:360px"><figcaption>Théâtre D’opéra Spatial (Jason Allen, Midjourney 사용)</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://www.nytimes.com/2022/09/02/technology/ai-artificial-intelligence-artists.html" target="_blank" rel="noopener">nytimes.com/2022/09/02/technology/ai-artificial-intelligence-artists.html</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="AI 미술과 AI 작문">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>AI가 만든 그림과 글이 거래될 때</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul compact">
+          <li><b>Edmond de Belamy</b>
+            <ul>
+              <li>프랑스 예술가 그룹 Obvious가 GAN으로 생성한 초상화</li>
+              <li>2018년 10월 크리스티 경매에서 432,500달러에 낙찰</li>
+            </ul>
+          </li>
+          <li><b>1 the Road</b> (2018): 자동차에 단 카메라, GPS, 마이크의 입력을 받아 AI가 쓴 소설로 출간</li>
+          <li><b>중국 선전시 난산구 법원</b>(2020. 1. 보도): 텐센트의 AI “Dreamwriter”가 작성한 기사를 무단 전재한 업체에 배상 명령. AI가 쓴 글도 저작권 보호 대상이 될 수 있다고 판단</li>
+          <li class="arrow">경매의 최종 구입자는 무엇을 산 것인가? 저작권인가, 출력물의 소유권인가?</li>
+        </ul>
+      </div>
+      <div class="figrow">
+        <figure><img src="assets/week12/belamy.jpg" alt="크리스티 경매 페이지의 Edmond de Belamy 초상화. 흐릿한 얼굴의 남성 초상이 금색 액자에 들어 있음" style="max-height:230px"><figcaption>Edmond de Belamy (Christie’s, 2018)</figcaption></figure>
+        <figure><img src="assets/week12/the-road.jpg" alt="AI가 쓴 소설 1 the Road의 표지" style="max-height:230px"><figcaption>1 the Road (2018)</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.christies.com/features/A-collaboration-between-two-artists-one-human-one-a-machine-9332-1.aspx" target="_blank" rel="noopener">christies.com</a> · <a href="https://en.wikipedia.org/wiki/1_the_Road" target="_blank" rel="noopener">en.wikipedia.org/wiki/1_the_Road</a> · <a href="https://www.yna.co.kr/view/AKR20200109118800083" target="_blank" rel="noopener">연합뉴스, 2020. 1. 9.</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="Thaler 사건">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>미국 (1): A Recent Entrance to Paradise 사건</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li>2018. 11. 3. 스티븐 탈러(Stephen Thaler)가 저작권 등록 신청
+            <ul>
+              <li>저작자: “창작 기계(Creativity Machine)”</li>
+              <li>신청자의 지위: “기계의 소유자”</li>
+              <li>신청서에 해당 저작물이 “기계에서 구동되는 컴퓨터 알고리즘에 의해 자율적으로 창조”되었다고 기재</li>
+            </ul>
+          </li>
+          <li>2019. 8. 12. 미국 저작권청 등록 거절: 인간에 의한 창작물이 아님</li>
+        </ul>
+        <ol class="tl" style="grid-template-columns:repeat(4,1fr)">
+          <li class="past"><b>2019~2022</b>저작권청 거절, 재심에서도 유지</li>
+          <li class="past"><b>2023. 8.</b>1심 법원: 거절 처분 적법</li>
+          <li class="past"><b>2025. 3.</b>연방항소법원: 항소 기각</li>
+          <li class="past"><b>2026. 3. 2.</b>연방대법원: 상고허가 거부(확정)</li>
+        </ol>
+      </div>
+      <figure><img src="assets/week12/paradise.jpg" alt="A Recent Entrance to Paradise: 꽃이 핀 터널로 이어지는 철길을 그린 AI 생성 이미지" style="max-height:320px"><figcaption>A Recent Entrance to Paradise</figcaption></figure>
+    </div>
+    <p class="em center">사람의 관여가 전혀 없다고 스스로 밝힌 AI 생성물은 저작물이 아니다. 미국에서 확정된 결론.</p>
+    <p class="src"><a href="https://www.copyright.gov/rulings-filings/review-board/docs/a-recent-entrance-to-paradise.pdf" target="_blank" rel="noopener">copyright.gov/rulings-filings/review-board/docs/a-recent-entrance-to-paradise.pdf</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="Zarya of the Dawn 사건">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>미국 (2): Zarya of the Dawn 사건</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul compact">
+          <li>작가 Kris Kashtanova가 글을 쓰고 Midjourney로 그림을 생성하여 만든 만화책</li>
+          <li>2022. 9. 15. 저작권 등록 승인</li>
+          <li>2022. 10. 28. 저작권청이 AI 도구 활용 여부에 대한 소명자료 요구</li>
+          <li>2023. 2. 21. AI가 생성한 그림을 제외하고 새 등록증 발급 통지</li>
+        </ul>
+        <table class="tbl cmp">
+          <tbody>
+            <tr><td>등록 범위</td><td>(1) 텍스트(어문저작물)<br>(2) AI로 생성된 그림을 선택, 조정, 배열한 것(편집저작물)</td></tr>
+            <tr><td>제외 범위</td><td>AI가 생성한 개별 그림</td></tr>
+          </tbody>
+        </table>
+        <p class="callout">사람이 만든 부분과 AI가 만든 부분을 나누어, 사람이 기여한 부분에만 저작권을 인정하는 방식.</p>
+      </div>
+      <div class="figrow">
+        <figure><img src="assets/week12/zarya-cover.jpg" alt="Zarya of the Dawn 표지" style="max-height:330px"></figure>
+        <figure><img src="assets/week12/zarya-pages.jpg" alt="Zarya of the Dawn 본문 페이지: AI 생성 그림에 말풍선과 글이 배치됨" style="max-height:330px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.copyright.gov/docs/zarya-of-the-dawn.pdf" target="_blank" rel="noopener">copyright.gov/docs/zarya-of-the-dawn.pdf</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="개별 이미지에 대한 판단">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>Zarya 사건: 개별 이미지를 제외한 이유</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li><b>생성형 AI의 작동 방식</b>
+          <ul>
+            <li>기존의 예술가, 작가, 사진가의 창작 과정과 같지 않음</li>
+            <li>이용자는 Midjourney가 무엇을 생성할지 예측할 수 없으므로 결과를 통제한다고 볼 수 없음</li>
+          </ul>
+        </li>
+        <li><b>이미지를 생성한 실행 주체는 Midjourney</b>
+          <ul><li>이용자가 직접 조작하는 Adobe Photoshop 같은 컴퓨터 기반 도구와 구별됨</li></ul>
+        </li>
+        <li><b>후보정 주장</b>
+          <ul><li>신청인은 입술과 입의 렌더링을 Photoshop으로 수정했다고 주장했으나, 그 수정이 미미하여 신청인이 기여한 표현과 Midjourney가 생성한 이미지가 구분되지 않음</li></ul>
+        </li>
+        <li class="arrow">기준은 프롬프트에 들인 노력의 양이 아니라, 표현 요소를 사람이 결정했는지 여부</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/zarya-midjourney.jpg" alt="Midjourney 디스코드 화면: 프롬프트 입력과 4개 후보 이미지 생성 과정" style="max-height:210px"><figcaption>Midjourney 작업 화면</figcaption></figure>
+        <figure><img src="assets/week12/zarya-photoshop.jpg" alt="Photoshop 수정 전과 후의 얼굴 이미지. 입술 부분에 붉은 표시" style="max-height:170px"><figcaption>Photoshop 수정 전(왼쪽)과 후(오른쪽)</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://www.copyright.gov/docs/zarya-of-the-dawn.pdf" target="_blank" rel="noopener">copyright.gov/docs/zarya-of-the-dawn.pdf</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="미국 저작권청 지침">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>미국 저작권청의 등록 지침과 AI 보고서</h2>
+  <div class="body">
+    <div class="two top">
+      <ul class="bul">
+        <li><b>AI 생성물 저작권 등록 지침(2023. 3. 16.)</b>
+          <ul>
+            <li><b>인간 저작자 요건</b>(Human Authorship Requirement): 인간의 창조적 개입 없이 임의로 또는 자동으로 작동하는 기계가 만든 생성물은 등록하지 않음</li>
+            <li>판단 기준: 저작물이 기본적으로 인간 저작의 결과물이고 컴퓨터는 보조 도구인가, 표현의 전통적 요소(문학적·예술적·음악적 표현, 선택, 배열)를 기계가 구상하고 실행했는가</li>
+            <li>인간이 AI 생성물을 선택, 배열하거나 수정했다면 그 부분에 한정하여 저작권 인정</li>
+            <li>신청자는 작품에 AI 생성물이 포함된 사실을 기재하고 인간이 기여한 부분을 설명해야 함</li>
+          </ul>
+        </li>
+        <li><b>AI 보고서 Part 2: Copyrightability (2025. 1. 29.)</b>
+          <ul>
+            <li>현 기술 수준에서는 프롬프트만으로는 이용자를 AI 산출물의 저작자로 만들 만큼 인간의 통제가 충분하지 않음</li>
+            <li>프롬프트는 지시에 가깝고, 같은 프롬프트로도 매번 다른 결과가 나옴</li>
+          </ul>
+        </li>
+      </ul>
+      <figure><img src="assets/week12/usco-guidance.png" alt="미국 저작권청 문서: Copyright Registration Guidance: Works Containing Material Generated by Artificial Intelligence" style="max-height:260px"></figure>
+    </div>
+    <p class="src"><a href="https://www.copyright.gov/ai/ai_policy_guidance.pdf" target="_blank" rel="noopener">copyright.gov/ai/ai_policy_guidance.pdf</a> · <a href="https://www.copyright.gov/ai/" target="_blank" rel="noopener">copyright.gov/ai</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="한국 저작권 등록 실무">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>한국: 종전 실무와 저작권 등록 안내서(2025. 6.)</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li><b>종전 실무</b>(2022. 11.): 저작권 등록 신청 절차에서 AI 창작물은 등록 대상으로 받지 않음. 등록 신청명세서에 “인공지능(AI) 창작물은 등록대상이 아닙니다”라고 안내</li>
+        <li><b>「생성형 인공지능 활용 저작물의 저작권 등록 안내서」(2025. 6.)</b>
+          <ul>
+            <li>인간이 창작 과정에서 생성형 AI를 도구로 활용하여 만든 결과물로서 <b>인간의 창작적 기여가 인정될 수 있는 부분</b>이 있는 것은 등록 가능</li>
+          </ul>
+        </li>
+        <li><b>등록 가능한 세 가지 경우</b>
+          <ul>
+            <li>① 이용자가 자신의 저작물을 프롬프트로 입력하여, 생성된 결과물에 그 저작물의 창작성이 나타난 경우</li>
+            <li>② 이용자가 AI 산출물을 수정·증감하는 등 추가 작업한 부분에 창작성이 있는 경우</li>
+            <li>③ AI 산출물을 선택하고 배열 또는 구성한 것에 창작성이 있는 경우</li>
+          </ul>
+        </li>
+        <li class="arrow">미국과 같은 방향. AI 산출물 자체는 등록 대상이 아니고, 인간이 기여한 부분만 등록</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/kcc-guide-diagram.png" alt="안내서 도식: GAI 결과물 중 인간의 창작적 기여가 있으면 GAI 활용 저작물, 없으면 GAI 산출물로 구분" style="max-height:250px"><figcaption>GAI 결과물의 구분: 활용 저작물과 산출물</figcaption></figure>
+        <figure><img src="assets/week12/kcc-old-form.png" alt="종전 저작권 등록 신청명세서 화면: 인공지능(AI) 창작물은 등록대상이 아닙니다라는 안내 문구가 붉게 표시됨" style="max-height:130px"><figcaption>종전 등록 신청명세서의 안내 문구</figcaption></figure>
+      </div>
+    </div>
+    <p class="src">문화체육관광부·한국저작권위원회, 「생성형 인공지능 활용 저작물의 저작권 등록 안내서」 (2025. 6.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="등록 사례 (1)">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>GAI 활용 저작물 등록 사례 (1)</h2>
+  <div class="body">
+    <div class="figrow" style="align-items:flex-start">
+      <figure><img src="assets/week12/reg-case1.jpg" alt="등록 사례 符(부), C-2024-010508: 배경을 직접 창작하고 GAI로 생성한 이미지 중 스케치와 일치하는 요소를 선별, 배열한 뒤 세부를 수정하여 완성" style="max-height:400px"></figure>
+      <figure><img src="assets/week12/reg-case2.jpg" alt="등록 사례 Gen Human V1, C-2024-010509: GAI 산출물을 분할, 레이어링, 투명도 조절, 편집, 질감 추가로 수정하여 완성" style="max-height:400px"></figure>
+    </div>
+    <p class="muted center">왼쪽 「符(부)」: 배경을 직접 그리고, GAI 산출물 가운데 스케치와 맞는 요소를 선별·배열한 뒤 세부를 수정. 오른쪽 「Gen Human V1」: GAI 산출물을 분할, 레이어링, 투명도 조절, 질감 추가로 수정. 두 사례 모두 사람이 추가 작업한 부분의 창작성이 인정됨.</p>
+    <p class="src">문화체육관광부·한국저작권위원회, 「생성형 인공지능 활용 저작물의 저작권 등록 안내서」 (2025. 6.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="등록 사례 (2)">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>GAI 활용 저작물 등록 사례 (2)</h2>
+  <div class="body">
+    <div class="figrow" style="align-items:flex-start">
+      <figure><img src="assets/week12/reg-case3.jpg" alt="등록 사례 ONE MORE PUMPKIN, C-2024-034221: 인간이 기획한 시나리오에 맞춰 GAI로 영상을 생성한 뒤 선택, 배치, 편집하여 제작한 영상" style="max-height:400px"></figure>
+      <figure><img src="assets/week12/reg-case4.jpg" alt="등록 사례 자연의 울림, C-2024-035109: GAI로 생성한 패턴 이미지를 선별하여 나무 블록에 부착하고 먹물 처리 등을 거쳐 완성한 작품" style="max-height:400px"></figure>
+    </div>
+    <p class="muted center">왼쪽 「ONE MORE PUMPKIN」: 사람이 기획한 시나리오에 맞춰 GAI로 장면을 생성하고, 취사선택·배치·편집하여 영상을 제작. 오른쪽 「자연의 울림」: GAI로 만든 패턴 이미지를 선별하여 나무 블록에 붙이고 먹물 처리를 거쳐 완성. 개별 산출물이 아니라 선택, 배열, 추가 작업 부분이 등록 대상.</p>
+    <p class="src">문화체육관광부·한국저작권위원회, 「생성형 인공지능 활용 저작물의 저작권 등록 안내서」 (2025. 6.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="실무상 함의">
+  <div class="kicker">AI 창작물과 저작권</div>
+  <h2>AI 생성물의 보호 공백과 실무상 함의</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card"><span class="ttl">보호되지 않는 AI 산출물</span>
+        <ul class="bul compact">
+          <li>사람의 창작적 기여가 없는 AI 산출물은 저작물이 아님</li>
+          <li>경쟁사가 그대로 가져다 써도 저작권 침해를 주장할 수 없음</li>
+          <li>마케팅 이미지, 광고 문구, AI가 작성한 코드에 모두 해당</li>
+        </ul>
+      </div>
+      <div class="card"><span class="ttl">기업의 대응</span>
+        <ul class="bul compact">
+          <li>사람이 수정, 선택, 배열한 과정을 기록으로 남김(프롬프트, 중간 산출물, 편집 이력)</li>
+          <li>핵심 자산은 사람의 창작적 기여가 드러나도록 제작</li>
+          <li>저작권 외의 수단 활용: 계약, 영업비밀, 상표, 부정경쟁방지법 성과도용</li>
+        </ul>
+      </div>
+      <div class="card"><span class="ttl">입법론: 별개의 권리 창설</span>
+        <ul class="bul compact">
+          <li>AI 산출물에 저작권보다 약한 별도의 권리를 부여하자는 견해</li>
+          <li>보호 기간 단축, 등록 요건, 투자자 보호 방식 등이 논의됨</li>
+          <li>반론: 생성 비용이 낮은 산출물에 독점권을 줄 유인 근거가 약함</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout warn"><b>허위 등록의 위험</b> AI 산출물을 사람이 창작한 것처럼 등록하면 저작권법상 허위 등록에 해당할 수 있다. 사람이 만든 저작물과 AI 산출물을 외관으로 구분하기 어렵다는 점이 등록 제도의 부담이 된다.</div>
+  </div>
+</section>
+
+<!-- ===================== 7. 정리 ===================== -->
+<section class="slide" data-sec="7" data-title="내 AI 서비스의 IP 점검">
+  <div class="kicker">정리</div>
+  <h2>기말 발표 준비: 내 AI 서비스의 지식재산권 점검</h2>
+  <div class="body">
+    <table class="tbl cmp">
+      <thead><tr><th>단계</th><th>점검할 질문</th><th>관련 내용</th></tr></thead>
+      <tbody>
+        <tr><td>데이터 수집</td><td>스크래핑하거나 RAG에 넣은 자료의 권리자는 누구인가. 이용약관과 robots.txt가 수집을 금지하는가. 데이터베이스의 상당한 부분을 반복적, 체계적으로 가져오는가</td><td>복제권, DB권, 약관, 정보통신망법 (Section 2)</td></tr>
+        <tr><td>모델과 API</td><td>사용하는 모델 제공자의 약관에서 입력 데이터와 출력물의 권리 귀속, IP 면책 범위와 제외 사유는 무엇인가</td><td>면책 조항 (Section 5)</td></tr>
+        <tr><td>출력물</td><td>서비스가 원문을 길게 그대로 출력하는가. 출처를 표시하는가. 캐릭터, 유명인의 초상·음성, 특정 작가 이름을 프롬프트로 받는가</td><td>암기, 캐릭터, 퍼블리시티권, 성과도용 (Section 4)</td></tr>
+        <tr><td>코드</td><td>AI가 작성한 코드에 오픈소스 라이선스 고지가 필요한 부분이 섞여 있는가</td><td>Copilot 소송 (Section 4)</td></tr>
+        <tr><td>결과물의 보호</td><td>서비스가 만든 결과물과 내가 AI로 만든 코드·콘텐츠 중 저작권으로 보호되는 부분은 어디인가. 사람의 기여를 기록하고 있는가</td><td>인간 저작자 요건, 등록 안내서 (Section 6)</td></tr>
+      </tbody>
+    </table>
+    <p class="muted center">14·15강 기말 발표의 “법적 쟁점” 부분에서 위 항목 가운데 자신의 서비스에 해당하는 것을 골라 분석한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="12강 정리">
+  <div class="kicker">정리</div>
+  <h2>12강 정리</h2>
+  <div class="body">
+    <ol class="recap">
+      <li><b>저작권의 기초</b>저작권은 인간의 창작적 표현을 보호한다. 아이디어와 스타일은 보호 대상이 아니다. 침해는 의거관계와 실질적 유사성으로 판단하고, 공정이용은 네 요소를 종합한다</li>
+      <li><b>학습 데이터의 수집</b>크롤링한 데이터를 저장하면 복제가 일어난다. 저작물이 아닌 정보도 반복적, 체계적으로 가져오면 DB권 침해가 될 수 있다. 약관 위반만으로 형사처벌되지는 않는다</li>
+      <li><b>AI 학습과 공정이용</b>Bartz 판결은 학습을 공정이용으로 보되 불법 복제물 취득은 침해로 보았다. GEMA 판결은 모델 내 암기를 복제로 보았고, Getty 영국 판결은 모델을 침해복제물로 보지 않았다</li>
+      <li><b>데이터 시장</b>학습 데이터 확보 경쟁 속에서 라이선스 계약이 늘고 있다. 이용허락 시장의 형성은 공정이용 판단에 영향을 준다</li>
+      <li><b>생성물에 의한 침해</b>암기와 캐릭터는 복제권, 초상·음성은 퍼블리시티권(부정경쟁방지법 타목), 스타일은 성과도용(파목) 여부, 코드는 라이선스 고지가 문제 된다</li>
+      <li><b>사업자의 대응</b>중복 제거와 출력 필터 같은 기술적 조치, 권리가 확보된 데이터만으로 학습, 기업 고객에 대한 IP 면책</li>
+      <li><b>AI 창작물의 보호</b>사람의 관여 없는 AI 산출물은 저작물이 아니다(Thaler 확정). 프롬프트만으로는 부족하고, 사람이 수정, 선택, 배열한 부분에 한하여 등록된다</li>
+      <li><b>실무</b>학습 데이터의 취득 경로, 출력물의 암기 여부, 약관의 면책 범위, 사람의 창작적 기여에 대한 기록을 관리한다</li>
+    </ol>
+  </div>
+</section>
+
+    </div><!-- /deck -->
+
+    <nav class="pager" aria-label="페이지 이동">
+      <button class="pbtn prev" id="btnPrev" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span id="prevLabel">이전</span></button>
+      <div class="pinfo"><span class="sec" id="pSec"></span><span class="dots" id="pDots"></span><span class="cnt" id="pCnt"></span></div>
+      <button class="pbtn next" id="btnNext" type="button"><span id="nextLabel">다음</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    </nav>
+  </main>
+</div>
+
+<script>
+(function(){
+  const SECTIONS = [
+    {name:'들어가며', sub:'문제 개관'},
+    {name:'저작권의 기초', sub:'저작물, 침해, 공정이용'},
+    {name:'학습 데이터의 수집', sub:'크롤링, 복제권, DB권'},
+    {name:'AI 학습과 공정이용', sub:'2025년 판결과 데이터 시장'},
+    {name:'생성물에 의한 침해', sub:'암기, 캐릭터, 음성, 스타일'},
+    {name:'기술적·상업적 대응', sub:'필터, 라이선스, 면책'},
+    {name:'AI 창작물과 저작권', sub:'인간 저작자 요건, 등록'},
+    {name:'정리', sub:'점검표와 요약'}
+  ];
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  const secOf = i => +slides[i].dataset.sec;
+  const secIdx = SECTIONS.map((_, s) => slides.map((sl, i) => i).filter(i => secOf(i) === s));
+  let cur = -1;
+
+  /* ---------- 사이드바 목차 ---------- */
+  const toc = document.getElementById('toc');
+  SECTIONS.forEach((s, k) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'toc-link';
+    btn.innerHTML = `<span class="no">${k}</span><span class="nm">${s.name}</span><span class="cnt">${secIdx[k].length}p</span>`;
+    btn.addEventListener('click', () => show(secIdx[k][0]));
+    if (!secIdx[k].length) { btn.disabled = true; btn.querySelector('.cnt').textContent = '준비 중'; }
+    const sub = document.createElement('ul'); sub.className = 'sub';
+    secIdx[k].forEach(i => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = slides[i].dataset.title || slides[i].querySelector('h2,h1')?.textContent || `슬라이드 ${i+1}`;
+      b.addEventListener('click', () => show(i));
+      const l = document.createElement('li'); l.appendChild(b); sub.appendChild(l);
+    });
+    li.appendChild(btn); li.appendChild(sub); toc.appendChild(li);
+  });
+  const tocItems = Array.from(toc.children);
+
+  /* 표지의 목차 버튼 */
+  const co = document.getElementById('coverOutline');
+  if (co) SECTIONS.slice(1).forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span class="num">${k+1}</span><span>${s.name}<small>${s.sub}</small></span>`;
+    b.addEventListener('click', e => { e.stopPropagation(); show(secIdx[k+1][0]); });
+    if (!secIdx[k+1].length) { b.disabled = true; b.querySelector('small').textContent = '준비 중'; }
+    co.appendChild(b);
+  });
+
+  /* ---------- 페이저 ---------- */
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const prevLabel = document.getElementById('prevLabel'), nextLabel = document.getElementById('nextLabel');
+  const pSec = document.getElementById('pSec'), pDots = document.getElementById('pDots'), pCnt = document.getElementById('pCnt');
+  const curNo = document.getElementById('curNo'), totNo = document.getElementById('totNo'), bar = document.getElementById('progressBar');
+  totNo.textContent = N;
+
+  function show(i, replace){
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    if (cur >= 0) { slides[cur].classList.remove('active'); slides[cur].querySelectorAll('video').forEach(v => v.pause()); }
+    cur = i;
+    const sl = slides[i]; sl.classList.add('active');
+    sl.querySelectorAll('video').forEach(v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const s = secOf(i), list = secIdx[s], k = list.indexOf(i);
+
+    tocItems.forEach((li, j) => {
+      const b = li.firstElementChild;
+      b.classList.toggle('active', j === s);
+      b.classList.toggle('done', j < s);
+      li.classList.toggle('open', j === s);
+      li.querySelectorAll('.sub button').forEach((sb, m) => sb.classList.toggle('active', j === s && m === k));
+    });
+    const act = toc.querySelector('.toc-link.active');
+    if (act && window.innerWidth <= 900) act.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+
+    pSec.textContent = SECTIONS[s].name;
+    pCnt.textContent = `${k + 1} / ${list.length} · 전체 ${i + 1} / ${N}`;
+    pDots.innerHTML = '';
+    list.forEach((idx, m) => { const d = document.createElement('i'); if (m === k) d.className = 'on'; d.title = slides[idx].dataset.title || ''; d.addEventListener('click', () => show(idx)); pDots.appendChild(d); });
+
+    btnPrev.disabled = i === 0; btnNext.disabled = i === N - 1;
+    prevLabel.textContent = k === 0 && s > 0 ? `이전 섹션: ${SECTIONS[s - 1].name}` : '이전';
+    nextLabel.textContent = k === list.length - 1 && s < SECTIONS.length - 1 ? `다음 섹션: ${SECTIONS[s + 1].name}` : (i === N - 1 ? '마지막 페이지' : '다음');
+
+    curNo.textContent = i + 1; bar.style.width = ((i + 1) / N * 100) + '%';
+    const h = '#' + (i + 1);
+    if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+    window.scrollTo({top:0, behavior:'auto'});
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} · 12강 인공지능과 지식재산권`;
+  }
+  const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
+  btnPrev.addEventListener('click', () => show(cur - 1));
+  btnNext.addEventListener('click', () => show(cur + 1));
+  window.addEventListener('popstate', () => show(fromHash(), true));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(N - 1); }
+    else if (e.key === '+' || e.key === '=') { e.preventDefault(); setUserZoom(userZoom * 1.1); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); setUserZoom(userZoom / 1.1); }
+    else if (e.key === '0') { e.preventDefault(); setUserZoom(1); }
+  });
+  /* ---------- 화면 크기에 맞춘 슬라이드 확대 ---------- */
+  const stage = document.getElementById('stage'), zoomVal = document.getElementById('zoomVal');
+  let userZoom = 1;
+  try { userZoom = parseFloat(localStorage.getItem('itm690-w12-zoom')) || 1; } catch (e) {}
+  function applyZoom(){
+    const mobile = window.innerWidth <= 900;
+    const side = mobile ? 0 : 264;
+    const auto = mobile ? 1 : Math.min(1.5, Math.max(1, (window.innerWidth - side) / 1100));
+    const z = Math.max(.6, Math.min(2.4, +(auto * userZoom).toFixed(3)));
+    stage.style.zoom = z;
+    stage.style.minHeight = mobile ? '' : ((window.innerHeight - 64) / z) + 'px';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  function setUserZoom(v){ userZoom = Math.max(.5, Math.min(2, +v.toFixed(3))); try { localStorage.setItem('itm690-w12-zoom', userZoom); } catch (e) {} applyZoom(); }
+  document.getElementById('zoomIn').addEventListener('click', () => setUserZoom(userZoom * 1.1));
+  document.getElementById('zoomOut').addEventListener('click', () => setUserZoom(userZoom / 1.1));
+  zoomVal.addEventListener('click', () => setUserZoom(1));
+  window.addEventListener('resize', applyZoom);
+  applyZoom();
+
+  let tx = null;
+  document.getElementById('deck').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('deck').addEventListener('touchend', e => {
+    if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 70) show(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  document.querySelectorAll('ol.roadmap').forEach(ol => {
+    const cur = +ol.dataset.current;
+    ol.innerHTML = SECTIONS.slice(1).map((s, i) => `<li class="${i + 1 === cur ? 'cur' : (i + 1 < cur ? 'done' : '')}"><span class="n">${i + 1}</span>${s.name}</li>`).join('');
+  });
+
+  show(fromHash(), true);
+})();
+</script>
+</body>
+</html>
