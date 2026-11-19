@@ -435,7 +435,6 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         <ul class="bul compact">
           <li>웹 크롤링 데이터의 수집과 복제: 저작권(복제권) 침해 여부</li>
           <li>데이터베이스제작자의 권리 침해 여부</li>
-          <li>크롤링 금지 약관과 정보통신망 침입</li>
           <li>항변: 공정이용</li>
         </ul>
       </div>
@@ -464,7 +463,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 <section class="slide section" data-sec="1" data-title="학습 데이터의 수집">
   <div class="kicker">Section 1</div>
   <h2>학습 데이터의 수집</h2>
-  <p class="section-lead">생성형 AI는 웹 크롤링 데이터로 학습한다. 수집 과정에서 복제권, 데이터베이스제작자의 권리, 접근 제한 약관이 문제 된다.</p>
+  <p class="section-lead">생성형 AI는 웹 크롤링 데이터로 학습한다. 수집 과정에서 복제권과 데이터베이스제작자의 권리가 문제 된다.</p>
   <div class="body">
     <ol class="roadmap" data-current="1"></ol>
   </div>
@@ -582,99 +581,6 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         <div class="law sm"><span class="art">제93조(데이터베이스제작자의 권리)</span>① 데이터베이스제작자는 그의 데이터베이스의 전부 또는 상당한 부분을 복제ㆍ배포ㆍ방송 또는 전송할 권리를 가진다.<br>② 데이터베이스의 개별 소재는 제1항에 따른 상당한 부분으로 간주되지 아니한다. 다만, (중략) 반복적이거나 특정한 목적을 위하여 체계적으로 함으로써 해당 데이터베이스의 일반적인 이용과 충돌하거나 데이터베이스제작자의 이익을 부당하게 해치는 경우에는 상당한 부분의 복제등으로 본다.</div>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="1" data-title="hiQ v. LinkedIn과 잡코리아 사건">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>데이터 크롤링의 적법성: hiQ v. LinkedIn과 잡코리아 사건</h2>
-  <div class="body">
-    <div class="cards c2">
-      <div class="card blue"><span class="tag">미국</span><span class="ttl">hiQ Labs v. LinkedIn<small>제9연방항소법원, 2019</small></span>
-        <ul class="bul compact">
-          <li>스타트업 hiQ는 LinkedIn의 공개 프로필을 크롤링하여 직원의 이직 위험을 예측하는 AI 소프트웨어를 개발</li>
-          <li>LinkedIn이 접속을 차단하자 hiQ가 소송 제기</li>
-          <li>항소법원은 공개된 프로필에 대한 hiQ의 접근을 LinkedIn이 막지 못하도록 한 가처분을 유지</li>
-          <li>최종적으로는 hiQ가 스크래핑을 중단하는 조건으로 합의 종결</li>
-        </ul>
-      </div>
-      <div class="card amber"><span class="tag">한국</span><span class="ttl">잡코리아 v. 사람인HR<small>서울고법 2016나2019365, 상고기각</small></span>
-        <ul class="bul compact">
-          <li>사람인이 잡코리아에 등록된 기업 채용공고를 크롤링해 자기 사이트에 게재</li>
-          <li>사람인의 반박: 채용정보는 구인업체가 작성한 것이고 잡코리아는 이를 보여 주는 플랫폼일 뿐</li>
-          <li>법원: 마케팅 비용 지출 없이 자기 영업에 이용할 목적으로 <b>반복적, 체계적으로</b> 채용정보를 복제하여 데이터베이스제작자의 이익을 부당하게 해침. DB권 침해 인정</li>
-        </ul>
-      </div>
-    </div>
-    <ul class="bul compact">
-      <li><b>두 사건의 차이</b>: 잡코리아 사건의 피고는 수집한 데이터를 그대로 게재하여 원고와 직접 경쟁. hiQ는 데이터를 분석하여 다른 종류의 서비스를 제공</li>
-      <li>기계학습에서는 데이터가 특징 추출과 파라미터 갱신에만 쓰이고, 원 서비스와 직접 경쟁하지 않으면서 부가적인 가치를 만든다는 주장이 가능. 다만 생성모델은 원 데이터와 경쟁하는 결과물을 낼 수 있어 별도로 따져야 함</li>
-      <li>국내법 해석: 소재 저작물의 복제권 침해, DB권 침해가 모두 인정될 가능성이 있고, AI 개발자는 공정이용(제35조의5)으로 항변</li>
-    </ul>
-  </div>
-</section>
-
-<section class="slide" data-sec="1" data-title="유럽: CV-Online 사건">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>유럽의 동향: 데이터베이스권의 축소 해석</h2>
-  <div class="body">
-    <div class="two eq top">
-      <ul class="bul">
-        <li><b>CV-Online Latvia v. Melons</b>
-          <ul>
-            <li>CV-Online: 라트비아의 구인광고 데이터베이스 웹사이트</li>
-            <li>Melons: 여러 구인광고 웹사이트를 대상으로 하는 검색엔진</li>
-            <li>Melons가 CV-Online의 메타태그(직위, 업체 이름, 근무 장소, 게시 날짜)를 스크래핑하여 검색 서비스에 활용</li>
-            <li>CV-Online은 데이터베이스권 침해를 주장</li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="bul">
-        <li><b>EU 사법재판소 판결(2021. 6.)</b>
-          <ul>
-            <li>EU 데이터베이스 지침상 “투자 비용을 회수하도록 의도된 수입을 박탈하는 효과가 있는 경우”에만 침해에 해당</li>
-            <li>침해 여부는 데이터베이스를 어떻게 재사용하는지에 따라 결정</li>
-            <li>데이터베이스 정보를 바탕으로 혁신적 제품을 만들 수 있는 이용자와 경쟁자의 이익을 제작자의 이익과 함께 고려해야 함</li>
-            <li>검색엔진은 인터넷의 정보를 구조화하고, 경쟁을 원활하게 하며, 공급과 가격의 투명성에 기여한다고 언급</li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="callout">잡코리아 판결은 반복적·체계적 복제라는 행위 태양에 주목했고, CJEU는 제작자의 투자 회수에 미치는 효과를 기준으로 삼았다. 같은 채용정보 크롤링이라도 수집한 데이터를 어디에 쓰는지에 따라 결론이 달라질 수 있다.</div>
-  </div>
-</section>
-
-<section class="slide" data-sec="1" data-title="크롤링 금지 약관과 정보통신망 침입">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>크롤링 금지 약관과 정보통신망 침입</h2>
-  <div class="body">
-    <div class="two eq top">
-      <div class="stack">
-        <ul class="bul compact">
-          <li><b>서비스 제공자의 금지·제한 정책</b>
-            <ul>
-              <li>신청과 승인 절차를 두고 용량, 범위, 이용목적을 제한</li>
-              <li>웹 스크래핑을 금지하고 API로만 수집을 허용</li>
-              <li>robots.txt로 AI 크롤러(GPTBot 등)를 차단하는 언론사 증가</li>
-            </ul>
-          </li>
-          <li><b>정당한 목적</b>: 서버 부하 방지, 영업비밀 유출 방지, 이용자 프라이버시 보호</li>
-          <li><b>부정한 목적</b>: 경쟁자와 시장 진입자의 데이터 수집 제한, 자사에 불리한 연구 제한
-            <ul><li>2021년 페이스북이 정치 광고 투명성을 조사하던 뉴욕대 Ad Observatory 연구진의 접근을 약관 위반을 이유로 차단</li></ul>
-          </li>
-        </ul>
-      </div>
-      <div class="stack">
-        <div class="law sm"><span class="art">정보통신망법 제48조 제1항</span>누구든지 정당한 접근권한 없이 또는 허용된 접근권한을 넘어 정보통신망에 침입하여서는 아니 된다.</div>
-        <ul class="bul compact">
-          <li><b>야놀자 사건(2021도1533)</b>: 접근권한을 제한하고 있는지는 보호조치나 이용약관 등 객관적으로 드러난 사정을 종합하여 신중하게 판단. 여기어때 직원들이 크롤링 프로그램으로 야놀자 API 서버에 접속한 행위는 침입이 아니라고 판단
-            <ul><li>API 서버에 별도의 보호조치가 없었고, 이용약관은 비회원에게 적용되지 않음</li></ul>
-          </li>
-          <li><b>Van Buren v. United States(2021)</b>: 접근 권한이 있는 자가 부정한 목적으로 접근한 것은 미국 CFAA 위반이 아님. 단순한 약관 위반을 형사처벌하지 않도록 범위를 제한</li>
-        </ul>
-      </div>
-    </div>
-    <p class="em center">약관 위반만으로 형사처벌되는 것은 아니지만, 계약 위반과 DB권·저작권 침해 책임은 별도로 남는다.</p>
   </div>
 </section>
 
@@ -1206,29 +1112,6 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         <div class="law sm"><span class="art">민법 개정안</span><b>제3조의2(인격권)</b> ① 사람은 생명, 신체, 건강, 자유, 명예, 사생활, 성명, 초상, 개인정보, 그 밖의 인격적 이익에 대한 권리를 가진다.<br><b>제3조의3(인격표지영리권)</b> ① 사람은 자신의 성명, 초상, 음성 그 밖의 인격표지를 영리적으로 이용할 권리를 가진다.</div>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="3" data-title="AI 커버곡">
-  <div class="kicker">AI 생성물에 의한 권리 침해</div>
-  <h2>사례: AI 커버곡에는 어떤 권리가 걸려 있는가</h2>
-  <div class="body">
-    <div class="two wide-r">
-      <div class="stack">
-        <figure><img src="assets/week12/ai-cover-qa.png" alt="생성형 AI 저작권 안내서 Q10: AI 커버곡을 제작하는 것도 저작권을 침해하는 건가요? 답: 저작권자 및 저작인접권자의 권리가 침해될 소지가 있으므로 사전에 각 권리자로부터 이용허락을 받을 필요가 있습니다" style="max-height:230px"><figcaption>생성형 AI 저작권 안내서(2023. 12.) Q10</figcaption></figure>
-      </div>
-      <table class="tbl cmp">
-        <thead><tr><th>대상</th><th>권리자</th><th>문제 되는 권리</th></tr></thead>
-        <tbody>
-          <tr><td>곡과 가사</td><td>작곡가, 작사가</td><td>복제권, 전송권, 2차적저작물작성권. 커버곡을 만들어 게시하려면 이용허락 필요</td></tr>
-          <tr><td>원곡 음원(반주 포함)</td><td>음반제작자, 실연자</td><td>저작인접권(복제권, 전송권). 원곡 음원에서 반주를 분리해 쓰면 침해 소지</td></tr>
-          <tr><td>음성 학습에 쓴 녹음</td><td>음반제작자, 실연자</td><td>학습을 위한 음원 복제. 공정이용 여부가 쟁점</td></tr>
-          <tr><td>가수의 목소리 자체</td><td>가수</td><td>목소리는 저작물도 실연도 아님. 부정경쟁방지법 (타)목의 인격표지 무단 사용 문제</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="em center">하나의 생성물에 저작권, 저작인접권, 퍼블리시티권이 겹쳐 있다. 권리마다 권리자와 허락 창구가 다르다.</p>
-    <p class="src">문화체육관광부·한국저작권위원회, 「생성형 AI 저작권 안내서」 (2023. 12.)</p>
   </div>
 </section>
 
@@ -2240,7 +2123,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
     <table class="tbl cmp">
       <thead><tr><th>단계</th><th>점검할 질문</th><th>관련 내용</th></tr></thead>
       <tbody>
-        <tr><td>데이터 수집</td><td>스크래핑하거나 RAG에 넣은 자료의 권리자는 누구인가. 이용약관과 robots.txt가 수집을 금지하는가. 데이터베이스의 상당한 부분을 반복적, 체계적으로 가져오는가</td><td>복제권, DB권, 약관, 정보통신망법 (Section 1)</td></tr>
+        <tr><td>데이터 수집</td><td>스크래핑하거나 RAG에 넣은 자료의 권리자는 누구인가. 이용약관과 robots.txt가 수집을 금지하는가. 데이터베이스의 상당한 부분을 반복적, 체계적으로 가져오는가</td><td>복제권, DB권 (Section 1)</td></tr>
         <tr><td>모델과 API</td><td>사용하는 모델 제공자의 약관에서 입력 데이터와 출력물의 권리 귀속, IP 면책 범위와 제외 사유는 무엇인가</td><td>면책 조항 (Section 4)</td></tr>
         <tr><td>출력물</td><td>서비스가 원문을 길게 그대로 출력하는가. 출처를 표시하는가. 캐릭터, 유명인의 초상·음성, 특정 작가 이름을 프롬프트로 받는가</td><td>암기, 캐릭터, 퍼블리시티권, 성과도용 (Section 3)</td></tr>
         <tr><td>코드</td><td>AI가 작성한 코드에 오픈소스 라이선스 고지가 필요한 부분이 섞여 있는가</td><td>Copilot 소송 (Section 3)</td></tr>
@@ -2256,7 +2139,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <h2>12강 정리</h2>
   <div class="body">
     <ol class="recap">
-      <li><b>학습 데이터의 수집</b>크롤링한 데이터를 저장하면 복제가 일어난다. 저작물이 아닌 정보도 반복적, 체계적으로 가져오면 DB권 침해가 될 수 있다. 약관 위반만으로 형사처벌되지는 않는다</li>
+      <li><b>학습 데이터의 수집</b>크롤링한 데이터를 저장하면 복제가 일어난다. 저작물이 아닌 정보도 반복적, 체계적으로 가져오면 DB권 침해가 될 수 있다. AI 개발자는 공정이용으로 항변한다</li>
       <li><b>AI 학습과 공정이용</b>Bartz 판결은 학습을 공정이용으로 보되 불법 복제물 취득은 침해로 보았다. GEMA 판결은 모델 내 암기를 복제로 보았고, Getty 영국 판결은 모델을 침해복제물로 보지 않았다</li>
       <li><b>데이터 시장</b>학습 데이터 확보 경쟁 속에서 라이선스 계약이 늘고 있다. 권리자 보호와 AI 혁신의 절충 방안으로 데이터 거래 시장이 논의된다</li>
       <li><b>생성물에 의한 침해</b>암기와 캐릭터는 복제권, 초상·음성은 퍼블리시티권(부정경쟁방지법 타목), 스타일은 성과도용(파목) 여부, 코드는 라이선스 고지가 문제 된다</li>
@@ -2282,7 +2165,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 (function(){
   const SECTIONS = [
     {name:'들어가며', sub:'문제 개관'},
-    {name:'학습 데이터의 수집', sub:'크롤링, 복제권, DB권'},
+    {name:'학습 데이터의 수집', sub:'웹 크롤링, 복제권, DB권'},
     {name:'AI 학습과 공정이용', sub:'구글 북스, 2025년 판결'},
     {name:'생성물에 의한 침해', sub:'암기, 캐릭터, 음성, 스타일'},
     {name:'기술적·상업적 대응', sub:'필터, 라이선스, 면책'},
