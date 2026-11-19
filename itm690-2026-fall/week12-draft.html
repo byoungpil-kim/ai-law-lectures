@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>12강 인공지능의 법적 쟁점 (3) 인공지능과 지식재산권 보호 · 인공지능 경영과 법 (ITM.690)</title>
-<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 12강: 저작권의 기초, 학습 데이터 수집과 크롤링, AI 학습과 공정이용(Bartz, GEMA, Getty 판결), AI 생성물에 의한 권리 침해, 기술적·상업적 대응, AI 창작물의 저작권 등록" />
+<title>12강 인공지능의 법적 쟁점 (3) 인공지능과 IP, 딥페이크와 이용자 보호 · 인공지능 경영과 법 (ITM.690)</title>
+<meta name="description" content="KAIST 기술경영전문대학원 ITM.690 인공지능 경영과 법 12강: 학습 데이터 수집과 크롤링, AI 학습과 공정이용, AI 생성물에 의한 권리 침해, AI 창작물의 저작권 등록, 딥페이크와 이용자 보호(C2PA, 워터마크, 탐지), 딥페이크 대응 정책" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -395,12 +395,11 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   <main class="stage" id="stage">
     <div class="deck" id="deck">
 
-<!-- ===================== 0. 들어가며 ===================== -->
 <section class="slide cover" data-sec="0" data-title="표지">
   <div class="cover-body">
     <span class="cover-kicker">ITM.690 인공지능 경영과 법 · 2026 가을 · 12강</span>
-    <h1>인공지능의 법적 쟁점 (3)<br><em>인공지능과 지식재산권 보호</em></h1>
-    <p class="lead">AI 학습에 남의 저작물을 써도 되는가, AI가 만든 결과물이 남의 권리를 침해하면 누가 책임지는가, AI로 만든 결과물은 저작권으로 보호되는가. 학습, 생성, 생성물의 세 단계로 나누어 살펴본다.</p>
+    <h1>인공지능의 법적 쟁점 (3)<br><em>인공지능과 IP / 딥페이크와 이용자 보호</em></h1>
+    <p class="lead">AI 학습에 남의 저작물을 써도 되는가, AI가 만든 결과물이 남의 권리를 침해하면 누가 책임지는가, AI로 만든 결과물은 저작권으로 보호되는가. 이어서 딥페이크로 인한 이용자 피해와 콘텐츠 투명성 기술, 대응 정책을 살펴본다.</p>
     <div class="meta">
       <span class="meta-chip">2026. 11. 19.</span>
       <span class="meta-chip">김병필 · KAIST 기술경영전문대학원</span>
@@ -458,189 +457,259 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
       </div>
     </div>
     <ol class="roadmap" data-current="0"></ol>
-    <p class="muted center">6강(개인정보 보호와 보안), 10강(인공지능 규제)에 이어지는 세 번째 법적 쟁점. 먼저 저작권법의 기본 개념을 정리한 뒤 세 단계를 차례로 본다.</p>
+    <p class="muted center">6강(개인정보 보호와 보안), 10강(인공지능 규제)에 이어지는 세 번째 법적 쟁점. 세 단계를 차례로 본 뒤 딥페이크와 이용자 보호 문제를 다룬다.</p>
   </div>
 </section>
 
-<!-- ===================== 1. 저작권의 기초 ===================== -->
-<section class="slide section" data-sec="1" data-title="저작권의 기초">
+<section class="slide section" data-sec="1" data-title="학습 데이터의 수집">
   <div class="kicker">Section 1</div>
-  <h2>저작권의 기초</h2>
-  <p class="section-lead">AI 쟁점을 판단하는 데 필요한 최소한의 개념: 저작물, 저작권의 내용, 침해 요건, 공정이용.</p>
+  <h2>학습 데이터의 수집</h2>
+  <p class="section-lead">생성형 AI는 웹 크롤링 데이터로 학습한다. 수집 과정에서 복제권, 데이터베이스제작자의 권리, 접근 제한 약관이 문제 된다.</p>
   <div class="body">
     <ol class="roadmap" data-current="1"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="1" data-title="저작물의 요건">
-  <div class="kicker">저작권의 기초</div>
-  <h2>저작물: 인간의 사상 또는 감정을 표현한 창작물</h2>
+<section class="slide" data-sec="1" data-title="웹 크롤링 데이터">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>웹 크롤링 데이터: 언어모델의 주된 학습 데이터</h2>
   <div class="body">
-    <div class="law"><span class="art">저작권법 제2조(정의)</span>1. “저작물”은 <b>인간의 사상 또는 감정</b>을 <b>표현</b>한 <b>창작물</b>을 말한다.</div>
-    <div class="cards c3">
-      <div class="card"><span class="no">1</span><span class="ttl">인간의 사상 또는 감정</span><p>사람이 만든 것이어야 한다. 원숭이가 찍은 셀카 사진은 정의 규정에 따라 저작물이 아니다. AI가 자율적으로 만든 결과물에 같은 문제가 생긴다.</p></div>
-      <div class="card"><span class="no">2</span><span class="ttl">표현</span><p>표현의 방법은 묻지 않는다. 보호 대상은 표현이고 그 안에 담긴 아이디어가 아니다. 같은 아이디어라도 표현을 달리하면 독립한 저작물이다.</p></div>
-      <div class="card"><span class="no">3</span><span class="ttl">창작성</span><p>남의 것을 모방하지 않았다는 것. 수준이 높을 필요는 없고 저작자의 개성이 최소한으로 반영되면 충분하다.</p></div>
-    </div>
-    <ul class="bul compact">
-      <li>저작권은 창작과 동시에 발생한다. 등록이나 표시 같은 절차가 필요 없다(특허와 다른 점)</li>
-      <li>특허법은 산업상 유용한 기술적 아이디어 자체를 보호하고, 저작권법은 표현만 보호한다</li>
-    </ul>
-  </div>
-</section>
-
-<section class="slide" data-sec="1" data-title="아이디어와 표현 이분법">
-  <div class="kicker">저작권의 기초</div>
-  <h2>아이디어와 표현 이분법</h2>
-  <div class="body">
-    <ul class="bul">
-      <li>아이디어가 독창적이어도 저작권법의 보호 대상인 저작물이 아니다
-        <ul>
-          <li>“추상적인 게임의 장르, 기본적인 게임의 배경, 게임의 전개방식, 규칙, 게임의 단계변화 등은 게임의 개념·방식·해법·창작도구로서 아이디어에 불과” (봄버맨 사건, 2005가합65093)</li>
-        </ul>
-      </li>
-      <li><b>합체의 원칙(merger doctrine)</b>: 아이디어를 표현하는 방법이 하나뿐이거나 매우 제한되면 저작물성을 부정</li>
-      <li><b>표준적 삽화의 원칙(scènes à faire)</b>: 어떤 주제를 다룰 때 전형적으로 따라오는 사건, 배경, 인물 유형은 보호하지 않음 (까레이스키 사건, 99다10813)</li>
-      <li>다만 개별 요소가 아이디어에 해당하더라도, 요소들의 <b>선택·배열·조합</b>에 창작적 개성이 있으면 전체가 저작물로 보호될 수 있음 (포레스트 매니아 사건, 2017다212095)</li>
-      <li class="arrow">AI 쟁점과의 연결: 화풍이나 문체 같은 “스타일”은 아이디어 쪽에 가깝다. 스타일 모방이 저작권 침해가 되기 어려운 이유이다</li>
-    </ul>
-  </div>
-</section>
-
-<section class="slide" data-sec="1" data-title="창작성: 사진 사례">
-  <div class="kicker">저작권의 기초</div>
-  <h2>창작성: 사진 저작물 사례</h2>
-  <div class="body">
-    <ul class="bul">
-      <li>사진은 “피사체의 선정, 구도의 설정, 빛의 방향과 양의 조절, 카메라 각도의 설정, 셔터의 속도, 셔터찬스의 포착, 기타 촬영방법, 현상 및 인화 등의 과정에서 촬영자의 개성과 창조성”이 있어야 저작물 (2005도3130)</li>
-    </ul>
-    <div class="cards c2">
-      <div class="card red"><span class="ttl">저작물이 아닌 경우</span>
-        <ul class="bul compact">
-          <li>제품 카탈로그 사진, 증명사진, 사고현장 사진: 사물의 단순한 복제</li>
-          <li>음식점 내부를 충실히 촬영한 광고 사진: 누가 찍어도 비슷한 결과</li>
-          <li>의료시술 전후 사진: 시술 효과를 보이려는 목적. 다만 경쟁사업자가 쓰면 부정경쟁방지법 위반 가능성</li>
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li><b>Common Crawl</b>: 비영리 단체가 공개하는 웹 크롤링 데이터. GPT-3(2020) 학습 데이터 구성에서 60%의 비중</li>
+          <li><b>네이버 HyperCLOVA</b>(2021): 네이버 블로그, 카페, 뉴스, 댓글, 지식iN 등 자사 서비스의 글을 주로 학습. 총 5,618억 토큰</li>
+          <li><b>The Pile</b>(2021): 언어모델 학습용 800GB 공개 데이터셋. 논문, 코드, 특허, 자막, 이메일 등 22개 출처</li>
+          <li>3강 실습에서 한 웹 스크래핑과 같은 행위를 대규모로 한 것이다</li>
         </ul>
       </div>
-      <div class="card green"><span class="ttl">저작물인 경우</span>
-        <ul class="bul compact">
-          <li>저녁 해와 바다가 함께 보이는 시간대와 각도를 골라 촬영한 찜질방 전경 사진: 촬영자의 창작적 고려가 드러남</li>
-        </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/gpt3-data.png" alt="GPT-3 학습 데이터 구성 표: Common Crawl 4,100억 토큰 60%, WebText2 22%, Books1 8%, Books2 8%, Wikipedia 3%" style="max-height:170px"><figcaption>GPT-3 학습 데이터 구성 (Brown et al., 2020)</figcaption></figure>
+        <figure><img src="assets/week12/hyperclova-data.png" alt="HyperCLOVA 학습 말뭉치 표: 블로그 2,736억, 카페 833억, 뉴스 738억, 댓글 411억, 지식iN 273억 토큰 등" style="max-height:200px"><figcaption>HyperCLOVA 학습 말뭉치 (Kim et al., 2021)</figcaption></figure>
       </div>
     </div>
-    <ul class="bul compact">
-      <li>기능적 저작물(지도, 서식, 규칙집, 프로그램)에는 문예적 저작물보다 엄격한 창작성 기준이 적용된다</li>
-      <li class="arrow">기준은 “사람이 어떤 선택을 했는가”이다. 프롬프트 입력을 이러한 선택으로 볼 수 있는지가 AI 생성물 논의의 출발점</li>
-    </ul>
+    <p class="src"><a href="https://arxiv.org/abs/2005.14165" target="_blank" rel="noopener">arxiv.org/abs/2005.14165</a> · <a href="https://arxiv.org/abs/2109.04650" target="_blank" rel="noopener">arxiv.org/abs/2109.04650</a> · <a href="https://arxiv.org/abs/2101.00027" target="_blank" rel="noopener">arxiv.org/abs/2101.00027</a> · <a href="https://commoncrawl.org/" target="_blank" rel="noopener">commoncrawl.org</a></p>
   </div>
 </section>
 
-<section class="slide" data-sec="1" data-title="저작권의 내용">
-  <div class="kicker">저작권의 기초</div>
-  <h2>저작권의 내용: 권리의 다발</h2>
+<section class="slide" data-sec="1" data-title="이미지 생성 AI 학습 데이터">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>이미지 생성 AI의 학습 데이터: LAION-5B</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li>웹 크롤링 데이터에서 이미지와 그 설명 텍스트의 쌍을 추출하여 학습 데이터로 활용</li>
+        <li><b>LAION-5B</b>(Schuhmann et al., 2022): 이미지-텍스트 쌍 58.5억 개. Stable Diffusion 학습에 사용됨</li>
+        <li>robots.txt 규약에 따라 크롤링을 거부한 페이지는 수집하지 않음</li>
+        <li>데이터셋에는 이미지 파일이 아니라 이미지 URL과 설명 텍스트가 들어 있음. 학습하려는 자가 URL을 따라가 이미지를 내려받음</li>
+        <li>검색 도구로 “BTS Jungkook” 같은 인명을 넣으면 해당 인물의 사진이 다수 포함되어 있음을 확인할 수 있음</li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/laion-5b.jpg" alt="LAION-5B 공개 블로그 화면" style="max-height:230px"></figure>
+        <figure><img src="assets/week12/laion-cat.jpg" alt="LAION 검색 도구에서 Odd-eyed cat을 검색한 결과 이미지 목록" style="max-height:140px"><figcaption>검색어 “Odd-eyed cat”에 대한 검색 결과</figcaption></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://laion.ai/blog/laion-5b/" target="_blank" rel="noopener">laion.ai/blog/laion-5b</a> · <a href="https://rom1504.github.io/clip-retrieval" target="_blank" rel="noopener">rom1504.github.io/clip-retrieval</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="Getty Images v. Stability AI 소장">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>Getty Images v. Stability AI: 소장의 주장(2023, 미국)</h2>
+  <div class="body">
+    <div class="two eq">
+      <div class="stack">
+        <ul class="bul">
+          <li>Getty Images의 데이터베이스에는 이미지마다 매우 상세한 설명이 붙어 있어 이미지 생성 모델 학습에 가치가 높음</li>
+          <li>Stability AI가 LAION 데이터셋의 링크를 따라 Getty 웹사이트에 접속하여 수백만 장의 이미지와 설명 텍스트를 허락 없이 복제했다고 주장</li>
+          <li>웹사이트 이용약관이 그러한 행위를 명시적으로 금지하고 있었다는 점도 주장</li>
+        </ul>
+        <blockquote class="quote" style="font-size:13.5px;line-height:1.6">“Stability AI followed links included in LAION’s dataset to access specific pages on Getty Images’ websites and copied many millions of copyrighted images and associated text. Such copying was done without Getty Images’ authorization and in violation of the express prohibitions against such conduct contained in its websites’ terms of use.”<cite>소장 제40항</cite></blockquote>
+      </div>
+      <figure><img src="assets/week12/getty-pair.jpg" alt="소장에 제시된 축구 경기 사진 두 장. 왼쪽은 Getty Images 원본, 오른쪽은 Stable Diffusion 생성물로 일그러진 Getty Images 워터마크가 보임" style="max-height:330px"><figcaption>소장에 제시된 사례: Getty 원본 사진(왼쪽)과 Stable Diffusion 생성물(오른쪽). 생성물에 변형된 Getty 워터마크가 나타남</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://copyrightlately.com/pdfviewer/getty-images-v-stability-ai-complaint" target="_blank" rel="noopener">copyrightlately.com/pdfviewer/getty-images-v-stability-ai-complaint</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="복제권 침해 가능성">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>크롤링 데이터 학습과 복제권 침해 가능성</h2>
   <div class="body">
     <div class="two eq top">
-      <div class="stack">
-        <div class="card blue"><span class="ttl">저작인격권<small>양도할 수 없음(일신전속)</small></span>
-          <ul class="bul compact">
-            <li><b>공표권</b>: 공표 여부를 결정할 권리</li>
-            <li><b>성명표시권</b>: 저작물에 실명 또는 이명을 표시할 권리</li>
-            <li><b>동일성유지권</b>: 내용·형식·제호의 동일성을 유지할 권리</li>
+      <ul class="bul">
+        <li><b>복제의 의미</b>
+          <ul>
+            <li>일시적 또는 영구적으로 유형물에 고정하거나 다시 제작하는 것</li>
+            <li>파일을 인터넷으로 전송받아 하드디스크에 저장하는 행위는 유형물에 고정하는 것에 해당 (2005도872)</li>
           </ul>
-        </div>
-        <div class="card"><span class="ttl">보호 기간</span><p>저작재산권은 저작자 생존 기간과 사망 후 70년. 업무상저작물은 공표한 때부터 70년.</p></div>
-      </div>
-      <div class="card blue"><span class="ttl">저작재산권<small>개별 권리마다 따로 행사, 양도, 이용허락 가능</small></span>
-        <ul class="bul compact">
-          <li><b>복제권</b>: 유형물에 고정하거나 다시 제작할 권리. 저장매체에 저장하거나 인터넷에서 내려받는 것도 복제</li>
-          <li><b>공연권</b>, <b>공중송신권</b>(방송, 전송, 디지털음성송신), <b>전시권</b>, <b>배포권</b>, <b>대여권</b></li>
-          <li><b>2차적저작물작성권</b>: 번역, 편곡, 변형, 각색, 영상제작 등으로 2차적저작물을 작성해 이용할 권리</li>
-        </ul>
-        <p>실연자, 음반제작자, 방송사업자는 저작인접권을 가진다. AI 커버곡에서는 작곡·작사가의 저작권과 가수(실연자), 음반제작자의 권리가 함께 문제 된다.</p>
+        </li>
+        <li><b>AI 학습 과정의 복제</b>
+          <ul>
+            <li>AI 개발자는 크롤링 데이터에 포함된 저작물의 복제본을 저장하고, 학습 과정에서 메모리에도 복제가 일어남</li>
+            <li>저작권자가 저작물을 웹에 게시했다는 사실만으로 AI 학습에 쓰는 것까지 허락했다고 보기는 어려움</li>
+          </ul>
+        </li>
+        <li class="arrow">일응 복제권 침해에 해당할 수 있다. 따라서 쟁점은 공정이용 등 저작재산권 제한 사유에 해당하는지로 넘어간다</li>
+      </ul>
+      <div class="stack">
+        <div class="law sm"><span class="art">저작권법 제2조(정의)</span>22. “복제”는 인쇄ㆍ사진촬영ㆍ복사ㆍ녹음ㆍ녹화 그 밖의 방법으로 <b>일시적 또는 영구적으로 유형물에 고정하거나 다시 제작하는 것</b>을 말하며, (후략)</div>
+        <div class="law sm"><span class="art">제16조(복제권)</span>저작자는 그의 저작물을 복제할 권리를 가진다.</div>
+        <div class="law sm"><span class="art">제123조(침해의 정지 등 청구)</span>① 저작권 그 밖에 이 법에 따라 보호되는 권리를 가진 자는 그 권리를 침해하는 자에 대하여 <b>침해의 정지</b>를 청구할 수 있으며, 그 권리를 침해할 우려가 있는 자에 대하여 침해의 예방 또는 손해배상의 담보를 청구할 수 있다.</div>
       </div>
     </div>
-    <p class="em center">AI 학습에서 주로 문제 되는 권리는 복제권, AI 생성에서는 복제권과 2차적저작물작성권이다.</p>
   </div>
 </section>
 
-<section class="slide" data-sec="1" data-title="저작권 침해 요건">
-  <div class="kicker">저작권의 기초</div>
-  <h2>저작권 침해의 요건: 의거관계와 실질적 유사성</h2>
+<section class="slide" data-sec="1" data-title="데이터베이스제작자의 권리">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>데이터베이스제작자의 권리(DB권)</h2>
   <div class="body">
-    <ul class="bul compact">
-      <li>완전히 같은 사본(dead copy)을 만들면 침해. 같지는 않지만 유사한 경우가 어려운 문제</li>
-    </ul>
-    <div class="cards c2">
-      <div class="card"><span class="ttl">주관적 요건: 의거관계<small>기존 저작물에 의거하여 작성되었을 것</small></span>
-        <ul class="bul compact">
-          <li>모방 행위를 직접 입증하기 어려우므로, 기존 저작물에 대한 <b>접근 가능성</b>과 실질적 유사성 등 간접사실이 인정되면 의거관계가 사실상 추정됨 (2005다35707)</li>
-          <li>독립적으로 창작했다고 볼 간접사실이 있으면 추정되지 않음</li>
-          <li>유사성이 현저하면 접근 가능성의 입증 없이도 의거관계를 추정</li>
-        </ul>
-      </div>
-      <div class="card"><span class="ttl">객관적 요건: 실질적 유사성<small>창작적 표현끼리 비교</small></span>
-        <ul class="bul compact">
-          <li>다소 수정·증감·변경을 했더라도 새로운 창작성을 더하지 않은 정도이면 복제</li>
-          <li>유사성 판단은 창작적인 표현형식에 해당하는 것만 가지고 대비 (2007다63409)</li>
-          <li>아이디어, 흔한 표현, 필연적으로 비슷해지는 표현은 비교 대상에서 제외</li>
-        </ul>
+    <div class="two eq top">
+      <ul class="bul">
+        <li>데이터베이스의 제작·갱신·검증·보충에 <b>인적 또는 물적으로 상당한 투자</b>를 한 자에게 인정되는 권리</li>
+        <li>데이터베이스를 구성하는 개별 소재의 저작권과 별개의 권리. 소재 자체가 저작물이 아니어도(가격, 주소, 채용 조건 등) 성립</li>
+        <li>데이터베이스의 <b>전부 또는 상당한 부분</b>을 복제·배포·방송·전송하면 침해
+          <ul>
+            <li>상당한 부분인지는 양적 측면과 질적 측면을 함께 고려 (2021도1533, 야놀자 사건)</li>
+            <li>개별 소재나 상당한 부분에 이르지 못하는 부분이라도 <b>반복적이거나 특정한 목적을 위하여 체계적으로</b> 복제하여 제작자의 이익을 부당하게 해치면 상당한 부분의 복제로 봄</li>
+          </ul>
+        </li>
+        <li class="arrow">저작물성이 없는 사실 정보만 수집하더라도 DB권 침해가 될 수 있다</li>
+      </ul>
+      <div class="stack">
+        <div class="law sm"><span class="art">저작권법 제2조(정의)</span>19. “데이터베이스”는 소재를 체계적으로 배열 또는 구성한 편집물로서 개별적으로 그 소재에 접근하거나 그 소재를 검색할 수 있도록 한 것을 말한다.<br>20. “데이터베이스제작자”는 데이터베이스의 제작 또는 그 소재의 갱신ㆍ검증 또는 보충에 인적 또는 물적으로 상당한 투자를 한 자를 말한다.</div>
+        <div class="law sm"><span class="art">제93조(데이터베이스제작자의 권리)</span>① 데이터베이스제작자는 그의 데이터베이스의 전부 또는 상당한 부분을 복제ㆍ배포ㆍ방송 또는 전송할 권리를 가진다.<br>② 데이터베이스의 개별 소재는 제1항에 따른 상당한 부분으로 간주되지 아니한다. 다만, (중략) 반복적이거나 특정한 목적을 위하여 체계적으로 함으로써 해당 데이터베이스의 일반적인 이용과 충돌하거나 데이터베이스제작자의 이익을 부당하게 해치는 경우에는 상당한 부분의 복제등으로 본다.</div>
       </div>
     </div>
-    <div class="callout"><b>AI 생성물에 적용하면</b> 학습 데이터에 그 저작물이 포함되어 있었다면 접근 가능성은 인정되기 쉽다. 남는 쟁점은 생성물이 원저작물의 창작적 표현과 실질적으로 유사한지, 그리고 책임을 이용자와 AI 사업자 중 누가 지는지이다.</div>
   </div>
 </section>
 
-<section class="slide" data-sec="1" data-title="공정이용">
-  <div class="kicker">저작권의 기초</div>
-  <h2>저작재산권의 제한: 공정이용(fair use)</h2>
+<section class="slide" data-sec="1" data-title="hiQ v. LinkedIn과 잡코리아 사건">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>데이터 크롤링의 적법성: hiQ v. LinkedIn과 잡코리아 사건</h2>
+  <div class="body">
+    <div class="cards c2">
+      <div class="card blue"><span class="tag">미국</span><span class="ttl">hiQ Labs v. LinkedIn<small>제9연방항소법원, 2019</small></span>
+        <ul class="bul compact">
+          <li>스타트업 hiQ는 LinkedIn의 공개 프로필을 크롤링하여 직원의 이직 위험을 예측하는 AI 소프트웨어를 개발</li>
+          <li>LinkedIn이 접속을 차단하자 hiQ가 소송 제기</li>
+          <li>항소법원은 공개된 프로필에 대한 hiQ의 접근을 LinkedIn이 막지 못하도록 한 가처분을 유지</li>
+          <li>최종적으로는 hiQ가 스크래핑을 중단하는 조건으로 합의 종결</li>
+        </ul>
+      </div>
+      <div class="card amber"><span class="tag">한국</span><span class="ttl">잡코리아 v. 사람인HR<small>서울고법 2016나2019365, 상고기각</small></span>
+        <ul class="bul compact">
+          <li>사람인이 잡코리아에 등록된 기업 채용공고를 크롤링해 자기 사이트에 게재</li>
+          <li>사람인의 반박: 채용정보는 구인업체가 작성한 것이고 잡코리아는 이를 보여 주는 플랫폼일 뿐</li>
+          <li>법원: 마케팅 비용 지출 없이 자기 영업에 이용할 목적으로 <b>반복적, 체계적으로</b> 채용정보를 복제하여 데이터베이스제작자의 이익을 부당하게 해침. DB권 침해 인정</li>
+        </ul>
+      </div>
+    </div>
+    <ul class="bul compact">
+      <li><b>두 사건의 차이</b>: 잡코리아 사건의 피고는 수집한 데이터를 그대로 게재하여 원고와 직접 경쟁. hiQ는 데이터를 분석하여 다른 종류의 서비스를 제공</li>
+      <li>기계학습에서는 데이터가 특징 추출과 파라미터 갱신에만 쓰이고, 원 서비스와 직접 경쟁하지 않으면서 부가적인 가치를 만든다는 주장이 가능. 다만 생성모델은 원 데이터와 경쟁하는 결과물을 낼 수 있어 별도로 따져야 함</li>
+      <li>국내법 해석: 소재 저작물의 복제권 침해, DB권 침해가 모두 인정될 가능성이 있고, AI 개발자는 공정이용(제35조의5)으로 항변</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="유럽: CV-Online 사건">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>유럽의 동향: 데이터베이스권의 축소 해석</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul">
+        <li><b>CV-Online Latvia v. Melons</b>
+          <ul>
+            <li>CV-Online: 라트비아의 구인광고 데이터베이스 웹사이트</li>
+            <li>Melons: 여러 구인광고 웹사이트를 대상으로 하는 검색엔진</li>
+            <li>Melons가 CV-Online의 메타태그(직위, 업체 이름, 근무 장소, 게시 날짜)를 스크래핑하여 검색 서비스에 활용</li>
+            <li>CV-Online은 데이터베이스권 침해를 주장</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="bul">
+        <li><b>EU 사법재판소 판결(2021. 6.)</b>
+          <ul>
+            <li>EU 데이터베이스 지침상 “투자 비용을 회수하도록 의도된 수입을 박탈하는 효과가 있는 경우”에만 침해에 해당</li>
+            <li>침해 여부는 데이터베이스를 어떻게 재사용하는지에 따라 결정</li>
+            <li>데이터베이스 정보를 바탕으로 혁신적 제품을 만들 수 있는 이용자와 경쟁자의 이익을 제작자의 이익과 함께 고려해야 함</li>
+            <li>검색엔진은 인터넷의 정보를 구조화하고, 경쟁을 원활하게 하며, 공급과 가격의 투명성에 기여한다고 언급</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="callout">잡코리아 판결은 반복적·체계적 복제라는 행위 태양에 주목했고, CJEU는 제작자의 투자 회수에 미치는 효과를 기준으로 삼았다. 같은 채용정보 크롤링이라도 수집한 데이터를 어디에 쓰는지에 따라 결론이 달라질 수 있다.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="크롤링 금지 약관과 정보통신망 침입">
+  <div class="kicker">학습 데이터의 수집</div>
+  <h2>크롤링 금지 약관과 정보통신망 침입</h2>
   <div class="body">
     <div class="two eq top">
       <div class="stack">
-        <div class="law sm"><span class="art">저작권법 제35조의5(저작물의 공정한 이용)</span>① 제23조부터 제35조의4까지, 제101조의3부터 제101조의5까지의 경우 외에 저작물의 일반적인 이용 방법과 충돌하지 아니하고 저작자의 정당한 이익을 부당하게 해치지 아니하는 경우에는 저작물을 이용할 수 있다.<br>② 저작물 이용 행위가 제1항에 해당하는지를 판단할 때에는 다음 각 호의 사항등을 고려하여야 한다.<br>1. 이용의 목적 및 성격<br>2. 저작물의 종류 및 용도<br>3. 이용된 부분이 저작물 전체에서 차지하는 비중과 그 중요성<br>4. 저작물의 이용이 그 저작물의 현재 시장 또는 가치나 잠재적인 시장 또는 가치에 미치는 영향</div>
-        <p class="ex">저작권법은 재판, 교육, 시사보도, 인용, 사적이용, 일시적 복제 등 개별 제한 사유(제23조~제35조의4)를 두고, 그 밖의 경우를 위해 2011년 일반 조항을 신설했다.</p>
+        <ul class="bul compact">
+          <li><b>서비스 제공자의 금지·제한 정책</b>
+            <ul>
+              <li>신청과 승인 절차를 두고 용량, 범위, 이용목적을 제한</li>
+              <li>웹 스크래핑을 금지하고 API로만 수집을 허용</li>
+              <li>robots.txt로 AI 크롤러(GPTBot 등)를 차단하는 언론사 증가</li>
+            </ul>
+          </li>
+          <li><b>정당한 목적</b>: 서버 부하 방지, 영업비밀 유출 방지, 이용자 프라이버시 보호</li>
+          <li><b>부정한 목적</b>: 경쟁자와 시장 진입자의 데이터 수집 제한, 자사에 불리한 연구 제한
+            <ul><li>2021년 페이스북이 정치 광고 투명성을 조사하던 뉴욕대 Ad Observatory 연구진의 접근을 약관 위반을 이유로 차단</li></ul>
+          </li>
+        </ul>
       </div>
-      <table class="tbl cmp">
-        <thead><tr><th>고려 요소</th><th>판단 기준 (대법원 2021다272001)</th></tr></thead>
-        <tbody>
-          <tr><td>목적·성격</td><td>원저작물을 단순히 대체하는가, 새로운 표현·의미·메시지를 나타내도록 <b>변형</b>했는가. 공익적·비영리적 이용인가</td></tr>
-          <tr><td>종류·용도</td><td>사실적·정보적 저작물인가, 공표된 저작물인가</td></tr>
-          <tr><td>비중·중요성</td><td>이용된 부분의 양적 비중과 질적 중요성이 낮은가. 필요한 범위 내에서 이용했는가</td></tr>
-          <tr><td>시장 영향</td><td>현재 시장 또는 장래 개발될 합리적 개연성이 있는 통상적 시장의 <b>수요를 대체</b>하거나 시장가치를 훼손하는가</td></tr>
-        </tbody>
-      </table>
+      <div class="stack">
+        <div class="law sm"><span class="art">정보통신망법 제48조 제1항</span>누구든지 정당한 접근권한 없이 또는 허용된 접근권한을 넘어 정보통신망에 침입하여서는 아니 된다.</div>
+        <ul class="bul compact">
+          <li><b>야놀자 사건(2021도1533)</b>: 접근권한을 제한하고 있는지는 보호조치나 이용약관 등 객관적으로 드러난 사정을 종합하여 신중하게 판단. 여기어때 직원들이 크롤링 프로그램으로 야놀자 API 서버에 접속한 행위는 침입이 아니라고 판단
+            <ul><li>API 서버에 별도의 보호조치가 없었고, 이용약관은 비회원에게 적용되지 않음</li></ul>
+          </li>
+          <li><b>Van Buren v. United States(2021)</b>: 접근 권한이 있는 자가 부정한 목적으로 접근한 것은 미국 CFAA 위반이 아님. 단순한 약관 위반을 형사처벌하지 않도록 범위를 제한</li>
+        </ul>
+      </div>
     </div>
-    <p class="em center">AI 학습 소송의 대부분은 이 네 요소, 특히 변형적 이용과 시장 대체 여부를 두고 다툰다.</p>
+    <p class="em center">약관 위반만으로 형사처벌되는 것은 아니지만, 계약 위반과 DB권·저작권 침해 책임은 별도로 남는다.</p>
   </div>
 </section>
 
-<section class="slide" data-sec="1" data-title="국내 공정이용 판단 사례">
-  <div class="kicker">저작권의 기초</div>
-  <h2>국내 공정이용 판단 사례</h2>
+<section class="slide section" data-sec="2" data-title="AI 학습과 공정이용">
+  <div class="kicker">Section 2</div>
+  <h2>AI 학습과 공정이용</h2>
+  <p class="section-lead">복제가 있다는 점은 다투기 어렵다. 쟁점은 그 복제가 공정이용으로 허용되는가이다. 2025년에 미국, 독일, 영국에서 첫 판결들이 나왔다.</p>
   <div class="body">
-    <div class="cards c2">
-      <div class="card green"><span class="tag">공정이용 인정</span><span class="ttl">NGO 블로그 광어회 사진<small>서울서부지법 2015가소308746</small></span>
-        <ul class="bul compact">
-          <li>NGO 단체가 채식을 장려하는 블로그 글에 구글 검색으로 찾은 광어회 섬네일 사진을 사용. 사진 권리자가 200만 원 손해배상 청구</li>
-          <li>이용 목적이 영리적이라 보기 어려움</li>
-          <li>사진이 게시물 전체에서 차지하는 비중과 중요성이 크지 않음</li>
-          <li>사진의 관련 시장과 가치에 큰 영향을 미쳤다고 보기 어려움</li>
-        </ul>
-      </div>
-      <div class="card red"><span class="tag">공정이용 부정</span><span class="ttl">한국교육과정평가원 기출문제 게시<small>대법원 2024. 7. 11. 선고 2021다272001</small></span>
-        <ul class="bul compact">
-          <li>평가원이 수능 등 시험 지문에 쓴 문학 작품을 시험 종료 후에도 홈페이지에 게시하여 누구나 내려받을 수 있게 함</li>
-          <li>시험 종료 후 기간 제한 없이 전송하는 것은 시험문제를 위한 복제(제32조)의 범위를 넘음</li>
-          <li>저작물을 학습자료로 쓰려는 자가 이용허락을 받고 사용료를 내는 시장이 이미 형성되어 있음</li>
-          <li>공익적·비영리적 측면이 있어도, 승인된 사용료를 내고 게시하는 것이 충분히 가능했으므로 공정이용이 아님</li>
-        </ul>
-      </div>
-    </div>
-    <div class="callout warn"><b>시사점</b> 비영리·공익 목적이라는 사정만으로 공정이용이 인정되지 않는다. 이용허락 시장이 존재하거나 형성될 개연성이 있으면 네 번째 요소(시장 영향)가 불리하게 작용한다. AI 학습용 데이터 라이선스 시장이 커질수록 같은 논리가 적용될 수 있다.</div>
+    <ol class="roadmap" data-current="2"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="1" data-title="구글 북스 사건">
-  <div class="kicker">저작권의 기초</div>
+<section class="slide" data-sec="2" data-title="공정이용의 항변">
+  <div class="kicker">AI 학습과 공정이용</div>
+  <h2>공정이용의 항변</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul">
+        <li>AI 개발자는 공정이용(제35조의5)에 해당한다는 항변 제기</li>
+        <li><b>공정이용 판단 시 고려 요소</b>
+          <ul>
+            <li>이용의 목적 및 성격<br><span class="arrow">영리적인가? 변형적으로 이용했는가?</span></li>
+            <li>저작물의 종류 및 용도<br><span class="arrow">허구적·창작적인가? 사실적·기능적 저작물인가?</span></li>
+            <li>이용 부분의 비중과 그 중요성<br><span class="arrow">공중에 제공되는 분량은 얼마인가?</span></li>
+            <li>저작물의 시장 또는 가치에 미치는 영향<br><span class="arrow">원저작물의 수익 모델을 침해하는가?</span></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="law"><span class="art">저작권법 제35조의5(저작물의 공정한 이용)</span>① 제23조부터 제35조의4까지, 제101조의3부터 제101조의5까지의 경우 외에 저작물의 일반적인 이용 방법과 충돌하지 아니하고 저작자의 정당한 이익을 부당하게 해치지 아니하는 경우에는 저작물을 이용할 수 있다.<br>② 저작물 이용 행위가 제1항에 해당하는지를 판단할 때에는 다음 각 호의 사항등을 고려하여야 한다.<br>1. <b>이용의 목적 및 성격</b><br>2. <b>저작물의 종류 및 용도</b><br>3. <b>이용된 부분이 저작물 전체에서 차지하는 비중과 그 중요성</b><br>4. <b>저작물의 이용이 그 저작물의 현재 시장 또는 가치나 잠재적인 시장 또는 가치에 미치는 영향</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="구글 북스 사건">
+  <div class="kicker">AI 학습과 공정이용</div>
   <h2>구글 북스(Google Books) 사건: 대량 복제와 변형적 이용</h2>
   <div class="body">
     <div class="two eq top">
@@ -676,235 +745,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<!-- ===================== 2. 학습 데이터의 수집 ===================== -->
-<section class="slide section" data-sec="2" data-title="학습 데이터의 수집">
-  <div class="kicker">Section 2</div>
-  <h2>학습 데이터의 수집</h2>
-  <p class="section-lead">생성형 AI는 웹 크롤링 데이터로 학습한다. 수집 과정에서 복제권, 데이터베이스제작자의 권리, 접근 제한 약관이 문제 된다.</p>
-  <div class="body">
-    <ol class="roadmap" data-current="2"></ol>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="웹 크롤링 데이터">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>웹 크롤링 데이터: 언어모델의 주된 학습 데이터</h2>
-  <div class="body">
-    <div class="two eq">
-      <div class="stack">
-        <ul class="bul">
-          <li><b>Common Crawl</b>: 비영리 단체가 공개하는 웹 크롤링 데이터. GPT-3(2020) 학습 데이터 구성에서 60%의 비중</li>
-          <li><b>네이버 HyperCLOVA</b>(2021): 네이버 블로그, 카페, 뉴스, 댓글, 지식iN 등 자사 서비스의 글을 주로 학습. 총 5,618억 토큰</li>
-          <li><b>The Pile</b>(2021): 언어모델 학습용 800GB 공개 데이터셋. 논문, 코드, 특허, 자막, 이메일 등 22개 출처</li>
-          <li>3강 실습에서 한 웹 스크래핑과 같은 행위를 대규모로 한 것이다</li>
-        </ul>
-      </div>
-      <div class="stack">
-        <figure><img src="assets/week12/gpt3-data.png" alt="GPT-3 학습 데이터 구성 표: Common Crawl 4,100억 토큰 60%, WebText2 22%, Books1 8%, Books2 8%, Wikipedia 3%" style="max-height:170px"><figcaption>GPT-3 학습 데이터 구성 (Brown et al., 2020)</figcaption></figure>
-        <figure><img src="assets/week12/hyperclova-data.png" alt="HyperCLOVA 학습 말뭉치 표: 블로그 2,736억, 카페 833억, 뉴스 738억, 댓글 411억, 지식iN 273억 토큰 등" style="max-height:200px"><figcaption>HyperCLOVA 학습 말뭉치 (Kim et al., 2021)</figcaption></figure>
-      </div>
-    </div>
-    <p class="src"><a href="https://arxiv.org/abs/2005.14165" target="_blank" rel="noopener">arxiv.org/abs/2005.14165</a> · <a href="https://arxiv.org/abs/2109.04650" target="_blank" rel="noopener">arxiv.org/abs/2109.04650</a> · <a href="https://arxiv.org/abs/2101.00027" target="_blank" rel="noopener">arxiv.org/abs/2101.00027</a> · <a href="https://commoncrawl.org/" target="_blank" rel="noopener">commoncrawl.org</a></p>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="이미지 생성 AI 학습 데이터">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>이미지 생성 AI의 학습 데이터: LAION-5B</h2>
-  <div class="body">
-    <div class="two eq">
-      <ul class="bul">
-        <li>웹 크롤링 데이터에서 이미지와 그 설명 텍스트의 쌍을 추출하여 학습 데이터로 활용</li>
-        <li><b>LAION-5B</b>(Schuhmann et al., 2022): 이미지-텍스트 쌍 58.5억 개. Stable Diffusion 학습에 사용됨</li>
-        <li>robots.txt 규약에 따라 크롤링을 거부한 페이지는 수집하지 않음</li>
-        <li>데이터셋에는 이미지 파일이 아니라 이미지 URL과 설명 텍스트가 들어 있음. 학습하려는 자가 URL을 따라가 이미지를 내려받음</li>
-        <li>검색 도구로 “BTS Jungkook” 같은 인명을 넣으면 해당 인물의 사진이 다수 포함되어 있음을 확인할 수 있음</li>
-      </ul>
-      <div class="stack">
-        <figure><img src="assets/week12/laion-5b.jpg" alt="LAION-5B 공개 블로그 화면" style="max-height:230px"></figure>
-        <figure><img src="assets/week12/laion-cat.jpg" alt="LAION 검색 도구에서 Odd-eyed cat을 검색한 결과 이미지 목록" style="max-height:140px"><figcaption>검색어 “Odd-eyed cat”에 대한 검색 결과</figcaption></figure>
-      </div>
-    </div>
-    <p class="src"><a href="https://laion.ai/blog/laion-5b/" target="_blank" rel="noopener">laion.ai/blog/laion-5b</a> · <a href="https://rom1504.github.io/clip-retrieval" target="_blank" rel="noopener">rom1504.github.io/clip-retrieval</a></p>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="Getty Images v. Stability AI 소장">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>Getty Images v. Stability AI: 소장의 주장(2023, 미국)</h2>
-  <div class="body">
-    <div class="two eq">
-      <div class="stack">
-        <ul class="bul">
-          <li>Getty Images의 데이터베이스에는 이미지마다 매우 상세한 설명이 붙어 있어 이미지 생성 모델 학습에 가치가 높음</li>
-          <li>Stability AI가 LAION 데이터셋의 링크를 따라 Getty 웹사이트에 접속하여 수백만 장의 이미지와 설명 텍스트를 허락 없이 복제했다고 주장</li>
-          <li>웹사이트 이용약관이 그러한 행위를 명시적으로 금지하고 있었다는 점도 주장</li>
-        </ul>
-        <blockquote class="quote" style="font-size:13.5px;line-height:1.6">“Stability AI followed links included in LAION’s dataset to access specific pages on Getty Images’ websites and copied many millions of copyrighted images and associated text. Such copying was done without Getty Images’ authorization and in violation of the express prohibitions against such conduct contained in its websites’ terms of use.”<cite>소장 제40항</cite></blockquote>
-      </div>
-      <figure><img src="assets/week12/getty-pair.jpg" alt="소장에 제시된 축구 경기 사진 두 장. 왼쪽은 Getty Images 원본, 오른쪽은 Stable Diffusion 생성물로 일그러진 Getty Images 워터마크가 보임" style="max-height:330px"><figcaption>소장에 제시된 사례: Getty 원본 사진(왼쪽)과 Stable Diffusion 생성물(오른쪽). 생성물에 변형된 Getty 워터마크가 나타남</figcaption></figure>
-    </div>
-    <p class="src"><a href="https://copyrightlately.com/pdfviewer/getty-images-v-stability-ai-complaint" target="_blank" rel="noopener">copyrightlately.com/pdfviewer/getty-images-v-stability-ai-complaint</a></p>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="복제권 침해 가능성">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>크롤링 데이터 학습과 복제권 침해 가능성</h2>
-  <div class="body">
-    <div class="two eq top">
-      <ul class="bul">
-        <li><b>복제의 의미</b>
-          <ul>
-            <li>일시적 또는 영구적으로 유형물에 고정하거나 다시 제작하는 것</li>
-            <li>파일을 인터넷으로 전송받아 하드디스크에 저장하는 행위는 유형물에 고정하는 것에 해당 (2005도872)</li>
-          </ul>
-        </li>
-        <li><b>AI 학습 과정의 복제</b>
-          <ul>
-            <li>AI 개발자는 크롤링 데이터에 포함된 저작물의 복제본을 저장하고, 학습 과정에서 메모리에도 복제가 일어남</li>
-            <li>저작권자가 저작물을 웹에 게시했다는 사실만으로 AI 학습에 쓰는 것까지 허락했다고 보기는 어려움</li>
-          </ul>
-        </li>
-        <li class="arrow">일응 복제권 침해에 해당할 수 있다. 따라서 쟁점은 공정이용 등 저작재산권 제한 사유에 해당하는지로 넘어간다</li>
-      </ul>
-      <div class="stack">
-        <div class="law sm"><span class="art">저작권법 제2조(정의)</span>22. “복제”는 인쇄ㆍ사진촬영ㆍ복사ㆍ녹음ㆍ녹화 그 밖의 방법으로 <b>일시적 또는 영구적으로 유형물에 고정하거나 다시 제작하는 것</b>을 말하며, (후략)</div>
-        <div class="law sm"><span class="art">제16조(복제권)</span>저작자는 그의 저작물을 복제할 권리를 가진다.</div>
-        <div class="law sm"><span class="art">제123조(침해의 정지 등 청구)</span>① 저작권 그 밖에 이 법에 따라 보호되는 권리를 가진 자는 그 권리를 침해하는 자에 대하여 <b>침해의 정지</b>를 청구할 수 있으며, 그 권리를 침해할 우려가 있는 자에 대하여 침해의 예방 또는 손해배상의 담보를 청구할 수 있다.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="데이터베이스제작자의 권리">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>데이터베이스제작자의 권리(DB권)</h2>
-  <div class="body">
-    <div class="two eq top">
-      <ul class="bul">
-        <li>데이터베이스의 제작·갱신·검증·보충에 <b>인적 또는 물적으로 상당한 투자</b>를 한 자에게 인정되는 권리</li>
-        <li>데이터베이스를 구성하는 개별 소재의 저작권과 별개의 권리. 소재 자체가 저작물이 아니어도(가격, 주소, 채용 조건 등) 성립</li>
-        <li>데이터베이스의 <b>전부 또는 상당한 부분</b>을 복제·배포·방송·전송하면 침해
-          <ul>
-            <li>상당한 부분인지는 양적 측면과 질적 측면을 함께 고려 (2021도1533, 야놀자 사건)</li>
-            <li>개별 소재나 상당한 부분에 이르지 못하는 부분이라도 <b>반복적이거나 특정한 목적을 위하여 체계적으로</b> 복제하여 제작자의 이익을 부당하게 해치면 상당한 부분의 복제로 봄</li>
-          </ul>
-        </li>
-        <li class="arrow">저작물성이 없는 사실 정보만 수집하더라도 DB권 침해가 될 수 있다</li>
-      </ul>
-      <div class="stack">
-        <div class="law sm"><span class="art">저작권법 제2조(정의)</span>19. “데이터베이스”는 소재를 체계적으로 배열 또는 구성한 편집물로서 개별적으로 그 소재에 접근하거나 그 소재를 검색할 수 있도록 한 것을 말한다.<br>20. “데이터베이스제작자”는 데이터베이스의 제작 또는 그 소재의 갱신ㆍ검증 또는 보충에 인적 또는 물적으로 상당한 투자를 한 자를 말한다.</div>
-        <div class="law sm"><span class="art">제93조(데이터베이스제작자의 권리)</span>① 데이터베이스제작자는 그의 데이터베이스의 전부 또는 상당한 부분을 복제ㆍ배포ㆍ방송 또는 전송할 권리를 가진다.<br>② 데이터베이스의 개별 소재는 제1항에 따른 상당한 부분으로 간주되지 아니한다. 다만, (중략) 반복적이거나 특정한 목적을 위하여 체계적으로 함으로써 해당 데이터베이스의 일반적인 이용과 충돌하거나 데이터베이스제작자의 이익을 부당하게 해치는 경우에는 상당한 부분의 복제등으로 본다.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="hiQ v. LinkedIn과 잡코리아 사건">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>데이터 크롤링의 적법성: hiQ v. LinkedIn과 잡코리아 사건</h2>
-  <div class="body">
-    <div class="cards c2">
-      <div class="card blue"><span class="tag">미국</span><span class="ttl">hiQ Labs v. LinkedIn<small>제9연방항소법원, 2019</small></span>
-        <ul class="bul compact">
-          <li>스타트업 hiQ는 LinkedIn의 공개 프로필을 크롤링하여 직원의 이직 위험을 예측하는 AI 소프트웨어를 개발</li>
-          <li>LinkedIn이 접속을 차단하자 hiQ가 소송 제기</li>
-          <li>항소법원은 공개된 프로필에 대한 hiQ의 접근을 LinkedIn이 막지 못하도록 한 가처분을 유지</li>
-          <li>최종적으로는 hiQ가 스크래핑을 중단하는 조건으로 합의 종결</li>
-        </ul>
-      </div>
-      <div class="card amber"><span class="tag">한국</span><span class="ttl">잡코리아 v. 사람인HR<small>서울고법 2016나2019365, 상고기각</small></span>
-        <ul class="bul compact">
-          <li>사람인이 잡코리아에 등록된 기업 채용공고를 크롤링해 자기 사이트에 게재</li>
-          <li>사람인의 반박: 채용정보는 구인업체가 작성한 것이고 잡코리아는 이를 보여 주는 플랫폼일 뿐</li>
-          <li>법원: 마케팅 비용 지출 없이 자기 영업에 이용할 목적으로 <b>반복적, 체계적으로</b> 채용정보를 복제하여 데이터베이스제작자의 이익을 부당하게 해침. DB권 침해 인정</li>
-        </ul>
-      </div>
-    </div>
-    <ul class="bul compact">
-      <li><b>두 사건의 차이</b>: 잡코리아 사건의 피고는 수집한 데이터를 그대로 게재하여 원고와 직접 경쟁. hiQ는 데이터를 분석하여 다른 종류의 서비스를 제공</li>
-      <li>기계학습에서는 데이터가 특징 추출과 파라미터 갱신에만 쓰이고, 원 서비스와 직접 경쟁하지 않으면서 부가적인 가치를 만든다는 주장이 가능. 다만 생성모델은 원 데이터와 경쟁하는 결과물을 낼 수 있어 별도로 따져야 함</li>
-      <li>국내법 해석: 소재 저작물의 복제권 침해, DB권 침해가 모두 인정될 가능성이 있고, AI 개발자는 공정이용(제35조의5)으로 항변</li>
-    </ul>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="유럽: CV-Online 사건">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>유럽의 동향: 데이터베이스권의 축소 해석</h2>
-  <div class="body">
-    <div class="two eq top">
-      <ul class="bul">
-        <li><b>CV-Online Latvia v. Melons</b>
-          <ul>
-            <li>CV-Online: 라트비아의 구인광고 데이터베이스 웹사이트</li>
-            <li>Melons: 여러 구인광고 웹사이트를 대상으로 하는 검색엔진</li>
-            <li>Melons가 CV-Online의 메타태그(직위, 업체 이름, 근무 장소, 게시 날짜)를 스크래핑하여 검색 서비스에 활용</li>
-            <li>CV-Online은 데이터베이스권 침해를 주장</li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="bul">
-        <li><b>EU 사법재판소 판결(2021. 6.)</b>
-          <ul>
-            <li>EU 데이터베이스 지침상 “투자 비용을 회수하도록 의도된 수입을 박탈하는 효과가 있는 경우”에만 침해에 해당</li>
-            <li>침해 여부는 데이터베이스를 어떻게 재사용하는지에 따라 결정</li>
-            <li>데이터베이스 정보를 바탕으로 혁신적 제품을 만들 수 있는 이용자와 경쟁자의 이익을 제작자의 이익과 함께 고려해야 함</li>
-            <li>검색엔진은 인터넷의 정보를 구조화하고, 경쟁을 원활하게 하며, 공급과 가격의 투명성에 기여한다고 언급</li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="callout">잡코리아 판결은 반복적·체계적 복제라는 행위 태양에 주목했고, CJEU는 제작자의 투자 회수에 미치는 효과를 기준으로 삼았다. 같은 채용정보 크롤링이라도 수집한 데이터를 어디에 쓰는지에 따라 결론이 달라질 수 있다.</div>
-  </div>
-</section>
-
-<section class="slide" data-sec="2" data-title="크롤링 금지 약관과 정보통신망 침입">
-  <div class="kicker">학습 데이터의 수집</div>
-  <h2>크롤링 금지 약관과 정보통신망 침입</h2>
-  <div class="body">
-    <div class="two eq top">
-      <div class="stack">
-        <ul class="bul compact">
-          <li><b>서비스 제공자의 금지·제한 정책</b>
-            <ul>
-              <li>신청과 승인 절차를 두고 용량, 범위, 이용목적을 제한</li>
-              <li>웹 스크래핑을 금지하고 API로만 수집을 허용</li>
-              <li>robots.txt로 AI 크롤러(GPTBot 등)를 차단하는 언론사 증가</li>
-            </ul>
-          </li>
-          <li><b>정당한 목적</b>: 서버 부하 방지, 영업비밀 유출 방지, 이용자 프라이버시 보호</li>
-          <li><b>부정한 목적</b>: 경쟁자와 시장 진입자의 데이터 수집 제한, 자사에 불리한 연구 제한
-            <ul><li>2021년 페이스북이 정치 광고 투명성을 조사하던 뉴욕대 Ad Observatory 연구진의 접근을 약관 위반을 이유로 차단</li></ul>
-          </li>
-        </ul>
-      </div>
-      <div class="stack">
-        <div class="law sm"><span class="art">정보통신망법 제48조 제1항</span>누구든지 정당한 접근권한 없이 또는 허용된 접근권한을 넘어 정보통신망에 침입하여서는 아니 된다.</div>
-        <ul class="bul compact">
-          <li><b>야놀자 사건(2021도1533)</b>: 접근권한을 제한하고 있는지는 보호조치나 이용약관 등 객관적으로 드러난 사정을 종합하여 신중하게 판단. 여기어때 직원들이 크롤링 프로그램으로 야놀자 API 서버에 접속한 행위는 침입이 아니라고 판단
-            <ul><li>API 서버에 별도의 보호조치가 없었고, 이용약관은 비회원에게 적용되지 않음</li></ul>
-          </li>
-          <li><b>Van Buren v. United States(2021)</b>: 접근 권한이 있는 자가 부정한 목적으로 접근한 것은 미국 CFAA 위반이 아님. 단순한 약관 위반을 형사처벌하지 않도록 범위를 제한</li>
-        </ul>
-      </div>
-    </div>
-    <p class="em center">약관 위반만으로 형사처벌되는 것은 아니지만, 계약 위반과 DB권·저작권 침해 책임은 별도로 남는다.</p>
-  </div>
-</section>
-
-<!-- ===================== 3. AI 학습과 공정이용 ===================== -->
-<section class="slide section" data-sec="3" data-title="AI 학습과 공정이용">
-  <div class="kicker">Section 3</div>
-  <h2>AI 학습과 공정이용</h2>
-  <p class="section-lead">복제가 있다는 점은 다투기 어렵다. 쟁점은 그 복제가 공정이용으로 허용되는가이다. 2025년에 미국, 독일, 영국에서 첫 판결들이 나왔다.</p>
-  <div class="body">
-    <ol class="roadmap" data-current="3"></ol>
-  </div>
-</section>
-
-<section class="slide" data-sec="3" data-title="비생성형 AI에 관한 종래 논의">
+<section class="slide" data-sec="2" data-title="비생성형 AI에 관한 종래 논의">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>비생성형 AI에 관한 종래의 논의: TDM 예외</h2>
   <div class="body">
@@ -928,7 +769,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="생성형 AI 확산 이후의 논의">
+<section class="slide" data-sec="2" data-title="생성형 AI 확산 이후의 논의">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>생성형 AI 확산 이후: 예외 확장에 대한 신중론</h2>
   <div class="body">
@@ -953,7 +794,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="Bartz v. Anthropic">
+<section class="slide" data-sec="2" data-title="Bartz v. Anthropic">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>Bartz v. Anthropic 1심 판결(미국, 2025. 6.)</h2>
   <div class="body">
@@ -974,7 +815,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="GEMA v. OpenAI">
+<section class="slide" data-sec="2" data-title="GEMA v. OpenAI">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>GEMA v. OpenAI 판결(독일, 2025. 11.)</h2>
   <div class="body">
@@ -1010,7 +851,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="Getty Images v. Stability AI (영국)">
+<section class="slide" data-sec="2" data-title="Getty Images v. Stability AI (영국)">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>Getty Images v. Stability AI 판결(영국, 2025. 11.)</h2>
   <div class="body">
@@ -1039,7 +880,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="세 판결의 비교">
+<section class="slide" data-sec="2" data-title="세 판결의 비교">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>2025년 세 판결의 비교</h2>
   <div class="body">
@@ -1061,7 +902,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="국내 가이드">
+<section class="slide" data-sec="2" data-title="국내 가이드">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>국내: 생성형 AI 저작권 안내서(2023. 12.)</h2>
   <div class="body">
@@ -1087,7 +928,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="학습 데이터 수집 경쟁">
+<section class="slide" data-sec="2" data-title="학습 데이터 수집 경쟁">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>학습 데이터 수집 경쟁</h2>
   <div class="body">
@@ -1108,7 +949,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="AI 개발사와 콘텐츠 제공사의 계약">
+<section class="slide" data-sec="2" data-title="AI 개발사와 콘텐츠 제공사의 계약">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>AI 개발사와 콘텐츠 제공사의 라이선스 계약</h2>
   <div class="body">
@@ -1123,7 +964,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
           </li>
           <li>Reddit은 OpenAI와의 데이터 제공 계약 발표 후 주가가 급등(2024. 5.)</li>
           <li>계약 유형: 학습용 데이터 제공, 실시간 검색 결과 인용(RAG), 출처 표시와 링크 제공</li>
-          <li class="arrow">계약이 늘어난다는 사실 자체가 “AI 학습용 이용허락 시장”의 존재를 뒷받침한다. 공정이용의 네 번째 요소 판단에서 권리자에게 유리한 사정이 될 수 있다(평가원 판결 참조)</li>
+          <li class="arrow">계약이 늘어난다는 사실 자체가 “AI 학습용 이용허락 시장”의 존재를 뒷받침한다. 공정이용의 네 번째 요소(시장 영향) 판단에서 권리자에게 유리한 사정이 될 수 있다</li>
         </ul>
       </div>
       <div class="stack">
@@ -1135,7 +976,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="국제 경쟁 환경">
+<section class="slide" data-sec="2" data-title="국제 경쟁 환경">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>국제 경쟁 환경에 대한 고려</h2>
   <div class="body">
@@ -1161,7 +1002,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="3" data-title="데이터 거래 시장">
+<section class="slide" data-sec="2" data-title="데이터 거래 시장">
   <div class="kicker">AI 학습과 공정이용</div>
   <h2>절충 방안: 데이터 거래 시장</h2>
   <div class="body">
@@ -1183,17 +1024,16 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<!-- ===================== 4. AI 생성물에 의한 권리 침해 ===================== -->
-<section class="slide section" data-sec="4" data-title="AI 생성물에 의한 권리 침해">
-  <div class="kicker">Section 4</div>
+<section class="slide section" data-sec="3" data-title="AI 생성물에 의한 권리 침해">
+  <div class="kicker">Section 3</div>
   <h2>AI 생성물에 의한 권리 침해</h2>
   <p class="section-lead">출력 단계의 다섯 가지 문제: 학습 데이터 암기, 캐릭터 생성, 초상·음성, 스타일, 원작자·고지사항 삭제.</p>
   <div class="body">
-    <ol class="roadmap" data-current="4"></ol>
+    <ol class="roadmap" data-current="3"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="(1) 학습 데이터 암기: 이미지">
+<section class="slide" data-sec="3" data-title="(1) 학습 데이터 암기: 이미지">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>(1) 학습 데이터 암기: 이미지 생성 모델</h2>
   <div class="body">
@@ -1218,7 +1058,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="학습 데이터 암기: 언어모델">
+<section class="slide" data-sec="3" data-title="학습 데이터 암기: 언어모델">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>대규모 언어모델의 학습 데이터 암기</h2>
   <div class="body">
@@ -1243,7 +1083,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="암기 위험에 대한 반론">
+<section class="slide" data-sec="3" data-title="암기 위험에 대한 반론">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>암기 위험의 크기: 측정과 반론</h2>
   <div class="body">
@@ -1283,7 +1123,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="(2) 캐릭터 생성">
+<section class="slide" data-sec="3" data-title="(2) 캐릭터 생성">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>(2) 캐릭터 생성의 문제</h2>
   <div class="body">
@@ -1311,7 +1151,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="(3) 초상·음성 등 인격표지">
+<section class="slide" data-sec="3" data-title="(3) 초상·음성 등 인격표지">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>(3) 초상·음성 등 인격표지 침해</h2>
   <div class="body">
@@ -1343,7 +1183,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="한국법상 퍼블리시티권">
+<section class="slide" data-sec="3" data-title="한국법상 퍼블리시티권">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>한국법상 퍼블리시티권 보호</h2>
   <div class="body">
@@ -1359,7 +1199,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
         <li><b>법무부 민법 개정안</b>: 모든 사람에게 인격표지영리권을 인정하는 규정을 신설하는 안
           <ul><li>자신의 성명, 초상, 음성 그 밖의 인격표지를 영리적으로 이용할 권리</li></ul>
         </li>
-        <li>딥페이크 영상의 표시 의무는 10강(EU AI Act 제50조, 인공지능 기본법 투명성 의무)에서 다룬 별도의 규율</li>
+        <li>딥페이크 영상의 표시 의무는 10강(EU AI Act 제50조, 인공지능 기본법 투명성 의무)에서 다룬 별도의 규율. 기술적 대응은 Section 6에서 다룸</li>
       </ul>
       <div class="stack">
         <div class="law sm"><span class="art">부정경쟁방지 및 영업비밀보호에 관한 법률 제2조 제1호 (타)목</span>국내에 널리 인식되고 경제적 가치를 가지는 <b>타인의 성명, 초상, 음성, 서명 등 그 타인을 식별할 수 있는 표지</b>를 공정한 상거래 관행이나 경쟁질서에 반하는 방법으로 자신의 영업을 위하여 무단으로 사용함으로써 타인의 경제적 이익을 침해하는 행위</div>
@@ -1369,7 +1209,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="AI 커버곡">
+<section class="slide" data-sec="3" data-title="AI 커버곡">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>사례: AI 커버곡에는 어떤 권리가 걸려 있는가</h2>
   <div class="body">
@@ -1392,7 +1232,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="(4) 스타일 모방">
+<section class="slide" data-sec="3" data-title="(4) 스타일 모방">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>(4) 스타일 모방</h2>
   <div class="body">
@@ -1417,7 +1257,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="스타일과 부정경쟁행위">
+<section class="slide" data-sec="3" data-title="스타일과 부정경쟁행위">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>스타일의 보호 가능성: 부정경쟁방지법 성과도용</h2>
   <div class="body">
@@ -1447,7 +1287,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="4" data-title="(5) 원작자·고지사항 삭제">
+<section class="slide" data-sec="3" data-title="(5) 원작자·고지사항 삭제">
   <div class="kicker">AI 생성물에 의한 권리 침해</div>
   <h2>(5) 원작자·고지사항 삭제: GitHub Copilot 소송</h2>
   <div class="body">
@@ -1478,17 +1318,16 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<!-- ===================== 5. 기술적·상업적 대응 ===================== -->
-<section class="slide section" data-sec="5" data-title="기술적·상업적 대응">
-  <div class="kicker">Section 5</div>
+<section class="slide section" data-sec="4" data-title="기술적·상업적 대응">
+  <div class="kicker">Section 4</div>
   <h2>기술적·상업적 대응</h2>
   <p class="section-lead">법적 결론이 확정되기 전에 AI 사업자들은 침해 위험을 줄이는 기술적 조치와 이용자에 대한 계약상 보장을 내놓고 있다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="5"></ol>
+    <ol class="roadmap" data-current="4"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="저작권 안전을 위한 기술적 방안">
+<section class="slide" data-sec="4" data-title="저작권 안전을 위한 기술적 방안">
   <div class="kicker">기술적·상업적 대응</div>
   <h2>생성 AI의 저작권 안전을 위한 기술적 방안</h2>
   <div class="body">
@@ -1512,7 +1351,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="상업적 대응: Adobe Firefly">
+<section class="slide" data-sec="4" data-title="상업적 대응: Adobe Firefly">
   <div class="kicker">기술적·상업적 대응</div>
   <h2>상업적 대응 (1): 권리가 확보된 데이터로만 학습</h2>
   <div class="body">
@@ -1534,7 +1373,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="5" data-title="상업적 대응: IP 면책">
+<section class="slide" data-sec="4" data-title="상업적 대응: IP 면책">
   <div class="kicker">기술적·상업적 대응</div>
   <h2>상업적 대응 (2): 이용자에 대한 IP 면책(indemnification)</h2>
   <div class="body">
@@ -1565,17 +1404,16 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<!-- ===================== 6. AI 창작물과 저작권 ===================== -->
-<section class="slide section" data-sec="6" data-title="AI 창작물과 저작권">
-  <div class="kicker">Section 6</div>
+<section class="slide section" data-sec="5" data-title="AI 창작물과 저작권">
+  <div class="kicker">Section 5</div>
   <h2>AI 창작물과 저작권</h2>
   <p class="section-lead">AI로 만든 결과물은 저작권으로 보호되는가. 누가 저작자인가. 미국과 한국의 등록 실무를 본다.</p>
   <div class="body">
-    <ol class="roadmap" data-current="6"></ol>
+    <ol class="roadmap" data-current="5"></ol>
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="문제의 제기">
+<section class="slide" data-sec="5" data-title="문제의 제기">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>AI 창작물은 저작권 보호 대상인가</h2>
   <div class="body">
@@ -1599,7 +1437,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="AI 미술과 AI 작문">
+<section class="slide" data-sec="5" data-title="AI 미술과 AI 작문">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>AI가 만든 그림과 글이 거래될 때</h2>
   <div class="body">
@@ -1626,7 +1464,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="Thaler 사건">
+<section class="slide" data-sec="5" data-title="Thaler 사건">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>미국 (1): A Recent Entrance to Paradise 사건</h2>
   <div class="body">
@@ -1656,7 +1494,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="Zarya of the Dawn 사건">
+<section class="slide" data-sec="5" data-title="Zarya of the Dawn 사건">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>미국 (2): Zarya of the Dawn 사건</h2>
   <div class="body">
@@ -1685,7 +1523,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="개별 이미지에 대한 판단">
+<section class="slide" data-sec="5" data-title="개별 이미지에 대한 판단">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>Zarya 사건: 개별 이미지를 제외한 이유</h2>
   <div class="body">
@@ -1714,7 +1552,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="미국 저작권청 지침">
+<section class="slide" data-sec="5" data-title="미국 저작권청 지침">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>미국 저작권청의 등록 지침과 AI 보고서</h2>
   <div class="body">
@@ -1741,7 +1579,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="한국 저작권 등록 실무">
+<section class="slide" data-sec="5" data-title="한국 저작권 등록 실무">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>한국: 종전 실무와 저작권 등록 안내서(2025. 6.)</h2>
   <div class="body">
@@ -1771,7 +1609,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="등록 사례 (1)">
+<section class="slide" data-sec="5" data-title="등록 사례 (1)">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>GAI 활용 저작물 등록 사례 (1)</h2>
   <div class="body">
@@ -1784,7 +1622,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="등록 사례 (2)">
+<section class="slide" data-sec="5" data-title="등록 사례 (2)">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>GAI 활용 저작물 등록 사례 (2)</h2>
   <div class="body">
@@ -1797,7 +1635,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<section class="slide" data-sec="6" data-title="실무상 함의">
+<section class="slide" data-sec="5" data-title="실무상 함의">
   <div class="kicker">AI 창작물과 저작권</div>
   <h2>AI 생성물의 보호 공백과 실무상 함의</h2>
   <div class="body">
@@ -1828,38 +1666,604 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
   </div>
 </section>
 
-<!-- ===================== 7. 정리 ===================== -->
-<section class="slide" data-sec="7" data-title="내 AI 서비스의 IP 점검">
+<section class="slide section" data-sec="6" data-title="딥페이크와 이용자 보호">
+  <div class="kicker">Section 6</div>
+  <h2>딥페이크와 이용자 보호</h2>
+  <p class="section-lead">AI 생성물이 권리자가 아니라 이용자와 사회 일반에 주는 피해. 정보 조작 우려와 피해 사례, 그리고 콘텐츠 투명성을 위한 세 가지 기술적 접근을 본다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="6"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="AI와 정보 조작 우려 (1)">
+  <div class="kicker">딥페이크와 이용자 보호</div>
+  <h2>AI와 정보 조작 우려</h2>
+  <div class="body">
+    <table class="tbl cmp">
+      <thead><tr><th>우려</th><th>설명</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>거짓말쟁이의 배당<br>(Liar’s dividend)</td><td>딥페이크 기술로 인해 실제 증거도 “가짜”라고 주장하며 부정할 수 있게 되어 책임성과 진실성이 훼손됨. 공신력 있는 정보에 대한 신뢰를 약화시키고, 검증된 정보조차 의심하는 환경을 조성</td><td>도널드 트럼프와 지지자들이 카멀라 해리스 집회 군중 사진이 AI로 조작됐다고 허위 주장</td></tr>
+        <tr><td>협박<br>(Blackmail)</td><td>AI로 제작된 조작 콘텐츠(딥페이크 포함)가 성적 착취, 금전 갈취, 명예 훼손 등에 악용됨. 피해자는 조작물의 허위를 입증하기 어려워 범죄자에게 이용당하게 됨</td><td>American Sunlight Project가 26명의 연방의원을 성착취물에 등장시킨 3만5천여 건의 딥페이크를 확인</td></tr>
+        <tr><td>증거 신뢰 훼손<br>(Erosion of trust in evidence)</td><td>AI 조작물이 진짜와 가짜의 경계를 모호하게 하여 디지털 미디어 전반의 진정성을 훼손. 정보의 무결성에 대한 대중의 신뢰를 떨어뜨림</td><td>러시아의 “Doppelganger” 캠페인은 합법 언론사처럼 보이는 가짜 도메인에 AI 기사와 프로파간다를 게시</td></tr>
+        <tr><td>인지적 자율성 감소<br>(Reduction of cognitive autonomy)</td><td>AI가 방대한 데이터를 분석해 맞춤형 메시지를 전달하며, 감정과 잠재 의식을 자극해 개인의 의사결정을 조작. 특히 정밀 타겟팅과 유권자 프로파일링에 악용</td><td>미국령 사모아 예비선거에서 제이슨 파머 후보가 AI 생성 이메일·영상·오디오를 활용해 조 바이든에 승리. 해당 메시지는 과도하게 맞춤화·감정화되어 특정 유권층을 공략</td></tr>
+      </tbody>
+    </table>
+    <p class="src">출처: Stanford HAI, AI Index Report (2025)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="AI와 정보 조작 우려 (2)">
+  <div class="kicker">딥페이크와 이용자 보호</div>
+  <h2>AI와 정보 조작 우려 (계속)</h2>
+  <div class="body">
+    <table class="tbl cmp">
+      <thead><tr><th>우려</th><th>설명</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>유명인 브랜드 악용<br>(Exploitation of personal brands)</td><td>딥페이크 기술로 유명인·공인·인플루언서 등의 무단 영상·이미지를 제작해 허위 지지 발언이나 광고를 날조. 이를 통해 대중을 속이고 잘못된 정보에 신뢰성을 부여</td><td>2024년 대선을 앞두고 트럼프가 테일러 스위프트가 자신을 지지하는 것처럼 AI 합성 사진을 게시</td></tr>
+        <tr><td>혐오 발언 확산<br>(Amplification of hate speech)</td><td>AI가 필터 버블과 에코 챔버를 형성해 혐오 발언의 확산과 정상화를 촉진. 이용자 참여 지표를 우선시해 기존 편견을 강화하고 분열적 콘텐츠를 부추김</td><td>트럼프와 측근들이 아이티 이민자들이 고양이·개를 훔쳐 먹는다는 근거 없는 음모론을 유포, AI 생성 밈을 통해 반(反)아이티 감정을 확산</td></tr>
+        <tr><td>외국 작전 추적성 감소<br>(Reduction in the traceability of foreign operations)</td><td>AI가 문법상 완벽한 텍스트 생성·번역·개선을 가능케 해 외국 악성 행위자가 활동을 추적당하지 않도록 지원. 과거에는 비원어민의 문법 오류로 추적할 수 있었으나, AI 콘텐츠로는 더 이상 추적 불가</td><td>러시아 연계 계정이 ChatGPT로 맞춤형 메시지를 작성·전파한 “Bad Grammar” 작전을 OpenAI가 적발</td></tr>
+        <tr><td>프라이버시 침해<br>(Privacy violations)</td><td>AI 학습을 위한 대규모 데이터 수집은 개인정보 오·남용·노출 위험을 야기. 보호 장치 부재 시 민감정보 침해와 권리 침해로 이어져 AI 윤리 환경을 악화시킴</td><td>“조 바이든”을 사칭한 자동 전화(robocall)가 뉴햄프셔 민주당원에게 투표 거부를 독려. 유권자 개인정보를 악용하여 허위 정보를 유포한 사례</td></tr>
+      </tbody>
+    </table>
+    <p class="src">출처: Stanford HAI, AI Index Report (2025)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="딥페이크 사기 피해 사례">
+  <div class="kicker">딥페이크와 이용자 보호</div>
+  <h2>딥페이크 사기 피해 사례의 증가</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card red"><span class="ttl">주가 조작</span>
+        <ul class="bul compact">
+          <li>2023년 5월: 펜타곤 폭발 딥페이크로 인해 미국 증시 일시적 급락</li>
+        </ul>
+      </div>
+      <div class="card red"><span class="ttl">경영진 사칭 사기</span>
+        <ul class="bul compact">
+          <li>2020년: 홍콩 소재 일본 기업 지점장이 모회사 이사의 음성 딥페이크를 듣고 3,500만 달러를 이체. 지점장은 변호사 명의 이메일까지 받아 진실로 믿고 송금</li>
+          <li>2024년 2월: 영국 엔지니어링 그룹 Arup의 홍콩 지사 직원이 CFO를 사칭한 화상회의에 참여한 뒤 여러 건을 송금. 피해액 2억 홍콩달러(미화 약 2,500만 달러) 상당</li>
+        </ul>
+      </div>
+      <div class="card red"><span class="ttl">신원 도용</span>
+        <ul class="bul compact">
+          <li>2024년 2월 보도: 불법 온라인 서비스(OnlyFake)가 15달러에 매우 정교한 가짜 신분증 사진을 제공. 한 암호화폐 거래소(OKX)의 고객 확인(KYC) 절차를 통과</li>
+          <li>2024년 7월 보도: 북한 공작원이 도난된 신원을 활용하여 미국 IT 기업에 취업. 채용 심사 과정에서 정교하게 설계된 허위 신원, 멀티미디어 위장, AI 활용 이미지와 음성 등을 사용</li>
+        </ul>
+      </div>
+    </div>
+    <p class="src">출처: FS-ISAC (2024. 10.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="콘텐츠 투명성을 위한 기술적 접근">
+  <div class="kicker">딥페이크와 이용자 보호</div>
+  <h2>디지털 콘텐츠 투명성을 위한 기술적 접근</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week12/nist-diagram.png" alt="NIST 도식: 디지털 콘텐츠 투명성은 출처 데이터 추적(메타데이터 기록, 디지털 워터마킹)과 합성 콘텐츠 탐지(출처 탐지, 자동 콘텐츠 기반 탐지, 인간 보조 탐지)로 나뉨" style="max-height:330px"></figure>
+    <div class="cards c3">
+      <div class="card blue"><span class="no">1</span><span class="ttl">메타데이터 기록<small>Metadata Recording</small></span></div>
+      <div class="card blue"><span class="no">2</span><span class="ttl">디지털 워터마크<small>Digital Watermarking: 인지 가능, 인지 불가능</small></span></div>
+      <div class="card blue"><span class="no">3</span><span class="ttl">AI 생성물 탐지<small>Synthetic Content Detection</small></span></div>
+    </div>
+    <p class="src">출처: NIST, Reducing Risks Posed by Synthetic Content (2024. 11.)</p>
+  </div>
+</section>
+
+<section class="slide section" data-sec="6" data-title="(1) 메타데이터 기록">
+  <div class="kicker">딥페이크와 이용자 보호</div>
+  <h2>(1) 메타데이터 기록</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week12/nist-hl-metadata.png" alt="NIST 도식에서 메타데이터 기록 부분이 붉은 점선으로 강조됨" style="max-height:330px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="어느 영상이 실제인가">
+  <div class="kicker">메타데이터 기록</div>
+  <h2>화면만 보고 영상의 진위를 구분할 수 있는가</h2>
+  <div class="body">
+    <div class="figrow">
+      <figure><img src="assets/week12/video-x.jpg" alt="X에 게시된 영상 화면: Texas 13.07.2025, No sirens. No alerts. Just silence... then chaos. 라는 자막과 물에 잠긴 마을" style="max-height:400px"><figcaption>X에 게시된 영상</figcaption></figure>
+      <span class="em">vs.</span>
+      <figure><img src="assets/week12/video-bbc.jpg" alt="BBC 뉴스 영상 화면: 산간 마을에 토사가 밀려드는 장면" style="max-height:400px"><figcaption>BBC 뉴스 영상</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://x.com/i/status/1945592812289888425" target="_blank" rel="noopener">x.com/i/status/1945592812289888425</a> · <a href="https://www.bbc.com/news/videos/cn85vlxxxz5o" target="_blank" rel="noopener">bbc.com/news/videos/cn85vlxxxz5o</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="C2PA">
+  <div class="kicker">메타데이터 기록</div>
+  <h2>C2PA (콘텐츠 출처 및 진위 확인 연합)</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li><b>C2PA</b> (Coalition for Content Provenance and Authenticity)
+          <ul>
+            <li>2021년 Adobe, ARM, BBC, Intel, Microsoft 등이 참여하여 설립</li>
+            <li>디지털 콘텐츠 증명을 위한 신뢰 가능한 공개, 무상의 기술 표준 제정 노력
+              <ul><li>콘텐츠의 출처, 수정 이력, 퍼블리셔 신원 등</li></ul>
+            </li>
+            <li>암호학적 서명 기반의 메타데이터 표준
+              <ul><li>기존 사진의 메타정보(Exif 등)와 달리 위·변조가 된 경우 탐지 가능</li></ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <figure class="plain"><img src="assets/week12/c2pa-spec.png" alt="C2PA 명세의 도식: 콘텐츠에 출처와 편집 이력에 관한 서명된 매니페스트가 단계별로 덧붙는 구조" style="max-height:360px"><figcaption>Source: C2PA Specification</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="C2PA 표준의 활용">
+  <div class="kicker">메타데이터 기록</div>
+  <h2>C2PA 표준의 활용</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>이용자들이 손쉽게 사진의 출처 및 진위를 확인할 수 있는 기능 제공</li>
+      <li>출처가 확인되지 않은 콘텐츠의 경우에는 경고 표시</li>
+    </ul>
+    <div class="figrow">
+      <figure><img src="assets/week12/c2pa-photo.jpg" alt="SNS 게시 사진에 Content Credentials 패널이 열려 제작 도구와 편집 이력이 표시된 화면" style="max-height:300px"></figure>
+      <div class="stack">
+        <figure><img src="assets/week12/c2pa-video1.jpg" alt="영상 재생 화면에 Content Credentials 패널이 표시되어 서명자와 게시자가 확인됨" style="max-height:142px"></figure>
+        <figure><img src="assets/week12/c2pa-video2.jpg" alt="영상 재생 화면에 Content credentials incomplete 경고가 표시됨" style="max-height:142px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://c2pa.org/" target="_blank" rel="noopener">c2pa.org</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="C2PA 기술 활용 사례">
+  <div class="kicker">메타데이터 기록</div>
+  <h2>C2PA 기술 활용 사례: BBC</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>2024년 3월 4일 C2PA 기반 “콘텐츠 자격 증명(Content Credentials)” 기술을 처음 뉴스 기사에 적용</li>
+      <li>독자가 미디어의 출처와 편집 이력을 확인해 신뢰 여부를 스스로 판단할 수 있도록 함</li>
+      <li>해당 콘텐츠가 제3자 플랫폼(Facebook 등)에 공유되더라도 출처 확인 가능</li>
+    </ul>
+    <div class="figrow">
+      <figure><img src="assets/week12/bbc-blog.png" alt="BBC R&amp;D 블로그 글: Mark the good stuff: Content provenance and the fight against disinformation" style="max-height:260px"></figure>
+      <figure><img src="assets/week12/bbc-verify.jpg" alt="BBC Verify 표시가 붙은 뉴스 영상 화면: Verified videos of violence in Haiti" style="max-height:260px"></figure>
+    </div>
+    <p class="src"><a href="https://www.bbc.co.uk/rd/blog/2024-03-c2pa-verification-news-journalism-credentials" target="_blank" rel="noopener">bbc.co.uk/rd/blog/2024-03-c2pa-verification-news-journalism-credentials</a> · <a href="https://www.bbc.com/news/world-latin-america-68462851" target="_blank" rel="noopener">bbc.com/news/world-latin-america-68462851</a></p>
+  </div>
+</section>
+
+<section class="slide section" data-sec="6" data-title="(2) 디지털 워터마크">
+  <div class="kicker">딥페이크와 이용자 보호</div>
+  <h2>(2) 디지털 워터마크</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week12/nist-hl-watermark.png" alt="NIST 도식에서 디지털 워터마킹(인지 가능, 인지 불가능) 부분이 붉은 점선으로 강조됨" style="max-height:330px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="워터마크 분류">
+  <div class="kicker">디지털 워터마크</div>
+  <h2>워터마크 분류</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>사람의 인지 여부에 따른 분류
+        <ul>
+          <li><b>인지 가능 워터마크</b>: 육안으로 구분 가능. (예) 로고나 텍스트 등 표시</li>
+          <li><b>인지 불가능 워터마크</b>: 품질 및 시청각적 경험에 영향을 끼치지 않음. (예) 인지 불가 패턴, 메타데이터 기록 등</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="figrow">
+      <figure><img src="assets/week12/wm-visible.jpg" alt="AI 생성 이미지 오른쪽 아래에 서비스 로고가 표시된 예" style="max-height:300px"><figcaption>인지 가능 워터마크</figcaption></figure>
+      <figure><img src="assets/week12/wm-invisible.png" alt="이미지의 콘텐츠 자격정보 패널에 AI 도구로 생성되었다는 기록이 표시된 예" style="max-height:300px"><figcaption>인지 불가 워터마크: 콘텐츠 자격정보 내 기록</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="국내외 워터마크 도입 현황">
+  <div class="kicker">디지털 워터마크</div>
+  <h2>국내외 워터마크 도입 현황</h2>
+  <div class="body">
+    <figure><img src="assets/week12/wm-adoption.png" alt="국내외 주요 생성형 AI 서비스의 워터마크 도입 현황 표(2024년 12월 기준): 기업, 서비스명, 워터마크 유형(인지 가능, 인지 불가능)" style="max-height:440px"></figure>
+    <p class="src">과기정통부·TTA, 인공지능(AI) 워터마크 기술 동향 보고서 (2024. 12.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="구글 SynthID">
+  <div class="kicker">디지털 워터마크</div>
+  <h2>인지 불가능 워터마크: 구글 SynthID</h2>
+  <div class="body">
+    <div class="two eq">
+      <ul class="bul">
+        <li><b>이미지 워터마크</b>
+          <ul>
+            <li>이미지 픽셀에 인지 불가능한 패턴을 삽입</li>
+            <li>필터나 압축 등의 파일 조작에도 유지 가능</li>
+          </ul>
+        </li>
+        <li><b>동영상 워터마크</b>
+          <ul><li>디지털 워터마크를 동영상의 각 프레임에 추가</li></ul>
+        </li>
+        <li><b>텍스트 워터마크</b>
+          <ul>
+            <li>LLM이 생성한 토큰의 확률 값을 조정하여 워터마크가 없는 텍스트와는 다른 패턴의 텍스트를 생성</li>
+            <li>최소 3문장 이상의 텍스트에서 워터마크 감지 가능</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/synthid-image.jpg" alt="SynthID 워터마크가 삽입된 AI 생성 영상의 장면" style="max-height:190px"></figure>
+        <figure><img src="assets/week12/synthid-text.png" alt="SynthID 텍스트 워터마크 예시: 생성된 텍스트에서 워터마크 신호가 있는 토큰이 강조 표시됨" style="max-height:190px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://deepmind.google/discover/blog/identifying-ai-generated-images-with-synthid/" target="_blank" rel="noopener">deepmind.google: identifying AI-generated images with SynthID</a> · <a href="https://deepmind.google/discover/blog/watermarking-ai-generated-text-and-video-with-synthid/" target="_blank" rel="noopener">deepmind.google: watermarking AI-generated text and video with SynthID</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="현행 워터마크 기술의 한계">
+  <div class="kicker">디지털 워터마크</div>
+  <h2>현행 워터마크 기술의 한계</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul compact">
+        <li><b>삭제 용이성(“스크러빙”)</b>
+          <ul>
+            <li>인지 가능 워터마크는 손쉽게 삭제 가능</li>
+            <li>인지 불가능 워터마크 역시 여전히 제거에 취약하다는 것이 일관되게 확인됨</li>
+            <li>이미지
+              <ul>
+                <li>노이즈를 추가해 워터마크를 파괴한 다음 노이즈를 제거하면 워터마크 없는 이미지 복원 가능</li>
+                <li>정교한 워터마크도 공격자가 검출기를 반복 활용하거나, 대규모 워터마크 데이터셋이 있으면 제거 가능</li>
+              </ul>
+            </li>
+            <li>텍스트
+              <ul>
+                <li>패러프레이징을 반복하면 검출률을 크게 낮출 수 있음(다만 400단어 이상 긴 텍스트는 강인성 유지)</li>
+                <li>단어 사이에 무의미한 단어 또는 이모티콘을 삽입하면 워터마크가 제거될 수 있음</li>
+              </ul>
+            </li>
+            <li>오디오, 비디오: 아직 충분한 연구가 이루어지지 않음</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="bul compact">
+        <li><b>워터마크 위·변조(“스푸핑”)</b>
+          <ul>
+            <li>워터마크가 없는 콘텐츠를 워터마크가 있는 것처럼 조작하는 행위
+              <ul><li>예시: 특정 AI 모델이 아동성착취물을 생성한 것처럼 조작하여 해당 모델의 평판을 낮추는 공격 가능</li></ul>
+            </li>
+            <li>이미지: 다양한 생성형 AI 워터마크에 대해 스푸핑이 실험적으로 입증됨</li>
+            <li>텍스트: 비워터마크 모델을 이용해 생성한 텍스트로 탐지기를 80% 속이는 데 성공한 사례 존재</li>
+            <li>오디오, 비디오: 아직 충분한 연구가 이루어지지 않음</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <p class="src">출처: NIST, Reducing Risks Posed by Synthetic Content (2024. 11.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="워터마크의 확장성 문제">
+  <div class="kicker">디지털 워터마크</div>
+  <h2>워터마크의 확장성 문제</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card"><span class="ttl">공개 워터마크의 문제</span>
+        <ul class="bul compact">
+          <li>공격자가 쉽게 회피하거나 스푸핑을 할 수 있음</li>
+          <li>특히 오픈소스 탐지기의 경우 탐지 회피 여부를 무제한으로 시험 가능</li>
+        </ul>
+      </div>
+      <div class="card"><span class="ttl">비공개 워터마크의 문제</span>
+        <ul class="bul compact">
+          <li>AI 모델 개발자는 현재 각기 다른 고유한 워터마킹 방법을 사용하고 있음 <b class="arrow">고유의 탐지기 활용</b></li>
+          <li>비공개 워터마크는 필요한 탐지 알고리즘, 암호키, ML 모델 등이 비공개 <b class="arrow">개발자로부터 별도 이용 허락 필요</b></li>
+        </ul>
+      </div>
+      <div class="card"><span class="ttl">콘텐츠 배포 플랫폼의 부담</span>
+        <ul class="bul compact">
+          <li>비공개 워터마크의 경우 AI 개발자별로 각기 다른 탐지 서비스를 이용해야 함</li>
+          <li>복잡한 워터마크의 경우 검출 비용이 높아져서 비용 부담이 증가</li>
+          <li>각기 다른 워터마크 탐지기 사용법과 결과 해석 방법을 이해해야 하는 교육 부담 존재</li>
+        </ul>
+      </div>
+    </div>
+    <p class="src">출처: NIST, Reducing Risks Posed by Synthetic Content (2024. 11.)</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="워터마크 도입 방법 비교">
+  <div class="kicker">디지털 워터마크</div>
+  <h2>워터마크 도입 방법 비교</h2>
+  <div class="body">
+    <div class="two wide-r">
+      <ul class="bul">
+        <li>국내 기업은 인지 가능 워터마크를 도입(2024년 12월 기준)</li>
+        <li>인지 불가능 워터마크는 도입 난이도와 소요 비용이 높음</li>
+      </ul>
+      <figure><img src="assets/week12/wm-compare.png" alt="워터마크 도입 방법 비교표: 인지 가능 워터마크와 인지 불가능 워터마크(자체 개발, 오픈소스, 상용 도구 활용)의 도입 난이도, 비용, 고려 사항" style="max-height:420px"></figure>
+    </div>
+    <p class="src">과기정통부·TTA, 인공지능(AI) 워터마크 기술 동향 보고서 (2024. 12.)</p>
+  </div>
+</section>
+
+<section class="slide section" data-sec="6" data-title="(3) AI 생성물 탐지">
+  <div class="kicker">딥페이크와 이용자 보호</div>
+  <h2>(3) AI 생성물 탐지</h2>
+  <div class="body">
+    <figure class="plain"><img src="assets/week12/nist-hl-detection.png" alt="NIST 도식에서 합성 콘텐츠 탐지(출처 탐지, 자동 콘텐츠 기반 탐지, 인간 보조 탐지) 부분이 붉은 점선으로 강조됨" style="max-height:330px"></figure>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="AI 생성물 탐지 방법론">
+  <div class="kicker">AI 생성물 탐지</div>
+  <h2>AI 생성물 탐지 방법론</h2>
+  <div class="body">
+    <div class="cards c3">
+      <div class="card"><span class="ttl">출처 데이터 탐지<small>provenance data detection</small></span>
+        <ul class="bul compact">
+          <li>콘텐츠에 포함된 출처정보(워터마크, 메타데이터)를 이용하여 AI 생성물 여부 확인</li>
+          <li>장래 출처 증빙 메타데이터(예: C2PA 표준을 기반으로 하는 서명·기록 정보 등)가 널리 활용된다면, 해당 데이터가 없는 콘텐츠는 AI 생성물로 의심 가능</li>
+          <li><b>장점</b>: 탐지 속도가 빠르고 구현이 단순. 명확한 출처 증거 제공 가능</li>
+          <li><b>한계</b>: 워터마크 탐지 오류(오탐/미탐) 가능성. 메타데이터가 부정확할 수 있음</li>
+        </ul>
+      </div>
+      <div class="card"><span class="ttl">자동 콘텐츠 기반 탐지<small>automated content-based detection</small></span>
+        <ul class="bul compact">
+          <li>콘텐츠 자체의 통계적, 구조적, 의미적 특징을 분석하여 AI 생성 여부를 판별</li>
+          <li>예시: 이미지의 주파수 스펙트럼 분석, 텍스트의 어휘·문장 구조, 오디오의 스펙트럼 특징 등</li>
+          <li><b>장점</b>: 메타데이터/워터마크 없이도 탐지 가능. 다양한 콘텐츠 형식에 적용</li>
+          <li><b>한계</b>: 새로운 생성 모델·후처리 기법이 등장하면 탐지 성능이 저하될 수 있으며, 적대적 회피 공격에 취약</li>
+          <li class="arrow">생성모델과 탐지 기술 간 군비 경쟁이 계속될 수 있음</li>
+        </ul>
+      </div>
+      <div class="card"><span class="ttl">인간 보조 탐지<small>human-assisted detection</small></span>
+        <ul class="bul compact">
+          <li>자동화된 탐지 기술을 분석가·플랫폼 모니터링 팀·전문가 그룹 등의 분석·판단과 결합해 최종 진위를 판별</li>
+          <li>예시: 의심 콘텐츠에 대한 전문가 시각검증(영상 frame-by-frame 분석), 자동 탐지기의 경계 사례(borderline case) 판정</li>
+          <li><b>장점</b>: 복잡한 맥락, 사회문화적 단서 반영 가능. 자동 탐지가 놓친 신호 포착 가능</li>
+          <li><b>한계</b>: 시간·비용 소모. 대량 콘텐츠 모니터링에는 확장성 제한</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="딥페이크 탐지 기술 현황 (1)">
+  <div class="kicker">AI 생성물 탐지</div>
+  <h2>딥페이크 탐지 기술 현황 (1)</h2>
+  <div class="body">
+    <ul class="bul compact">
+      <li><b>Deepfake-Eval-2024</b> (Chandra et al., 2025)
+        <ul>
+          <li>데이터셋: 2024년 온라인에서 수집한 딥페이크 데이터. 45시간 비디오, 56.5시간 오디오, 1,975건 이미지</li>
+          <li>오픈소스 탐지 모델은 실제 데이터 적용 시 성능이 급격히 하락
+            <ul><li>이전 벤치마크 대비 AUC 점수가 비디오 모델 50%, 오디오 모델 48%, 이미지 모델 45% 감소</li></ul>
+          </li>
+          <li>상용 딥페이크 탐지 모델은 오픈소스 모델보다 우수하지만, 딥페이크 포렌식 분석가의 정확도에 미치지 못함</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="figrow">
+      <figure><img src="assets/week12/dfeval-examples.jpg" alt="Deepfake-Eval-2024 데이터셋의 비디오, 오디오, 이미지 예시" style="max-height:270px"></figure>
+      <div class="stack">
+        <figure><img src="assets/week12/dfeval-table3.png" alt="Table 3: 오픈소스 모델의 Deepfake-Eval-2024 성능과 기존 벤치마크 성능 비교" style="max-height:170px"></figure>
+        <figure><img src="assets/week12/dfeval-table5.png" alt="Table 5: 상용 모델의 Deepfake-Eval-2024 최고 성능. 비디오 AUC 0.79, 오디오 0.93, 이미지 0.90" style="max-height:90px"></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="6" data-title="딥페이크 탐지 기술 현황 (2)">
+  <div class="kicker">AI 생성물 탐지</div>
+  <h2>딥페이크 탐지 기술 현황 (2)</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>Evaluating Deepfake Detectors in the Wild</b> (Pirogov et al., 2025)
+        <ul>
+          <li>최신 딥페이크 생성 기법을 사용해 50만 개 이상의 고품질 딥페이크 이미지를 제작</li>
+          <li>공개된 최신 딥페이크 탐지 모델들을 평가한 결과 절반 이하의 모델만이 AUC 60% 이상, 최저는 50% 수준</li>
+          <li>간단한 이미지 조작(JPEG 압축, 이미지 보정 등)만으로도 탐지 성능이 크게 하락함</li>
+        </ul>
+      </li>
+      <li class="arrow">실제 환경에서의 딥페이크 탐지는 여전히 미해결 과제</li>
+    </ul>
+    <figure><img src="assets/week12/df-wild.png" alt="논문 요약 화면: Evaluating Deepfake Detectors in the Wild. TL;DR: Deepfake detectors are ineffective in real-world scenarios" style="max-height:250px"></figure>
+    <p class="src"><a href="https://github.com/SumSubstance/Deepfake-Detectors-in-the-Wild" target="_blank" rel="noopener">github.com/SumSubstance/Deepfake-Detectors-in-the-Wild</a></p>
+  </div>
+</section>
+
+<section class="slide section" data-sec="7" data-title="딥페이크 대응 정책">
+  <div class="kicker">Section 7</div>
+  <h2>딥페이크 대응 정책</h2>
+  <p class="section-lead">기술만으로는 해결되지 않는다. 콘텐츠가 배포되는 단계에서 플랫폼이 무엇을 해야 하는지를 본다.</p>
+  <div class="body">
+    <ol class="roadmap" data-current="7"></ol>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="플랫폼의 자발적 조치">
+  <div class="kicker">딥페이크 대응 정책</div>
+  <h2>콘텐츠 배포 플랫폼의 자발적 조치</h2>
+  <div class="body">
+    <ul class="bul">
+      <li>크리에이터가 자발적으로 인공지능 생성물을 표시하도록 유도
+        <ul>
+          <li>예시: 유튜브는 변경되었거나 합성된 콘텐츠 공개 의무화</li>
+          <li>콘텐츠 변형 및 합성 여부 공개 위반을 지속적으로 하는 경우 콘텐츠 삭제, 유튜브 파트너 프로그램 정지 등 제재 부과</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="figrow">
+      <figure><img src="assets/week12/yt-examples.png" alt="유튜브 고객센터: 변경되었거나 합성된 콘텐츠의 예. 크리에이터가 공개하지 않아도 되는 경우와 공개해야 하는 경우의 비교표" style="max-height:290px"></figure>
+      <div class="stack">
+        <figure><img src="assets/week12/yt-form.png" alt="유튜브 업로드 화면의 변경된 콘텐츠 질문: 실제 인물이 하지 않은 말이나 행동, 실제 사건이나 장소의 영상 변경, 실제로 발생하지 않은 장면 생성 여부를 예 또는 아니요로 선택" style="max-height:150px"></figure>
+        <figure><img src="assets/week12/yt-label.png" alt="유튜브 영상 설명란의 표시: 콘텐츠 생성 방식, 변경되었거나 합성된 콘텐츠" style="max-height:120px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://support.google.com/youtube/answer/14328491" target="_blank" rel="noopener">support.google.com/youtube/answer/14328491</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="콘텐츠 배포 단계의 중요성">
+  <div class="kicker">딥페이크 대응 정책</div>
+  <h2>콘텐츠 배포 단계의 중요성</h2>
+  <div class="body">
+    <div class="two top">
+      <ul class="bul compact">
+        <li><b>“주목 경제(attention economy)” 시대</b>
+          <ul>
+            <li>이미 인간에 의해서도 매우 많은 콘텐츠가 생성되고 있음</li>
+            <li>한정된 이용자들의 “주목”을 얻기 위한 막대한 경쟁이 진행되고 있음</li>
+            <li><b>AI 콘텐츠의 생성 가능성 ≠ 사람들의 주목을 얻을 가능성</b>
+              <ul><li>이미 수년 전부터 GPT-J와 같은 공개된 대규모 언어모형이 존재했으나, 이로 인해 허위조작정보 위험이 증가했다는 증거는 없음 (Narayanan &amp; Kapoor, 2023. 3. 7.)</li></ul>
+            </li>
+          </ul>
+        </li>
+        <li><b>AI 생성 콘텐츠의 영향은 콘텐츠 유통 플랫폼에 의해 상당 부분 좌우</b>
+          <ul>
+            <li>2023. 5. 22. 펜타곤 폭발 사진 유포 사건
+              <ul>
+                <li>트위터 유료 인증을 받은 “Bloomberg Feed” 계정에 올라온 사진</li>
+                <li>트위터 계정 유료 인증 방식의 문제점을 드러냄</li>
+              </ul>
+            </li>
+            <li>콘텐츠 유통 플랫폼의 허위조작 사진 판별 기능 부재 문제 + 이에 대한 투자 인센티브의 결여 문제</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="stack">
+        <figure><img src="assets/week12/pentagon-tweet.jpg" alt="Bloomberg Feed 계정이 올린 펜타곤 인근 폭발 가짜 사진 트윗" style="max-height:250px"></figure>
+        <figure><img src="assets/week12/bloomberg-deepfake.png" alt="Bloomberg 기사 제목: Deepfakes Are Running Rampant as Tools to Detect Them Lag Behind" style="max-height:80px"></figure>
+      </div>
+    </div>
+    <p class="src"><a href="https://aisnakeoil.substack.com/p/the-llama-is-out-of-the-bag-should" target="_blank" rel="noopener">aisnakeoil.substack.com/p/the-llama-is-out-of-the-bag-should</a> · <a href="https://www.bloomberg.com/news/articles/2023-04-20/deepfake-detection-is-one-corner-of-ai-tech-that-isn-t-booming" target="_blank" rel="noopener">bloomberg.com/news/articles/2023-04-20/deepfake-detection-is-one-corner-of-ai-tech-that-isn-t-booming</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="AI에 기반한 여론 조작의 단계">
+  <div class="kicker">딥페이크 대응 정책</div>
+  <h2>AI에 기반한 여론 조작의 단계</h2>
+  <div class="body">
+    <div class="two wide-r">
+      <div class="stack">
+        <div class="card amber" style="text-align:center"><span class="ttl">콘텐츠 배포<br>+<br>이용자 신념 형성</span></div>
+        <p class="em center"><span class="arrow">주목 필요</span></p>
+        <p class="muted">모델 구축과 콘텐츠 생성 단계가 아니라, 배포와 신념 형성 단계가 여론 조작의 성패를 좌우한다.</p>
+      </div>
+      <figure><img src="assets/week12/influence-stages.png" alt="AI 기반 영향 공작의 단계 도식: 모델 구축, 모델 접근, 콘텐츠 배포, 신념 형성. 콘텐츠 배포와 신념 형성 단계가 붉은 점선으로 강조됨" style="max-height:440px"></figure>
+    </div>
+    <p class="src">Goldstein et al. (2023), <a href="https://arxiv.org/abs/2301.04246" target="_blank" rel="noopener">arxiv.org/abs/2301.04246</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="Borderline Content 문제">
+  <div class="kicker">딥페이크 대응 정책</div>
+  <h2>“Borderline Content” 문제의 극복</h2>
+  <div class="body">
+    <div class="figrow">
+      <figure><img src="assets/week12/borderline1.png" alt="Natural Engagement Pattern 그래프: 콘텐츠가 금지선(policy line)에 가까워질수록 이용자 참여가 증가" style="max-height:230px"><figcaption>자연 상태: 금지선에 가까운 콘텐츠일수록 참여(engagement)가 높아짐</figcaption></figure>
+      <span class="em">➜</span>
+      <figure><img src="assets/week12/borderline2.png" alt="Adjusted to Discourage Borderline Content 그래프: 금지선에 가까워질수록 참여가 감소하도록 배포를 조정" style="max-height:230px"><figcaption>조정 후: 금지선에 가까운 콘텐츠일수록 배포를 줄임</figcaption></figure>
+    </div>
+    <p class="src"><a href="https://techcrunch.com/2018/11/15/facebook-borderline-content/" target="_blank" rel="noopener">techcrunch.com/2018/11/15/facebook-borderline-content</a></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="EU Digital Services Act">
+  <div class="kicker">딥페이크 대응 정책</div>
+  <h2>법적 규율 사례: EU Digital Services Act</h2>
+  <div class="body">
+    <div class="two eq top">
+      <ul class="bul compact">
+        <li><b>Digital Services Act (DSA) 현황</b>
+          <ul>
+            <li>2022. 11. 16. 시행</li>
+            <li>2023. 4. 25. 대규모 온라인 플랫폼 17개, 대규모 온라인 검색엔진 2곳 지정(이용자 수 4,500만 명 이상)
+              <ul>
+                <li>대규모 온라인 플랫폼(VLOPs): Alibaba AliExpress, Amazon Store, Apple AppStore, Booking.com, Facebook, Google Play, Google Maps, Google Shopping, Instagram, LinkedIn, Pinterest, Snapchat, TikTok, Twitter, Wikipedia, YouTube, Zalando</li>
+                <li>대규모 온라인 검색엔진(VLOSEs): Bing, Google Search</li>
+              </ul>
+            </li>
+            <li>2023. 12. 19. 대규모 온라인 플랫폼 3곳(성인물 사업자) 추가 지정: Pornhub, Stripchat, XVideos</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="bul compact">
+        <li><b>AI 생성 콘텐츠 관련 대규모 온라인 플랫폼의 DSA상 의무</b>
+          <ul>
+            <li><b>제34조 위험 평가</b>
+              <ul>
+                <li>불법 콘텐츠의 배포</li>
+                <li>기본권 침해 위험(인간 존엄성, 사생활의 자유, 표현 및 정보의 자유, 차별 금지, 아동의 권리, 소비자 보호 등)</li>
+                <li>시민 담론, 선거 절차 및 안보에의 부정적 영향</li>
+                <li>성폭력, 공중보건 및 미성년자 보호, 신체 및 정신 건강</li>
+              </ul>
+            </li>
+            <li><b>제35조 위험 완화 조치 의무</b>
+              <ul><li>제1항 (k) 딥페이크 표시 의무를 포함: 실존하는 사람, 물체, 장소, 단체나 사건과 눈에 띄게 닮아서 진짜처럼 보이는 생성·조작된 이미지, 오디오, 비디오를 온라인 인터페이스에서 눈에 띄는 표식으로 구분할 수 있게 하고, 이용자가 해당 정보를 표시할 수 있는 사용하기 쉬운 기능을 제공</li></ul>
+            </li>
+            <li><b>제52조</b>: 위반 시 전세계 연간 매출액의 6% 이하의 과징금 부과 가능</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="7" data-title="정책적 과제">
+  <div class="kicker">딥페이크 대응 정책</div>
+  <h2>정책적 과제</h2>
+  <div class="body">
+    <ul class="bul">
+      <li><b>이용자가 딥페이크임을 손쉽게 알 수 있는 콘텐츠 소비 환경 구축</b>
+        <ul>
+          <li>C2PA 등을 활용하여 진정한 콘텐츠 여부를 손쉽게 확인할 수 있는 표시 부착 장려</li>
+          <li>딥페이크 생성물일 경우 경고창을 먼저 표시하고 이용자가 동의해야 표시</li>
+        </ul>
+      </li>
+      <li><b>콘텐츠 배포 플랫폼의 특성을 고려한 정책 방안</b></li>
+    </ul>
+    <table class="tbl left">
+      <thead><tr><th>대상</th><th>조치</th></tr></thead>
+      <tbody>
+        <tr><td>모든 플랫폼</td><td>크리에이터/게시자가 AI 생성물임을 표시. 약관 위반 시 비례적 제재</td></tr>
+        <tr><td>일정 규모 이상의 숏폼 콘텐츠 배포자</td><td>업로드 시 AI 생성물 확인(워터마크, 메타데이터 + 탐지) 및 경고 기능</td></tr>
+        <tr><td>일정 규모 이상의 온라인 커뮤니티</td><td>게시판 운영자에 의한 인간 탐지 및 감독</td></tr>
+        <tr><td>대화 참여자 수 일정 규모 이상의 오픈 대화방</td><td>자동화된 기술에 의한 콘텐츠 안전 보장</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-sec="8" data-title="내 AI 서비스의 IP 점검">
   <div class="kicker">정리</div>
   <h2>기말 발표 준비: 내 AI 서비스의 지식재산권 점검</h2>
   <div class="body">
     <table class="tbl cmp">
       <thead><tr><th>단계</th><th>점검할 질문</th><th>관련 내용</th></tr></thead>
       <tbody>
-        <tr><td>데이터 수집</td><td>스크래핑하거나 RAG에 넣은 자료의 권리자는 누구인가. 이용약관과 robots.txt가 수집을 금지하는가. 데이터베이스의 상당한 부분을 반복적, 체계적으로 가져오는가</td><td>복제권, DB권, 약관, 정보통신망법 (Section 2)</td></tr>
-        <tr><td>모델과 API</td><td>사용하는 모델 제공자의 약관에서 입력 데이터와 출력물의 권리 귀속, IP 면책 범위와 제외 사유는 무엇인가</td><td>면책 조항 (Section 5)</td></tr>
-        <tr><td>출력물</td><td>서비스가 원문을 길게 그대로 출력하는가. 출처를 표시하는가. 캐릭터, 유명인의 초상·음성, 특정 작가 이름을 프롬프트로 받는가</td><td>암기, 캐릭터, 퍼블리시티권, 성과도용 (Section 4)</td></tr>
-        <tr><td>코드</td><td>AI가 작성한 코드에 오픈소스 라이선스 고지가 필요한 부분이 섞여 있는가</td><td>Copilot 소송 (Section 4)</td></tr>
-        <tr><td>결과물의 보호</td><td>서비스가 만든 결과물과 내가 AI로 만든 코드·콘텐츠 중 저작권으로 보호되는 부분은 어디인가. 사람의 기여를 기록하고 있는가</td><td>인간 저작자 요건, 등록 안내서 (Section 6)</td></tr>
+        <tr><td>데이터 수집</td><td>스크래핑하거나 RAG에 넣은 자료의 권리자는 누구인가. 이용약관과 robots.txt가 수집을 금지하는가. 데이터베이스의 상당한 부분을 반복적, 체계적으로 가져오는가</td><td>복제권, DB권, 약관, 정보통신망법 (Section 1)</td></tr>
+        <tr><td>모델과 API</td><td>사용하는 모델 제공자의 약관에서 입력 데이터와 출력물의 권리 귀속, IP 면책 범위와 제외 사유는 무엇인가</td><td>면책 조항 (Section 4)</td></tr>
+        <tr><td>출력물</td><td>서비스가 원문을 길게 그대로 출력하는가. 출처를 표시하는가. 캐릭터, 유명인의 초상·음성, 특정 작가 이름을 프롬프트로 받는가</td><td>암기, 캐릭터, 퍼블리시티권, 성과도용 (Section 3)</td></tr>
+        <tr><td>코드</td><td>AI가 작성한 코드에 오픈소스 라이선스 고지가 필요한 부분이 섞여 있는가</td><td>Copilot 소송 (Section 3)</td></tr>
+        <tr><td>결과물의 보호</td><td>서비스가 만든 결과물과 내가 AI로 만든 코드·콘텐츠 중 저작권으로 보호되는 부분은 어디인가. 사람의 기여를 기록하고 있는가</td><td>인간 저작자 요건, 등록 안내서 (Section 5)</td></tr>
       </tbody>
     </table>
     <p class="muted center">14·15강 기말 발표의 “법적 쟁점” 부분에서 위 항목 가운데 자신의 서비스에 해당하는 것을 골라 분석한다.</p>
   </div>
 </section>
 
-<section class="slide" data-sec="7" data-title="12강 정리">
+<section class="slide" data-sec="8" data-title="12강 정리">
   <div class="kicker">정리</div>
   <h2>12강 정리</h2>
   <div class="body">
     <ol class="recap">
-      <li><b>저작권의 기초</b>저작권은 인간의 창작적 표현을 보호한다. 아이디어와 스타일은 보호 대상이 아니다. 침해는 의거관계와 실질적 유사성으로 판단하고, 공정이용은 네 요소를 종합한다</li>
       <li><b>학습 데이터의 수집</b>크롤링한 데이터를 저장하면 복제가 일어난다. 저작물이 아닌 정보도 반복적, 체계적으로 가져오면 DB권 침해가 될 수 있다. 약관 위반만으로 형사처벌되지는 않는다</li>
       <li><b>AI 학습과 공정이용</b>Bartz 판결은 학습을 공정이용으로 보되 불법 복제물 취득은 침해로 보았다. GEMA 판결은 모델 내 암기를 복제로 보았고, Getty 영국 판결은 모델을 침해복제물로 보지 않았다</li>
-      <li><b>데이터 시장</b>학습 데이터 확보 경쟁 속에서 라이선스 계약이 늘고 있다. 이용허락 시장의 형성은 공정이용 판단에 영향을 준다</li>
+      <li><b>데이터 시장</b>학습 데이터 확보 경쟁 속에서 라이선스 계약이 늘고 있다. 권리자 보호와 AI 혁신의 절충 방안으로 데이터 거래 시장이 논의된다</li>
       <li><b>생성물에 의한 침해</b>암기와 캐릭터는 복제권, 초상·음성은 퍼블리시티권(부정경쟁방지법 타목), 스타일은 성과도용(파목) 여부, 코드는 라이선스 고지가 문제 된다</li>
       <li><b>사업자의 대응</b>중복 제거와 출력 필터 같은 기술적 조치, 권리가 확보된 데이터만으로 학습, 기업 고객에 대한 IP 면책</li>
       <li><b>AI 창작물의 보호</b>사람의 관여 없는 AI 산출물은 저작물이 아니다(Thaler 확정). 프롬프트만으로는 부족하고, 사람이 수정, 선택, 배열한 부분에 한하여 등록된다</li>
-      <li><b>실무</b>학습 데이터의 취득 경로, 출력물의 암기 여부, 약관의 면책 범위, 사람의 창작적 기여에 대한 기록을 관리한다</li>
+      <li><b>딥페이크와 콘텐츠 투명성</b>메타데이터 기록(C2PA), 워터마크, AI 생성물 탐지의 세 접근이 있다. 워터마크는 삭제와 위조에 취약하고, 탐지 모델은 실제 환경에서 성능이 크게 떨어진다</li>
+      <li><b>딥페이크 대응 정책</b>생성 가능성보다 배포 단계가 영향을 좌우한다. 플랫폼의 표시 정책, EU DSA의 위험 평가와 완화 의무, 플랫폼 특성별 조치가 과제이다</li>
     </ol>
   </div>
 </section>
@@ -1878,12 +2282,13 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
 (function(){
   const SECTIONS = [
     {name:'들어가며', sub:'문제 개관'},
-    {name:'저작권의 기초', sub:'저작물, 침해, 공정이용'},
     {name:'학습 데이터의 수집', sub:'크롤링, 복제권, DB권'},
-    {name:'AI 학습과 공정이용', sub:'2025년 판결과 데이터 시장'},
+    {name:'AI 학습과 공정이용', sub:'구글 북스, 2025년 판결'},
     {name:'생성물에 의한 침해', sub:'암기, 캐릭터, 음성, 스타일'},
     {name:'기술적·상업적 대응', sub:'필터, 라이선스, 면책'},
     {name:'AI 창작물과 저작권', sub:'인간 저작자 요건, 등록'},
+    {name:'딥페이크와 이용자 보호', sub:'C2PA, 워터마크, 탐지'},
+    {name:'딥페이크 대응 정책', sub:'플랫폼, EU DSA'},
     {name:'정리', sub:'점검표와 요약'}
   ];
   const slides = Array.from(document.querySelectorAll('.slide'));
@@ -1961,7 +2366,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;}
     const h = '#' + (i + 1);
     if (location.hash !== h) { if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
     window.scrollTo({top:0, behavior:'auto'});
-    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} · 12강 인공지능과 지식재산권`;
+    document.title = `${i + 1}/${N} ${sl.dataset.title || ''} · 12강 인공지능과 IP, 딥페이크`;
   }
   const fromHash = () => { const n = parseInt((location.hash || '').replace('#', ''), 10); return isNaN(n) ? 0 : n - 1; };
   btnPrev.addEventListener('click', () => show(cur - 1));
